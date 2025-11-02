@@ -68,6 +68,8 @@ class LockHandlerButton extends HandlerButton:
 		if deleted: return
 		var rect:Rect2 = Rect2(position+Vector2.ONE, size-Vector2(2,2))
 		var texture:Texture2D
+		if lock.color == Game.COLOR.GLITCH: RenderingServer.canvas_item_set_material(drawMain, Game.UNSCALED_GLITCH_MATERIAL)
+		else: RenderingServer.canvas_item_set_material(drawMain, Game.NO_MATERIAL)
 		match lock.color:
 			Game.COLOR.MASTER: texture = editor.game.masterTex()
 			Game.COLOR.PURE: texture = editor.game.pureTex()

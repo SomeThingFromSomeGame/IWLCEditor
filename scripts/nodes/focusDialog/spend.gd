@@ -1,5 +1,7 @@
 extends Button
 
+const GATE_FILL:Texture2D = preload('res://assets/ui/focusDialog/lockHandler/spendGate.png')
+
 @onready var editor:Editor = get_node("/root/editor")
 
 var drawMain:RID
@@ -16,8 +18,10 @@ func _draw() -> void:
 	if door is not Door: return
 	var rect:Rect2 = Rect2(position+Vector2.ONE, size-Vector2(2,2))
 	var texture:Texture2D
+	if door.colorSpend == Game.COLOR.GLITCH: RenderingServer.canvas_item_set_material(drawMain, Game.UNSCALED_GLITCH_MATERIAL)
+	else: RenderingServer.canvas_item_set_material(drawMain, Game.NO_MATERIAL)
 	if door.type == Door.TYPE.GATE:
-		RenderingServer.canvas_item_add_texture_rect(drawMain,rect,Door.GATE_FILL,true)
+		RenderingServer.canvas_item_add_texture_rect(drawMain,rect,GATE_FILL,true)
 	else:
 		match door.colorSpend:
 			Game.COLOR.MASTER: texture = editor.game.masterTex()

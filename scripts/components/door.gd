@@ -233,7 +233,7 @@ func propertyChangedInit(property:StringName) -> void:
 			TYPE.GATE:
 				if !mods.active(&"NstdLockSize"):
 					for lock in locks: lock._coerceSize()
-				changes.addChange(Changes.PropertyChange.new(game,self,&"color",Game.COLOR.WHITE))
+				changes.addChange(Changes.PropertyChange.new(game,self,&"colorSpend",Game.COLOR.WHITE))
 				changes.addChange(Changes.PropertyChange.new(game,self,&"copies",C.ONE))
 				changes.addChange(Changes.PropertyChange.new(game,self,&"frozen",false))
 				changes.addChange(Changes.PropertyChange.new(game,self,&"crumbled",false))
@@ -244,7 +244,7 @@ func propertyChangedDo(property:StringName) -> void:
 	super(property)
 	if property == &"type" and editor.findProblems:
 		for lock in locks: editor.findProblems.findProblems(lock)
-	if property == &"size" or property == &"type":
+	if property in [&"size", &"type"]:
 		%shape.shape.size = size
 		%shape.position = size/2
 		%interactShape.shape.size = size

@@ -254,6 +254,7 @@ var levelBounds:Rect2i = Rect2i(0,0,800,608):
 		%playCamera.set_limit.right = levelBounds.end.x
 		%playCamera.set_limit.bottom = levelBounds.end.y
 
+const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
 const UNSCALED_GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/unscaledGlitchDrawMaterial.tres") # per pixel
 const SCALED_GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/scaledGlitchDrawMaterial.tres") # uses size input

@@ -421,6 +421,7 @@ func propertyChangedInit(property:StringName) -> void:
 			changes.addChange(Changes.PropertyChange.new(game,self,&"count",C.ONE))
 		if type == TYPE.BLAST and (count.neq(count.axis()) or count.eq(0)):
 			changes.addChange(Changes.PropertyChange.new(game,self,&"count",C.ONE if count.eq(0) else count.axis()))
+	if property in [&"color", &"type"] and editor.focusDialog.focused == parent: editor.focusDialog.doorDialog.lockHandler.redrawButton(index)
 
 # ==== PLAY ==== #
 var glitchMimic:Game.COLOR = Game.COLOR.GLITCH

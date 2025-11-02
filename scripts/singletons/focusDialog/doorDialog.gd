@@ -4,6 +4,8 @@ class_name DoorDialog
 @onready var editor:Editor = get_node("/root/editor")
 @onready var main = get_parent()
 
+@onready var lockHandler:LockHandler = %lockHandler
+
 func focus(focused:Door, new:bool, dontRedirect:bool) -> void:
 	%doorTypes.get_child(focused.type).button_pressed = true
 	%lockHandler.colorLink.visible = focused.type == Door.TYPE.SIMPLE
