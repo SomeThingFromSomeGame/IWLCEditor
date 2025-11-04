@@ -22,3 +22,5 @@ func propertyGameChangedDo(_property:StringName) -> void: pass
 
 func start() -> void: pass
 func stop() -> void: pass
+
+func deleted() -> void: pass

@@ -25,9 +25,10 @@ const TILE:RenderingServer.NinePatchAxisMode = RenderingServer.NinePatchAxisMode
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
 var drawMain:RID
 var drawGlitch:RID

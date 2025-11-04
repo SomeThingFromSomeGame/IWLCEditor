@@ -171,6 +171,8 @@ func near(area:Area2D) -> void:
 		nearDoor = true
 		object.auraCheck(self)
 		if curseMode: object.curseCheck(self)
+	if object is RemoteLock:
+		nearDoor = true
 
 func overlapping(area:Area2D) -> bool: return %interact.overlaps_area(area)
 

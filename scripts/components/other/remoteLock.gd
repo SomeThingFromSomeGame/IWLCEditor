@@ -13,10 +13,14 @@ func getAvailableConfigurations() -> Array[Array]: return Lock.availableConfigur
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"color", &"type", &"configuration", &"sizeType", &"count", &"isPartial", &"denominator", &"negated",
+	# todo: however youre going to pull that off
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {
+	&"doors":Door
+}
 
 var color:Game.COLOR = Game.COLOR.WHITE
 var type:Lock.TYPE = Lock.TYPE.NORMAL
@@ -26,7 +30,9 @@ var count:C = C.ONE
 var isPartial:bool = false # for partial blast
 var denominator:C = C.ONE # for partial blast
 var negated:bool = false
+var doors:Array[Door] = []
 
+var drawConnections:RID
 var drawGlitch:RID
 var drawScaled:RID
 var drawMain:RID
@@ -35,10 +41,13 @@ var drawConfiguration:RID
 func _init() -> void: size = Vector2(18,18)
 
 func _ready() -> void:
+	drawConnections = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
 	drawScaled = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawConfiguration = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_z_index(drawConnections,-1)
+	RenderingServer.canvas_item_set_parent(drawConnections,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
@@ -46,10 +55,12 @@ func _ready() -> void:
 	game.connect(&"goldIndexChanged",queue_redraw)
 
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(drawConnections)
 	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawConfiguration)
+	if !active and game.playState == Game.PLAY_STATE.PLAY: return
 	Lock.drawLock(game,drawGlitch,drawScaled,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,isPartial,denominator,negated,
 		Lock.getFrameHighColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
@@ -57,6 +68,12 @@ func _draw() -> void:
 		Lock.getFrameDarkColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		isNegative()
 	)
+	var from:Vector2 = size/2-getOffset()
+	for door in doors:
+		if !door.active and game.playState == Game.PLAY_STATE.PLAY: continue
+		var to:Vector2 = door.position+door.size/2 - position
+		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
+		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
 
 func getDrawPosition() -> Vector2: return position - getOffset()
 
@@ -87,6 +104,14 @@ func propertyChangedDo(property:StringName) -> void:
 func _comboDoorConfigurationChanged(newSizeType:Lock.SIZE_TYPE,newConfiguration:Lock.CONFIGURATION=Lock.CONFIGURATION.NONE) -> void: Lock.comboDoorConfigurationChanged(game,self,newSizeType,newConfiguration)
 func _comboDoorSizeChanged() -> void: Lock.comboDoorSizeChanged(game,self)
 func _setAutoConfiguration() -> void: changes.addChange(Changes.PropertyChange.new(game,self,&"configuration",Lock.getAutoConfiguration(self)))
+
+func _connectTo(door:Door) -> void:
+	changes.addChange(Changes.ComponentArrayAppendChange.new(game,self,&"doors",door))
+	changes.addChange(Changes.ComponentArrayAppendChange.new(game,door,&"remoteLocks",self))
+
+func deleted() -> void:
+	for door in doors:
+		changes.addChange(Changes.ArrayPopAtChange.new(game,door,&"remoteLocks",door.remoteLocks.find(self)))
 
 # ==== PLAY ==== #
 var cursed:bool = false
@@ -119,11 +144,15 @@ func stop() -> void:
 	cost = C.ZERO
 
 func check(player:Player) -> void:
-	satisfied = canOpen(player)
-	cost = getCost(player)
+	var satisfiedBefore:bool = satisfied
+	var costBefore:C = cost.copy()
+	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"satisfied",canOpen(player)))
+	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"cost",getCost(player)))
 	if satisfied: AudioManager.play(preload("res://resources/sounds/remoteLock/success.wav"))
 	else: AudioManager.play(preload("res://resources/sounds/remoteLock/fail.wav"))
+	for door in doors: if door.type == Door.TYPE.GATE: door.gateCheck(player)
 	blinkAnim()
+	if satisfiedBefore != satisfied and costBefore.eq(cost): gameChanges.bufferSave()
 
 func blinkAnim() -> void:
 	animAlpha = 1
@@ -162,3 +191,13 @@ func isNegative() -> bool:
 
 func effectiveCount(_ipow:C=C.ONE) -> C: return count
 func effectiveDenominator(_ipow:C=C.ONE) -> C: return denominator
+
+func checkDoors() -> void:
+	var any:bool = false
+	for door in doors:
+		if door.active: any = true
+	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"active",any))
+
+func propertyGameChangedDo(property:StringName) -> void:
+	if property == &"active":
+		%interact.process_mode = PROCESS_MODE_INHERIT if active else PROCESS_MODE_DISABLED

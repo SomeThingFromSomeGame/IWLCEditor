@@ -1,6 +1,8 @@
 extends Node
 class_name Changes
 
+static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
+
 var undoStack:Array[RefCounted] = [UndoSeparator.new()]
 var stackPosition:int = 0
 
@@ -107,9 +109,8 @@ class CreateComponentChange extends Change:
 		for property in type.CREATE_PARAMETERS:
 			prop[property] = Changes.copy(parameters[property])
 		
-		match type:
-			Lock, KeyCounterElement: dictionary = game.components
-			_: dictionary = game.objects
+		if type in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
 
 		do()
 		if type == PlayerSpawn and !game.levelStart:
@@ -179,6 +180,7 @@ class CreateComponentChange extends Change:
 				parent.elements[elementIndex].index -= 1
 
 		if game.editor.findProblems: game.editor.findProblems.componentRemoved(dictionary[id])
+		dictionary[prop[&"id"]].deleted()
 
 		dictionary[id].queue_free()
 		dictionary.erase(id)
@@ -196,12 +198,11 @@ class DeleteComponentChange extends Change:
 	func _init(_game:Game,component:GameComponent) -> void:
 		type = component.get_script()
 		game = _game
-		for property in component.EDITOR_PROPERTIES:
+		for property in component.PROPERTIES:
 			prop[property] = Changes.copy(component.get(property))
 		
-		match type:
-			Lock, KeyCounterElement: dictionary = game.components
-			_: dictionary = game.objects
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
 		
 		if type == Door:
 			for lock in component.locks.duplicate():
@@ -236,6 +237,7 @@ class DeleteComponentChange extends Change:
 				parent.elements[elementIndex].index -= 1
 		
 		if game.editor.findProblems: game.editor.findProblems.componentRemoved(dictionary[prop[&"id"]])
+		dictionary[prop[&"id"]].deleted()
 
 		dictionary[prop[&"id"]].queue_free()
 		dictionary.erase(prop[&"id"])
@@ -257,7 +259,7 @@ class DeleteComponentChange extends Change:
 		component.editor = game.editor
 		component.game = game
 
-		for property in component.EDITOR_PROPERTIES:
+		for property in component.PROPERTIES:
 			component.set(property, Changes.copy(prop[property]))
 			component.propertyChangedDo(property)
 		dictionary[prop[&"id"]] = component
@@ -308,9 +310,8 @@ class PropertyChange extends Change:
 	
 	func changeValue(value:Variant) -> void:
 		var component:GameComponent
-		match type:
-			Lock, KeyCounterElement: component = game.components[id]
-			_: component = game.objects[id]
+		if type in Changes.NON_OBJECT_COMPONENTS: component = game.components[id]
+		else: component = game.objects[id]
 		component.set(property, value)
 		component.propertyChangedDo(property)
 		component.queue_redraw()
@@ -380,15 +381,13 @@ class ArrayAppendChange extends Change:
 	var after:Variant
 	var dictionary:Dictionary
 
-
 	func _init(_game:Game,component:GameComponent,_array:StringName,_after:Variant) -> void:
 		game = _game
 		id = component.id
 		after = _after
 		array = _array
-		match component.get_script():
-			Lock: dictionary = game.components
-			_: dictionary = game.objects
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
 		do()
 
 	func do() -> void: dictionary[id].get(array).append(after)
@@ -410,9 +409,8 @@ class ArrayElementChange extends Change:
 		array = _array
 		before = Changes.copy(component.get(array)[index])
 		after = Changes.copy(_after)
-		match component.get_script():
-			Lock: dictionary = game.components
-			_: dictionary = game.objects
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
 		do()
 
 	func do() -> void: dictionary[id].get(array)[index] = Changes.copy(after)
@@ -433,10 +431,81 @@ class ArrayPopAtChange extends Change:
 		array = _array
 		index = _index
 		before = Changes.copy(component.get(array)[index])
-		match component.get_script():
-			Lock: dictionary = game.components
-			_: dictionary = game.objects
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
 		do()
 
 	func do() -> void: dictionary[id].get(array).pop_at(index)
 	func undo() -> void: dictionary[id].get(array).insert(index,Changes.copy(before))
+
+class ComponentArrayAppendChange extends Change:
+	# appends to array of components
+	var id:int
+	var array:StringName
+	var afterId:int
+	var dictionary:Dictionary
+	var elementDictionary:Dictionary
+
+	func _init(_game:Game,component:GameComponent,_array:StringName,after:GameComponent) -> void:
+		game = _game
+		id = component.id
+		afterId = after.id
+		array = _array
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
+		if after.get_script() in Changes.NON_OBJECT_COMPONENTS: elementDictionary = game.components
+		else: elementDictionary = game.objects
+		do()
+
+	func do() -> void: dictionary[id].get(array).append(elementDictionary[afterId])
+	func undo() -> void: dictionary[id].get(array).pop_back()
+
+class ComponentArrayElementChange extends Change:
+	# changes element of array of components
+	var id:int
+	var array:StringName
+	var index:int
+	var beforeId:int
+	var afterId:int
+	var dictionary:Dictionary
+	var elementDictionary:Dictionary
+
+	func _init(_game:Game,component:GameComponent,_array:StringName,_index:int,after:GameComponent) -> void:
+		game = _game
+		id = component.id
+		index = _index
+		array = _array
+		beforeId = component.get(array)[index].id
+		afterId = after.id
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
+		if after.get_script() in Changes.NON_OBJECT_COMPONENTS: elementDictionary = game.components
+		else: elementDictionary = game.objects
+		do()
+
+	func do() -> void: dictionary[id].get(array)[index] = elementDictionary[afterId]
+	func undo() -> void: dictionary[id].get(array)[index] = elementDictionary[beforeId]
+
+class ComponentArrayPopAtChange extends Change:
+	# pops at array of components index
+	var id:int
+	var array:StringName
+	var index:int
+	var beforeId:int
+	var dictionary:Dictionary
+	var elementDictionary:Dictionary
+
+	func _init(_game:Game,component:GameComponent,_array:StringName,_index:int) -> void:
+		game = _game
+		id = component.id
+		array = _array
+		index = _index
+		beforeId = component.get(array)[index].id
+		if component.get_script() in Changes.NON_OBJECT_COMPONENTS: dictionary = game.components
+		else: dictionary = game.objects
+		if component.get(array)[index].get_script() in Changes.NON_OBJECT_COMPONENTS: elementDictionary = game.components
+		else: elementDictionary = game.objects
+		do()
+
+	func do() -> void: dictionary[id].get(array).pop_at(index)
+	func undo() -> void: dictionary[id].get(array).insert(index,elementDictionary[beforeId])

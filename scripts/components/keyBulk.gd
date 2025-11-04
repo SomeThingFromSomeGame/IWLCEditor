@@ -94,10 +94,11 @@ const FKEYBULK:Font = preload("res://resources/fonts/fKeyBulk.tres")
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"color", &"type", &"count", &"infinite"
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
 var color:Game.COLOR = Game.COLOR.WHITE
 var type:TYPE = TYPE.NORMAL

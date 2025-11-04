@@ -75,15 +75,15 @@ class HandlerButton extends Button:
 	@onready var editor:Editor = get_node("/root/editor")
 	
 	var index:int
-	var selector:Handler
+	var handler:Handler
 	
 	var deleted:bool=false
 
-	func _init(_index:int,_selector:Handler) -> void:
+	func _init(_index:int,_handler:Handler) -> void:
 		custom_minimum_size = Vector2(16,16)
 		index = _index
-		selector = _selector
-		button_group = selector.buttonGroup
+		handler = _handler
+		button_group = handler.buttonGroup
 		toggle_mode = true
 		z_index = 1
 		theme_type_variation = &"SelectorButton"

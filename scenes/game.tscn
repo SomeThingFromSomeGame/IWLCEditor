@@ -25,6 +25,7 @@ sources/1 = SubResource("TileSetAtlasSource_w7c3h")
 
 [node name="tiles" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+z_index = -2
 tile_set = SubResource("TileSet_w8frs")
 
 [node name="editorCamera" type="Camera2D" parent="."]

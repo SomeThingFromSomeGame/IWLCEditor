@@ -51,13 +51,13 @@ class LockHandlerButton extends HandlerButton:
 
 	var drawMain:RID
 
-	func _init(_index:int,_selector:LockHandler) -> void:
-		super(_index, _selector)
-		lock = selector.door.locks[index]
+	func _init(_index:int,_handler:LockHandler) -> void:
+		super(_index, _handler)
+		lock = handler.door.locks[index]
 	
 	func _ready() -> void:
 		drawMain = RenderingServer.canvas_item_create()
-		RenderingServer.canvas_item_set_parent(drawMain,selector.get_canvas_item())
+		RenderingServer.canvas_item_set_parent(drawMain,handler.get_canvas_item())
 		editor.game.connect(&"goldIndexChanged",queue_redraw)
 		await get_tree().process_frame
 		await get_tree().process_frame # control positioning jank. figure out some way to fix this

@@ -51,11 +51,14 @@ const STRETCH:RenderingServer.NinePatchAxisMode = RenderingServer.NinePatchAxisM
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"colorSpend", &"copies", &"infCopies", &"type",
 	&"frozen", &"crumbled", &"painted"
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {
+	&"remoteLocks":RemoteLock
+}
 
 var colorSpend:Game.COLOR = Game.COLOR.WHITE
 var copies:C = C.ONE
@@ -75,6 +78,7 @@ var drawCopies:RID
 var drawNegative:RID
 
 var locks:Array[Lock] = []
+var remoteLocks:Array[RemoteLock] = []
 
 @onready var locksParent:Node2D = %locksParent
 
@@ -96,8 +100,8 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_material(drawPainted,PAINTED_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_material(drawFrozen,FROZEN_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_material(drawNegative,Game.NEGATIVE_MATERIAL.get_rid())
-	RenderingServer.canvas_item_set_z_index(drawCopies,1)
-	RenderingServer.canvas_item_set_z_index(drawNegative,1)
+	RenderingServer.canvas_item_set_z_index(drawCopies,2)
+	RenderingServer.canvas_item_set_z_index(drawNegative,2)
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
@@ -255,6 +259,8 @@ func propertyChangedDo(property:StringName) -> void:
 		%interactShape.position = size/2
 		if type == TYPE.SIMPLE: %shape.shape.size -= Vector2(2,2)
 		else: %interactShape.shape.size += Vector2(2,2)
+	if property in [&"size", &"position"]:
+		for remoteLock in remoteLocks: remoteLock.queue_redraw()
 
 func addLock() -> void:
 	changes.addChange(Changes.CreateComponentChange.new(game,Lock,{&"position":getFirstFreePosition(),&"parentId":id}))
@@ -281,6 +287,10 @@ func removeLock(index:int) -> void:
 	changes.addChange(Changes.DeleteComponentChange.new(game,locks[index]))
 	if type == Door.TYPE.SIMPLE: changes.addChange(Changes.PropertyChange.new(game,self,&"type",TYPE.COMBO))
 	changes.bufferSave()
+
+func deleted() -> void:
+	for remoteLock in remoteLocks:
+		changes.addChange(Changes.ArrayPopAtChange.new(game,remoteLock,&"doors",remoteLock.doors.find(self)))
 
 # ==== PLAY ==== #
 var gameCopies:C = C.ONE
@@ -392,10 +402,14 @@ func tryOpen(player:Player) -> void:
 	if gameCopies.neq(0): # although nothing (yet) can make a door 0 copy without destroying it
 		for lock in locks:
 			if !lock.canOpen(player): return
+		for lock in remoteLocks:
+			if !lock.satisfied: return
 	
 	var cost:C = C.ZERO
 	for lock in locks:
 		cost = cost.plus(lock.getCost(player))
+	for lock in remoteLocks:
+		cost = cost.plus(lock.cost)
 	
 	gameChanges.addChange(GameChanges.KeyChange.new(game, colorAfterAurabreaker(), player.key[colorAfterAurabreaker()].minus(cost)))
 	gameChanges.addChange(GameChanges.PropertyChange.new(game, self, &"gameCopies", gameCopies.minus(ipow().across(C.new(1,1).minus(infCopies)))))
@@ -441,7 +455,9 @@ func tryQuicksilverOpen(player:Player) -> bool:
 	var cost:C = C.ZERO
 	for lock in locks:
 		cost = cost.plus(lock.getCost(player, player.masterMode))
-	
+	for lock in remoteLocks:
+		cost = cost.plus(lock.cost.times(player.masterMode))
+
 	gameChanges.addChange(GameChanges.KeyChange.new(game, Game.COLOR.QUICKSILVER, player.key[Game.COLOR.QUICKSILVER].minus(player.masterMode)))
 	gameChanges.addChange(GameChanges.KeyChange.new(game, colorAfterGlitch(), player.key[colorAfterGlitch()].plus(cost)))
 
@@ -531,6 +547,7 @@ func propertyGameChangedDo(property:StringName) -> void:
 	if property == &"active":
 		%collision.process_mode = PROCESS_MODE_INHERIT if active else PROCESS_MODE_DISABLED
 		%interact.process_mode = PROCESS_MODE_INHERIT if active else PROCESS_MODE_DISABLED
+		for remoteLock in remoteLocks: remoteLock.checkDoors()
 	if property == &"gateOpen" and type == TYPE.GATE:
 		%collision.process_mode = PROCESS_MODE_DISABLED if gateOpen else PROCESS_MODE_INHERIT
 	if property == &"gameCopies": complexCheck()

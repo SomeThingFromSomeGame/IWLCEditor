@@ -39,6 +39,7 @@ func focus(focused:GameObject, new:bool, dontRedirect:bool) -> void: # Door or R
 			if focused.type == Door.TYPE.SIMPLE and !dontRedirect: main.focusComponent(focused.locks[0])
 	elif focused is RemoteLock:
 		%door.visible = false
+		%doorsHandler.setup(focused)
 		focusComponent(focused, new)
 
 func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or RemoteLock

@@ -170,7 +170,7 @@ func getOffset() -> Vector2: return offsetFromType(sizeType)
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position", &"parentId"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"parentId", &"color", &"type", &"configuration", &"sizeType", &"count", &"isPartial", &"denominator", &"negated",
 	&"index" # implcit

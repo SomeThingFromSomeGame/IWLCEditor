@@ -42,16 +42,16 @@ class KeyCounterHandlerButton extends HandlerButton:
 	var drawMain:RID
 	var drawGlitch:RID
 
-	func _init(_index:int,_selector:KeyCounterHandler) -> void:
-		super(_index, _selector)
-		element = selector.keyCounter.elements[index]
+	func _init(_index:int,_handler:KeyCounterHandler) -> void:
+		super(_index, _handler)
+		element = handler.keyCounter.elements[index]
 
 	func _ready() -> void:
 		drawMain = RenderingServer.canvas_item_create()
 		drawGlitch = RenderingServer.canvas_item_create()
 		RenderingServer.canvas_item_set_material(drawGlitch,Game.UNSCALED_GLITCH_MATERIAL.get_rid())
-		RenderingServer.canvas_item_set_parent(drawMain,selector.get_canvas_item())
-		RenderingServer.canvas_item_set_parent(drawGlitch,selector.get_canvas_item())
+		RenderingServer.canvas_item_set_parent(drawMain,handler.get_canvas_item())
+		RenderingServer.canvas_item_set_parent(drawGlitch,handler.get_canvas_item())
 		editor.game.connect(&"goldIndexChanged",queue_redraw)
 		await get_tree().process_frame
 		await get_tree().process_frame # control positioning jank. figure out some way to fix this

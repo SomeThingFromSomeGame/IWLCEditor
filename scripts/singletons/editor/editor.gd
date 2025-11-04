@@ -32,6 +32,8 @@ var dragOffset:Vector2 # the offset for position dragging
 var dragPivotRect:Rect2 # the pivot for size dragging
 var previousDragPosition:Vector2i # to check whether or not a drag would do anything
 
+var connectionSource:GameObject # for pulling connections between remote locks and doors
+
 var tileSize:Vector2i = Vector2i(32,32)
 
 var cameraZoom:float = 1
@@ -116,6 +118,12 @@ func _gui_input(event:InputEvent) -> void:
 					DRAG_MODE.SIZE_VERT: mouse_default_cursor_shape = CURSOR_VSIZE
 					DRAG_MODE.SIZE_HORIZ: mouse_default_cursor_shape = CURSOR_HSIZE
 			else: mouse_default_cursor_shape = CURSOR_ARROW
+			# connection pulling
+			if connectionSource and isLeftClick(event):
+				if connectionSource is RemoteLock and objectHovered is Door: connectionSource._connectTo(objectHovered)
+				if connectionSource is Door and objectHovered is RemoteLock: objectHovered._connectTo(connectionSource)
+				connectionSource = null
+				return
 			# multiselect
 			if multiselect.receiveMouseInput(event): return
 			elif multiselect.state == Multiselect.STATE.HOLDING and isLeftClick(event): multiselect.deselect()

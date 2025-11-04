@@ -6,9 +6,11 @@
 size = Vector2(18, 18)
 
 [node name="remoteLock" type="Node2D"]
+z_index = 1
 script = ExtResource("1_kxkn4")
 
 [node name="interact" type="Area2D" parent="."]
+unique_name_in_owner = true
 monitoring = false
 
 [node name="shape" type="CollisionShape2D" parent="interact"]

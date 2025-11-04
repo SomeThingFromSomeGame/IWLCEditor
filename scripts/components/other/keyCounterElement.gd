@@ -6,11 +6,12 @@ func outlineTex() -> Texture2D: return KeyBulk.getOutlineTexture(color)
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position", &"parentId"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"parentId", &"color",
 	&"index" # implciit
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
 const TEXT_COLOR:Color = Color("#2c221c")
 

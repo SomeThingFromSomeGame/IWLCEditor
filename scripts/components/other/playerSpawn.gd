@@ -16,9 +16,10 @@ const SAVESTATE_ICON:Texture2D = preload("res://assets/game/playerSpawn/savestat
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
 var drawMain:RID
 func _init() -> void : size = Vector2(32,32)

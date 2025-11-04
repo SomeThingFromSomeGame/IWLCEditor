@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://8bth374yqwpe"]
+[gd_scene load_steps=45 format=3 uid="uid://8bth374yqwpe"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_eqegh"]
 [ext_resource type="Script" uid="uid://dm8t82nhqkdlc" path="res://scripts/singletons/focusDialog/focusDialog.gd" id="2_k8bto"]
@@ -36,6 +36,7 @@
 [ext_resource type="Script" uid="uid://ofo6shxaymkl" path="res://scripts/singletons/focusDialog/playerDialog.gd" id="28_4qfwo"]
 [ext_resource type="Texture2D" uid="uid://cln0osp8um3ti" path="res://assets/ui/focusDialog/numberEdit/partialBlast.png" id="29_di8ev"]
 [ext_resource type="Script" uid="uid://dihumic7k5rec" path="res://scripts/singletons/focusDialog/keyCounterDialog.gd" id="30_bfxh1"]
+[ext_resource type="Script" uid="uid://2iqmgcrc5wpq" path="res://scripts/nodes/focusDialog/doorsHandler.gd" id="31_xwnfa"]
 [ext_resource type="Script" uid="uid://b0shfyjnfk7ih" path="res://scripts/singletons/focusDialog/goalDialog.gd" id="33_di8ev"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_oii3e"]
@@ -49,6 +50,9 @@ color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 grow_begin = 2.0
 grow_end = 2.0
 thickness = 2
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_xwnfa"]
+allow_unpress = true
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_h1xy2"]
 
@@ -382,6 +386,17 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="remoteLock" type="PanelContainer" parent="doorDialog/c"]
+layout_mode = 2
+theme_type_variation = &"DialogPanelContainer"
+
+[node name="doorsHandler" type="HFlowContainer" parent="doorDialog/c/remoteLock"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("31_xwnfa")
+buttonGroup = SubResource("ButtonGroup_xwnfa")
+metadata/_custom_type_script = "uid://2iqmgcrc5wpq"
 
 [node name="playerDialog" type="Control" parent="."]
 unique_name_in_owner = true

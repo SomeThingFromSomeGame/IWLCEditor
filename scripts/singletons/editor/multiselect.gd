@@ -206,7 +206,7 @@ class ObjectCopy extends Copy:
 		editor = select.editor
 		type = select.object.get_script()
 
-		for property in select.object.EDITOR_PROPERTIES:
+		for property in select.object.PROPERTIES:
 			properties[property] = select.object.get(property)
 		
 		properties[&"position"] -= editor.multiselect.selectRect.position
@@ -214,7 +214,7 @@ class ObjectCopy extends Copy:
 	func paste() -> GameComponent:
 		if editor.game.levelBounds.has_point(Vector2i(properties[&"position"])+editor.mouseTilePosition):
 			var object:GameObject = changes.addChange(Changes.CreateComponentChange.new(editor.game,type,{&"position":properties[&"position"]+Vector2(editor.mouseTilePosition)})).result
-			for property in object.EDITOR_PROPERTIES:
+			for property in object.PROPERTIES:
 				if property != &"id" and property not in object.CREATE_PARAMETERS:
 					changes.addChange(Changes.PropertyChange.new(editor.game,object,property,properties[property]))
 			return object
@@ -240,14 +240,14 @@ class LockCopy extends Copy:
 
 	func _init(_editor,lock:Lock) -> void:
 		editor = _editor
-		for property in Lock.EDITOR_PROPERTIES:
+		for property in Lock.PROPERTIES:
 			properties[property] = lock.get(property)
 
 	func paste(door:Door) -> Lock:
 		var lock:Lock = changes.addChange(Changes.CreateComponentChange.new(editor.game,Lock,
 			{&"position":properties[&"position"], &"parentId":door.id}
 		)).result
-		for property in lock.EDITOR_PROPERTIES:
+		for property in lock.PROPERTIES:
 			if property != &"id" and property not in lock.CREATE_PARAMETERS:
 				changes.addChange(Changes.PropertyChange.new(editor.game,lock,property,properties[property]))
 		return lock
@@ -272,14 +272,14 @@ class KeyCounterElementCopy extends Copy:
 
 	func _init(_editor,element:KeyCounterElement) -> void:
 		editor = _editor
-		for property in KeyCounterElement.EDITOR_PROPERTIES:
+		for property in KeyCounterElement.PROPERTIES:
 			properties[property] = element.get(property)
 
 	func paste(keyCounter:KeyCounter) -> KeyCounterElement:
 		var element:KeyCounterElement = changes.addChange(Changes.CreateComponentChange.new(editor.game,KeyCounterElement,
 			{&"position":properties[&"position"], &"parentId":keyCounter.id}
 		)).result
-		for property in element.EDITOR_PROPERTIES:
+		for property in element.PROPERTIES:
 			if property != &"id" and property not in element.CREATE_PARAMETERS:
 				changes.addChange(Changes.PropertyChange.new(editor.game,element,property,properties[property]))
 		return element

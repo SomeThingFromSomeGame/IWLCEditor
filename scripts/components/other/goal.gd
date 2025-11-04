@@ -22,10 +22,11 @@ func getSprite() -> Texture2D:
 const CREATE_PARAMETERS:Array[StringName] = [
 	&"position"
 ]
-const EDITOR_PROPERTIES:Array[StringName] = [
+const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"type"
 ]
+static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
 const TYPES:int = 3
 enum TYPE {NORMAL, STAR, OMEGA}
@@ -65,8 +66,8 @@ func _process(delta:float):
 func _ready() -> void:
 	drawMain = RenderingServer.canvas_item_create()
 	drawStar = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_z_index(drawMain,1)
-	RenderingServer.canvas_item_set_z_index(drawStar,1)
+	RenderingServer.canvas_item_set_z_index(drawMain,2)
+	RenderingServer.canvas_item_set_z_index(drawStar,2)
 	RenderingServer.canvas_item_set_material(drawStar,Game.ADDITIVE_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawStar,get_canvas_item())
