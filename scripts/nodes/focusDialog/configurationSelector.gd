@@ -54,7 +54,7 @@ func _select(button:ConfigurationSelectorButton) -> void:
 	selected = button.option
 	if !manuallySetting: select.emit(button.option)
 
-func setup(lock:Lock) -> void:
+func setup(lock:GameComponent) -> void: # Lock or RemoteLock
 	var specificAAvailable:bool = false
 	var specificBAvailable:bool = false
 	for configuration in lock.getAvailableConfigurations():
@@ -91,6 +91,7 @@ func setup(lock:Lock) -> void:
 
 func changedMods() -> void:
 	if editor.focusDialog.componentFocused is Lock: setup(editor.focusDialog.componentFocused)
+	elif editor.focusDialog.focused is RemoteLock: setup(editor.focusDialog.focused)
 
 class ConfigurationSelectorButton extends Button:
 	@onready var editor:Editor = get_node("/root/editor")

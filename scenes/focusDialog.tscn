@@ -150,6 +150,7 @@ grow_horizontal = 2
 theme_override_constants/separation = 4
 
 [node name="door" type="PanelContainer" parent="doorDialog/c"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(182, 0)
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"

@@ -180,6 +180,10 @@ class ObjectSelect extends Select:
 	
 	func delete() -> void: changes.addChange(Changes.DeleteComponentChange.new(editor.game,object))
 
+	func getDrawPosition() -> Vector2:
+		if object is RemoteLock: return position-object.getOffset()
+		else: return position
+
 class Copy extends RefCounted:
 	# a copy of a single thing
 	var editor:Editor

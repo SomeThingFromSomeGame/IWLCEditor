@@ -157,8 +157,8 @@ func receiveKey(event:InputEventKey):
 
 func _newlyInteracted(area:Area2D) -> void:
 	var object:GameObject = area.get_parent()
-	if object is KeyBulk:
-		object.collect(self)
+	if object is KeyBulk: object.collect(self)
+	elif object is RemoteLock: object.check(self)
 
 func interacted(area:Area2D) -> void:
 	var object:GameObject = area.get_parent()

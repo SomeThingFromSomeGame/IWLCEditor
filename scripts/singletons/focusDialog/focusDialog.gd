@@ -25,14 +25,14 @@ func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	editor.game.objectsParent.move_child(focused, -1)
 	showCorrectDialog()
 	if focused is KeyBulk: keyDialog.focus(focused, new)
-	elif focused is Door: doorDialog.focus(focused, new, dontRedirect)
+	elif focused is Door or focused is RemoteLock: doorDialog.focus(focused, new, dontRedirect)
 	elif focused is PlayerSpawn: playerDialog.focus(focused, new)
 	elif focused is KeyCounter: keyCounterDialog.focus(focused, new, dontRedirect)
 	elif focused is Goal: goalDialog.focus(focused, new)
 
 func showCorrectDialog() -> void:
 	%keyDialog.visible = focused is KeyBulk
-	%doorDialog.visible = focused is Door
+	%doorDialog.visible = focused is Door or focused is RemoteLock
 	%playerDialog.visible = focused is PlayerSpawn
 	%keyCounterDialog.visible = focused is KeyCounter
 	%goalDialog.visible = focused is Goal
@@ -151,8 +151,8 @@ func receiveKey(event:InputEvent) -> bool:
 func _process(_delta:float) -> void:
 	if focused:
 		visible = true
-		if above: position = editor.worldspaceToScreenspace(focused.position + Vector2(focused.size.x/2,0)) + Vector2(0,-8)
-		else: position = editor.worldspaceToScreenspace(focused.position + Vector2(focused.size.x/2,focused.size.y)) + Vector2(0,8)
+		if above: position = editor.worldspaceToScreenspace(focused.getDrawPosition() + Vector2(focused.size.x/2,0)) + Vector2(0,-8)
+		else: position = editor.worldspaceToScreenspace(focused.getDrawPosition() + Vector2(focused.size.x/2,focused.size.y)) + Vector2(0,8)
 		var halfWidth:float = getWidth()/2
 		%speechBubbler.position.x = 0
 		if position.x < halfWidth:
