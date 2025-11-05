@@ -447,18 +447,20 @@ func receiveMouseInput(event:InputEventMouse) -> bool:
 		return true
 	return false
 
-func _coerceSize() -> void:
-	var newSize = (size+Vector2(14,14)).snapped(Vector2(16,16))
+func _coerceSize() -> void: lockCoerceSize(game,self)
+
+static func lockCoerceSize(_game:Game,lock:GameComponent) -> void:
+	var newSize = (lock.size+Vector2(14,14)).snapped(Vector2(16,16))
 	if newSize == Vector2(48,48):
 		newSize = Vector2(38,38)
 	else:
-		newSize = (size+Vector2(14,14)).snapped(Vector2(32,32)) - Vector2(14,14)
+		newSize = (lock.size+Vector2(14,14)).snapped(Vector2(32,32)) - Vector2(14,14)
 		if newSize in SIZES: return
 		newSize = newSize.min(Vector2(82,82))
 		# 1x3, 2x3 -> 3x3
 		if newSize.x < newSize.y: newSize = Vector2(newSize.y, newSize.y)
 		elif newSize.y < newSize.x: newSize = Vector2(newSize.x, newSize.x)
-	changes.addChange(Changes.PropertyChange.new(game,self,&"size",newSize))
+	_game.changes.addChange(Changes.PropertyChange.new(_game,lock,&"size",newSize))
 
 func propertyChangedInit(property:StringName) -> void:
 	if parent.type != Door.TYPE.SIMPLE:

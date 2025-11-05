@@ -108,9 +108,30 @@ func propertyChangedDo(property:StringName) -> void:
 		%shape.shape.size = size
 		%shape.position = size/2 - getOffset()
 
+func receiveMouseInput(event:InputEventMouse) -> bool:
+	# resizing
+	if editor.componentDragged: return false
+	var dragCornerSize:Vector2 = Vector2(8,8)/editor.cameraZoom
+	var diffSign:Vector2 = Editor.rectSign(Rect2(position-getOffset()+dragCornerSize,size-dragCornerSize*2), editor.mouseWorldPosition)
+	var dragPivot:Editor.SIZE_DRAG_PIVOT = Editor.SIZE_DRAG_PIVOT.NONE
+	match diffSign:
+		Vector2(-1,-1): dragPivot = Editor.SIZE_DRAG_PIVOT.TOP_LEFT;	editor.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
+		Vector2(0,-1): dragPivot = Editor.SIZE_DRAG_PIVOT.TOP;			editor.mouse_default_cursor_shape = Control.CURSOR_VSIZE
+		Vector2(1,-1): dragPivot = Editor.SIZE_DRAG_PIVOT.TOP_RIGHT;	editor.mouse_default_cursor_shape = Control.CURSOR_BDIAGSIZE
+		Vector2(-1,0): dragPivot = Editor.SIZE_DRAG_PIVOT.LEFT;			editor.mouse_default_cursor_shape = Control.CURSOR_HSIZE
+		Vector2(1,0): dragPivot = Editor.SIZE_DRAG_PIVOT.RIGHT;			editor.mouse_default_cursor_shape = Control.CURSOR_HSIZE
+		Vector2(-1,1): dragPivot = Editor.SIZE_DRAG_PIVOT.BOTTOM_LEFT;	editor.mouse_default_cursor_shape = Control.CURSOR_BDIAGSIZE
+		Vector2(0,1): dragPivot = Editor.SIZE_DRAG_PIVOT.BOTTOM;		editor.mouse_default_cursor_shape = Control.CURSOR_VSIZE
+		Vector2(1,1): dragPivot = Editor.SIZE_DRAG_PIVOT.BOTTOM_RIGHT;	editor.mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
+	if dragPivot != Editor.SIZE_DRAG_PIVOT.NONE and Editor.isLeftClick(event):
+		editor.startSizeDrag(self, dragPivot)
+		return true
+	return false
+
 func _comboDoorConfigurationChanged(newSizeType:Lock.SIZE_TYPE,newConfiguration:Lock.CONFIGURATION=Lock.CONFIGURATION.NONE) -> void: Lock.comboDoorConfigurationChanged(game,self,newSizeType,newConfiguration)
 func _comboDoorSizeChanged() -> void: Lock.comboDoorSizeChanged(game,self)
 func _setAutoConfiguration() -> void: changes.addChange(Changes.PropertyChange.new(game,self,&"configuration",Lock.getAutoConfiguration(self)))
+func _coerceSize() -> void: Lock.lockCoerceSize(game,self)
 
 func _connectTo(door:Door) -> void:
 	changes.addChange(Changes.ComponentArrayAppendChange.new(game,self,&"doors",door))

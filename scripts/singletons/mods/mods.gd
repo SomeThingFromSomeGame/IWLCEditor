@@ -122,10 +122,12 @@ func getTempActiveMods() -> Array[StringName]:
 
 
 func openModsWindow() -> void:
-	if editor.modsWindow: editor.modsWindow.queue_free()
-	var window:Window = preload("res://scenes/modsWindow.tscn").instantiate()
-	editor.add_child(window)
-	window.position = get_window().position+(get_window().size-window.size)/2
+	if editor.modsWindow:
+		editor.modsWindow.grab_focus()
+	else:
+		var window:Window = preload("res://scenes/modsWindow.tscn").instantiate()
+		editor.add_child(window)
+		window.position = get_window().position+(get_window().size-window.size)/2
 
 func listDependencies(mod:Mod) -> String:
 	if mod.dependencies == []: return "No dependencies"

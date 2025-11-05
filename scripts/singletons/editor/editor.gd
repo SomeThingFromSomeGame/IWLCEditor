@@ -100,7 +100,7 @@ func _gui_input(event:InputEvent) -> void:
 			if isLeftUnclick(event) or isRightUnclick(event):
 				if componentDragged:
 					if sizeDragging():
-						if !mods.active(&"NstdLockSize") and componentDragged is Lock and componentDragged.parent.type != Door.TYPE.SIMPLE:
+						if !mods.active(&"NstdLockSize") and ((componentDragged is Lock and componentDragged.parent.type != Door.TYPE.SIMPLE) or componentDragged is RemoteLock):
 							componentDragged._coerceSize()
 						if componentDragged is GameObject: focusDialog.focus(componentDragged)
 						else: focusDialog.focusComponent(componentDragged)
@@ -141,7 +141,7 @@ func _gui_input(event:InputEvent) -> void:
 				return
 			# multiselect
 			if multiselect.receiveMouseInput(event): return
-			elif multiselect.state == Multiselect.STATE.HOLDING and isLeftClick(event): multiselect.deselect()
+			elif multiselect.state == Multiselect.STATE.HOLDING and (isLeftClick(event) or isRightClick(event)): multiselect.deselect()
 			# size drag handles
 			if focusDialog.componentFocused is Lock and focusDialog.focused.type != Door.TYPE.SIMPLE:
 				if focusDialog.componentFocused.receiveMouseInput(event): return
@@ -243,7 +243,7 @@ func startSizeDrag(component:GameComponent, pivot:SIZE_DRAG_PIVOT=SIZE_DRAG_PIVO
 	var rectPos:Vector2 = Vector2.ZERO
 	var minSize:Vector2
 	if component is Door: minSize = Vector2(32,32)
-	elif component is Lock: minSize = Vector2(18,18)
+	elif component is Lock or component is RemoteLock: minSize = Vector2(18,18)
 	elif component is KeyCounter: minSize = Vector2(107,63)
 	if component is not GameObject: rectPos += component.parent.position
 	match pivot:
@@ -303,10 +303,10 @@ func dragComponent() -> bool: # returns whether or not an object is being dragge
 			# since mousetileposition rounds down, dragging down or right should go one tile farther
 			if mouseWorldPosition.x > dragPivotRect.position.x:
 				dragPosition.x += tileSize.x
-				if componentDragged is Lock: dragPosition.x += componentDragged.getOffset().x*2
+				if componentDragged is Lock or componentDragged is RemoteLock: dragPosition.x += componentDragged.getOffset().x*2
 			if mouseWorldPosition.y > dragPivotRect.position.y:
 				dragPosition.y += tileSize.y
-				if componentDragged is Lock: dragPosition.y += componentDragged.getOffset().y*2
+				if componentDragged is Lock or componentDragged is RemoteLock: dragPosition.y += componentDragged.getOffset().y*2
 			# keycounter has only a few possible widths
 			if componentDragged is KeyCounter:
 				dragPosition -= dragPivotRect.position
