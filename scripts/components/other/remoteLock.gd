@@ -84,16 +84,16 @@ func _draw() -> void:
 		Lock.getFrameDarkColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		isNegative()
 	)
-	# figure this out
-	#if color == Game.COLOR.GLITCH: RenderingServer.canvas_item_set_material(drawConnections, Game.UNSCALED_GLITCH_MATERIAL)
-	#else: RenderingServer.canvas_item_set_material(drawConnections, Game.NO_MATERIAL)
-	# connections
 	var from:Vector2 = size/2-getOffset()
+	var index:int = 0
 	for door in doors:
 		if !door.active and game.playState == Game.PLAY_STATE.PLAY: continue
 		var to:Vector2 = door.position+door.size/2 - position
+		if self == editor.focusDialog.focused and index == editor.focusDialog.doorDialog.doorsHandler.selected:
+			RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE,4+4/editor.cameraZoom)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
+		index += 1
 	if self == editor.connectionSource:
 		var to:Vector2 = editor.mouseWorldPosition - position
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)

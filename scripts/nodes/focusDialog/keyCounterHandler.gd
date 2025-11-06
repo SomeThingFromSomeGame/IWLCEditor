@@ -18,12 +18,12 @@ func removeComponent() -> void: keyCounter.removeElement(selected)
 
 static func buttonType() -> GDScript: return KeyCounterHandlerButton
 
-func addButton(index:int=len(buttons)) -> void:
-	super(index)
+func addButton(index:int=len(buttons),select:bool=true) -> void:
+	super(index,select)
 	if len(buttons) == 1: remove.visible = false
 
-func removeButton(index:int=selected) -> void:
-	super(index)
+func removeButton(index:int=selected,select:bool=true) -> void:
+	super(index,select)
 	if len(buttons) == 1: remove.visible = false
 
 func _select(button:Button) -> void:

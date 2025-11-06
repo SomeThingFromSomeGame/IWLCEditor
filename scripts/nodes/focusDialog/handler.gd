@@ -46,16 +46,17 @@ func _select(button:Button) -> void: # not necessarily HandlerButton since lockh
 
 static func buttonType() -> GDScript: return HandlerButton
 
-func addButton(index:int=len(buttons)) -> void:
+func addButton(index:int=len(buttons),select:bool=true) -> void:
 	var button:HandlerButton = buttonType().new(index, self)
 	buttons.append(button)
 	add_child(button)
 	move_child(add, -1)
 	move_child(remove, -1)
-	button.button_pressed = true
+	if select: button.button_pressed = true
+	else: selected = -1
 	remove.visible = true
 
-func removeButton(index:int=selected) -> void:
+func removeButton(index:int=selected,select:bool=true) -> void:
 	var button:HandlerButton = buttons.pop_at(index)
 	button.deleted = true
 	button._draw()
@@ -65,7 +66,7 @@ func removeButton(index:int=selected) -> void:
 	if len(buttons) == 0:
 		remove.visible = false
 		selected = -1
-	else: setSelect(len(buttons)-1)
+	elif select: setSelect(len(buttons)-1)
 	changes.bufferSave()
 
 func redrawButton(index:int) -> void:

@@ -5,6 +5,7 @@ class_name DoorDialog
 @onready var main:FocusDialog = get_parent()
 
 @onready var lockHandler:LockHandler = %lockHandler
+@onready var doorsHandler:DoorsHandler = %doorsHandler
 
 func focus(focused:GameObject, new:bool, dontRedirect:bool) -> void: # Door or RemoteLock
 	if focused is Door:

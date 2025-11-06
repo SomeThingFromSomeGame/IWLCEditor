@@ -42,9 +42,11 @@ func showCorrectDialog() -> void:
 
 func defocus() -> void:
 	if !focused: return
+	var object:GameObject = focused
 	editor.quickSet.applyOrCancel()
-	if focused is Door and !mods.active(&"ZeroCopies") and focused.copies.eq(0): changes.addChange(Changes.PropertyChange.new(editor.game,focused,&"copies",C.new(1)))
+	if object is Door and !mods.active(&"ZeroCopies") and object.copies.eq(0): changes.addChange(Changes.PropertyChange.new(editor.game,object,&"copies",C.new(1)))
 	focused = null
+	if object is RemoteLock: object.queue_redraw()
 	deinteract()
 	defocusComponent()
 
@@ -182,7 +184,7 @@ func focusHandlerAdded(type:GDScript, index:int) -> void:
 		KeyCounterElement:
 			%keyCounterHandler.addButton(index)
 			focusComponent(focused.elements[index])
-		Door: %doorsHandler.addButton(index)
+		Door: %doorsHandler.addButton(index,false)
 
 func focusHandlerRemoved(type:GDScript, index:int) -> void:
 	match type:
@@ -192,4 +194,4 @@ func focusHandlerRemoved(type:GDScript, index:int) -> void:
 		KeyCounterElement:
 			%keyCounterHandler.removeButton(index)
 			if index != 0: focusComponent(focused.elements[index-1])
-		Door: %doorsHandler.removeButton(index)
+		Door: %doorsHandler.removeButton(index,false)

@@ -137,6 +137,7 @@ func _gui_input(event:InputEvent) -> void:
 				if connectionSource is RemoteLock and objectHovered is Door: connectionSource._connectTo(objectHovered)
 				if connectionSource is Door and objectHovered is RemoteLock: objectHovered._connectTo(connectionSource)
 				focusDialog.focus(connectionSource)
+				connectionSource.queue_redraw()
 				connectionSource = null
 				return
 			# multiselect

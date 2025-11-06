@@ -27,6 +27,7 @@ func removeComponent() -> void: remoteLock._disconnectTo(buttons[selected].door)
 func _select(button:Button) -> void:
 	if selected == button.index: editor.focusDialog.focus(button.door)
 	else: super(button)
+	remoteLock.queue_redraw()
 
 class DoorsHandlerButton extends HandlerButton:
 	const ICON:Texture2D = preload("res://assets/ui/focusDialog/doorsHandler/door.png")

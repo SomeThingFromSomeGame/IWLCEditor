@@ -25,12 +25,12 @@ func removeComponent() -> void: door.removeLock(selected)
 
 static func buttonType() -> GDScript: return LockHandlerButton
 
-func addButton(index:int=len(buttons)) -> void:
-	super(index)
+func addButton(index:int=len(buttons),select:bool=true) -> void:
+	super(index,select)
 	move_child(colorLink, -1)
 
-func removeButton(index:int=selected) -> void:
-	super(index)
+func removeButton(index:int=selected,select:bool=true) -> void:
+	super(index,select)
 	colorLink.visible = false
 
 func _select(button:Button) -> void:
