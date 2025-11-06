@@ -13,6 +13,11 @@ class_name Editor
 var modsWindow:ModsWindow
 var findProblems:FindProblems
 
+@onready var saveAsDialog:FileDialog = %saveAsDialog
+@onready var openDialog:FileDialog = %openDialog
+@onready var unsavedChangesPopup:ConfirmationDialog = %unsavedChangesPopup
+@onready var loadErrorPopup:AcceptDialog = %loadErrorPopup
+
 enum MODE {SELECT, TILE, KEY, DOOR, OTHER, PASTE}
 var mode:MODE = MODE.SELECT
 
@@ -343,7 +348,11 @@ func _input(event:InputEvent) -> void:
 				KEY_T: modes.setMode(MODE.TILE)
 				KEY_B: modes.setMode(MODE.KEY)
 				KEY_D: modes.setMode(MODE.DOOR)
-				KEY_S: otherObjects.objectSearch.grab_focus()
+				KEY_S:
+					if Input.is_key_pressed(KEY_CTRL):
+						if Input.is_key_pressed(KEY_SHIFT): Saving.saveAs()
+						else: Saving.save()
+					else: otherObjects.objectSearch.grab_focus()
 				KEY_Z: if Input.is_key_pressed(KEY_CTRL): Changes.undo()
 				KEY_Y: if Input.is_key_pressed(KEY_CTRL): Changes.redo()
 				KEY_C: if Input.is_key_pressed(KEY_CTRL): multiselect.copySelection()
@@ -355,10 +364,7 @@ func _input(event:InputEvent) -> void:
 				KEY_M:
 					if focusDialog.componentFocused: startPositionDrag(focusDialog.componentFocused)
 					elif focusDialog.focused: startPositionDrag(focusDialog.focused)
-				KEY_H:
-					targetCameraZoom = 1
-					zoomPoint = game.levelBounds.get_center()
-					game.editorCamera.position = zoomPoint - gameViewportCont.size / (cameraZoom*2)
+				KEY_H: home()
 				KEY_SPACE:
 					if !topBar.play.disabled:
 						var ctrlHeld:bool = Input.is_key_pressed(KEY_CTRL)
@@ -368,6 +374,11 @@ func _input(event:InputEvent) -> void:
 						else: game.playTest(game.levelStart)
 				KEY_DELETE: multiselect.delete()
 				KEY_TAB: grab_focus()
+
+func home() -> void:
+	targetCameraZoom = 1
+	zoomPoint = game.levelBounds.get_center()
+	game.editorCamera.position = zoomPoint - gameViewportCont.size / (cameraZoom*2)
 
 func zoomCamera(factor:float) -> void:
 	targetCameraZoom *= factor

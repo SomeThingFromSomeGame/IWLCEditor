@@ -16,10 +16,11 @@ func _ready() -> void:
 func optionPressed(id:int) -> void:
 	match id:
 		# FILE
-		0: pass # new
-		1: pass # open
-		2: pass # save
-		3: pass # save as
+		0: Saving.new()
+		1: Saving.open()
+		2: Saving.save()
+		3: Saving.saveAs()
 		4: pass # export
+		5: OS.shell_open(ProjectSettings.globalize_path("user://levels"))
 		# CONFIG
-		6: Mods.openModsWindow()
+		7: Mods.openModsWindow()

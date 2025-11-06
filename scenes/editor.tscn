@@ -63,7 +63,6 @@ resource_name = "modes"
 shader = ExtResource("8_o435n")
 shader_parameter/GRID_COLOR = Color(0.54901963, 0.54901963, 0.54901963, 0.54509807)
 shader_parameter/OUTOFBOUNDS_COLOR = Color(0.20990813, 0.20990813, 0.2099081, 1)
-shader_parameter/levelSize = Vector2(800, 608)
 shader_parameter/screenPosition = Vector2(0, 0)
 shader_parameter/mousePosition = Vector2(0, 0)
 shader_parameter/tileSize = Vector2(32, 32)
@@ -110,7 +109,7 @@ script = ExtResource("4_4jiep")
 layout_mode = 2
 icon = ExtResource("5_m12ww")
 flat = false
-item_count = 7
+item_count = 8
 popup/item_0/text = "New"
 popup/item_0/id = 0
 popup/item_1/text = "Open"
@@ -121,10 +120,12 @@ popup/item_3/text = "Save As"
 popup/item_3/id = 3
 popup/item_4/text = "Export"
 popup/item_4/id = 4
+popup/item_5/text = "Open Levels Folder"
 popup/item_5/id = 5
-popup/item_5/separator = true
-popup/item_6/text = "Mods "
 popup/item_6/id = 6
+popup/item_6/separator = true
+popup/item_7/text = "Mods "
+popup/item_7/id = 7
 script = ExtResource("6_7msgv")
 
 [node name="spacer" type="Control" parent="c/c/topBar/c/modes"]
@@ -316,6 +317,45 @@ script = ExtResource("14_sdh1e")
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
+
+[node name="saveAsDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Save As"
+mode_overrides_title = false
+display_mode = 1
+access = 1
+filters = PackedStringArray("*.cedit")
+use_native_dialog = true
+
+[node name="openDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open"
+mode_overrides_title = false
+file_mode = 0
+display_mode = 1
+access = 1
+filters = PackedStringArray("*.cedit;IWLCEditor File")
+use_native_dialog = true
+
+[node name="unsavedChangesPopup" type="ConfirmationDialog" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Unsaved Changes"
+initial_position = 2
+size = Vector2i(200, 90)
+unresizable = true
+ok_button_text = "Yes"
+dialog_text = "You have unsaved changes.
+Load new level anyway?"
+
+[node name="loadErrorPopup" type="AcceptDialog" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Load Error"
+initial_position = 2
+size = Vector2i(200, 90)
+unresizable = true
 
 [connection signal="pressed" from="c/c/topBar/c/modes/select" to="c/c/topBar/c/modes" method="_setMode" binds= [0]]
 [connection signal="pressed" from="c/c/topBar/c/modes/tile" to="c/c/topBar/c/modes" method="_setMode" binds= [1]]

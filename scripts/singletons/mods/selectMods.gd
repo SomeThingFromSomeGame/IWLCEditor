@@ -81,7 +81,7 @@ func _modpackSelected(index:int, manual:bool=false) -> void:
 		modsWindow.tempActiveVersion = null
 	else:
 		if modsWindow.tempActiveModpack == Mods.modpacks[Mods.modpacks.keys()[index]]: return
-		modsWindow.tempActiveModpack = Mods.modpacks[Mods.modpacks.keys()[index]]
+		modsWindow.tempActiveModpack = Mods.modpacks.values()[index]
 		modsWindow.tempActiveVersion = modsWindow.tempActiveModpack.versions[0]
 	updateModpacks()
 	updateversions()
@@ -149,11 +149,11 @@ func setInfoMod(mod:Mods.Mod) -> void:
 
 class SubTree extends RefCounted:
 	var label:String
-	var Mods:Array[StringName] # cant recurse yet; maybe at some point
+	var mods:Array[StringName] # cant recurse yet; maybe at some point
 
 	func _init(_label:String, _mods:Array[StringName]) -> void:
 		label = _label
-		Mods = _mods
+		mods = _mods
 
 # because we want to be able to undo here
 func bufferSave() -> void:

@@ -9,7 +9,7 @@ static var nI:C = C.new(0,-1)
 var r:Q
 var i:Q
 
-func _init(_r:Variant,_i:Variant=0) -> void:
+func _init(_r:Variant=0,_i:Variant=0) -> void:
 	if _r is C:
 		r = _r.r
 		i = _r.i
@@ -90,3 +90,9 @@ func toIpow() -> int:
 	elif eq(-1): return 2
 	elif eq(C.nI): return 3
 	else: assert(false); return 0
+
+func _get_property_list() -> Array[Dictionary]:
+	return [
+		{"name":"r","class_name":&"Q","type":TYPE_OBJECT,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE},
+		{"name":"i","class_name":&"Q","type":TYPE_OBJECT,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE}
+	]

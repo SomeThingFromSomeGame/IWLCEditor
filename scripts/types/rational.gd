@@ -4,7 +4,7 @@ class_name Q
 static var ZERO:Q = Q.new(0)
 var n:int
 
-func _init(_n) -> void:
+func _init(_n:Variant=0) -> void:
 	if _n is Q: n = _n.n
 	else: n = _n
 
@@ -33,3 +33,8 @@ func squared() -> Q: return self.times(self)
 
 func divides(number) -> bool:
 	return n % Q.new(number).n == 0
+
+func _get_property_list() -> Array[Dictionary]:
+	return [
+		{"name":"n","type":TYPE_INT,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE}
+	]

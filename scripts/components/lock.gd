@@ -209,10 +209,7 @@ static func getConfigurationColor(_isNegative:bool) -> Color:
 	if _isNegative: return Color("#ebdfd3")
 	else: return Color("#2c2014")
 
-func _init(_parent:Door, _index:int) -> void:
-	parent = _parent
-	index = _index
-	size = Vector2(18,18)
+func _init() -> void: size = Vector2(18,18)
 
 func _ready() -> void:
 	drawGlitch = RenderingServer.canvas_item_create()
@@ -491,8 +488,8 @@ func propertyChangedInit(property:StringName) -> void:
 		Changes.addChange(Changes.PropertyChange.new(game,self,&"denominator", C.ONE if count.isComplex() or count.eq(0) or type == TYPE.ALL else count.axis()))
 
 func propertyChangedDo(property:StringName) -> void:
-	if property in [&"count", &"denominator"]: parent.queue_redraw()
-	if property == &"armament": parent.reindexLocks()
+	if property in [&"count", &"denominator"] and parent: parent.queue_redraw()
+	if property == &"armament" and parent: parent.reindexLocks()
 
 # ==== PLAY ==== #
 var glitchMimic:Game.COLOR = Game.COLOR.GLITCH

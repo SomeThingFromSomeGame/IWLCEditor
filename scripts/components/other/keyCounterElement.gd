@@ -28,10 +28,7 @@ var drawGlitch:RID
 var drawMain:RID
 var drawCurse:CurseParticle
 
-func _init(_parent:KeyCounter, _index:int) -> void:
-	parent = _parent
-	index = _index
-	size = Vector2(32,32)
+func _init() -> void: size = Vector2(32,32)
 
 func _ready() -> void:
 	drawCurse = CurseParticle.new(color,1,Vector2(16,16),-2.3038346126,0.4)

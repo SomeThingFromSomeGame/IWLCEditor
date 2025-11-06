@@ -25,7 +25,7 @@ Changes="*res://scripts/singletons/editor/changes.gd"
 GameChanges="*res://scripts/singletons/game/gameChanges.gd"
 Mods="*res://scripts/singletons/mods/mods.gd"
 AudioManager="*res://scripts/singletons/game/audioManager.gd"
-Saving="*res://scripts/singletons/editor/saving.gd"
+Saving="*res://scripts/singletons/saving/saving.gd"
 
 [display]
 
@@ -71,4 +71,8 @@ NOISE_OFFSET={
 RCAMERA_ZOOM={
 "type": "float",
 "value": 1.0
+}
+LEVEL_SIZE={
+"type": "vec2",
+"value": Vector2(800, 608)
 }

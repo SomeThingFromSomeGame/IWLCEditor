@@ -1,6 +1,9 @@
 extends Node2D
 class_name Game
 
+static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, RemoteLock]
+static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
+
 const COLORS:int = 22
 enum COLOR {MASTER, WHITE, ORANGE, PURPLE, RED, GREEN, BLUE, PINK, CYAN, BLACK, BROWN, PURE, GLITCH, STONE, DYNAMITE, QUICKSILVER, MAROON, FOREST, NAVY, ICE, MUD, GRAFFITI}
 
@@ -236,6 +239,13 @@ const darkTone:Array[Color] = [
 @onready var playCamera:Camera2D = %playCamera
 @onready var objectsParent:Node = %objectsParent
 
+var level:Level = Level.new()
+var anyChanges:bool = false:
+	set(value):
+		anyChanges = value
+		if anyChanges: get_window().title = level.name + "*" + " - IWLCEDitor"
+		else: get_window().title = level.name + " - IWLCEDitor"
+
 var objectIdIter:int = 0 # for creating objects
 var componentIdIter:int = 0 # for creating components
 var goldIndex:int = 0 # youve seen this before
@@ -248,11 +258,11 @@ var components:Dictionary[int,GameComponent] = {}
 var levelBounds:Rect2i = Rect2i(0,0,800,608):
 	set(value):
 		levelBounds = value
-		editor.gameViewportCont.material.set_shader_material("gameSize",levelBounds.size)
-		%playCamera.set_limit.left = levelBounds.position.x
-		%playCamera.set_limit.top = levelBounds.position.y
-		%playCamera.set_limit.right = levelBounds.end.x
-		%playCamera.set_limit.bottom = levelBounds.end.y
+		RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size)
+		%playCamera.limit_left = levelBounds.position.x
+		%playCamera.limit_top = levelBounds.position.y
+		%playCamera.limit_right = levelBounds.end.x
+		%playCamera.limit_bottom = levelBounds.end.y
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
@@ -288,6 +298,8 @@ var complexViewHue:float = 0
 
 func _ready() -> void:
 	GameChanges.game = self
+	Saving.game = self
+	anyChanges = false
 
 func _process(delta:float) -> void:
 	goldIndexFloat += delta*6 # 0.1 per frame, 60fps
@@ -368,3 +380,8 @@ func setGlitch(color:COLOR) -> void:
 	for object in objects.values():
 		if object.get_script() in [KeyBulk, Door, RemoteLock]:
 			object.setGlitch(color)
+
+class Level extends RefCounted:
+	var name:String = "Unnamed Level"
+	var description:String = ""
+	var author:String = "Unknown Author"
