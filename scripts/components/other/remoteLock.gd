@@ -16,7 +16,7 @@ const CREATE_PARAMETERS:Array[StringName] = [
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"color", &"type", &"configuration", &"sizeType", &"count", &"isPartial", &"denominator", &"negated",
-	# todo: however youre going to pull that off
+	&"frozen", &"crumbled", &"painted"
 ]
 static var ARRAYS:Dictionary[StringName,GDScript] = {
 	&"doors":Door
@@ -30,6 +30,10 @@ var count:C = C.ONE
 var isPartial:bool = false # for partial blast
 var denominator:C = C.ONE # for partial blast
 var negated:bool = false
+var frozen:bool = false
+var crumbled:bool = false
+var painted:bool = false
+
 var doors:Array[Door] = []
 
 var drawConnections:RID
@@ -37,6 +41,9 @@ var drawGlitch:RID
 var drawScaled:RID
 var drawMain:RID
 var drawConfiguration:RID
+var drawCrumbled:RID
+var drawPainted:RID
+var drawFrozen:RID
 
 func _init() -> void: size = Vector2(18,18)
 
@@ -46,12 +53,18 @@ func _ready() -> void:
 	drawScaled = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawConfiguration = RenderingServer.canvas_item_create()
+	drawCrumbled = RenderingServer.canvas_item_create()
+	drawPainted = RenderingServer.canvas_item_create()
+	drawFrozen = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_z_index(drawConnections,-1)
 	RenderingServer.canvas_item_set_parent(drawConnections,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawCrumbled,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawPainted,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawFrozen,get_canvas_item())
 	game.connect(&"goldIndexChanged",queue_redraw)
 
 func _draw() -> void:
@@ -60,6 +73,9 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawConfiguration)
+	RenderingServer.canvas_item_clear(drawCrumbled)
+	RenderingServer.canvas_item_clear(drawPainted)
+	RenderingServer.canvas_item_clear(drawFrozen)
 	if !active and game.playState == Game.PLAY_STATE.PLAY: return
 	Lock.drawLock(game,drawGlitch,drawScaled,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,isPartial,denominator,negated,
@@ -71,6 +87,7 @@ func _draw() -> void:
 	# figure this out
 	#if color == Game.COLOR.GLITCH: RenderingServer.canvas_item_set_material(drawConnections, Game.UNSCALED_GLITCH_MATERIAL)
 	#else: RenderingServer.canvas_item_set_material(drawConnections, Game.NO_MATERIAL)
+	# connections
 	var from:Vector2 = size/2-getOffset()
 	for door in doors:
 		if !door.active and game.playState == Game.PLAY_STATE.PLAY: continue
@@ -81,6 +98,12 @@ func _draw() -> void:
 		var to:Vector2 = editor.mouseWorldPosition - position
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
+	# auras
+	Door.drawAuras(drawCrumbled,drawPainted,drawFrozen,
+		frozen if game.playState == Game.PLAY_STATE.EDIT else gameFrozen,
+		crumbled if game.playState == Game.PLAY_STATE.EDIT else gameCrumbled,
+		painted if game.playState == Game.PLAY_STATE.EDIT else gamePainted,
+		Rect2(-getOffset(),size))
 
 func getDrawPosition() -> Vector2: return position - getOffset()
 
@@ -158,9 +181,15 @@ var gamePainted:bool = false
 
 var animColor:Color
 var animAlpha:float = 0
+var curseTimer:float = 0
 
 func _process(delta:float) -> void:
 	if self == editor.connectionSource: queue_redraw()
+	if cursed and active:
+		curseTimer += delta
+		if curseTimer >= 2:
+			curseTimer -= 2
+			makeCurseParticles(curseColor,1,0.2,0.3)
 	if animAlpha > 0:
 		animAlpha -= delta*3
 		queue_redraw()
@@ -168,6 +197,9 @@ func _process(delta:float) -> void:
 
 func start() -> void:
 	animAlpha = 0
+	gameFrozen = frozen
+	gameCrumbled = crumbled
+	gamePainted = painted
 
 func stop() -> void:
 	cursed = false
@@ -175,30 +207,31 @@ func stop() -> void:
 	curseGlitchMimic = Game.COLOR.GLITCH
 	satisfied = false
 	cost = C.ZERO
+	curseTimer = 0
 
 func check(player:Player) -> void:
+	if gameFrozen or gameCrumbled or gamePainted:
+		if colorAfterGlitch() == Game.COLOR.PURE: return
+		if int(gameFrozen) + int(gameCrumbled) + int(gamePainted) > 1: return
+		if gameFrozen and player.key[Game.COLOR.ICE].eq(0): return
+		if gameCrumbled and player.key[Game.COLOR.MUD].eq(0): return
+		if gamePainted and player.key[Game.COLOR.GRAFFITI].eq(0): return
 	var satisfiedBefore:bool = satisfied
 	var costBefore:C = cost.copy()
 	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"satisfied",canOpen(player)))
 	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"cost",getCost(player)))
-	if satisfied: AudioManager.play(preload("res://resources/sounds/remoteLock/success.wav"))
-	else: AudioManager.play(preload("res://resources/sounds/remoteLock/fail.wav"))
-	for door in doors: if door.type == Door.TYPE.GATE: door.gateCheck(player)
-	blinkAnim()
-	if satisfiedBefore != satisfied and costBefore.eq(cost): gameChanges.bufferSave()
+	if !(satisfiedBefore == satisfied and costBefore.eq(cost)):
+		if satisfied: AudioManager.play(preload("res://resources/sounds/remoteLock/success.wav"))
+		else: AudioManager.play(preload("res://resources/sounds/remoteLock/fail.wav"))
+		for door in doors: if door.type == Door.TYPE.GATE: door.gateCheck(player)
+		blinkAnim()
+		gameChanges.bufferSave()
 
 func blinkAnim() -> void:
 	animAlpha = 1
 	animColor = Color("#00ff66") if satisfied else Color("#ff0066")
 
-func canOpen(player:Player) -> bool:
-	if gameFrozen or gameCrumbled or gamePainted:
-		if colorAfterGlitch() == Game.COLOR.PURE: return false
-		if int(gameFrozen) + int(gameCrumbled) + int(gamePainted) > 1: return false
-		if gameFrozen and player.key[Game.COLOR.ICE].eq(0): return false
-		if gameCrumbled and player.key[Game.COLOR.MUD].eq(0): return false
-		if gamePainted and player.key[Game.COLOR.GRAFFITI].eq(0): return false
-	return Lock.getLockCanOpen(self, player)
+func canOpen(player:Player) -> bool: return Lock.getLockCanOpen(self, player)
 
 func getCost(player:Player) -> C: return Lock.getLockCost(self,player,C.ONE)
 
@@ -231,6 +264,68 @@ func checkDoors() -> void:
 		if door.active: any = true
 	gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"active",any))
 	queue_redraw()
+
+func setGlitch(setColor:Game.COLOR) -> void:
+	gameChanges.addChange(GameChanges.PropertyChange.new(game, self, &"glitchMimic", setColor))
+	queue_redraw()
+
+func curseCheck(player:Player) -> void:
+	if colorAfterGlitch() == Game.COLOR.PURE: return
+	if player.curseMode > 0 and colorAfterGlitch() != player.curseColor and (!cursed or curseColor != player.curseColor):
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"cursed",true))
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"curseColor",player.curseColor))
+		makeCurseParticles(curseColor, 1, 0.2, 0.5)
+		AudioManager.play(preload("res://resources/sounds/door/curse.wav"))
+		changes.bufferSave()
+	elif player.curseMode < 0 and cursed and curseColor == player.curseColor:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"cursed",false))
+		if curseColor == Game.COLOR.GLITCH:
+			gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"curseGlitchMimic",Game.COLOR.GLITCH))
+		makeCurseParticles(Game.COLOR.BROWN, -1, 0.2, 0.5)
+		AudioManager.play(preload("res://resources/sounds/door/decurse.wav"))
+		changes.bufferSave()
+
+func makeCurseParticles(particleColor:Game.COLOR, mode:int, scaleMin:float=1,scaleMax:float=1) -> void:
+	for y in floor((size.y)/16):
+		for x in floor((size.x)/16):
+			add_child(CurseParticle.Temporary.new(particleColor, mode, Vector2(x,y)*16-getOffset()+Vector2.ONE*randf_range(4,12), randf_range(scaleMin,scaleMax)))
+
+func auraCheck(player:Player) -> void:
+	var deAuraed:bool = false
+	if player.auraRed and gameFrozen:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameFrozen",false))
+		makeDebris(Door.Debris, Game.COLOR.WHITE)
+		deAuraed = true
+	if player.auraGreen and gameCrumbled:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameCrumbled",false))
+		makeDebris(Door.Debris, Game.COLOR.BROWN)
+		deAuraed = true
+	if player.auraBlue and gamePainted:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gamePainted",false))
+		makeDebris(Door.Debris, Game.COLOR.ORANGE)
+		deAuraed = true
+	var auraed:bool = false
+	if player.auraMaroon and !gameFrozen:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameFrozen",true))
+		makeDebris(Door.Debris, Game.COLOR.WHITE)
+		auraed = true
+	if player.auraForest and !gameCrumbled:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameCrumbled",true))
+		makeDebris(Door.Debris, Game.COLOR.BROWN)
+		auraed = true
+	if player.auraNavy and !gamePainted:
+		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gamePainted",true))
+		makeDebris(Door.Debris, Game.COLOR.ORANGE)
+		auraed = true
+	
+	if deAuraed or auraed:
+		AudioManager.play(preload("res://resources/sounds/door/deaura.wav"))
+		changes.bufferSave()
+
+func makeDebris(debrisType:GDScript, debrisColor:Game.COLOR) -> void:
+	for y in floor(size.y/16):
+		for x in floor(size.x/16):
+			add_child(debrisType.new(game,debrisColor,Vector2(x*16,y*16)))
 
 func propertyGameChangedDo(property:StringName) -> void:
 	if property == &"active":

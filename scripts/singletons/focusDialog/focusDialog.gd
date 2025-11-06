@@ -24,6 +24,7 @@ func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	focused = object
 	editor.game.objectsParent.move_child(focused, -1)
 	showCorrectDialog()
+	if new: deinteract()
 	if focused is KeyBulk: keyDialog.focus(focused, new)
 	elif focused is Door or focused is RemoteLock: doorDialog.focus(focused, new, dontRedirect)
 	elif focused is PlayerSpawn: playerDialog.focus(focused, new)

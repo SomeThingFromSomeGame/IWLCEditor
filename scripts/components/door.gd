@@ -97,8 +97,6 @@ func _ready() -> void:
 	drawCopies = RenderingServer.canvas_item_create()
 	drawNegative = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawGlitch,Game.GLITCH_MATERIAL.get_rid())
-	RenderingServer.canvas_item_set_material(drawPainted,PAINTED_MATERIAL.get_rid())
-	RenderingServer.canvas_item_set_material(drawFrozen,FROZEN_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_material(drawNegative,Game.NEGATIVE_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_z_index(drawCopies,2)
 	RenderingServer.canvas_item_set_z_index(drawNegative,2)
@@ -171,29 +169,11 @@ func _draw() -> void:
 		elif (len(locks) > 0 and type == TYPE.SIMPLE and locks[0].isNegative()) != (ipow().sign() < 0): RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME_NEGATIVE,CORNER_SIZE,CORNER_SIZE)
 		else: RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME,CORNER_SIZE,CORNER_SIZE)
 	# auras
-	if crumbled if game.playState == Game.PLAY_STATE.EDIT else gameCrumbled:
-		if size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(drawCrumbled,Rect2(Vector2.ZERO, size),CRUMBLED_1X1)
-		elif size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(drawCrumbled,Rect2(Vector2.ZERO, size),CRUMBLED_1X2)
-		elif size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(drawCrumbled,Rect2(Vector2.ZERO, size),CRUMBLED_2X2)
-		else:
-			RenderingServer.canvas_item_add_nine_patch(drawCrumbled,rect,TEXTURE_RECT,CRUMBLED_BASE,Vector2(16,18),Vector2(16,14),TILE,TILE,true)
-	if painted if game.playState == Game.PLAY_STATE.EDIT else gamePainted:
-		RenderingServer.canvas_item_set_instance_shader_parameter(drawPainted, &"scale", Vector2(0,0))
-		if size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(drawPainted,Rect2(Vector2.ZERO, size),PAINTED_1X1)
-		elif size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(drawPainted,Rect2(Vector2.ZERO, size),PAINTED_1X2)
-		elif size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(drawPainted,Rect2(Vector2.ZERO, size),PAINTED_2X2)
-		else:
-			RenderingServer.canvas_item_set_instance_shader_parameter(drawPainted, &"scale", size/128)
-			RenderingServer.canvas_item_add_texture_rect(drawPainted,rect,PAINTED_BASE,true)
-	if frozen if game.playState == Game.PLAY_STATE.EDIT else gameFrozen:
-		RenderingServer.canvas_item_set_instance_shader_parameter(drawFrozen, &"size", Vector2(0,0))
-		if size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(drawFrozen,Rect2(Vector2.ZERO, size),FROZEN_1X1)
-		elif size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(drawFrozen,Rect2(Vector2.ZERO, size),FROZEN_1X2)
-		elif size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(drawFrozen,Rect2(Vector2.ZERO, size),FROZEN_2X2)
-		elif size == Vector2(96,64): RenderingServer.canvas_item_add_texture_rect(drawFrozen,Rect2(Vector2.ZERO, size),FROZEN_3X2)
-		else:
-			RenderingServer.canvas_item_set_instance_shader_parameter(drawFrozen, &"size", size)
-			RenderingServer.canvas_item_add_rect(drawFrozen,rect,Color.WHITE)
+	drawAuras(drawCrumbled,drawPainted,drawFrozen,
+		frozen if game.playState == Game.PLAY_STATE.EDIT else gameFrozen,
+		crumbled if game.playState == Game.PLAY_STATE.EDIT else gameCrumbled,
+		painted if game.playState == Game.PLAY_STATE.EDIT else gamePainted,
+		rect)
 	# anim overlays
 	if animState == ANIM_STATE.ADD_COPY: RenderingServer.canvas_item_add_rect(drawNegative,rect,Color(Color.WHITE,animAlpha))
 	elif animState == ANIM_STATE.RELOCK: RenderingServer.canvas_item_add_rect(drawCopies,rect,Color(Color.WHITE,animAlpha)) # just to be on top of everything else
@@ -202,6 +182,33 @@ func _draw() -> void:
 		if copies.neq(1) or infCopies.neq(0): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+copies.strWithInf(infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
 	else:
 		if gameCopies.neq(1) or infCopies.neq(0): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+gameCopies.strWithInf(infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
+
+static func drawAuras(objectDrawCrumbled:RID,objectDrawPainted:RID,objectDrawFrozen:RID,objectFrozen:bool,objectCrumbled:bool,objectPainted:bool,rect:Rect2) -> void:
+	if objectCrumbled:
+		if rect.size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_1X1)
+		elif rect.size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_1X2)
+		elif rect.size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_2X2)
+		else:
+			RenderingServer.canvas_item_add_nine_patch(objectDrawCrumbled,rect,TEXTURE_RECT,CRUMBLED_BASE,Vector2(16,18),Vector2(16,14),TILE,TILE,true)
+	if objectPainted:
+		RenderingServer.canvas_item_set_material(objectDrawPainted,PAINTED_MATERIAL.get_rid())
+		RenderingServer.canvas_item_set_instance_shader_parameter(objectDrawPainted, &"scale", Vector2(0,0))
+		if rect.size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(objectDrawPainted,rect,PAINTED_1X1)
+		elif rect.size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(objectDrawPainted,rect,PAINTED_1X2)
+		elif rect.size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(objectDrawPainted,rect,PAINTED_2X2)
+		else:
+			RenderingServer.canvas_item_set_instance_shader_parameter(objectDrawPainted, &"scale", rect.size/128)
+			RenderingServer.canvas_item_add_texture_rect(objectDrawPainted,rect,PAINTED_BASE,true)
+	if objectFrozen:
+		RenderingServer.canvas_item_set_material(objectDrawFrozen,FROZEN_MATERIAL.get_rid())
+		RenderingServer.canvas_item_set_instance_shader_parameter(objectDrawFrozen, &"size", Vector2(0,0))
+		if rect.size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(objectDrawFrozen,rect,FROZEN_1X1)
+		elif rect.size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(objectDrawFrozen,rect,FROZEN_1X2)
+		elif rect.size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(objectDrawFrozen,rect,FROZEN_2X2)
+		elif rect.size == Vector2(96,64): RenderingServer.canvas_item_add_texture_rect(objectDrawFrozen,rect,FROZEN_3X2)
+		else:
+			RenderingServer.canvas_item_set_instance_shader_parameter(objectDrawFrozen, &"size", rect.size)
+			RenderingServer.canvas_item_add_rect(objectDrawFrozen,rect,Color.WHITE)
 
 func receiveMouseInput(event:InputEventMouse) -> bool:
 	# resizing
@@ -556,6 +563,8 @@ func gateCheck(player:Player) -> void:
 	var shouldOpen:bool = true
 	for lock in locks:
 		if !lock.canOpen(player): shouldOpen = false
+	for lock in remoteLocks:
+		if !lock.satisfied: shouldOpen = false
 	if gateOpen and !shouldOpen:
 		gateBufferCheck = player
 	elif !gateOpen and shouldOpen:
@@ -601,7 +610,6 @@ func isAllColor(color:Game.COLOR) -> bool:
 
 func curseCheck(player:Player) -> void:
 	if hasColor(Game.COLOR.PURE): return
-	if gameFrozen or gameCrumbled or gamePainted: return
 	if player.curseMode > 0 and !isAllColor(player.curseColor) and (!cursed or curseColor != player.curseColor):
 		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"cursed",true))
 		gameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"curseColor",player.curseColor))

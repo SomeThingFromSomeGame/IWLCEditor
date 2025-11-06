@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://clmtd8tgbgxiy" path="res://scripts/components/other/remoteLock.gd" id="1_kxkn4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kxkn4"]
+resource_local_to_scene = true
 size = Vector2(18, 18)
 
 [node name="remoteLock" type="Node2D"]

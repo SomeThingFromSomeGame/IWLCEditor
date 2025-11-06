@@ -41,6 +41,7 @@ func focus(focused:GameObject, new:bool, dontRedirect:bool) -> void: # Door or R
 	elif focused is RemoteLock:
 		%door.visible = false
 		%remoteLock.visible = true
+		%doorAuraSettings.visible = true
 		%doorsHandler.setup(focused)
 		focusComponent(focused, new)
 
@@ -57,7 +58,7 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 	%doorAxialNumberEdit.setValue(component.count, true)
 
 	%doorCopySettings.visible = false
-	%doorAuraSettings.visible = false
+	if component is Lock: %doorAuraSettings.visible = false
 
 	%blastLockSettings.visible = component.type in [Lock.TYPE.BLAST, Lock.TYPE.ALL]
 	%blastLockSign.button_pressed = component.denominator.sign() < 0
@@ -176,17 +177,17 @@ func _lockConfigurationSelected(option:ConfigurationSelector.OPTION) -> void:
 	changes.bufferSave()
 
 func _frozenSet(value:bool) -> void:
-	if main.focused is not Door: return
+	if main.focused is not Door and main.focused is not RemoteLock: return
 	changes.addChange(Changes.PropertyChange.new(editor.game,main.focused,&"frozen",value))
 	changes.bufferSave()
 
 func _crumbledSet(value:bool) -> void:
-	if main.focused is not Door: return
+	if main.focused is not Door and main.focused is not RemoteLock: return
 	changes.addChange(Changes.PropertyChange.new(editor.game,main.focused,&"crumbled",value))
 	changes.bufferSave()
 
 func _paintedSet(value:bool) -> void:
-	if main.focused is not Door: return
+	if main.focused is not Door and main.focused is not RemoteLock: return
 	changes.addChange(Changes.PropertyChange.new(editor.game,main.focused,&"painted",value))
 	changes.bufferSave()
 

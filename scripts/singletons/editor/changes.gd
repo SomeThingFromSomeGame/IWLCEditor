@@ -27,7 +27,6 @@ func _process(_delta) -> void:
 		if undoStack[stackPosition] is UndoSeparator: return # nothing new happened
 		undoStack.append(UndoSeparator.new())
 		stackPosition += 1
-		print(undoStack)
 
 func undo() -> void:
 	if stackPosition == 0: return

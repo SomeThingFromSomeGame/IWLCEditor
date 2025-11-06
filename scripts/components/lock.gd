@@ -325,9 +325,9 @@ static func drawLock(_game:Game, lockDrawGlitch:RID, lockDrawScaled:RID, lockDra
 					elif lockCount.isNonzeroImag(): lockSymbol = SYMBOL_EXACTI
 					else: lockSymbol = SYMBOL_EXACT
 					if lockNegated: lockRect = Rect2(lockSize-lockRect.position-lockRect.size-offsetFromType(lockSizeType)*2,lockRect.size)
-					RenderingServer.canvas_item_add_texture_rect(lockDrawConfiguration,lockRect,lockSymbol,false,getConfigurationColor(lockNegated))
-				if symbolLast: Game.FTALK.draw_string(lockDrawMain,Vector2(startX,startY)-offsetFromType(lockSizeType),string,HORIZONTAL_ALIGNMENT_LEFT,-1,12,getConfigurationColor(lockNegated))
-				else: Game.FTALK.draw_string(lockDrawMain,Vector2(startX+lockOffsetX,startY)-offsetFromType(lockSizeType),string,HORIZONTAL_ALIGNMENT_LEFT,-1,12,getConfigurationColor(lockNegated))
+					RenderingServer.canvas_item_add_texture_rect(lockDrawConfiguration,lockRect,lockSymbol,false,getConfigurationColor(negative))
+				if symbolLast: Game.FTALK.draw_string(lockDrawMain,Vector2(startX,startY)-offsetFromType(lockSizeType),string,HORIZONTAL_ALIGNMENT_LEFT,-1,12,getConfigurationColor(negative))
+				else: Game.FTALK.draw_string(lockDrawMain,Vector2(startX+lockOffsetX,startY)-offsetFromType(lockSizeType),string,HORIZONTAL_ALIGNMENT_LEFT,-1,12,getConfigurationColor(negative))
 			TYPE.BLANK: pass # nothing really
 			TYPE.BLAST, TYPE.ALL:
 				var numerator:String
@@ -461,7 +461,7 @@ static func lockCoerceSize(_game:Game,lock:GameComponent) -> void:
 		# 1x3, 2x3 -> 3x3
 		if newSize.x < newSize.y: newSize = Vector2(newSize.y, newSize.y)
 		elif newSize.y < newSize.x: newSize = Vector2(newSize.x, newSize.x)
-	_game.changes.addChange(Changes.PropertyChange.new(_game,lock,&"size",newSize))
+	changes.addChange(Changes.PropertyChange.new(_game,lock,&"size",newSize))
 
 func propertyChangedInit(property:StringName) -> void:
 	if parent.type != Door.TYPE.SIMPLE:

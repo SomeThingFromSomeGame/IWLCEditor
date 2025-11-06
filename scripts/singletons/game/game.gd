@@ -365,5 +365,5 @@ func restart() -> void:
 
 func setGlitch(color:COLOR) -> void:
 	for object in objects.values():
-		if object is KeyBulk or object is Door:
+		if object.get_script() in [KeyBulk, Door, RemoteLock]:
 			object.setGlitch(color)
