@@ -90,13 +90,13 @@ func _draw() -> void:
 		if !door.active and game.playState == Game.PLAY_STATE.PLAY: continue
 		var to:Vector2 = door.position+door.size/2 - position
 		if self == editor.focusDialog.focused and index == editor.focusDialog.doorDialog.doorsHandler.selected:
-			RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE,4+4/editor.cameraZoom)
-		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
+			RenderingServer.canvas_item_add_line(drawConnections,from,to,Color("#00a2ff"),4+4/editor.cameraZoom)
+		RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
 		index += 1
 	if self == editor.connectionSource:
 		var to:Vector2 = editor.mouseWorldPosition - position
-		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.darkTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
+		RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
 	# auras
 	Door.drawAuras(drawCrumbled,drawPainted,drawFrozen,
