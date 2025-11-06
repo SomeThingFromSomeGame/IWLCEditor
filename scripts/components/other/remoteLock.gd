@@ -108,7 +108,7 @@ func _draw() -> void:
 func getDrawPosition() -> Vector2: return position - getOffset()
 
 func propertyChangedInit(property:StringName) -> void:
-	if property == &"size": _comboDoorSizeChanged()
+	if property == &"size": _setSizeType()
 	if property in [&"count", &"sizeType", &"type"]: _setAutoConfiguration()
 	
 	if property == &"type":
@@ -151,10 +151,13 @@ func receiveMouseInput(event:InputEventMouse) -> bool:
 		return true
 	return false
 
-func _comboDoorConfigurationChanged(newSizeType:Lock.SIZE_TYPE,newConfiguration:Lock.CONFIGURATION=Lock.CONFIGURATION.NONE) -> void: Lock.comboDoorConfigurationChanged(game,self,newSizeType,newConfiguration)
-func _comboDoorSizeChanged() -> void: Lock.comboDoorSizeChanged(game,self)
 func _setAutoConfiguration() -> void: changes.addChange(Changes.PropertyChange.new(game,self,&"configuration",Lock.getAutoConfiguration(self)))
-func _coerceSize() -> void: Lock.lockCoerceSize(game,self)
+
+func _setSizeType() -> void:
+	var match:int = Lock.SIZES.find(size)
+	var newSizeType:Lock.SIZE_TYPE = Lock.SIZE_TYPE.ANY if match == -1 else match as Lock.SIZE_TYPE
+	changes.addChange(Changes.PropertyChange.new(game,self,&"sizeType",newSizeType))
+	queue_redraw()
 
 func _connectTo(door:Door) -> void:
 	changes.addChange(Changes.ComponentArrayAppendChange.new(game,self,&"doors",door))

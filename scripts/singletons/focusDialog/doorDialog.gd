@@ -42,6 +42,7 @@ func focus(focused:GameObject, new:bool, dontRedirect:bool) -> void: # Door or R
 		%door.visible = false
 		%remoteLock.visible = true
 		%doorAuraSettings.visible = true
+		%lockConfigurationSelector.visible = false
 		%doorsHandler.setup(focused)
 		focusComponent(focused, new)
 
@@ -50,8 +51,9 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 	%doorColorSelector.setSelect(component.color)
 	if component is Lock: %lockHandler.setSelect(component.index)
 	%lockTypeSelector.setSelect(component.type)
-	%lockConfigurationSelector.visible = main.focused.type != Door.TYPE.SIMPLE or component is RemoteLock
-	%lockConfigurationSelector.setup(component)
+	if component is Lock:
+		%lockConfigurationSelector.visible = main.focused.type != Door.TYPE.SIMPLE
+		%lockConfigurationSelector.setup(component)
 	%lockSettings.visible = true
 	
 	%doorAxialNumberEdit.visible = component.type == Lock.TYPE.NORMAL or component.type == Lock.TYPE.EXACT
@@ -159,8 +161,8 @@ func _spendSelected() -> void:
 	main.focus(main.focused)
 
 func _lockConfigurationSelected(option:ConfigurationSelector.OPTION) -> void:
-	if main.componentFocused is not Lock and main.focused is not RemoteLock: return
-	var lock:GameComponent = main.componentFocused if main.componentFocused is Lock else main.focused
+	if main.componentFocused is not Lock: return
+	var lock:GameComponent = main.componentFocused
 	match option:
 		ConfigurationSelector.OPTION.SpecificA:
 			var configuration:Array = lock.getAvailableConfigurations()[0]

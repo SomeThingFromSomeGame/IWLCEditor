@@ -67,26 +67,25 @@ func findProblems(component:GameComponent) -> void:
 			findColorProblems(component, component.color)
 			if &"C5" in modsWindow.modsRemoved:
 				noteProblem(&"C5", &"CurseKeyType", component, component.type in [KeyBulk.TYPE.CURSE, KeyBulk.TYPE.UNCURSE])
-		Lock:
+		Lock, RemoteLock:
 			findColorProblems(component, component.color)
-			if &"NstdLockSize" in modsWindow.modsRemoved:
-				noteProblem(&"NstdLockSize", &"NstdLockSize", component, component.parent.type != Door.TYPE.SIMPLE and component.size not in Lock.SIZES)
-			if &"MoreLockConfigs" in modsWindow.modsRemoved:
-				noteProblem(&"MoreLockConfigs", &"NstdLockConfig", component, component.parent.type != Door.TYPE.SIMPLE and component.configuration in [
-					Lock.CONFIGURATION.spr7A, Lock.CONFIGURATION.spr9A, Lock.CONFIGURATION.spr9B, Lock.CONFIGURATION.spr10A, Lock.CONFIGURATION.spr11A, Lock.CONFIGURATION.spr13A,
-					Lock.CONFIGURATION.spr24B
-				])
+			if component is Lock:
+				if &"NstdLockSize" in modsWindow.modsRemoved:
+					noteProblem(&"NstdLockSize", &"NstdLockSize", component, component.parent.type != Door.TYPE.SIMPLE and component.size not in Lock.SIZES)
+				if &"MoreLockConfigs" in modsWindow.modsRemoved:
+					noteProblem(&"MoreLockConfigs", &"NstdLockConfig", component, component.parent.type != Door.TYPE.SIMPLE and component.configuration in [
+						Lock.CONFIGURATION.spr7A, Lock.CONFIGURATION.spr9A, Lock.CONFIGURATION.spr9B, Lock.CONFIGURATION.spr10A, Lock.CONFIGURATION.spr11A, Lock.CONFIGURATION.spr13A,
+						Lock.CONFIGURATION.spr24B
+					])
 			if &"ZeroCostLock" in modsWindow.modsRemoved:
 				noteProblem(&"ZeroCostLock", &"ZeroCostLock", component, component.count.eq(0))
 			if &"C1" in modsWindow.modsRemoved:
+				noteProblem(&"C1", &"RemoteLock", component, component is RemoteLock)
 				noteProblem(&"C1", &"NegatedLock", component, component.negated)
 			if &"C3" in modsWindow.modsRemoved:
 				noteProblem(&"C3", &"ExactLock", component, component.type == Lock.TYPE.EXACT)
 				noteProblem(&"C3", &"PartialBlastLock", component, component.type == Lock.TYPE.BLAST and (component.isPartial or component.count.neq(component.denominator)))
 				noteProblem(&"C3", &"PartialBlastLock", component, component.type == Lock.TYPE.ALL and (component.isPartial or component.count.neq(1) or component.denominator.neq(1)))
-		RemoteLock:
-			if &"C1" in modsWindow.modsRemoved:
-				noteProblem(&"C1", &"RemoteLock", component, true)
 		Door:
 			findColorProblems(component, component.colorSpend)
 			if &"ZeroCopies" in modsWindow.modsRemoved:

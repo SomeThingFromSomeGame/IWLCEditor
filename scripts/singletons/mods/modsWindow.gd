@@ -57,9 +57,13 @@ func addMod(mod:StringName):
 		&"MoreLockConfigs":
 			for component in editor.game.components.values():
 				if component is Lock and component.parent.type == Door.TYPE.SIMPLE: component._setAutoConfiguration()
+			for object in editor.game.objects.values():
+				if object is RemoteLock: object._setAutoConfiguration()
 
 func removeMod(mod:StringName):
 	match mod:
 		&"MoreLockConfigs":
 			for component in editor.game.components.values():
 				if component is Lock and component.parent.type == Door.TYPE.SIMPLE: component._setAutoConfiguration()
+			for object in editor.game.objects.values():
+				if object is RemoteLock: object._setAutoConfiguration()
