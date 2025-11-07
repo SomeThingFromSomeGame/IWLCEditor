@@ -65,9 +65,8 @@ static var ARRAYS:Dictionary[GDScript,Dictionary] = {
 # - objects
 
 static func load(file:FileAccess, game:Game) -> void:
-	game.level.name = file.get_pascal_string()
-	game.level.description = file.get_pascal_string()
-	game.level.author = file.get_pascal_string()
+	game.level = file.get_var(true)
+	game.level.game = game
 	game.levelBounds.size = file.get_var()
 	for mod in file.get_var(): Mods.mods[mod].active = true
 	var modpackId:StringName = file.get_var()
@@ -141,4 +140,7 @@ static func load(file:FileAccess, game:Game) -> void:
 		game.levelStart = game.objects[levelStart]
 		game.editor.topBar._updateButtons()
 	
+	game.updateWindowName()
+	game.editor.settingsMenu.opened()
+	game.editor.updateDescription()
 	game.get_tree().call_group("modUI", "changedMods")

@@ -13,7 +13,9 @@ func _ready() -> void:
 	textDraw = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_z_index(textDraw,1)
 	RenderingServer.canvas_item_set_parent(textDraw,get_canvas_item())
-	if !FileAccess.file_exists("user://config.ini"): closed()
+	if !FileAccess.file_exists("user://config.ini"):
+		print("uhoh")
+		closed()
 
 func _tabSelected(tab:int) -> void:
 	%levelSettings.visible = tab == 0
@@ -50,8 +52,7 @@ func opened() -> void:
 	%levelNumber.text = editor.game.level.number
 	%levelName.text = editor.game.level.name
 	%levelAuthor.text = editor.game.level.author
-	_useNativeFileDialogSet(configFile.get_value("editor", "useNativeFileDialog"))
-	
+	%useNativeFileDialog.button_pressed = configFile.get_value("editor", "useNativeFileDialog")	
 
 func closed() -> void:
 	configFile.set_value("editor", "useNativeFileDialog", %useNativeFileDialog.button_pressed)

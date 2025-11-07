@@ -16,9 +16,7 @@ const FILE_FORMAT_VERSION:int = 0
 # - file format header
 # - file format version number
 # LEVEL METADATA:
-# - level name
-# - level description
-# - level author
+# - level object
 # - level size
 # - active mods
 # - modpack
@@ -51,6 +49,7 @@ func open() -> void:
 
 func saveAs() -> void:
 	editor.saveAsDialog.current_dir = "puzzles"
+	editor.saveAsDialog.current_file = "puzzles/"+game.level.name+".cedit"
 	editor.saveAsDialog.visible = true
 	editor.saveAsDialog.grab_focus()
 
@@ -98,7 +97,7 @@ func clear() -> void:
 	game.objects.clear()
 	for component in game.components.values(): component.queue_free()
 	game.components.clear()
-	game.level = Game.Level.new()
+	game.level = Level.new()
 	game.level.game = game
 	game.anyChanges = false
 	game.tiles.clear()
@@ -123,9 +122,7 @@ func save(path:String="") -> void:
 	file.store_pascal_string("IWLCEditorPuzzle")
 	file.store_32(FILE_FORMAT_VERSION)
 	# LEVEL METADATA
-	file.store_pascal_string(game.level.name)
-	file.store_pascal_string(game.level.description)
-	file.store_pascal_string(game.level.author)
+	file.store_var(game.level,true)
 	file.store_var(game.levelBounds.size)
 	file.store_var(Mods.getActiveMods())
 	var modpackId = Mods.modpacks.find_key(Mods.activeModpack)

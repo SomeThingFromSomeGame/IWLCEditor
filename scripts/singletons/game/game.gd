@@ -388,15 +388,3 @@ func setGlitch(color:COLOR) -> void:
 	for object in objects.values():
 		if object.get_script() in [KeyBulk, Door, RemoteLock]:
 			object.setGlitch(color)
-
-class Level extends RefCounted:
-	var game:Game
-
-	var shortNumber:String = "X-X"
-	var number:String = ""
-	var name:String = "Unnamed Level":
-		set(value):
-			name = value
-			game.updateWindowName()
-	var description:String = ""
-	var author:String = ""
