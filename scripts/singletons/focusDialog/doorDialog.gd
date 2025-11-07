@@ -87,17 +87,22 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 
 func receiveKey(event:InputEvent) -> bool:
 	match event.keycode:
-		KEY_N: _lockTypeSelected(Lock.TYPE.NORMAL)
+		KEY_N:
+			if Input.is_key_pressed(KEY_SHIFT) and Mods.active(&"C1"): _lockNegatedSet(!%lockNegated.button_pressed)
+			else: _lockTypeSelected(Lock.TYPE.NORMAL)
 		KEY_B: _lockTypeSelected(Lock.TYPE.BLANK)
 		KEY_X: _lockTypeSelected(Lock.TYPE.BLAST)
-		KEY_A: _lockTypeSelected(Lock.TYPE.ALL)
+		KEY_A:
+			if Input.is_key_pressed(KEY_SHIFT) and Mods.active(&"C5"): _lockArmamentSet(!%lockArmament.button_pressed)
+			else: _lockTypeSelected(Lock.TYPE.ALL)
 		KEY_E: if Mods.active(&"C3"): _lockTypeSelected(Lock.TYPE.EXACT)
-		KEY_N: if Mods.active(&"C1"): _lockNegatedSet(!%lockNegated.button_pressed)
 		KEY_C:
 			if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
 			else: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
 		KEY_L: if Input.is_key_pressed(KEY_CTRL): main.focused.addLock()
 		KEY_F: if main.focused is RemoteLock: %doorsHandler.addComponent()
+		KEY_MINUS: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockSignSet(!%blastLockSign.button_pressed)
+		KEY_I: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockAxisSet(!%blastLockAxis.button_pressed)
 		KEY_DELETE:
 			if main.componentFocused:
 				main.focused.removeLock(main.componentFocused.index)

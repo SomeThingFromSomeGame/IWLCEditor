@@ -3,13 +3,14 @@ class_name Editor
 
 @onready var game:Game = %game
 @onready var modes:Modes = %modes
-@onready var gameViewportCont:SubViewportContainer = %gameViewportCont
+@onready var gameCont:MarginContainer = %gameCont
 @onready var focusDialog:FocusDialog = %focusDialog
 @onready var quickSet:QuickSet = %quickSet
 @onready var multiselect:Multiselect = %multiselect
 @onready var paste:Button = %paste
 @onready var otherObjects:OtherObjects = %otherObjects
 @onready var topBar:TopBar = %topBar
+@onready var settingsMenu:SettingsMenu = %settingsMenu
 var modsWindow:ModsWindow
 var findProblems:FindProblems
 
@@ -17,6 +18,8 @@ var findProblems:FindProblems
 @onready var openDialog:FileDialog = %openDialog
 @onready var unsavedChangesPopup:ConfirmationDialog = %unsavedChangesPopup
 @onready var loadErrorPopup:AcceptDialog = %loadErrorPopup
+
+@onready var explainText:RichTextLabel = %explainText
 
 enum MODE {SELECT, TILE, KEY, DOOR, OTHER, PASTE}
 var mode:MODE = MODE.SELECT
@@ -45,6 +48,15 @@ var tileSize:Vector2i = Vector2i(32,32)
 
 var cameraZoom:float = 1
 
+var settingsOpen:bool = false
+
+var descriptionDraw:RID
+
+func _ready() -> void:
+	descriptionDraw = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_z_index(descriptionDraw, 1)
+	RenderingServer.canvas_item_set_parent(descriptionDraw, %description.get_canvas_item())
+
 func _process(delta:float) -> void:
 	queue_redraw()
 	var scaleFactor:float = (targetCameraZoom/game.editorCamera.zoom.x)**0.2
@@ -53,25 +65,25 @@ func _process(delta:float) -> void:
 		if targetCameraZoom == 1: game.editorCamera.position = round(game.editorCamera.position)
 	else:
 		game.editorCamera.zoom *= scaleFactor
-		game.editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameViewportCont.position) / game.editorCamera.zoom
+		game.editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameCont.position) / game.editorCamera.zoom
 	
 	if Input.is_key_pressed(KEY_ALT): tileSize = Vector2i(1,1)
 	elif Input.is_key_pressed(KEY_CTRL): tileSize = Vector2i(16,16)
 	else: tileSize = Vector2i(32,32)
 	
-	if game.playState != Game.PLAY_STATE.PLAY and !focusDialog.focused:
+	if game.playState != Game.PLAY_STATE.PLAY and !focusDialog.focused and !settingsOpen:
 		game.editorCamera.position += Vector2(Input.get_axis(&"camera_left", &"camera_right"),Input.get_axis(&"camera_up", &"camera_down"))*delta/game.editorCamera.zoom*700
 
 
 	mouseWorldPosition = screenspaceToWorldspace(get_global_mouse_position())
 	mouseTilePosition = Vector2i(mouseWorldPosition) / tileSize * tileSize
-	if game.playState == Game.PLAY_STATE.PLAY: gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
-	else: gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition)
-	gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
+	if game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
+	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition)
+	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
 	if game.playState == Game.PLAY_STATE.PLAY: cameraZoom = game.playCamera.zoom.x
 	else: cameraZoom = game.editorCamera.zoom.x
-	gameViewportCont.material.set_shader_parameter("rCameraZoom",1/cameraZoom)
-	gameViewportCont.material.set_shader_parameter("tileSize",tileSize)
+	%gameViewportCont.material.set_shader_parameter("rCameraZoom",1/cameraZoom)
+	%gameViewportCont.material.set_shader_parameter("tileSize",tileSize)
 	componentHovered = null
 	if !componentDragged:
 		objectHovered = null
@@ -94,7 +106,9 @@ func _gui_input(event:InputEvent) -> void:
 	if !objectHovered: objectHovered = null
 	if !componentHovered: componentHovered = null
 	if event is InputEventMouse:
-		if game.playState == Game.PLAY_STATE.PLAY:
+		if settingsOpen:
+			pass
+		elif game.playState == Game.PLAY_STATE.PLAY:
 			pass
 		else:
 			# move camera
@@ -170,7 +184,8 @@ func _gui_input(event:InputEvent) -> void:
 						elif objectHovered: startPositionDrag(objectHovered)
 						else:
 							focusDialog.defocus()
-							multiselect.startSelect()
+							multiselect.pivot = get_global_mouse_position()
+					if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and event is InputEventMouseMotion and multiselect.state == Multiselect.STATE.HOLDING: multiselect.startSelect()
 				MODE.TILE:
 					if Mods.active(&"OutOfBounds") or game.levelBounds.has_point(mouseWorldPosition):
 						if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
@@ -333,12 +348,18 @@ func dragComponent() -> bool: # returns whether or not an object is being dragge
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventKey and event.is_pressed():
-		if game.playState == Game.PLAY_STATE.PLAY:
+		if settingsOpen:
+			pass
+		elif game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
 			game.player.receiveKey(event)
 		else:
 			# IN EDIT
-			if %objectSearch.has_focus(): return
+			if otherObjects.objectSearch.has_focus():
+				match event.keycode:
+					KEY_ESCAPE: grab_focus()
+					KEY_TAB: otherObjects._searchSubmitted()
+				return
 			if quickSet.quick: quickSet.receiveKey(event); return
 			if focusDialog.interacted and focusDialog.interacted.receiveKey(event): return
 			if focusDialog.focused and focusDialog.receiveKey(event): return
@@ -381,7 +402,7 @@ func _input(event:InputEvent) -> void:
 func home() -> void:
 	targetCameraZoom = 1
 	zoomPoint = game.levelBounds.get_center()
-	game.editorCamera.position = zoomPoint - gameViewportCont.size / (cameraZoom*2)
+	game.editorCamera.position = zoomPoint - gameCont.size / (cameraZoom*2)
 
 func zoomCamera(factor:float) -> void:
 	targetCameraZoom *= factor
@@ -391,12 +412,12 @@ func zoomCamera(factor:float) -> void:
 	if targetCameraZoom > 1000: targetCameraZoom = 1000
 
 func worldspaceToScreenspace(vector:Vector2) -> Vector2:
-	if game.playState == Game.PLAY_STATE.PLAY: return (vector - game.playCamera.get_screen_center_position())*game.playCamera.zoom + gameViewportCont.position + gameViewportCont.size/2
-	else: return (vector - game.editorCamera.position)*game.editorCamera.zoom + gameViewportCont.position
+	if game.playState == Game.PLAY_STATE.PLAY: return (vector - game.playCamera.get_screen_center_position())*game.playCamera.zoom + gameCont.position + gameCont.size/2
+	else: return (vector - game.editorCamera.position)*game.editorCamera.zoom + gameCont.position
 
 func screenspaceToWorldspace(vector:Vector2) -> Vector2:
-	if game.playState == Game.PLAY_STATE.PLAY: return (vector - gameViewportCont.position - gameViewportCont.size/2)/game.playCamera.zoom + game.playCamera.get_screen_center_position()
-	return (vector - gameViewportCont.position)/game.editorCamera.zoom + game.editorCamera.position
+	if game.playState == Game.PLAY_STATE.PLAY: return (vector - gameCont.position - gameCont.size/2)/game.playCamera.zoom + game.playCamera.get_screen_center_position()
+	return (vector - gameCont.position)/game.editorCamera.zoom + game.editorCamera.position
 
 static func isLeftClick(event:InputEvent) -> bool: return event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT
 static func isRightClick(event:InputEvent) -> bool: return event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT
@@ -416,9 +437,42 @@ static func rectSign(rect:Rect2, point:Vector2) -> Vector2: # the "sign" of a po
 
 func scrollIntoView(component:GameComponent) -> void:
 	var rect:Rect2 = Rect2(component.getDrawPosition()-Vector2(16,16), component.size+Vector2(32,32))
-	var screenRect:Rect2 = Rect2(screenspaceToWorldspace(gameViewportCont.position), gameViewportCont.size/game.editorCamera.zoom)
+	var screenRect:Rect2 = Rect2(screenspaceToWorldspace(gameCont.position), gameCont.size/game.editorCamera.zoom)
 	if rect.size.x > screenRect.size.x: zoomCamera(0.8**ceil(log(screenRect.size.x/rect.size.x)/-0.2231435513))
 	if rect.size.y > screenRect.size.y: zoomCamera(0.8**ceil(log(screenRect.size.y/rect.size.y)/-0.2231435513))
 	game.editorCamera.zoom = Vector2(targetCameraZoom,targetCameraZoom)
-	screenRect = Rect2(screenspaceToWorldspace(gameViewportCont.position), gameViewportCont.size/game.editorCamera.zoom)
+	screenRect = Rect2(screenspaceToWorldspace(gameCont.position), gameCont.size/game.editorCamera.zoom)
 	game.editorCamera.position = game.editorCamera.position.clamp(rect.end-screenRect.size, rect.position)
+
+func _toggleSettingsMenu(toggled_on:bool) -> void:
+	quickSet.applyOrCancel()
+	%settingsMenu.visible = toggled_on
+	%settingsText.visible = toggled_on
+	%explainText.visible = !toggled_on
+	settingsOpen = toggled_on
+	get_tree().call_group(&"hotkeyButton", &"queue_redraw")
+	topBar._updateButtons()
+	if toggled_on: %settingsMenu.opened()
+	else:
+		%settingsMenu.closed()
+		grab_focus()
+	updateDescription()
+
+func updateDescription() -> void:
+	%description.visible = (settingsOpen and settingsMenu.levelSettings.visible) or (game.playState == Game.PLAY_STATE.PLAY and %levelDescription.text != "")
+	%levelDescription.text = game.level.description
+	%levelShortNumber.text = game.level.shortNumber
+	%levelDescription.editable = settingsOpen
+	%levelShortNumber.editable = settingsOpen
+
+func _levelDescriptionSet() -> void:
+	game.level.description = %levelDescription.text
+
+func _draw() -> void:
+	RenderingServer.canvas_item_clear(descriptionDraw)
+	TextDraw.outlinedCentered(Game.FROOMNUM,descriptionDraw,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(728,27))
+	TextDraw.outlinedCentered(Game.FROOMNUM,descriptionDraw,%levelShortNumber.text,Color("#8c50c8"),Color("#140064"),20,Vector2(728,57))
+
+func _levelShortNumberSet(string:String) -> void:
+	game.level.shortNumber = string
+	queue_redraw()

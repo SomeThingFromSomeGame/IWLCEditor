@@ -5,6 +5,10 @@ class_name LockHandler
 
 var door:Door
 
+func _ready() -> void:
+	super()
+	Explainer.addControl(add,ControlExplanation.new("",{"Ctrl+L":"Add lock"}))
+
 func setup(_door:Door) -> void:
 	door = _door
 	deleteButtons()

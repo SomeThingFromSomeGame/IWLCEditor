@@ -99,6 +99,7 @@ func clear() -> void:
 	for component in game.components.values(): component.queue_free()
 	game.components.clear()
 	game.level = Game.Level.new()
+	game.level.game = game
 	game.anyChanges = false
 	game.tiles.clear()
 	Changes.undoStack.clear()

@@ -19,6 +19,15 @@ func _ready() -> void:
 	defaultValue = KeyBulk.TYPE.NORMAL
 	buttonType = KeyTypeSelectorButton
 	super()
+	for button in buttons:
+		var explanation:ControlExplanation = ControlExplanation.new()
+		match button.value:
+			KeyBulk.TYPE.NORMAL: explanation.hotkeys["N"] = "Set normal key type"
+			KeyBulk.TYPE.EXACT: explanation.hotkeys["E"] = "Set exact key type"
+			KeyBulk.TYPE.STAR, KeyBulk.TYPE.UNSTAR: explanation.hotkeys["S"] = "Toggle star key type"
+			KeyBulk.TYPE.POSROTOR, KeyBulk.TYPE.NEGROTOR, KeyBulk.TYPE.SIGNFLIP: explanation.hotkeys["R"] = "Rotate signflip/rotor key type"
+			KeyBulk.TYPE.CURSE, KeyBulk.TYPE.UNCURSE: explanation.hotkeys["U"] = "Toggle curse key type"
+		Explainer.addControl(button,explanation)
 
 func changedMods() -> void:
 	var keyTypes:Array[KeyBulk.TYPE] = Mods.keyTypes()

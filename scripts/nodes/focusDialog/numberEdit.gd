@@ -13,6 +13,9 @@ var value:Q = Q.new(0)
 var bufferedNegative:bool = false # since -0 cant exist, activate it when the number is set
 var purpose:PURPOSE = PURPOSE.SINGLE
 
+func _ready() -> void:
+	Explainer.addControl(self,ControlExplanation.new("Number Edit",{Explainer.ARROWS_UD:"±1","-":"×-1","I":"×i"}))
+
 func _gui_input(event:InputEvent) -> void:
 	if Editor.isLeftClick(event): editor.focusDialog.interact(self)
 

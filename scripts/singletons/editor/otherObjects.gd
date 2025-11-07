@@ -9,6 +9,7 @@ var objects:Array[GDScript] = [Goal, KeyCounter, PlayerSpawn, RemoteLock]
 var firstResult:GDScript
 
 func _searchFocused() -> void:
+	editor.focusDialog.defocus()
 	await get_tree().process_frame
 	objectSearch.text = ""
 	_updateSearch()

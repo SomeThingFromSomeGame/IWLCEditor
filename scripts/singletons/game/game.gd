@@ -243,8 +243,7 @@ var level:Level = Level.new()
 var anyChanges:bool = false:
 	set(value):
 		anyChanges = value
-		if anyChanges: get_window().title = level.name + "*" + " - IWLCEditor"
-		else: get_window().title = level.name + " - IWLCEditor"
+		updateWindowName()
 
 var objectIdIter:int = 0 # for creating objects
 var componentIdIter:int = 0 # for creating components
@@ -276,6 +275,9 @@ const NEGATIVE_MATERIAL:ShaderMaterial = preload("res://resources/materials/nega
 const FKEYX:Font = preload("res://resources/fonts/fKeyX.fnt")
 const FKEYNUM:Font = preload("res://resources/fonts/fKeyNum.fnt")
 const FTALK:Font = preload("res://resources/fonts/fTalk.fnt")
+const FLEVELID:Font = preload("res://resources/fonts/fLevelID.fnt")
+const FLEVELNAME:Font = preload("res://resources/fonts/fLevelName.fnt")
+const FROOMNUM:Font = preload("res://resources/fonts/fRoomNum.fnt")
 
 var latestSpawn:PlayerSpawn
 var levelStart:PlayerSpawn
@@ -284,12 +286,13 @@ enum PLAY_STATE {EDIT, PLAY, PAUSED}
 var playState:PLAY_STATE = PLAY_STATE.EDIT:
 	set(value):
 		playState = value
-		editor.topBar._playStateChanged()
+		editor.topBar._updateButtons()
 		%editorCamera.enabled = playState != PLAY_STATE.PLAY
 		%playCamera.enabled = playState == PLAY_STATE.PLAY
 		fastAnimSpeed = 0
 		fastAnimTimer = 0
 		complexViewHue = 0
+		editor.updateDescription()
 
 var fastAnimSpeed:float = 0 # 0: slowest, 1: fastest
 var fastAnimTimer:float = 0 # speed resets when this counts down to 0
@@ -299,7 +302,8 @@ var complexViewHue:float = 0
 func _ready() -> void:
 	GameChanges.game = self
 	Saving.game = self
-	anyChanges = false
+	level.game = self
+	updateWindowName()
 
 func _process(delta:float) -> void:
 	goldIndexFloat += delta*6 # 0.1 per frame, 60fps
@@ -320,6 +324,10 @@ func _process(delta:float) -> void:
 			fastAnimSpeed = 0
 	complexViewHue += delta*0.1764705882 # 0.75/255 per frame, 60fps
 	if complexViewHue >= 1: complexViewHue -= 1
+
+func updateWindowName() -> void:
+	if anyChanges: get_window().title = level.name + "*" + " - IWLCEditor"
+	else: get_window().title = level.name + " - IWLCEditor"
 
 func fasterAnims() -> void:
 	fastAnimTimer = 1.6666666667 # 100 frames, 60fps
@@ -382,6 +390,13 @@ func setGlitch(color:COLOR) -> void:
 			object.setGlitch(color)
 
 class Level extends RefCounted:
-	var name:String = "Unnamed Level"
+	var game:Game
+
+	var shortNumber:String = "X-X"
+	var number:String = ""
+	var name:String = "Unnamed Level":
+		set(value):
+			name = value
+			game.updateWindowName()
 	var description:String = ""
-	var author:String = "Unknown Author"
+	var author:String = ""

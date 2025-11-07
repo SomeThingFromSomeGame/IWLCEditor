@@ -11,6 +11,9 @@ var value:C = C.ZERO
 var bufferedSign:C = C.ONE # since -0 (and 0i and -0i) cant exist, activate it when the number is set
 var purpose:NumberEdit.PURPOSE = NumberEdit.PURPOSE.AXIAL
 
+func _ready() -> void:
+	Explainer.addControl(self,ControlExplanation.new("Number Edit",{Explainer.ARROWS_UD:"±1","-":"×-1","I":"×i"}))
+
 func _gui_input(event:InputEvent) -> void:
 	if Editor.isLeftClick(event): editor.focusDialog.interact(self)
 

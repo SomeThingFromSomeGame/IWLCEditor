@@ -50,7 +50,11 @@ var completeMatch:String = "" # if this is a partial match, display the complete
 
 func updateText() -> void:
 	var string:String = ""
-	if quick  == QUICK.NONE: text = ""; return
+	if quick == QUICK.NONE:
+		cancel()
+	else:
+		visible = true
+		%explainText.visible = false
 	match quick:
 		QUICK.COLOR:
 			if component is Door and (component.type == Door.TYPE.COMBO or !editor.focusDialog.colorLink.button_pressed): string += "SPEND COLOR: "
@@ -76,6 +80,9 @@ func cancel() -> void:
 	quick = QUICK.NONE
 	text = ""
 	completeMatch = ""
+	visible = false
+	%explainText.visible = true
+	editor.grab_focus()
 
 func evaluateQuick() -> void:
 	matched = -1
@@ -96,19 +103,19 @@ func receiveKey(event:InputEventKey) -> void:
 			KEY_BACKSPACE:
 				if Input.is_key_pressed(KEY_CTRL): input = ""
 				input = input.left(input.length()-1)
-			KEY_TAB, KEY_ENTER:
-				if matched != -1: apply()
-				quick = QUICK.NONE
-				editor.grab_focus()
-			KEY_ESCAPE: quick = QUICK.NONE
+			KEY_TAB, KEY_ENTER: applyOrCancel()
+			KEY_ESCAPE: cancel()
 	evaluateQuick()
 	updateText()
 
 func apply() -> void:
 	match quick:
 		QUICK.COLOR:
-			if component is KeyBulk: editor.focusDialog.keyDialog._keyColorSelected(matched)
-			if component is Door or component is Lock: editor.focusDialog.doorDialog._doorColorSelected(matched)
+			match component.get_script():
+				KeyBulk: editor.focusDialog.keyDialog._keyColorSelected(matched)
+				Door, Lock: editor.focusDialog.doorDialog._doorColorSelected(matched)
+				KeyCounterElement: editor.focusDialog.keyCounterDialog._keyCounterColorSelected(matched)
+
 
 func matchesId(values:int) -> bool: return input.is_valid_int() and input.to_int() >= 0 and input.to_int() < values
 

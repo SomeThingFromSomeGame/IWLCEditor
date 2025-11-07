@@ -31,7 +31,6 @@ func startSelect() -> void:
 	state = STATE.SELECTING
 	visible = true
 	selected = []
-	pivot = get_global_mouse_position()
 	continueSelect()
 
 func hold() -> void:
@@ -58,7 +57,7 @@ func stopDrag() -> void:
 func continueSelect() -> void:
 	var rect:Rect2 = Rect2(pivot,Vector2.ZERO).expand(get_global_mouse_position())
 	var worldRect:Rect2 = Rect2(editor.screenspaceToWorldspace(pivot),Vector2.ZERO).expand(editor.screenspaceToWorldspace(get_global_mouse_position()))
-	position = rect.position - editor.gameViewportCont.position
+	position = rect.position - editor.gameCont.position
 	size = rect.size
 	selected = []
 	# tiles

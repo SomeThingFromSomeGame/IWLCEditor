@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://c81fuf05yiuem"
+path="res://.godot/imported/fRoomNum.fnt-6bc0b44640b6b0ad30dc28ed4e8fad29.fontdata"
+
+[deps]
+
+source_file="res://resources/fonts/fRoomNum.fnt"
+dest_files=["res://.godot/imported/fRoomNum.fnt-6bc0b44640b6b0ad30dc28ed4e8fad29.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://djnt51xv7wn52"]
+[gd_scene load_steps=43 format=3 uid="uid://djnt51xv7wn52"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_j8y2p"]
 [ext_resource type="Script" uid="uid://2wjcj6frwpjo" path="res://scripts/singletons/editor/editor.gd" id="2_o435n"]
@@ -26,6 +26,11 @@
 [ext_resource type="Script" uid="uid://y6lb6luqyxy2" path="res://scripts/singletons/editor/quickSet.gd" id="14_sdh1e"]
 [ext_resource type="Texture2D" uid="uid://lbuoq1o35ds2" path="res://assets/ui/playControls/pause.png" id="15_fce0a"]
 [ext_resource type="Texture2D" uid="uid://dnjchcne7ikhq" path="res://assets/ui/playControls/stop.png" id="16_m12ww"]
+[ext_resource type="Script" uid="uid://lwocqakgt4qr" path="res://resources/controlExplanation.gd" id="17_bn54a"]
+[ext_resource type="PackedScene" uid="uid://uojm0pynavni" path="res://scenes/settingsMenu.tscn" id="25_6lm8n"]
+[ext_resource type="Texture2D" uid="uid://fegj6p13p4ot" path="res://assets/ui/settings/description.png" id="26_nhltt"]
+[ext_resource type="Texture2D" uid="uid://ba540b55427af" path="res://assets/ui/settings/setings.png" id="27_1abrv"]
+[ext_resource type="FontFile" uid="uid://c81fuf05yiuem" path="res://resources/fonts/fRoomNum.fnt" id="27_v24q3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_74j0u"]
 content_margin_left = 2.0
@@ -59,6 +64,27 @@ corner_detail = 5
 [sub_resource type="ButtonGroup" id="ButtonGroup_wm3ai"]
 resource_name = "modes"
 
+[sub_resource type="Resource" id="Resource_1abrv"]
+script = ExtResource("17_bn54a")
+hotkeys = Dictionary[String, String]({
+"Space": "Playtest level"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
+[sub_resource type="Resource" id="Resource_bn54a"]
+script = ExtResource("17_bn54a")
+hotkeys = Dictionary[String, String]({
+"P": "Pause playtest"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
+[sub_resource type="Resource" id="Resource_6lm8n"]
+script = ExtResource("17_bn54a")
+hotkeys = Dictionary[String, String]({
+"O": "Stop playtest"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3vi5u"]
 shader = ExtResource("8_o435n")
 shader_parameter/GRID_COLOR = Color(0.54901963, 0.54901963, 0.54901963, 0.54509807)
@@ -66,6 +92,12 @@ shader_parameter/OUTOFBOUNDS_COLOR = Color(0.20990813, 0.20990813, 0.2099081, 1)
 shader_parameter/screenPosition = Vector2(0, 0)
 shader_parameter/mousePosition = Vector2(0, 0)
 shader_parameter/tileSize = Vector2(32, 32)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jke8t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lo5f0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mxdmd"]
 
 [node name="editor" type="Control"]
 layout_mode = 3
@@ -76,7 +108,6 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
 mouse_default_cursor_shape = 4
-theme = ExtResource("1_j8y2p")
 script = ExtResource("2_o435n")
 
 [node name="c" type="VBoxContainer" parent="."]
@@ -86,6 +117,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_j8y2p")
 
 [node name="c" type="PanelContainer" parent="c"]
 z_index = 2
@@ -93,6 +125,7 @@ layout_mode = 2
 
 [node name="topBar" type="MarginContainer" parent="c/c"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 script = ExtResource("3_3vi5u")
 
@@ -235,12 +268,22 @@ defaultHotkey = "Ctrl+V"
 pressedHotkey = "Shift"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
+[node name="settingTabs" type="TabBar" parent="c/c/topBar/c"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 0
+tab_count = 2
+tab_0/title = "Level"
+tab_1/title = "Editor"
+
 [node name="playControls" type="HBoxContainer" parent="c/c/topBar/c"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="play" type="Button" parent="c/c/topBar/c/playControls"]
+[node name="play" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -248,8 +291,9 @@ icon = ExtResource("13_wyx26")
 script = ExtResource("5_3vi5u")
 defaultHotkey = "Space"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
+metadata/explanation = SubResource("Resource_1abrv")
 
-[node name="pause" type="Button" parent="c/c/topBar/c/playControls"]
+[node name="pause" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -257,8 +301,9 @@ icon = ExtResource("15_fce0a")
 script = ExtResource("5_3vi5u")
 defaultHotkey = "P"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
+metadata/explanation = SubResource("Resource_bn54a")
 
-[node name="stop" type="Button" parent="c/c/topBar/c/playControls"]
+[node name="stop" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -266,8 +311,18 @@ icon = ExtResource("16_m12ww")
 script = ExtResource("5_3vi5u")
 defaultHotkey = "O"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
+metadata/explanation = SubResource("Resource_6lm8n")
 
-[node name="gameViewportCont" type="SubViewportContainer" parent="c"]
+[node name="gameCont" type="MarginContainer" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="gameViewportCont" type="SubViewportContainer" parent="c/gameCont"]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3vi5u")
 layout_mode = 2
@@ -275,32 +330,118 @@ size_flags_vertical = 3
 mouse_filter = 2
 stretch = true
 
-[node name="gameViewport" type="SubViewport" parent="c/gameViewportCont"]
+[node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportCont"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(820, 628)
 render_target_update_mode = 4
 
-[node name="game" parent="c/gameViewportCont/gameViewport" instance=ExtResource("8_5tdu1")]
+[node name="game" parent="c/gameCont/gameViewportCont/gameViewport" instance=ExtResource("8_5tdu1")]
 unique_name_in_owner = true
 script = ExtResource("11_3vi5u")
 
-[node name="multiselect" parent="c/gameViewportCont" instance=ExtResource("12_q8l03")]
+[node name="multiselect" parent="c/gameCont/gameViewportCont" instance=ExtResource("12_q8l03")]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("13_0u1f5")
 
-[node name="c2" type="PanelContainer" parent="c"]
+[node name="MarginContainer" type="MarginContainer" parent="c/gameCont/gameViewportCont"]
+layout_mode = 2
+
+[node name="settingsMenu" parent="c/gameCont" instance=ExtResource("25_6lm8n")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="description" type="MarginContainer" parent="c/gameCont"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 22
+
+[node name="descriptionImage" type="TextureRect" parent="c/gameCont/description"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture = ExtResource("26_nhltt")
+
+[node name="c" type="HBoxContainer" parent="c/gameCont/description"]
+layout_mode = 2
+
+[node name="c" type="MarginContainer" parent="c/gameCont/description/c"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 0
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+
+[node name="c" type="Control" parent="c/gameCont/description/c/c"]
+clip_contents = true
+layout_mode = 2
+
+[node name="levelDescription" type="TextEdit" parent="c/gameCont/description/c/c/c"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 658.0
+offset_bottom = 68.0
+placeholder_text = "No description set; box will not be visible"
+wrap_mode = 1
+scroll_fit_content_height = true
+caret_blink = true
+
+[node name="c2" type="MarginContainer" parent="c/gameCont/description/c"]
+custom_minimum_size = Vector2(116, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 34
+
+[node name="levelShortNumber" type="LineEdit" parent="c/gameCont/description/c/c2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.54901963, 0.3137255, 0.78431374, 0)
+theme_override_colors/font_uneditable_color = Color(0.8745098, 0.8745098, 0.8745098, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_colors/caret_color = Color(0.1254902, 0, 0.1254902, 1)
+theme_override_colors/selection_color = Color(0.6313726, 0.7254902, 0.9843137, 1)
+theme_override_fonts/font = ExtResource("27_v24q3")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_jke8t")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_lo5f0")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mxdmd")
+text = "T1-1"
+alignment = 1
+caret_blink = true
+
+[node name="c3" type="PanelContainer" parent="c"]
 z_index = 2
 layout_mode = 2
 
-[node name="c" type="MarginContainer" parent="c/c2"]
+[node name="c2" type="HBoxContainer" parent="c/c3"]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/c2/c"]
+[node name="c2" type="MarginContainer" parent="c/c3/c2"]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="quickSet" type="RichTextLabel" parent="c/c2/c/c"]
+[node name="quickSet" type="RichTextLabel" parent="c/c3/c2/c2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 17)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8289096, 0.82890975, 0.8289095, 1)
+theme_override_fonts/normal_font = ExtResource("12_2w0at")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+scroll_active = false
+autowrap_mode = 0
+script = ExtResource("14_sdh1e")
+
+[node name="explainText" type="RichTextLabel" parent="c/c3/c2/c2"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 17)
 layout_mode = 2
@@ -308,10 +449,27 @@ theme_override_colors/default_color = Color(0.8289096, 0.82890975, 0.8289095, 1)
 theme_override_fonts/normal_font = ExtResource("12_2w0at")
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
-fit_content = true
 scroll_active = false
 autowrap_mode = 0
-script = ExtResource("14_sdh1e")
+
+[node name="settingsText" type="RichTextLabel" parent="c/c3/c2/c2"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 17)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8289096, 0.82890975, 0.8289095, 1)
+theme_override_fonts/normal_font = ExtResource("12_2w0at")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "IWLCEditor v0.2.0"
+scroll_active = false
+autowrap_mode = 0
+
+[node name="toggleSettingsMenu" type="Button" parent="c/c3/c2"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+icon = ExtResource("27_1abrv")
 
 [node name="focusDialog" parent="." instance=ExtResource("12_74j0u")]
 unique_name_in_owner = true
@@ -322,6 +480,7 @@ layout_mode = 0
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Save As"
+initial_position = 2
 mode_overrides_title = false
 display_mode = 1
 access = 1
@@ -330,6 +489,7 @@ use_native_dialog = true
 [node name="openDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
 title = "Open"
+initial_position = 2
 mode_overrides_title = false
 file_mode = 0
 display_mode = 1
@@ -343,6 +503,7 @@ title = "Unsaved Changes"
 initial_position = 2
 size = Vector2i(200, 90)
 unresizable = true
+theme = ExtResource("1_j8y2p")
 ok_button_text = "Yes"
 dialog_text = "You have unsaved changes.
 Load new level anyway?"
@@ -354,6 +515,7 @@ title = "Load Error"
 initial_position = 2
 size = Vector2i(200, 90)
 unresizable = true
+theme = ExtResource("1_j8y2p")
 
 [connection signal="pressed" from="c/c/topBar/c/modes/select" to="c/c/topBar/c/modes" method="_setMode" binds= [0]]
 [connection signal="pressed" from="c/c/topBar/c/modes/tile" to="c/c/topBar/c/modes" method="_setMode" binds= [1]]
@@ -365,6 +527,10 @@ unresizable = true
 [connection signal="text_changed" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_updateSearch" unbinds=1]
 [connection signal="text_submitted" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_searchSubmitted" unbinds=1]
 [connection signal="pressed" from="c/c/topBar/c/modes/paste" to="c/c/topBar/c/modes" method="_setMode" binds= [5]]
+[connection signal="tab_changed" from="c/c/topBar/c/settingTabs" to="c/gameCont/settingsMenu" method="_tabSelected"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/play" to="c/c/topBar" method="_play"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/pause" to="c/c/topBar" method="_pause"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/stop" to="c/c/topBar" method="_stop"]
+[connection signal="text_changed" from="c/gameCont/description/c/c/c/levelDescription" to="." method="_levelDescriptionSet"]
+[connection signal="text_changed" from="c/gameCont/description/c/c2/levelShortNumber" to="." method="_levelShortNumberSet"]
+[connection signal="toggled" from="c/c3/c2/toggleSettingsMenu" to="." method="_toggleSettingsMenu"]

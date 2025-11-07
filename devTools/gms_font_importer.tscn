@@ -4,4 +4,5 @@
 
 [node name="FontMaker" type="Node"]
 script = ExtResource("1_5l1cu")
-font_name = "fKeyX"
+font_name = "fRoomNum"
+convert_font = true

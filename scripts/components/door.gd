@@ -608,15 +608,15 @@ func auraCheck(player:Player) -> void:
 		makeDebris(Debris, Game.COLOR.ORANGE)
 		deAuraed = true
 	var auraed:bool = false
-	if player.auraMaroon and !gameFrozen:
+	if player.auraMaroon and !gameFrozen and !hasColor(Game.COLOR.RED):
 		GameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameFrozen",true))
 		makeDebris(Debris, Game.COLOR.WHITE)
 		auraed = true
-	if player.auraForest and !gameCrumbled:
+	if player.auraForest and !gameCrumbled and !hasColor(Game.COLOR.GREEN):
 		GameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gameCrumbled",true))
 		makeDebris(Debris, Game.COLOR.BROWN)
 		auraed = true
-	if player.auraNavy and !gamePainted:
+	if player.auraNavy and !gamePainted and !hasColor(Game.COLOR.BLUE):
 		GameChanges.addChange(GameChanges.PropertyChange.new(game,self,&"gamePainted",true))
 		makeDebris(Debris, Game.COLOR.ORANGE)
 		auraed = true

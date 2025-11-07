@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="IWLCEditor"
+config/version="0.2.0"
 run/main_scene="uid://djnt51xv7wn52"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="uid://b5g2tn4r1674k"
@@ -26,6 +27,7 @@ GameChanges="*res://scripts/singletons/game/gameChanges.gd"
 Mods="*res://scripts/singletons/mods/mods.gd"
 AudioManager="*res://scripts/singletons/game/audioManager.gd"
 Saving="*res://scripts/singletons/saving/saving.gd"
+Explainer="*res://scripts/singletons/editor/explainer.gd"
 
 [display]
 
@@ -37,6 +39,8 @@ window/per_pixel_transparency/allowed=true
 [global_group]
 
 modUI="UI affected by mod changes"
+explained=""
+hotkeyButton=""
 
 [input]
 

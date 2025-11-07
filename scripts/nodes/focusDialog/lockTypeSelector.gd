@@ -15,6 +15,15 @@ func _ready() -> void:
 	defaultValue = KeyBulk.TYPE.NORMAL
 	buttonType = LockTypeSelectorButton
 	super()
+	for button in buttons:
+		var explanation:ControlExplanation = ControlExplanation.new()
+		match button.value:
+			Lock.TYPE.NORMAL: explanation.hotkeys["N"] = "Set normal lock type"
+			Lock.TYPE.BLANK: explanation.hotkeys["B"] = "Set blank lock type"
+			Lock.TYPE.BLAST: explanation.hotkeys["X"] = "Set blast lock type"
+			Lock.TYPE.ALL: explanation.hotkeys["A"] = "Set all lock type"
+			Lock.TYPE.EXACT: explanation.hotkeys["E"] = "Set exact lock type"
+		Explainer.addControl(button,explanation)
 
 func changedMods() -> void:
 	var lockTypes:Array[Lock.TYPE] = Mods.lockTypes()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://8bth374yqwpe"]
+[gd_scene load_steps=51 format=3 uid="uid://8bth374yqwpe"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_eqegh"]
 [ext_resource type="Script" uid="uid://dm8t82nhqkdlc" path="res://scripts/singletons/focusDialog/focusDialog.gd" id="2_k8bto"]
@@ -28,6 +28,7 @@
 [ext_resource type="Script" uid="uid://cqv0og8rnwrph" path="res://scripts/nodes/focusDialog/axialNumberEdit.gd" id="21_k4n5y"]
 [ext_resource type="Texture2D" uid="uid://brhnpnqvdifb8" path="res://assets/ui/focusDialog/lockBooleans/armament.png" id="22_4u2vc"]
 [ext_resource type="Texture2D" uid="uid://dyhbxvexn1w26" path="res://assets/ui/focusDialog/blastLockSettings/negative.png" id="22_hh12n"]
+[ext_resource type="Script" uid="uid://lwocqakgt4qr" path="res://resources/controlExplanation.gd" id="22_s5h3h"]
 [ext_resource type="Texture2D" uid="uid://b38kvgugo2qsu" path="res://assets/ui/focusDialog/blastLockSettings/i.png" id="23_h1xy2"]
 [ext_resource type="Texture2D" uid="uid://ddautei1wlnil" path="res://assets/ui/focusDialog/otherObjects/playtest.png" id="24_7tfe2"]
 [ext_resource type="Script" uid="uid://lbaubg2qq1s1" path="res://scripts/nodes/focusDialog/keyCounterHandler.gd" id="25_1rcup"]
@@ -44,6 +45,20 @@
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_e2stj"]
 
+[sub_resource type="Resource" id="Resource_q8u4b"]
+script = ExtResource("22_s5h3h")
+hotkeys = Dictionary[String, String]({
+"Shift+N": "Toggle negated"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
+[sub_resource type="Resource" id="Resource_mscoq"]
+script = ExtResource("22_s5h3h")
+hotkeys = Dictionary[String, String]({
+"Shift+A": "Toggle armament"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_di8ev"]
 content_margin_left = 4.0
 content_margin_right = 4.0
@@ -51,6 +66,20 @@ color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 grow_begin = 2.0
 grow_end = 2.0
 thickness = 2
+
+[sub_resource type="Resource" id="Resource_s5h3h"]
+script = ExtResource("22_s5h3h")
+hotkeys = Dictionary[String, String]({
+"-": "Toggle sign"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
+
+[sub_resource type="Resource" id="Resource_rmnx8"]
+script = ExtResource("22_s5h3h")
+hotkeys = Dictionary[String, String]({
+"I": "Toggle axis"
+})
+metadata/_custom_type_script = "uid://lwocqakgt4qr"
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_xwnfa"]
 allow_unpress = true
@@ -268,17 +297,19 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"VSeperatorHigh"
 
-[node name="lockNegated" type="Button" parent="doorDialog/c/lock/c/c/lockSettings"]
+[node name="lockNegated" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("21_bfxh1")
+metadata/explanation = SubResource("Resource_q8u4b")
 
-[node name="lockArmament" type="Button" parent="doorDialog/c/lock/c/c/lockSettings"]
+[node name="lockArmament" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("22_4u2vc")
+metadata/explanation = SubResource("Resource_mscoq")
 
 [node name="doorAuraSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c"]
 unique_name_in_owner = true
@@ -370,19 +401,21 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="blastLockSign" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings"]
+[node name="blastLockSign" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
 toggle_mode = true
 icon = ExtResource("22_hh12n")
+metadata/explanation = SubResource("Resource_s5h3h")
 
-[node name="blastLockAxis" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings"]
+[node name="blastLockAxis" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
 toggle_mode = true
 icon = ExtResource("23_h1xy2")
+metadata/explanation = SubResource("Resource_rmnx8")
 
 [node name="partialDenominator" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings/c"]
 unique_name_in_owner = true

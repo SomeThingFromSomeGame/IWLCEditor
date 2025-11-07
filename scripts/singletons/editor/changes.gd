@@ -358,7 +358,7 @@ class GlobalObjectChange extends Change:
 		else: singleton.set(property, game.objects[id])
 
 		if singleton == game and property == &"levelStart":
-			game.editor.topBar.updatePlayButton()
+			game.editor.topBar._updateButtons()
 
 	func _to_string() -> String:
 		return "<GlobalObjectChange:"+str(singleton)+"."+str(property)+"->"+str(afterId)+">"

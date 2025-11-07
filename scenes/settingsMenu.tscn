@@ -1,0 +1,149 @@
+[gd_scene load_steps=8 format=3 uid="uid://uojm0pynavni"]
+
+[ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_c8k7n"]
+[ext_resource type="Script" uid="uid://cp1r75v1n7qs1" path="res://scripts/singletons/editor/settingsMenu.gd" id="2_onm7i"]
+[ext_resource type="FontFile" uid="uid://dftdrhvd8mdyi" path="res://resources/fonts/fLevelID.fnt" id="3_tixgc"]
+[ext_resource type="FontFile" uid="uid://cdifvlr6awojn" path="res://resources/fonts/fLevelName.fnt" id="4_egwj7"]
+[ext_resource type="Texture2D" uid="uid://cpllfu67xbr0h" path="res://assets/ui/settings/clarifier.png" id="5_iswfj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a5etv"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_egwj7"]
+content_margin_left = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+color = Color(0.5, 0.5, 0.5, 1)
+thickness = 2
+
+[node name="settingsMenu" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 1
+theme = ExtResource("1_c8k7n")
+theme_override_styles/panel = SubResource("StyleBoxFlat_a5etv")
+script = ExtResource("2_onm7i")
+
+[node name="c" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="c"]
+layout_mode = 2
+theme_override_constants/separation = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_egwj7")
+
+[node name="levelSettings" type="MarginContainer" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="c" type="MarginContainer" parent="c/levelSettings"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="c" type="VBoxContainer" parent="c/levelSettings/c"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+
+[node name="l" type="Label" parent="c/levelSettings/c/c"]
+layout_mode = 2
+text = "Level Number"
+horizontal_alignment = 1
+
+[node name="levelNumber" type="LineEdit" parent="c/levelSettings/c/c"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_fonts/font = ExtResource("3_tixgc")
+theme_override_font_sizes/font_size = 24
+alignment = 1
+expand_to_text_length = true
+caret_blink = true
+
+[node name="l2" type="Label" parent="c/levelSettings/c/c"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+text = "Level Name"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="levelName" type="LineEdit" parent="c/levelSettings/c/c"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_fonts/font = ExtResource("4_egwj7")
+theme_override_font_sizes/font_size = 36
+alignment = 1
+expand_to_text_length = true
+caret_blink = true
+
+[node name="l3" type="Label" parent="c/levelSettings/c/c"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Author"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="levelAuthor" type="LineEdit" parent="c/levelSettings/c/c"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.88, 0.88, 0.88, 0)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 0)
+theme_override_fonts/font = ExtResource("4_egwj7")
+theme_override_font_sizes/font_size = 36
+alignment = 1
+expand_to_text_length = true
+caret_blink = true
+
+[node name="editorSettings" type="MarginContainer" parent="c"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings"]
+layout_mode = 2
+
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c"]
+layout_mode = 2
+
+[node name="useNativeFileDialog" type="CheckBox" parent="c/editorSettings/c/c"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Use native file dialog"
+
+[node name="TextureRect" type="TextureRect" parent="c/editorSettings/c/c"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "If file dialogs aren't opening correctly (eg. Save As does nothing), turn this off."
+texture = ExtResource("5_iswfj")
+
+[connection signal="focus_exited" from="c/levelSettings/c/c/levelNumber" to="." method="_defocus"]
+[connection signal="text_changed" from="c/levelSettings/c/c/levelNumber" to="." method="_levelNumberSet"]
+[connection signal="focus_exited" from="c/levelSettings/c/c/levelName" to="." method="_defocus"]
+[connection signal="text_changed" from="c/levelSettings/c/c/levelName" to="." method="_levelNameSet"]
+[connection signal="focus_exited" from="c/levelSettings/c/c/levelAuthor" to="." method="_defocus"]
+[connection signal="text_changed" from="c/levelSettings/c/c/levelAuthor" to="." method="_levelAuthorSet"]
+[connection signal="toggled" from="c/editorSettings/c/c/useNativeFileDialog" to="." method="_useNativeFileDialogSet"]

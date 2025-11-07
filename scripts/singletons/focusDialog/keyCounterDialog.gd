@@ -21,6 +21,7 @@ func focusComponent(component:KeyCounterElement, _new:bool) -> void:
 
 func receiveKey(event:InputEvent) -> bool:
 	match event.keycode:
+		KEY_C: if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
 		KEY_E: if Input.is_key_pressed(KEY_CTRL): main.focused.addElement()
 		KEY_DELETE:
 			if main.componentFocused and len(main.focused.elements) > 1:

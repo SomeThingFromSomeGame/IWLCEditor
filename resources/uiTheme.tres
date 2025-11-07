@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=28 format=3 uid="uid://bvfthh0vm4fbp"]
+[gd_resource type="Theme" load_steps=43 format=3 uid="uid://bvfthh0vm4fbp"]
 
 [ext_resource type="FontFile" uid="uid://cjub6sxbu8elx" path="res://resources/fonts/RobotoMono-SemiBold.ttf" id="1_bmmxy"]
 [ext_resource type="FontFile" uid="uid://c1cbi8by5johg" path="res://resources/fonts/fTalk.fnt" id="2_0b2ua"]
@@ -38,6 +38,18 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(1, 1, 1, 1)
 corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8clmk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5vlxa"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vukqh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_420dv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2ry82"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3rwxy"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wu0u2"]
 bg_color = Color(0.25323758, 0.2532376, 0.2532375, 1)
@@ -170,9 +182,56 @@ content_margin_left = 2.0
 content_margin_top = 2.0
 content_margin_right = 2.0
 content_margin_bottom = 2.0
-bg_color = Color(0.18120003, 0.18120006, 0.18120003, 1)
-border_color = Color(0.25490198, 0.25490198, 0.25490198, 1)
+bg_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5764706, 0.5764706, 0.5764706, 1)
 corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bmmxy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0b2ua"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.585062, 0.585062, 0.5850621, 0.6)
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w58ka"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13319641, 0.13319641, 0.13319638, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5764706, 0.5764706, 0.5764706, 1)
+corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mie15"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+
+[sub_resource type="DPITexture" id="DPITexture_bmmxy"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"8\" height=\"8\"><circle cx=\"4\" cy=\"4\" r=\"1.5\" fill=\"#b2b2b2\" fill-opacity=\".25\"/></svg>
+"
+
+[sub_resource type="DPITexture" id="DPITexture_0b2ua"]
+_source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"8\" height=\"8\"><path fill=\"#b2b2b2\" fill-opacity=\".25\" d=\"M6 0v8h2V0zM1 0a1 1 0 0 0-.693 1.705L2.6 3.998.307 6.291A1 1 0 0 0 1.72 7.705l3-3a1 1 0 0 0 0-1.414l-3-3A1 1 0 0 0 1 0z\"/></svg>
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w58ka"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1fv4g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0b2ua"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_eyl0i"]
 
@@ -214,6 +273,18 @@ Button/styles/focus = SubResource("StyleBoxEmpty_51dj7")
 Button/styles/hover = SubResource("StyleBoxFlat_waqcv")
 Button/styles/normal = SubResource("StyleBoxFlat_sy460")
 Button/styles/pressed = SubResource("StyleBoxFlat_51dj7")
+CheckBox/colors/font_color = Color(0.7497799, 0.7497801, 0.74977976, 1)
+CheckBox/colors/font_focus_color = Color(0.7490196, 0.7490196, 0.7490196, 1)
+CheckBox/colors/font_hover_color = Color(0.8460434, 0.84604394, 0.84604436, 1)
+CheckBox/colors/font_pressed_color = Color(0.9268064, 0.9268064, 0.92680633, 1)
+CheckBox/font_sizes/font_size = 12
+CheckBox/fonts/font = ExtResource("1_bmmxy")
+CheckBox/styles/disabled = SubResource("StyleBoxEmpty_8clmk")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_5vlxa")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_vukqh")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_420dv")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_2ry82")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_3rwxy")
 ColorSelector/base_type = &"GridContainer"
 DialogPanelContainer/base_type = &"PanelContainer"
 DialogPanelContainer/styles/panel = SubResource("StyleBoxFlat_wu0u2")
@@ -266,6 +337,34 @@ RadioButtonText/styles/normal = SubResource("StyleBoxFlat_vqwi6")
 RadioButtonText/styles/pressed = SubResource("StyleBoxFlat_51dj7")
 SelectorButton/base_type = &"Button"
 SelectorButton/styles/normal = SubResource("StyleBoxFlat_sy460")
+TabBar/fonts/font = ExtResource("1_bmmxy")
+TabBar/styles/tab_focus = SubResource("StyleBoxEmpty_bmmxy")
+TabBar/styles/tab_hovered = SubResource("StyleBoxFlat_0b2ua")
+TabBar/styles/tab_selected = SubResource("StyleBoxFlat_w58ka")
+TabBar/styles/tab_unselected = SubResource("StyleBoxEmpty_mie15")
+TextEdit/colors/background_color = Color(0, 0, 0, 0)
+TextEdit/colors/caret_background_color = Color(0, 0, 0, 1)
+TextEdit/colors/caret_color = Color(0.1254902, 0, 0.1254902, 1)
+TextEdit/colors/current_line_color = Color(0.25, 0.25, 0.26, 0.8)
+TextEdit/colors/font_color = Color(0.1254902, 0, 0.1254902, 1)
+TextEdit/colors/font_outline_color = Color(0, 0, 0, 1)
+TextEdit/colors/font_placeholder_color = Color(0.4424, 0.48295337, 0.79, 1)
+TextEdit/colors/font_readonly_color = Color(0.1254902, 0, 0.1254902, 1)
+TextEdit/colors/font_selected_color = Color(0, 0, 0, 0)
+TextEdit/colors/search_result_border_color = Color(0.3, 0.3, 0.3, 0.4)
+TextEdit/colors/search_result_color = Color(0.3, 0.3, 0.3, 1)
+TextEdit/colors/selection_color = Color(0.6328224, 0.72446007, 0.98391825, 1)
+TextEdit/colors/word_highlighted_color = Color(0.5, 0.5, 0.5, 0.25)
+TextEdit/constants/caret_width = 1
+TextEdit/constants/line_spacing = 0
+TextEdit/constants/outline_size = 0
+TextEdit/font_sizes/font_size = 12
+TextEdit/fonts/font = ExtResource("2_0b2ua")
+TextEdit/icons/space = SubResource("DPITexture_bmmxy")
+TextEdit/icons/tab = SubResource("DPITexture_0b2ua")
+TextEdit/styles/focus = SubResource("StyleBoxEmpty_w58ka")
+TextEdit/styles/normal = SubResource("StyleBoxEmpty_1fv4g")
+TextEdit/styles/read_only = SubResource("StyleBoxEmpty_0b2ua")
 Tree/constants/v_separation = 2
 Tree/font_sizes/font_size = 12
 Tree/fonts/font = ExtResource("1_bmmxy")

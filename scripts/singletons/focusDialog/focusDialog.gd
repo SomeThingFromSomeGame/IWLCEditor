@@ -161,9 +161,9 @@ func _process(_delta:float) -> void:
 		if position.x < halfWidth:
 			%speechBubbler.position.x = max(position.x-halfWidth,10-halfWidth)
 			position.x = halfWidth
-		if position.x + halfWidth > editor.gameViewportCont.size.x:
-			%speechBubbler.position.x = min(position.x+halfWidth-editor.gameViewportCont.size.x,halfWidth-10)
-			position.x = editor.gameViewportCont.size.x - halfWidth
+		if position.x + halfWidth > editor.gameCont.size.x:
+			%speechBubbler.position.x = min(position.x+halfWidth-editor.gameCont.size.x,halfWidth-10)
+			position.x = editor.gameCont.size.x - halfWidth
 	else:
 		visible = false
 

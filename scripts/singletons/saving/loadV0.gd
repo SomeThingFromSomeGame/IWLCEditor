@@ -139,4 +139,6 @@ static func load(file:FileAccess, game:Game) -> void:
 
 	if levelStart != -1:
 		game.levelStart = game.objects[levelStart]
-		game.editor.topBar.updatePlayButton()
+		game.editor.topBar._updateButtons()
+	
+	game.get_tree().call_group("modUI", "changedMods")
