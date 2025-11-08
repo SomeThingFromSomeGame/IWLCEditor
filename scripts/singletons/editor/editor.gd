@@ -88,7 +88,7 @@ func _process(delta:float) -> void:
 	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
 	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x
 	else: cameraZoom = editorCamera.zoom.x
-	%gameViewportCont.material.set_shader_parameter("rCameraZoom",1/cameraZoom)
+	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
 	%gameViewportCont.material.set_shader_parameter("tileSize",tileSize)
 	componentHovered = null
 	if !componentDragged:

@@ -346,7 +346,6 @@ unique_name_in_owner = true
 
 [node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
 unique_name_in_owner = true
-position = Vector2(-10, -10)
 anchor_mode = 0
 limit_enabled = false
 
@@ -487,7 +486,7 @@ theme_override_colors/default_color = Color(0.8289096, 0.82890975, 0.8289095, 1)
 theme_override_fonts/normal_font = ExtResource("12_2w0at")
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
-text = "IWLCEditor v0.3.0"
+text = "IWLCEditor v0.3.1"
 scroll_active = false
 autowrap_mode = 0
 

@@ -315,9 +315,7 @@ func _process(delta:float) -> void:
 		goldIndex = int(goldIndexFloat)
 		goldIndexChanged.emit()
 	RenderingServer.global_shader_parameter_set(&"NOISE_OFFSET", Vector2(randf_range(-1000, 1000), randf_range(-1000, 1000)))
-	if editor:
-		RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/editor.cameraZoom)
-		if player: editor.playtestCamera.position = player.position
+	if editor and player: editor.playtestCamera.position = player.position
 	# fast anims
 	if fastAnimTimer > 0:
 		fastAnimTimer -= delta
