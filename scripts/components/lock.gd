@@ -541,7 +541,9 @@ static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 			elif keyCount.eq(0): can = false
 			elif lock.isPartial:
 				if keyCount.modulo(lock.effectiveDenominator()).neq(0): can = false
-		TYPE.EXACT: can = keyCount.across(lock.effectiveCount().axibs()).eq(lock.effectiveCount())
+		TYPE.EXACT:
+			if lock.effectiveCount().eq(0): can = keyCount.neq(0)
+			else: can = keyCount.across(lock.effectiveCount().axibs()).eq(lock.effectiveCount())
 	return can != lock.negated
 
 func getCost(player:Player, ipow:C=parent.ipow()) -> C: return getLockCost(self, player, ipow)
