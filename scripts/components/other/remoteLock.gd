@@ -280,14 +280,14 @@ func curseCheck(player:Player) -> void:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseColor",player.curseColor))
 		makeCurseParticles(curseColor, 1, 0.2, 0.5)
 		AudioManager.play(preload("res://resources/sounds/door/curse.wav"))
-		Changes.bufferSave()
+		GameChanges.bufferSave()
 	elif player.curseMode < 0 and cursed and curseColor == player.curseColor:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",false))
 		if curseColor == Game.COLOR.GLITCH:
 			GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseGlitchMimic",Game.COLOR.GLITCH))
 		makeCurseParticles(Game.COLOR.BROWN, -1, 0.2, 0.5)
 		AudioManager.play(preload("res://resources/sounds/door/decurse.wav"))
-		Changes.bufferSave()
+		GameChanges.bufferSave()
 
 func makeCurseParticles(particleColor:Game.COLOR, mode:int, scaleMin:float=1,scaleMax:float=1) -> void:
 	for y in floor((size.y)/16):
@@ -324,7 +324,7 @@ func auraCheck(player:Player) -> void:
 	
 	if deAuraed or auraed:
 		AudioManager.play(preload("res://resources/sounds/door/deaura.wav"))
-		Changes.bufferSave()
+		GameChanges.bufferSave()
 
 func makeDebris(debrisType:GDScript, debrisColor:Game.COLOR) -> void:
 	for y in floor(size.y/16):
