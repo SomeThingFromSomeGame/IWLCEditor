@@ -233,6 +233,7 @@ const darkTone:Array[Color] = [
 ]
 
 @onready var editor:Editor = get_node("/root/editor")
+var playGame:PlayGame
 var world:World
 var tiles:TileMapLayer
 var objectsParent:Node
@@ -256,10 +257,11 @@ var levelBounds:Rect2i = Rect2i(0,0,800,608):
 	set(value):
 		levelBounds = value
 		RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size)
-		editor.playCamera.limit_left = levelBounds.position.x
-		editor.playCamera.limit_top = levelBounds.position.y
-		editor.playCamera.limit_right = levelBounds.end.x
-		editor.playCamera.limit_bottom = levelBounds.end.y
+		if editor:
+			editor.playtestCamera.limit_left = levelBounds.position.x
+			editor.playtestCamera.limit_top = levelBounds.position.y
+			editor.playtestCamera.limit_right = levelBounds.end.x
+			editor.playtestCamera.limit_bottom = levelBounds.end.y
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
@@ -284,18 +286,21 @@ enum PLAY_STATE {EDIT, PLAY, PAUSED}
 var playState:PLAY_STATE = PLAY_STATE.EDIT:
 	set(value):
 		playState = value
-		editor.topBar._updateButtons()
-		editor.editorCamera.enabled = playState != PLAY_STATE.PLAY
-		editor.playCamera.enabled = playState == PLAY_STATE.PLAY
+		if editor:
+			editor.topBar._updateButtons()
+			editor.editorCamera.enabled = playState != PLAY_STATE.PLAY
+			editor.playtestCamera.enabled = playState == PLAY_STATE.PLAY
+			editor.updateDescription()
 		fastAnimSpeed = 0
 		fastAnimTimer = 0
 		complexViewHue = 0
-		editor.updateDescription()
 
 var fastAnimSpeed:float = 0 # 0: slowest, 1: fastest
 var fastAnimTimer:float = 0 # speed resets when this counts down to 0
 
 var complexViewHue:float = 0
+
+var editorWindowSize:Vector2
 
 func setWorld(_world:World) -> void:
 	world = _world
@@ -310,9 +315,9 @@ func _process(delta:float) -> void:
 		goldIndex = int(goldIndexFloat)
 		goldIndexChanged.emit()
 	RenderingServer.global_shader_parameter_set(&"NOISE_OFFSET", Vector2(randf_range(-1000, 1000), randf_range(-1000, 1000)))
-	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/editor.cameraZoom)
-	if player:
-		editor.playCamera.position = player.position
+	if editor:
+		RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/editor.cameraZoom)
+		if player: editor.playtestCamera.position = player.position
 	# fast anims
 	if fastAnimTimer > 0:
 		fastAnimTimer -= delta
@@ -324,8 +329,10 @@ func _process(delta:float) -> void:
 	if complexViewHue >= 1: complexViewHue -= 1
 
 func updateWindowName() -> void:
-	if anyChanges: get_window().title = level.name + "*" + " - IWLCEditor"
-	else: get_window().title = level.name + " - IWLCEditor"
+	if editor:
+		if anyChanges: get_window().title = level.name + "*" + " - IWLCEditor"
+		else: get_window().title = level.name + " - IWLCEditor"
+	else: get_window().title = "IWLCEditor"
 
 func fasterAnims() -> void:
 	fastAnimTimer = 1.6666666667 # 100 frames, 60fps
@@ -368,7 +375,6 @@ func stopTest() -> void:
 	player.pauseFrame = true
 	await get_tree().process_frame
 	player.queue_free()
-	player = null
 	for object in objects.values():
 		object.stop()
 		object.queue_redraw()
@@ -377,11 +383,32 @@ func stopTest() -> void:
 		component.queue_redraw()
 
 func restart() -> void:
-	stopTest()
-	await get_tree().process_frame # to be safe
-	playTest(latestSpawn)
+	if editor:
+		stopTest()
+		await get_tree().process_frame # to be safe
+		if editor: playTest(latestSpawn)
+	else: playGame.restart()
+
 
 func setGlitch(color:COLOR) -> void:
 	for object in objects.values():
 		if object.get_script() in [KeyBulk, Door, RemoteLock]:
 			object.setGlitch(color)
+
+func play() -> void:
+	if !levelStart: return Saving.loadError("No level start found,\nCannot play level.", "Play Error")
+	Saving.confirmAction = Saving.ACTION.SAVE_FOR_PLAY
+	Saving.save()
+
+func playSaved() -> void:
+	editorWindowSize = get_window().size
+	get_tree().change_scene_to_packed(preload("res://scenes/playGame.tscn"))
+	get_window().size = Vector2(800,608)
+	objects.clear()
+	components.clear()
+
+func playReadied() -> void:
+	setWorld(playGame.world)
+	Saving.load(Saving.savePath)
+	playState = PLAY_STATE.PLAY
+	playGame.startLevel()

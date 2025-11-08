@@ -18,9 +18,11 @@ func optionPressed(id:int) -> void:
 		# FILE
 		0: Saving.new()
 		1: Saving.open()
-		2: Saving.save()
-		3: Saving.saveAs()
-		4: pass # export
-		5: OS.shell_open(ProjectSettings.globalize_path("user://puzzles"))
+		2: Saving.openForPlay()
+		3: Saving.save()
+		4: Saving.saveAs()
+		5: pass # export
+		6: OS.shell_open(ProjectSettings.globalize_path("user://puzzles"))
 		# CONFIG
-		7: Mods.openModsWindow()
+		8: Mods.openModsWindow()
+		9: Game.play()

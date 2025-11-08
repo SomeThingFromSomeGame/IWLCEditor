@@ -23,14 +23,17 @@ func _tabSelected(tab:int) -> void:
 
 func _levelNumberSet(string:String) -> void:
 	Game.level.number = string
+	Game.anyChanges = true
 	queue_redraw()
 
 func _levelNameSet(string:String) -> void:
 	Game.level.name = string if string else "Unnamed Level"
+	Game.anyChanges = true
 	queue_redraw()
 
 func _levelAuthorSet(string:String) -> void:
 	Game.level.author = string
+	Game.anyChanges = true
 	queue_redraw()
 
 func _draw() -> void:

@@ -95,7 +95,7 @@ func _ready() -> void:
 		curse.append(color == Game.COLOR.BROWN)
 
 func _physics_process(_delta:float) -> void:
-	if Game.playState != Game.PLAY_STATE.PLAY:
+	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and !Game.playGame.playerInput()):
 		%sprite.pause()
 		return
 	
@@ -149,8 +149,8 @@ func _process(delta:float) -> void:
 func receiveKey(event:InputEventKey):
 	if event.echo: return
 	match event.keycode:
-		KEY_P: Game.pauseTest()
-		KEY_O: Game.stopTest()
+		KEY_P: if Game.editor: Game.pauseTest()
+		KEY_O: if Game.editor: Game.stopTest()
 		KEY_R: Game.restart()
 		KEY_Z: if GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav")).pitch_scale = 0.6
 		KEY_X: cycleMaster()

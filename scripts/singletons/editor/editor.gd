@@ -20,7 +20,7 @@ var findProblems:FindProblems
 @onready var loadErrorPopup:AcceptDialog = %loadErrorPopup
 
 @onready var editorCamera:Camera2D = %editorCamera
-@onready var playCamera:Camera2D = %playCamera
+@onready var playtestCamera:Camera2D = %playtestCamera
 
 @onready var explainText:RichTextLabel = %explainText
 
@@ -86,7 +86,7 @@ func _process(delta:float) -> void:
 	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
 	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition)
 	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
-	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playCamera.zoom.x
+	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x
 	else: cameraZoom = editorCamera.zoom.x
 	%gameViewportCont.material.set_shader_parameter("rCameraZoom",1/cameraZoom)
 	%gameViewportCont.material.set_shader_parameter("tileSize",tileSize)
@@ -418,11 +418,11 @@ func zoomCamera(factor:float) -> void:
 	if targetCameraZoom > 1000: targetCameraZoom = 1000
 
 func worldspaceToScreenspace(vector:Vector2) -> Vector2:
-	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - playCamera.get_screen_center_position())*playCamera.zoom + gameCont.position + gameCont.size/2
+	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - playtestCamera.get_screen_center_position())*playtestCamera.zoom + gameCont.position + gameCont.size/2
 	else: return (vector - editorCamera.position)*editorCamera.zoom + gameCont.position
 
 func screenspaceToWorldspace(vector:Vector2) -> Vector2:
-	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - gameCont.position - gameCont.size/2)/playCamera.zoom + playCamera.get_screen_center_position()
+	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - gameCont.position - gameCont.size/2)/playtestCamera.zoom + playtestCamera.get_screen_center_position()
 	return (vector - gameCont.position)/editorCamera.zoom + editorCamera.position
 
 static func isLeftClick(event:InputEvent) -> bool: return event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT
@@ -473,6 +473,7 @@ func updateDescription() -> void:
 
 func _levelDescriptionSet() -> void:
 	Game.level.description = %levelDescription.text
+	Game.anyChanges = true
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(descriptionDraw)

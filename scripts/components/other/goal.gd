@@ -96,10 +96,8 @@ class Particle extends Sprite2D: # taken from lpe
 	func _init():
 		scale = Vector2(0.04, 0.04)
 		texture = preload("res://assets/game/goal/particle.png")
-
+	
 	func _physics_process(_delta: float) -> void:
-		# don't process if alone in editor (enable for tool mode)
-		if get_parent() is SubViewport: return
 		if type == 1:
 			velocity *= 0.95
 		if mode == 0:
@@ -122,3 +120,4 @@ class Particle extends Sprite2D: # taken from lpe
 func start() -> void:
 	super()
 	floatAngle = 0
+	for particle in %particles.get_children(): particle.queue_free()

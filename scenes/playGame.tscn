@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://br4e21jc0gv8o"]
+
+[ext_resource type="Script" uid="uid://bkauup2it2tfp" path="res://scripts/singletons/game/playGame.gd" id="1_abwwd"]
+[ext_resource type="PackedScene" uid="uid://2hd65vn44me7" path="res://scenes/world.tscn" id="2_abwwd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abwwd"]
+bg_color = Color(0, 0, 0, 1)
+
+[node name="playGame" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_abwwd")
+script = ExtResource("1_abwwd")
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="."]
+layout_mode = 2
+ratio = 1.3158
+
+[node name="gameViewportCont" type="SubViewportContainer" parent="AspectRatioContainer"]
+layout_mode = 2
+stretch = true
+
+[node name="gameViewport" type="SubViewport" parent="AspectRatioContainer/gameViewportCont"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(820, 623)
+size_2d_override = Vector2i(800, 608)
+size_2d_override_stretch = true
+render_target_update_mode = 4
+
+[node name="world" parent="AspectRatioContainer/gameViewportCont/gameViewport" instance=ExtResource("2_abwwd")]
+unique_name_in_owner = true
+
+[node name="playCamera" type="Camera2D" parent="AspectRatioContainer/gameViewportCont/gameViewport/world"]
+anchor_mode = 0
+
+[node name="roomTransition" type="ColorRect" parent="AspectRatioContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+color = Color(0.3529412, 0.5882353, 0.78431374, 0)

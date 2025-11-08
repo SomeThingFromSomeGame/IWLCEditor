@@ -37,6 +37,7 @@ func addControl(control:Control, explanation:ControlExplanation) -> void:
 func updateText() -> void:
 	var string:String = ""
 	var control:String = str(controlExplanation) + " " if controlExplanation else ""
+	if !editor: return
 	if editor.focusDialog.focused:
 		if editor.focusDialog.componentFocused:
 				match editor.focusDialog.componentFocused.get_script():

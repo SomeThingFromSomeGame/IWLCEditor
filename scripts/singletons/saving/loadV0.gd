@@ -81,7 +81,7 @@ static func load(file:FileAccess) -> void:
 	for _i in file.get_64():
 		var type:GDScript = COMPONENTS[file.get_16()]
 		var component = type.new()
-		component.editor = Game.editor
+		if Game.editor: component.editor = Game.editor
 		for property in PROPERTIES[type]:
 			var value = file.get_var(true)
 			if property == &"id":
@@ -96,7 +96,7 @@ static func load(file:FileAccess) -> void:
 	for _i in file.get_64():
 		var type:GDScript = COMPONENTS[file.get_16()]
 		var object = type.SCENE.instantiate()
-		object.editor = Game.editor
+		if Game.editor: object.editor = Game.editor
 		for property in PROPERTIES[type]:
 			var value = file.get_var(true)
 			if property == &"id":
@@ -137,9 +137,10 @@ static func load(file:FileAccess) -> void:
 
 	if levelStart != -1:
 		Game.levelStart = Game.objects[levelStart]
-		Game.editor.topBar._updateButtons()
+		if Game.editor: Game.editor.topBar._updateButtons()
 	
 	Game.updateWindowName()
-	Game.editor.settingsMenu.opened()
-	Game.editor.updateDescription()
+	if Game.editor:
+		Game.editor.settingsMenu.opened()
+		Game.editor.updateDescription()
 	Game.get_tree().call_group("modUI", "changedMods")

@@ -2,7 +2,7 @@ extends Node
 
 @onready var editor:Editor = get_node("/root/editor")
 
-enum ACTION {NEW, OPEN}
+enum ACTION {NEW, OPEN, SAVE_FOR_PLAY, OPEN_FOR_PLAY}
 
 var savePath:String = ""
 var confirmAction:ACTION
@@ -46,6 +46,14 @@ func open() -> void:
 		editor.unsavedChangesPopup.grab_focus()
 	else: confirmed()
 
+func openForPlay() -> void:
+	confirmAction = ACTION.OPEN_FOR_PLAY
+	if Game.anyChanges:
+		editor.unsavedChangesPopup.position = get_window().position+(get_window().size-editor.unsavedChangesPopup.size)/2
+		editor.unsavedChangesPopup.visible = true
+		editor.unsavedChangesPopup.grab_focus()
+	else: confirmed()
+
 func saveAs() -> void:
 	editor.saveAsDialog.current_dir = "puzzles"
 	editor.saveAsDialog.current_file = "puzzles/"+Game.level.name+".cedit"
@@ -63,7 +71,7 @@ func new() -> void:
 func confirmed() -> void:
 	match confirmAction:
 		ACTION.NEW: clear()
-		ACTION.OPEN:
+		ACTION.OPEN, ACTION.OPEN_FOR_PLAY:
 			editor.openDialog.current_dir = "puzzles"
 			editor.openDialog.visible = true
 			editor.openDialog.grab_focus()
@@ -71,18 +79,19 @@ func confirmed() -> void:
 func clear() -> void:
 	savePath = ""
 	Game.levelBounds = Rect2i(0,0,800,608)
-	editor.focusDialog.defocus()
-	editor.objectHovered = null
-	editor.componentHovered = null
-	editor.componentDragged = null
-	editor.lockBufferConvert = false
-	editor.connectionSource = null
-	if editor.modsWindow: editor.modsWindow._close()
-	editor.quickSet.cancel()
-	editor.modes.setMode(Editor.MODE.SELECT)
-	editor.otherObjects.objectSelected(PlayerSpawn, true)
-	editor.multiselect.stopDrag()
-	editor.multiselect.clipboard.clear()
+	if editor:
+		editor.focusDialog.defocus()
+		editor.objectHovered = null
+		editor.componentHovered = null
+		editor.componentDragged = null
+		editor.lockBufferConvert = false
+		editor.connectionSource = null
+		if editor.modsWindow: editor.modsWindow._close()
+		editor.quickSet.cancel()
+		editor.modes.setMode(Editor.MODE.SELECT)
+		editor.otherObjects.objectSelected(PlayerSpawn, true)
+		editor.multiselect.stopDrag()
+		editor.multiselect.clipboard.clear()
 	if Game.playState != Game.PLAY_STATE.EDIT: await Game.stopTest()
 	Game.latestSpawn = null
 	Game.levelStart = null
@@ -105,12 +114,16 @@ func clear() -> void:
 	Mods.activeModpack = Mods.modpacks[&"Refactored"]
 	Mods.activeVersion = Mods.activeModpack.versions[0]
 	for mod in Mods.mods.values(): mod.active = false
-	editor.home()
+	if editor: editor.home()
 
 func save(path:String="") -> void:
 	if !path:
-		if savePath and !Game.anyChanges: return
-		return saveAs()
+		if savePath:
+			path = savePath
+			if !Game.anyChanges:
+				if confirmAction == ACTION.SAVE_FOR_PLAY: Game.playSaved()
+				return
+		else: return saveAs()
 	else: savePath = path
 	Game.anyChanges = false
 
@@ -153,6 +166,7 @@ func save(path:String="") -> void:
 		if object is Door: file.store_var(componentArrayToIDs(object.locks))
 		elif object is KeyCounter: file.store_var(componentArrayToIDs(object.elements))
 	file.close()
+	if confirmAction == ACTION.SAVE_FOR_PLAY: Game.playSaved()
 
 func componentArrayToIDs(array:Array) -> Array: return array.map(func(component):return component.id)
 func IDArraytoComponents(type:GDScript,array:Array) -> Array:
@@ -162,6 +176,9 @@ func IDArraytoComponents(type:GDScript,array:Array) -> Array:
 func load(path:String) -> void:
 	clear()
 	savePath = path
+	if confirmAction == ACTION.OPEN_FOR_PLAY:
+		confirmAction = ACTION.OPEN
+		return Game.playSaved()
 
 	var file:FileAccess = FileAccess.open(path,FileAccess.ModeFlags.READ)
 
@@ -170,7 +187,8 @@ func load(path:String) -> void:
 		0: LoadV0.load(file)
 		_: return loadError("Unrecognised version")
 
-func loadError(message:String) -> void:
+func loadError(message:String,title:="Load Error") -> void:
+	editor.loadErrorPopup.title = title
 	editor.loadErrorPopup.dialog_text = message
 	editor.loadErrorPopup.position = get_window().position+(get_window().size-editor.loadErrorPopup.size)/2
 	editor.loadErrorPopup.visible = true

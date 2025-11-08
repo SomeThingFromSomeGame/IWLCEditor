@@ -29,7 +29,7 @@
 [ext_resource type="Material" uid="uid://bc5stfiew5ji4" path="res://resources/materials/outlineDrawMaterial.tres" id="22_jke8t"]
 [ext_resource type="Script" uid="uid://c7ptucaohcnil" path="res://scripts/singletons/editor/outline.gd" id="23_lo5f0"]
 [ext_resource type="PackedScene" uid="uid://uojm0pynavni" path="res://scenes/settingsMenu.tscn" id="25_6lm8n"]
-[ext_resource type="Texture2D" uid="uid://fegj6p13p4ot" path="res://assets/ui/settings/description.png" id="26_nhltt"]
+[ext_resource type="Texture2D" uid="uid://fegj6p13p4ot" path="res://assets/game/gameUI/description.png" id="26_nhltt"]
 [ext_resource type="Texture2D" uid="uid://ba540b55427af" path="res://assets/ui/settings/setings.png" id="27_1abrv"]
 [ext_resource type="FontFile" uid="uid://c81fuf05yiuem" path="res://resources/fonts/fRoomNum.fnt" id="27_v24q3"]
 
@@ -108,7 +108,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
-mouse_default_cursor_shape = 4
 script = ExtResource("2_o435n")
 
 [node name="c" type="VBoxContainer" parent="."]
@@ -143,23 +142,27 @@ script = ExtResource("4_4jiep")
 layout_mode = 2
 icon = ExtResource("5_m12ww")
 flat = false
-item_count = 8
+item_count = 10
 popup/item_0/text = "New"
 popup/item_0/id = 0
-popup/item_1/text = "Open"
+popup/item_1/text = "Open To Edit"
 popup/item_1/id = 1
-popup/item_2/text = "Save"
+popup/item_2/text = "Open To Play"
 popup/item_2/id = 2
-popup/item_3/text = "Save As"
+popup/item_3/text = "Save"
 popup/item_3/id = 3
-popup/item_4/text = "Export"
+popup/item_4/text = "Save As"
 popup/item_4/id = 4
-popup/item_5/text = "Open Puzzles Folder"
+popup/item_5/text = "Export"
 popup/item_5/id = 5
+popup/item_6/text = "Open Puzzles Folder"
 popup/item_6/id = 6
-popup/item_6/separator = true
-popup/item_7/text = "Mods "
 popup/item_7/id = 7
+popup/item_7/separator = true
+popup/item_8/text = "Mods "
+popup/item_8/id = 8
+popup/item_9/text = "Play Current"
+popup/item_9/id = 9
 script = ExtResource("6_7msgv")
 
 [node name="spacer" type="Control" parent="c/c/topBar/c/modes"]
@@ -347,7 +350,7 @@ position = Vector2(-10, -10)
 anchor_mode = 0
 limit_enabled = false
 
-[node name="playCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
+[node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
 unique_name_in_owner = true
 enabled = false
 limit_left = 0
@@ -366,13 +369,14 @@ unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("13_0u1f5")
 
-[node name="MarginContainer" type="MarginContainer" parent="c/gameCont/gameViewportCont"]
+[node name="c" type="Control" parent="c/gameCont"]
 layout_mode = 2
+mouse_filter = 2
 
-[node name="settingsMenu" parent="c/gameCont" instance=ExtResource("25_6lm8n")]
+[node name="settingsMenu" parent="c/gameCont/c" instance=ExtResource("25_6lm8n")]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
+layout_mode = 1
 
 [node name="description" type="MarginContainer" parent="c/gameCont"]
 unique_name_in_owner = true
@@ -406,7 +410,7 @@ layout_mode = 2
 [node name="levelDescription" type="TextEdit" parent="c/gameCont/description/c/c/c"]
 unique_name_in_owner = true
 layout_mode = 0
-offset_right = 658.0
+offset_right = 667.0
 offset_bottom = 68.0
 placeholder_text = "No description set; box will not be visible"
 wrap_mode = 1
@@ -414,10 +418,11 @@ scroll_fit_content_height = true
 caret_blink = true
 
 [node name="c2" type="MarginContainer" parent="c/gameCont/description/c"]
-custom_minimum_size = Vector2(116, 0)
+custom_minimum_size = Vector2(114, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 34
+theme_override_constants/margin_right = 6
 
 [node name="levelShortNumber" type="LineEdit" parent="c/gameCont/description/c/c2"]
 unique_name_in_owner = true
@@ -548,7 +553,7 @@ theme = ExtResource("1_j8y2p")
 [connection signal="text_changed" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_updateSearch" unbinds=1]
 [connection signal="text_submitted" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_searchSubmitted" unbinds=1]
 [connection signal="pressed" from="c/c/topBar/c/modes/paste" to="c/c/topBar/c/modes" method="_setMode" binds= [5]]
-[connection signal="tab_changed" from="c/c/topBar/c/settingTabs" to="c/gameCont/settingsMenu" method="_tabSelected"]
+[connection signal="tab_changed" from="c/c/topBar/c/settingTabs" to="c/gameCont/c/settingsMenu" method="_tabSelected"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/play" to="c/c/topBar" method="_play"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/pause" to="c/c/topBar" method="_pause"]
 [connection signal="pressed" from="c/c/topBar/c/playControls/stop" to="c/c/topBar" method="_stop"]
