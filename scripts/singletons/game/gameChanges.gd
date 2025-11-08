@@ -22,7 +22,7 @@ func process() -> void:
 	if saveBuffered and Game.player.is_on_floor() and !Game.player.cantSave:
 		saveBuffered = false
 		if undoStack[-1] is not UndoSeparator: # could happen if something buffers save on the frame before a reset
-			undoStack.append(UndoSeparator.new(Game.player.position))
+			undoStack.append(UndoSeparator.new(Game.player.previousPosition))
 
 func undo() -> bool:
 	if len(undoStack) == 1: return false

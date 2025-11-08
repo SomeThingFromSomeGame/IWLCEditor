@@ -66,6 +66,8 @@ var complexSwitchDraw:RID
 var complexSwitchAnim:bool = false
 var complexSwitchAngle:float = 0
 
+var previousPosition:Vector2
+
 func _ready() -> void:
 	auraDraw = RenderingServer.canvas_item_create()
 	masterShineDraw = RenderingServer.canvas_item_create()
@@ -93,6 +95,8 @@ func _ready() -> void:
 		key.append(C.ZERO)
 		star.append(false)
 		curse.append(color == Game.COLOR.BROWN)
+	
+	previousPosition = position
 
 func _physics_process(_delta:float) -> void:
 	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and !Game.playGame.playerInput()):
@@ -134,6 +138,7 @@ func _physics_process(_delta:float) -> void:
 		for area in %near.get_overlapping_areas(): near(area)
 		for area in %interact.get_overlapping_areas(): interacted(area)
 		GameChanges.process()
+		previousPosition = position
 
 func _process(delta:float) -> void:
 	masterShineAngle += delta*4.1887902048 # 4 degrees per frame, 60fps

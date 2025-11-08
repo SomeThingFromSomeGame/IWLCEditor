@@ -90,12 +90,12 @@ func _draw() -> void:
 	for door in doors:
 		if !door.active and Game.playState == Game.PLAY_STATE.PLAY: continue
 		var to:Vector2 = door.position+door.size/2 - position
-		if self == editor.focusDialog.focused and index == editor.focusDialog.doorDialog.doorsHandler.selected:
+		if editor and self == editor.focusDialog.focused and index == editor.focusDialog.doorDialog.doorsHandler.selected:
 			RenderingServer.canvas_item_add_line(drawConnections,from,to,Color("#00a2ff"),4+4/editor.cameraZoom)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE if satisfied or Game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or Game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
 		index += 1
-	if self == editor.connectionSource:
+	if editor and self == editor.connectionSource:
 		var to:Vector2 = editor.mouseWorldPosition - position
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Color.WHITE if satisfied or Game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,4)
 		RenderingServer.canvas_item_add_line(drawConnections,from,to,Game.mainTone[color] if satisfied or Game.playState == Game.PLAY_STATE.EDIT else Color.BLACK,2)
@@ -188,7 +188,7 @@ var animAlpha:float = 0
 var curseTimer:float = 0
 
 func _process(delta:float) -> void:
-	if self == editor.connectionSource: queue_redraw()
+	if editor and self == editor.connectionSource: queue_redraw()
 	if cursed and active:
 		curseTimer += delta
 		if curseTimer >= 2:
