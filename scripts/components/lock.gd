@@ -200,8 +200,9 @@ var armament:bool = false
 var index:int
 var displayIndex:int # split into armaments and nonarmaments
 
-var drawGlitch:RID
 var drawScaled:RID
+var drawAuraBreaker:RID
+var drawGlitch:RID
 var drawMain:RID
 var drawConfiguration:RID
 
@@ -212,23 +213,26 @@ static func getConfigurationColor(_isNegative:bool) -> Color:
 func _init() -> void: size = Vector2(18,18)
 
 func _ready() -> void:
-	drawGlitch = RenderingServer.canvas_item_create()
 	drawScaled = RenderingServer.canvas_item_create()
+	drawAuraBreaker = RenderingServer.canvas_item_create()
+	drawGlitch = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawConfiguration = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
 	Game.connect(&"goldIndexChanged",queue_redraw)
 
 func _draw() -> void:
-	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawScaled)
+	RenderingServer.canvas_item_clear(drawAuraBreaker)
+	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	if !parent.active and Game.playState == Game.PLAY_STATE.PLAY: return
-	drawLock(drawGlitch,drawScaled,drawMain,drawConfiguration,
+	drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,effectiveConfiguration(),sizeType,effectiveCount(),isPartial,effectiveDenominator(),negated,armament,
 		getFrameHighColor(isNegative(), negated),
 		getFrameMainColor(isNegative(), negated),
@@ -238,7 +242,7 @@ func _draw() -> void:
 		Game.playState != Game.PLAY_STATE.EDIT and parent.ipow().across(Game.player.complexMode).eq(0)
 	)
 
-static func drawLock(lockDrawGlitch:RID, lockDrawScaled:RID, lockDrawMain:RID, lockDrawConfiguration:RID, lockSize:Vector2,
+static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID, lockSize:Vector2,
 	lockBaseColor:Game.COLOR, lockGlitchColor:Game.COLOR,
 	lockType:TYPE,
 	lockConfiguration:CONFIGURATION,
@@ -290,6 +294,9 @@ static func drawLock(lockDrawGlitch:RID, lockDrawScaled:RID, lockDrawMain:RID, l
 					else: RenderingServer.canvas_item_add_nine_patch(lockDrawMain,rect,GLITCH_ANY_RECT,GLITCH_FILL[lockSizeType],GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[lockGlitchColor])
 				elif glitchTexture: RenderingServer.canvas_item_add_texture_rect(lockDrawMain,rect,glitchTexture)
 				else: RenderingServer.canvas_item_add_texture_rect(lockDrawMain,rect,GLITCH_FILL[lockSizeType],false,Game.mainTone[lockGlitchColor])
+		elif lockBaseColor in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
+			RenderingServer.canvas_item_add_rect(lockDrawScaled,Rect2(rect.position+Vector2.ONE,rect.size-Vector2(2,2)),Game.mainTone[lockBaseColor])
+			Door.drawAuras(lockDrawAuraBreaker,lockDrawAuraBreaker,lockDrawAuraBreaker,lockBaseColor==Game.COLOR.ICE,lockBaseColor==Game.COLOR.MUD,lockBaseColor==Game.COLOR.GRAFFITI,rect)
 		else:
 			RenderingServer.canvas_item_add_rect(lockDrawMain,Rect2(rect.position+Vector2.ONE,rect.size-Vector2(2,2)),Game.mainTone[lockBaseColor])
 	if noCopies: return # no copies in this direction; go away

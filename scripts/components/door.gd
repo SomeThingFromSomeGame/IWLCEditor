@@ -68,7 +68,8 @@ var frozen:bool = false
 var crumbled:bool = false
 var painted:bool = false
 
-var drawScaled:RID
+var drawScaled:RID # also draws aura breaker fills
+var drawAuraBreaker:RID
 var drawGlitch:RID
 var drawMain:RID
 var drawCrumbled:RID
@@ -89,6 +90,7 @@ func _init() -> void: size = Vector2(32,32)
 
 func _ready() -> void:
 	drawScaled = RenderingServer.canvas_item_create()
+	drawAuraBreaker = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawCrumbled = RenderingServer.canvas_item_create()
@@ -101,6 +103,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_z_index(drawCopies,2)
 	RenderingServer.canvas_item_set_z_index(drawNegative,2)
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawCrumbled, %auraParent.get_canvas_item())
@@ -112,6 +115,7 @@ func _ready() -> void:
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawScaled)
+	RenderingServer.canvas_item_clear(drawAuraBreaker)
 	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawCrumbled)
@@ -157,6 +161,11 @@ func _draw() -> void:
 						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_HIGH,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterGlitch()])
 						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_MAIN,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterGlitch()])
 						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_DARK,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.darkTone[colorAfterGlitch()])
+			elif colorAfterCurse() in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
+				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterCurse()])
+				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterCurse()])
+				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[colorAfterCurse()])
+				drawAuras(drawAuraBreaker,drawAuraBreaker,drawAuraBreaker,colorAfterCurse()==Game.COLOR.ICE,colorAfterCurse()==Game.COLOR.MUD,colorAfterCurse()==Game.COLOR.GRAFFITI,rect)
 			else:
 				RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterCurse()])
 				RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterCurse()])

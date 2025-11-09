@@ -177,9 +177,9 @@ const highTone:Array[Color] = [
 	Color("#6b2020"),
 	Color("#1d5c2c"),
 	Color("#20326b"),
-	Color("#cce7ed"),
-	Color("#945950"),
-	Color("#91a35e")
+	Color("#d1ffff"),
+	Color("#b57ea7"),
+	Color("#f2e380")
 ]
 
 const mainTone:Array[Color] = [
@@ -202,9 +202,9 @@ const mainTone:Array[Color] = [
 	Color("#461415"),
 	Color("#163b21"),
 	Color("#182552"),
-	Color("#98d8ea"),
-	Color("#744138"),
-	Color("#71843e")
+	Color("#82f0ff"),
+	Color("#966489"),
+	Color("#e2c961")
 ]
 
 const darkTone:Array[Color] = [
@@ -227,9 +227,9 @@ const darkTone:Array[Color] = [
 	Color("#2e0c0c"),
 	Color("#0a2b14"),
 	Color("#101833"),
-	Color("#5ebdcc"),
-	Color("#562a25"),
-	Color("#4e5c27")
+	Color("#62b6c1"),
+	Color("#7f4972"),
+	Color("#c6af51")
 ]
 
 @onready var editor:Editor = get_node("/root/editor")

@@ -11,16 +11,16 @@ uniform vec4 colorBack:source_color;
 void fragment() {
 	if (size.x > 0.5 && size.y > 0.5) {
 		float topLeftSize = 56.0;
-		if (size.x < 62.0 || size.y < 62.0) topLeftSize = 24.0;
+		if (size.x < 50.0 || size.y < 50.0) topLeftSize = 24.0;
 		float bottomRightSize = 46.0;
-		if (size.x < 52.0 || size.y < 52.0) bottomRightSize = 23.0;
+		if (size.x < 40.0 || size.y < 40.0) bottomRightSize = 23.0;
 		
 		vec2 position = floor(UV*size);
 		vec2 unposition = size - position - vec2(1,1);
-		if (position.x < 4.5 && unposition.y < 4.5) { // bottom left
-			COLOR = texture(bottomLeft,vec2(position.x+0.5,4.5-unposition.y)/5.0);
-		} else if (unposition.x < 4.5 && position.y < 4.5) { // bottom right
-			COLOR = texture(bottomLeft,vec2(unposition.x+0.5,4.5-position.y)/5.0);
+		if (position.x < 4.5 && unposition.y < 4.5 && texture(bottomLeft,vec2(position.x+0.5,4.5-unposition.y)/5.0)==colorFilled) { // bottom left
+			COLOR = colorFilled;
+		} else if (unposition.x < 4.5 && position.y < 4.5 && texture(bottomLeft,vec2(unposition.x+0.5,4.5-position.y)/5.0)==colorFilled) { // bottom right
+			COLOR = colorFilled;
 		} else if (position.x + position.y < topLeftSize+0.5) { // top left
 			if (topLeftSize > 55.5) COLOR = texture(topLeftBig,vec2(position.x+0.5,position.y+0.5)/topLeftSize);
 			else COLOR = texture(topLeftSmall,vec2(position.x+0.5,position.y+0.5)/topLeftSize);

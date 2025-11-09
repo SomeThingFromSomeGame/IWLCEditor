@@ -40,6 +40,7 @@ var doors:Array[Door] = []
 var drawConnections:RID
 var drawGlitch:RID
 var drawScaled:RID
+var drawAuraBreaker:RID
 var drawMain:RID
 var drawConfiguration:RID
 var drawCrumbled:RID
@@ -50,8 +51,9 @@ func _init() -> void: size = Vector2(18,18)
 
 func _ready() -> void:
 	drawConnections = RenderingServer.canvas_item_create()
-	drawGlitch = RenderingServer.canvas_item_create()
 	drawScaled = RenderingServer.canvas_item_create()
+	drawAuraBreaker = RenderingServer.canvas_item_create()
+	drawGlitch = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawConfiguration = RenderingServer.canvas_item_create()
 	drawCrumbled = RenderingServer.canvas_item_create()
@@ -59,8 +61,9 @@ func _ready() -> void:
 	drawFrozen = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_z_index(drawConnections,-1)
 	RenderingServer.canvas_item_set_parent(drawConnections,get_canvas_item())
-	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawCrumbled,get_canvas_item())
@@ -70,15 +73,16 @@ func _ready() -> void:
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawConnections)
-	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawScaled)
+	RenderingServer.canvas_item_clear(drawAuraBreaker)
+	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	RenderingServer.canvas_item_clear(drawCrumbled)
 	RenderingServer.canvas_item_clear(drawPainted)
 	RenderingServer.canvas_item_clear(drawFrozen)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
-	Lock.drawLock(drawGlitch,drawScaled,drawMain,drawConfiguration,
+	Lock.drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,isPartial,denominator,negated,armament,
 		Lock.getFrameHighColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		Lock.getFrameMainColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
