@@ -62,6 +62,7 @@ func _ready() -> void:
 	Game.setWorld(%world)
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
 	settingsMenu.opened()
+	if Game.awaitingEditor: Game.editReadied()
 
 func _process(delta:float) -> void:
 	queue_redraw()
@@ -360,7 +361,9 @@ func _input(event:InputEvent) -> void:
 			pass
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
-			Game.player.receiveKey(event)
+			match event.keycode:
+				KEY_ESCAPE: _toggleSettingsMenu(true)
+				_: Game.player.receiveKey(event)
 		else:
 			# IN EDIT
 			if otherObjects.objectSearch.has_focus():
@@ -373,10 +376,13 @@ func _input(event:InputEvent) -> void:
 			if focusDialog.focused and focusDialog.receiveKey(event): return
 			match event.keycode:
 				KEY_ESCAPE:
-					modes.setMode(MODE.SELECT)
-					focusDialog.defocus()
-					componentDragged = null
-					multiselect.deselect()
+					if Input.is_key_pressed(KEY_SHIFT):
+						_toggleSettingsMenu(true)
+					else:
+						modes.setMode(MODE.SELECT)
+						focusDialog.defocus()
+						componentDragged = null
+						multiselect.deselect()
 				KEY_T: modes.setMode(MODE.TILE)
 				KEY_B: modes.setMode(MODE.KEY)
 				KEY_D: modes.setMode(MODE.DOOR)
@@ -453,6 +459,7 @@ func scrollIntoView(component:GameComponent) -> void:
 	editorCamera.position = editorCamera.position.clamp(rect.end-screenRect.size, rect.position)
 
 func _toggleSettingsMenu(toggled_on:bool) -> void:
+	%toggleSettingsMenu.button_pressed = toggled_on
 	quickSet.applyOrCancel()
 	%settingsMenu.visible = toggled_on
 	%settingsText.visible = toggled_on

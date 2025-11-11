@@ -99,7 +99,7 @@ func _ready() -> void:
 	previousPosition = position
 
 func _physics_process(_delta:float) -> void:
-	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and !Game.playGame.playerInput()):
+	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and (Game.playGame.inAnimation() or Game.playGame.paused)):
 		%sprite.pause()
 		return
 	

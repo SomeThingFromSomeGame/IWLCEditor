@@ -31,4 +31,27 @@ value = 0.5
 layout_mode = 2
 text = "Volume"
 
+[node name="fullscreen" type="CheckBox" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enable Fullscreen"
+
+[node name="smoothingMode" type="CheckBox" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Smoothing Mode"
+
+[node name="CheckBox3" type="CheckBox" parent="c"]
+visible = false
+layout_mode = 2
+text = "Low FX"
+
+[node name="simpleLocks" type="CheckBox" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Simple Locks"
+
 [connection signal="value_changed" from="c/c/volume" to="." method="_volumeSet"]
+[connection signal="toggled" from="c/fullscreen" to="." method="_fullscreenSet"]
+[connection signal="toggled" from="c/smoothingMode" to="." method="_smoothingModeSet"]
+[connection signal="toggled" from="c/simpleLocks" to="." method="_simpleLocksSet"]

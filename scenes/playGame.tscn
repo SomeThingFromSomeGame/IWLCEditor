@@ -1,11 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://br4e21jc0gv8o"]
+[gd_scene load_steps=10 format=3 uid="uid://br4e21jc0gv8o"]
 
 [ext_resource type="Script" uid="uid://bkauup2it2tfp" path="res://scripts/singletons/game/playGame.gd" id="1_abwwd"]
 [ext_resource type="PackedScene" uid="uid://2hd65vn44me7" path="res://scenes/world.tscn" id="2_abwwd"]
 [ext_resource type="Script" uid="uid://q0u3f7fb1u41" path="res://scripts/nodes/aspectRatioContainer.gd" id="2_rt4fk"]
+[ext_resource type="Shader" uid="uid://donorxvv474n1" path="res://resources/materials/playGame.gdshader" id="3_wfiui"]
+[ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="5_n2d1d"]
+[ext_resource type="PackedScene" uid="uid://cudl265jx2hk6" path="res://scenes/gameSetings.tscn" id="6_m88lo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abwwd"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2d1d"]
+shader = ExtResource("3_wfiui")
+shader_parameter/pauseAnimTimer = 0.0
+shader_parameter/darken = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wfiui"]
+bg_color = Color(0.25490198, 0.25490198, 0.25490198, 1)
 
 [node name="playGame" type="PanelContainer"]
 anchors_preset = 15
@@ -22,20 +33,108 @@ script = ExtResource("2_rt4fk")
 metadata/_custom_type_script = "uid://q0u3f7fb1u41"
 
 [node name="gameViewportCont" type="SubViewportContainer" parent="aspectRatioContainer"]
-editor_description = "this is broken here but its fine ingame. no idea why"
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_n2d1d")
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 stretch = true
 
 [node name="gameViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont"]
+unique_name_in_owner = true
 handle_input_locally = false
-size = Vector2i(2, 2)
+canvas_item_default_texture_filter = 0
+size = Vector2i(820, 623)
 size_2d_override = Vector2i(800, 608)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="world" parent="aspectRatioContainer/gameViewportCont/gameViewport" instance=ExtResource("2_abwwd")]
+[node name="worldViewportCont" type="SubViewportContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="worldViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont"]
+handle_input_locally = false
+canvas_item_default_texture_filter = 0
+size = Vector2i(800, 608)
+render_target_update_mode = 4
+
+[node name="world" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport" instance=ExtResource("2_abwwd")]
 unique_name_in_owner = true
 
-[node name="playCamera" type="Camera2D" parent="aspectRatioContainer/gameViewportCont/gameViewport/world"]
+[node name="playCamera" type="Camera2D" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport/world"]
 anchor_mode = 0
+
+[node name="pauseMenu" type="Panel" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_n2d1d")
+theme_override_styles/panel = SubResource("StyleBoxFlat_wfiui")
+
+[node name="gameSettings" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu" instance=ExtResource("6_m88lo")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="main" type="MarginContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -92.5
+offset_bottom = 92.5
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/margin_right = 49
+
+[node name="c" type="VBoxContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main"]
+custom_minimum_size = Vector2(301, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="resume" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+custom_minimum_size = Vector2(0, 33)
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+theme_override_font_sizes/font_size = 16
+text = "Resume"
+
+[node name="edit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+custom_minimum_size = Vector2(0, 33)
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+theme_override_font_sizes/font_size = 16
+text = "Edit Level"
+
+[node name="quit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+custom_minimum_size = Vector2(0, 33)
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+theme_override_font_sizes/font_size = 16
+text = "Quit Game (Instantly)"
+
+[node name="erasePencilmarks" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+visible = false
+custom_minimum_size = Vector2(0, 33)
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+theme_override_font_sizes/font_size = 16
+text = "Erase Pencilmarks"
+
+[node name="mouseBlocker" type="Control" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu"]
+unique_name_in_owner = true
+anchors_preset = 0
+mouse_filter = 2
+
+[connection signal="pressed" from="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c/resume" to="." method="pause"]
+[connection signal="pressed" from="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c/edit" to="." method="editLevel"]
+[connection signal="pressed" from="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c/quit" to="." method="quit"]

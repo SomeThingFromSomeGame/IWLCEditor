@@ -16,6 +16,14 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(textDraw,get_canvas_item())
 	if !FileAccess.file_exists("user://config.ini"): closed()
 
+func _input(event:InputEvent):
+	if !editor.settingsOpen: return
+	if event is InputEventKey and event.is_pressed():
+		match event.keycode:
+			KEY_ESCAPE:
+				editor._toggleSettingsMenu(false)
+				get_viewport().set_input_as_handled()
+
 func _tabSelected(tab:int) -> void:
 	%levelSettings.visible = tab == 0
 	%editorSettings.visible = tab == 1

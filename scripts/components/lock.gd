@@ -523,6 +523,7 @@ func colorAfterAurabreaker() -> Game.COLOR:
 	return colorAfterGlitch()
 
 func effectiveConfiguration() -> CONFIGURATION:
+	if Game.simpleLocks: return CONFIGURATION.NONE
 	if parent.ipow().neq(1):
 		if parent.type == Door.TYPE.SIMPLE: return getAutoConfiguration(self)
 		else: return CONFIGURATION.NONE

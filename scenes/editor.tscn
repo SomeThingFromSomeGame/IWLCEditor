@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://cx3mntdf11c1g" path="res://assets/ui/modes/key.png" id="6_sdh1e"]
 [ext_resource type="Texture2D" uid="uid://ckk7i2y24ysor" path="res://assets/ui/modes/door.png" id="7_2w0at"]
 [ext_resource type="PackedScene" uid="uid://2hd65vn44me7" path="res://scenes/world.tscn" id="8_5tdu1"]
-[ext_resource type="Shader" uid="uid://befrul0j4yc02" path="res://resources/materials/level.gdshader" id="8_o435n"]
+[ext_resource type="Shader" uid="uid://befrul0j4yc02" path="res://resources/materials/game.gdshader" id="8_o435n"]
 [ext_resource type="Texture2D" uid="uid://b4tmgbs01eh7i" path="res://assets/ui/modes/paste.png" id="9_0u1f5"]
 [ext_resource type="Script" uid="uid://brsj7c2dial40" path="res://scripts/singletons/editor/otherObjects.gd" id="9_k1sck"]
 [ext_resource type="Texture2D" uid="uid://b2ouh1fqa64em" path="res://assets/ui/modes/search.png" id="10_8g6du"]
@@ -347,6 +347,7 @@ unique_name_in_owner = true
 
 [node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
 unique_name_in_owner = true
+position = Vector2(-10, -10)
 anchor_mode = 0
 limit_enabled = false
 

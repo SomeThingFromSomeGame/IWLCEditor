@@ -29,14 +29,17 @@ const FILE_FORMAT_VERSION:int = 0
 func _ready() -> void:
 	await editor.ready
 	DirAccess.make_dir_absolute("user://puzzles")
-	editor.saveAsDialog.file_selected.connect(save)
 	editor.saveAsDialog.add_filter("*.cedit", "IWLCEditor Puzzle File")
-	editor.openDialog.file_selected.connect(load)
 	editor.openDialog.add_filter("*.cedit", "IWLCEditor Puzzle File")
 	editor.unsavedChangesPopup.get_ok_button().theme_type_variation = &"RadioButtonText"
 	editor.unsavedChangesPopup.get_cancel_button().theme_type_variation = &"RadioButtonText"
 	editor.unsavedChangesPopup.get_ok_button().pressed.connect(confirmed)
 	editor.loadErrorPopup.get_ok_button().theme_type_variation = &"RadioButtonText"
+	setConnections()
+
+func setConnections() -> void:
+	editor.saveAsDialog.file_selected.connect(save)
+	editor.openDialog.file_selected.connect(load)
 
 func open() -> void:
 	confirmAction = ACTION.OPEN

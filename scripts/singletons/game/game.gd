@@ -301,6 +301,15 @@ var fastAnimTimer:float = 0 # speed resets when this counts down to 0
 var complexViewHue:float = 0
 
 var editorWindowSize:Vector2
+var editorWindowMode:Window.Mode
+
+var awaitingEditor:bool = false
+
+var simpleLocks:bool = false:
+	set(value):
+		simpleLocks = value
+		for component in components.values():
+			if component is Lock: component.queue_redraw()
 
 func setWorld(_world:World) -> void:
 	world = _world
@@ -399,8 +408,10 @@ func play() -> void:
 	Saving.save()
 
 func playSaved() -> void:
+	editorWindowMode = get_window().mode
 	editorWindowSize = get_window().size
-	get_tree().change_scene_to_packed(preload("res://scenes/playGame.tscn"))
+	get_tree().change_scene_to_file("res://scenes/playGame.tscn")
+	get_window().mode = Window.MODE_WINDOWED
 	get_window().size = Vector2(800,608)
 	objects.clear()
 	components.clear()
@@ -409,4 +420,25 @@ func playReadied() -> void:
 	setWorld(playGame.world)
 	Saving.load(Saving.savePath)
 	playState = PLAY_STATE.PLAY
+	playGame.updateSettings()
 	playGame.startLevel()
+
+func edit() -> void:
+	awaitingEditor = true
+	playState = PLAY_STATE.EDIT
+	get_tree().change_scene_to_file("res://scenes/editor.tscn")
+	get_window().mode = editorWindowMode
+	get_window().size = editorWindowSize
+	objects.clear()
+	components.clear()
+
+func editReadied() -> void:
+	editor = get_node("/root/editor")
+	Changes.editor = editor
+	Mods.editor = editor
+	Saving.editor = editor
+	Explainer.editor = editor
+	Saving.load(Saving.savePath)
+	Saving.setConnections()
+	await get_tree().process_frame
+	editor.home()

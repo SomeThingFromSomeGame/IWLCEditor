@@ -7,6 +7,11 @@ const DESCRIPTION_BOX:Texture2D = preload("res://assets/game/gameUI/description.
 const TEXT_BREAK_FLAGS:int = TextServer.LineBreakFlag.BREAK_MANDATORY|TextServer.LineBreakFlag.BREAK_WORD_BOUND|TextServer.LineBreakFlag.BREAK_ADAPTIVE
 
 @onready var world:World = %world
+@onready var gameViewport:SubViewport = %gameViewport
+
+var configFile:ConfigFile = ConfigFile.new()
+
+var paused:bool = false
 
 var mainDraw:RID
 
@@ -15,11 +20,12 @@ var roomTransitionTimer:float = 0
 var roomTransitionColor:Color = Color("#5a96c8")
 var textWiggleAngle:float = 0
 var textOffsetAngle:float = 0
+var pauseAnimPhase:int = -1
+var pauseAnimTimer:float = 0
 
 func _ready() -> void:
 	mainDraw = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_z_index(mainDraw, 15)
-	RenderingServer.canvas_item_set_parent(mainDraw, world.get_canvas_item())
+	RenderingServer.canvas_item_set_parent(mainDraw, %worldViewportCont.get_canvas_item())
 	Game.playGame = self
 	Game.playReadied()
 
@@ -42,6 +48,23 @@ func _process(delta:float) -> void:
 				queue_redraw()
 				if roomTransitionTimer >= 0.4166666667:
 					roomTransitionPhase = -1
+	if pauseAnimPhase != -1:
+		pauseAnimTimer += delta
+		%gameViewportCont.get_material().set_shader_parameter(&"pauseAnimTimer", pauseAnimTimer)
+		queue_redraw()
+		match pauseAnimPhase:
+			0:
+				if pauseAnimTimer >= 0.4166666667:
+					pauseAnimPhase += 1
+					paused = !paused
+					%pauseMenu.visible = paused
+					%gameViewportCont.get_material().set_shader_parameter(&"darken", !paused)
+			1:
+				if pauseAnimTimer >= 0.75:
+					pauseAnimPhase = -1
+					%mouseBlocker.mouse_filter = MOUSE_FILTER_IGNORE
+					%gameViewportCont.get_material().set_shader_parameter(&"pauseAnimTimer", 0)
+					%gameViewportCont.get_material().set_shader_parameter(&"darken", false)
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(mainDraw)
@@ -64,12 +87,15 @@ func _draw() -> void:
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventKey and event.is_pressed():
-		if event.keycode == KEY_F5: queue_redraw()
-		if roomTransitionPhase == 0 and roomTransitionTimer >= 0.6666666667:
-			if event.keycode == KEY_SPACE:
-				roomTransitionPhase += 1
-				roomTransitionTimer = 0
-		elif roomTransitionPhase == -1: Game.player.receiveKey(event)
+		if !event.is_echo():
+			if event.keycode == KEY_F5: queue_redraw()
+			if roomTransitionPhase == 0 and roomTransitionTimer >= 0.6666666667:
+				if event.keycode == KEY_SPACE:
+					roomTransitionPhase += 1
+					roomTransitionTimer = 0
+			if !inAnimation():
+				if event.keycode == KEY_ESCAPE: pause()
+		if !paused and !inAnimation(): Game.player.receiveKey(event)
 
 func startLevel() -> void:
 	start()
@@ -81,6 +107,7 @@ func start() -> void:
 	world.add_child(Game.player)
 	assert(Game.levelStart)
 	Game.player.position = Game.levelStart.position + Vector2(16, 23)
+	Game.goldIndexFloat = 0
 	GameChanges.start()
 	for object in Game.objects.values():
 		object.start()
@@ -88,7 +115,6 @@ func start() -> void:
 	for component in Game.components.values():
 		component.start()
 		component.queue_redraw()
-
 
 func restart() -> void:
 	Game.player.pauseFrame = true
@@ -102,7 +128,40 @@ func restart() -> void:
 	await get_tree().process_frame
 	start()
 
-func playerInput() -> bool:
-	if roomTransitionPhase == 0: return false
-	if roomTransitionPhase == 1 and roomTransitionTimer < 0.1: return false
-	return true
+func inAnimation() -> bool:
+	if roomTransitionPhase == 0: return true
+	if roomTransitionPhase == 1 and roomTransitionTimer < 0.1: return true
+	if pauseAnimPhase != -1: return true
+	return false
+
+func pause() -> void:
+	if inAnimation(): return
+	pauseAnimPhase = 0
+	pauseAnimTimer = 0
+	%gameViewportCont.get_material().set_shader_parameter(&"darken", !paused)
+	%mouseBlocker.mouse_filter = MOUSE_FILTER_STOP
+	var pauseSound:AudioStreamPlayer = AudioManager.play(preload("res://resources/sounds/pause.wav"))
+	pauseSound.volume_linear = 0.85
+	pauseSound.pitch_scale = 0.6
+	if paused:
+		%gameSettings.closed(configFile)
+		configFile.save("user://config.ini")
+	else:
+		configFile.load("user://config.ini")
+		%gameSettings.opened(configFile)
+
+func quit() -> void:
+	%gameSettings.closed(configFile)
+	configFile.save("user://config.ini")
+	get_tree().quit()
+
+func editLevel() -> void:
+	%gameSettings.closed(configFile)
+	configFile.save("user://config.ini")
+	await get_tree().process_frame
+	Game.edit()
+
+func updateSettings() -> void:
+	configFile.load("user://config.ini")
+	%gameSettings.playGame = self
+	%gameSettings.opened(configFile)
