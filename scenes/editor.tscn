@@ -344,6 +344,7 @@ mouse_filter = 2
 stretch = true
 
 [node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportCont"]
+unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(820, 628)
@@ -360,6 +361,7 @@ limit_enabled = false
 
 [node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
 unique_name_in_owner = true
+offset = Vector2(0, -0.1)
 enabled = false
 limit_left = 0
 limit_top = 0

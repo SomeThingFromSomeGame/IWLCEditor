@@ -22,6 +22,7 @@ var findProblems:FindProblems
 @onready var editorCamera:Camera2D = %editorCamera
 @onready var playtestCamera:Camera2D = %playtestCamera
 
+@onready var gameViewport:SubViewport = %gameViewport
 @onready var explainText:RichTextLabel = %explainText
 
 enum MODE {SELECT, TILE, KEY, DOOR, OTHER, PASTE}
@@ -61,6 +62,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(descriptionDraw, %description.get_canvas_item())
 	Game.setWorld(%world)
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
+	settingsMenu.gameSettings.editor = self
 	settingsMenu.opened()
 	if Game.awaitingEditor: Game.editReadied()
 	Saving.editorReady()

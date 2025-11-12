@@ -242,7 +242,8 @@ func _draw() -> void:
 		Game.playState != Game.PLAY_STATE.EDIT and parent.ipow().across(Game.player.complexMode).eq(0)
 	)
 
-static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID, lockSize:Vector2,
+static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID,
+	lockSize:Vector2,
 	lockBaseColor:Game.COLOR, lockGlitchColor:Game.COLOR,
 	lockType:TYPE,
 	lockConfiguration:CONFIGURATION,

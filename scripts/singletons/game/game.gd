@@ -5,6 +5,7 @@ static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
 
 const COLORS:int = 22
 enum COLOR {MASTER, WHITE, ORANGE, PURPLE, RED, GREEN, BLUE, PINK, CYAN, BLACK, BROWN, PURE, GLITCH, STONE, DYNAMITE, QUICKSILVER, MAROON, FOREST, NAVY, ICE, MUD, GRAFFITI}
+const NONFLAT_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.GLITCH, COLOR.STONE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
 
 func isAnimated(color:COLOR) -> bool: return color in [COLOR.MASTER, COLOR.PURE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
 
@@ -155,81 +156,88 @@ func graffitiKeyTex(type:KeyBulk.TYPE) -> Texture2D: return GRAFFITI_KEY_TEXTURE
 const EMPTY:Texture2D = preload("res://assets/empty.png")
 const FILLED:Texture2D = preload("res://assets/filled.png")
 
-
-
-const highTone:Array[Color] = [
+var highTone:Array[Color] = DEFAULT_HIGH.duplicate()
+const DEFAULT_HIGH:Array[Color] = [
 	Color("#e7bf98"),
-	Color("#edeae7"),
-	Color("#e7bf98"),
-	Color("#bfa4db"),
-	Color("#c83737"),
-	Color("#70cf88"),
-	Color("#8795b8"),
-	Color("#e4afca"),
-	Color("#8acaca"),
-	Color("#554b40"),
+	Color("#edeae7"), Color("#e7bf98"), Color("#bfa4db"),
+	Color("#c83737"), Color("#70cf88"), Color("#8795b8"),
+	Color("#e4afca"), Color("#8acaca"), Color("#554b40"),
 	Color("#aa6015"),
 	Color("#edeae7"),
 	Color("#78be00"),
 	Color("#96a0a5"),
-	Color("#d18866"),
-	Color("#ffffff"),
-	Color("#6b2020"),
-	Color("#1d5c2c"),
-	Color("#20326b"),
-	Color("#d1ffff"),
-	Color("#b57ea7"),
-	Color("#f2e380")
+	Color("#d18866"), Color("#ffffff"),
+	Color("#6b2020"), Color("#1d5c2c"), Color("#20326b"),
+	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
+]
+const BRIGHT_HIGH:Array[Color] = [
+	Color("#e7bf98"),
+	Color("#edeae7"), Color("#e7bf98"), Color("#bfa4db"),
+	Color("#eb3737"), Color("#70cf88"), Color("#8795b8"),
+	Color("#e4afca"), Color("#8acaf8"), Color("#554b40"),
+	Color("#aa6015"),
+	Color("#edeae7"),
+	Color("#78be00"),
+	Color("#96a0a5"),
+	Color("#d18866"), Color("#ffffff"),
+	Color("#6b2020"), Color("#1d5c2c"), Color("#20326b"),
+	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
 ]
 
-const mainTone:Array[Color] = [
+var mainTone:Array[Color] = DEFAULT_MAIN.duplicate()
+const DEFAULT_MAIN:Array[Color] = [
 	Color("#d68f49"),
-	Color("#d6cfc9"),
-	Color("#d68f49"),
-	Color("#8f5fc0"),
-	Color("#8f1b1b"),
-	Color("#359f50"),
-	Color("#5f71a0"),
-	Color("#cf709f"),
-	Color("#50afaf"),
-	Color("#363029"),
+	Color("#d6cfc9"), Color("#d68f49"), Color("#8f5fc0"),
+	Color("#8f1b1b"), Color("#359f50"), Color("#5f71a0"),
+	Color("#cf709f"), Color("#50afaf"), Color("#363029"),
 	Color("#704010"),
 	Color("#d6cfc9"),
 	Color("#b49600"),
 	Color("#647378"),
-	Color("#d34728"),
-	Color("#b8b8b8"),
-	Color("#461415"),
-	Color("#163b21"),
-	Color("#182552"),
-	Color("#82f0ff"),
-	Color("#966489"),
-	Color("#e2c961")
+	Color("#d34728"), Color("#b8b8b8"),
+	Color("#461415"), Color("#163b21"), Color("#182552"),
+	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
+]
+const BRIGHT_MAIN:Array[Color] = [
+	Color("#d68f49"),
+	Color("#d6cfc9"), Color("#d68f49"), Color("#8f5fc0"),
+	Color("#a11b1b"), Color("#359f50"), Color("#5f71a0"),
+	Color("#cf709f"), Color("#50afd1"), Color("#363029"),
+	Color("#704010"),
+	Color("#d6cfc9"),
+	Color("#b49600"),
+	Color("#647378"),
+	Color("#d34728"), Color("#b8b8b8"),
+	Color("#461415"), Color("#163b21"), Color("#182552"),
+	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
 ]
 
-const darkTone:Array[Color] = [
+var darkTone:Array[Color] = DEFAULT_DARK.duplicate()
+const DEFAULT_DARK:Array[Color] = [
 	Color("#9c6023"),
-	Color("#bbaea4"),
-	Color("#9c6023"),
-	Color("#603689"),
-	Color("#480d0d"),
-	Color("#1b5028"),
-	Color("#3a4665"),
-	Color("#af3a75"),
-	Color("#357575"),
-	Color("#181512"),
+	Color("#bbaea4"), Color("#9c6023"), Color("#603689"),
+	Color("#480d0d"), Color("#1b5028"), Color("#3a4665"),
+	Color("#af3a75"), Color("#357575"), Color("#181512"),
 	Color("#382007"),
 	Color("#bbaea4"),
 	Color("#dc6e00"),
 	Color("#3c4b50"),
-	Color("#7a3117"),
-	Color("#818181"),
-	Color("#2e0c0c"),
-	Color("#0a2b14"),
-	Color("#101833"),
-	Color("#62b6c1"),
-	Color("#7f4972"),
-	Color("#c6af51")
+	Color("#7a3117"), Color("#818181"),
+	Color("#2e0c0c"), Color("#0a2b14"), Color("#101833"),
+	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
+]
+const BRIGHT_DARK:Array[Color] = [
+	Color("#9c6023"),
+	Color("#bbaea4"), Color("#9c6023"), Color("#603689"),
+	Color("#6b0d0d"), Color("#1b5028"), Color("#3a4665"),
+	Color("#af3a75"), Color("#357592"), Color("#181512"),
+	Color("#382007"),
+	Color("#bbaea4"),
+	Color("#dc6e00"),
+	Color("#3c4b50"),
+	Color("#7a3117"), Color("#818181"),
+	Color("#2e0c0c"), Color("#0a2b14"), Color("#101833"),
+	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
 ]
 
 @onready var editor:Editor = get_node("/root/editor")

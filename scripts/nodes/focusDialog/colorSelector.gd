@@ -10,6 +10,9 @@ func _ready() -> void:
 	buttonType = ColorSelectorButton
 	super()
 
+func onlyFlatColors() -> void:
+	for color in Game.NONFLAT_COLORS: buttons[color].visible = false
+
 func changedMods() -> void:
 	var colors:Array[Game.COLOR] = Mods.colors()
 	for button in buttons: button.visible = false

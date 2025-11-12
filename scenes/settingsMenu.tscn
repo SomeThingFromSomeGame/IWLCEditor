@@ -12,7 +12,7 @@ content_margin_left = 0.0
 content_margin_top = 0.0
 content_margin_right = 0.0
 content_margin_bottom = 0.0
-bg_color = Color(0.1, 0.1, 0.1, 0.6)
+bg_color = Color(0.1, 0.1, 0.1, 0.8)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -140,6 +140,11 @@ size_flags_vertical = 0
 tooltip_text = "Uses godot's built-in file dialog instead of the OS native one. If file dialogs aren't opening correctly (eg. Save As does nothing), turn this on."
 texture = ExtResource("5_iswfj")
 
+[node name="fullscreen" type="CheckBox" parent="c/editorSettings/c"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enable Fullscreen (in editor)"
+
 [node name="gameSettings" parent="c" instance=ExtResource("6_tyaol")]
 unique_name_in_owner = true
 visible = false
@@ -152,3 +157,4 @@ layout_mode = 2
 [connection signal="focus_exited" from="c/levelSettings/c/c/levelAuthor" to="." method="_defocus"]
 [connection signal="text_changed" from="c/levelSettings/c/c/levelAuthor" to="." method="_levelAuthorSet"]
 [connection signal="toggled" from="c/editorSettings/c/c/fileDialogWorkaround" to="." method="_fileDialogWorkaroundSet"]
+[connection signal="toggled" from="c/editorSettings/c/fullscreen" to="." method="_fullscreenSet"]

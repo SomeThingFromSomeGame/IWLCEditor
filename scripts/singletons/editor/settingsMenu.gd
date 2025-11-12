@@ -64,13 +64,18 @@ func opened() -> void:
 	%levelName.text = Game.level.name
 	%levelAuthor.text = Game.level.author
 	%fileDialogWorkaround.button_pressed = configFile.get_value("editor", "fileDialogWorkaround", false)
+	%fullscreen.button_pressed = configFile.get_value("editor", "fullscreen", false)
 	%gameSettings.opened(configFile)
 
 func closed() -> void:
 	configFile.set_value("editor", "fileDialogWorkaround", %fileDialogWorkaround.button_pressed)
+	configFile.set_value("editor", "fullscreen", %fullscreen.button_pressed)
 	%gameSettings.closed(configFile)
 	configFile.save("user://config.ini")
 
-func _fileDialogWorkaroundSet(toggled_on: bool) -> void:
+func _fileDialogWorkaroundSet(toggled_on:bool) -> void:
 	editor.saveAsDialog.use_native_dialog = !toggled_on
 	editor.openDialog.use_native_dialog = !toggled_on
+
+func _fullscreenSet(toggled_on:bool) -> void:
+	get_window().mode = Window.MODE_FULLSCREEN if toggled_on else Window.MODE_WINDOWED

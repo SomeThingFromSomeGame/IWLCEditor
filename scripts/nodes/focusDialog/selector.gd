@@ -37,6 +37,8 @@ func _select(button:SelectorButton) -> void:
 	selected = button.value
 	select.emit(button.value)
 
+func redrawButtons() -> void: for button in buttons: button.queue_redraw()
+
 class SelectorButton extends Button:
 	@onready var editor:Editor = get_node("/root/editor")
 

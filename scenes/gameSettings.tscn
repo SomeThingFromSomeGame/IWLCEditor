@@ -1,7 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://cudl265jx2hk6"]
+[gd_scene load_steps=6 format=3 uid="uid://cudl265jx2hk6"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_tmlsq"]
 [ext_resource type="Script" uid="uid://dtw6afpsoarco" path="res://scripts/singletons/editor/gameSettings.gd" id="2_nrqkd"]
+[ext_resource type="Script" uid="uid://c70juj2p5s6yd" path="res://scripts/nodes/focusDialog/colorSelector.gd" id="3_vtnhb"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_vtnhb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vtnhb"]
+font_size = 10
+font_color = Color(0.79482806, 0.794828, 0.794828, 1)
 
 [node name="gameSettings" type="MarginContainer"]
 anchors_preset = 15
@@ -11,9 +18,17 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_tmlsq")
 script = ExtResource("2_nrqkd")
+toneButtonGroup = SubResource("ButtonGroup_vtnhb")
 
 [node name="c" type="VBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="l" type="Label" parent="c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Audio"
+label_settings = SubResource("LabelSettings_vtnhb")
+vertical_alignment = 2
 
 [node name="c" type="HBoxContainer" parent="c"]
 layout_mode = 2
@@ -31,10 +46,17 @@ value = 0.5
 layout_mode = 2
 text = "Volume"
 
+[node name="l2" type="Label" parent="c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Visual"
+label_settings = SubResource("LabelSettings_vtnhb")
+vertical_alignment = 2
+
 [node name="fullscreen" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Enable Fullscreen"
+text = "Enable Fullscreen (in game)"
 
 [node name="smoothingMode" type="CheckBox" parent="c"]
 unique_name_in_owner = true
@@ -51,7 +73,172 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Simple Locks"
 
+[node name="l3" type="Label" parent="c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Colorblind"
+label_settings = SubResource("LabelSettings_vtnhb")
+vertical_alignment = 2
+
+[node name="c2" type="MarginContainer" parent="c"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="c" type="VBoxContainer" parent="c/c2"]
+layout_mode = 2
+
+[node name="c3" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="colorSelector" type="GridContainer" parent="c/c2/c/c3"]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("3_vtnhb")
+metadata/_custom_type_script = "uid://c70juj2p5s6yd"
+
+[node name="keyPreview" type="Control" parent="c/c2/c/c3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="c" type="Control" parent="c/c2/c/c3"]
+layout_mode = 2
+
+[node name="doorPreview" type="Control" parent="c/c2/c/c3"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="c4" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="colorEditLabel" type="Label" parent="c/c2/c/c4"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Editing 'White'"
+
+[node name="high" type="Button" parent="c/c2/c/c4"]
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_vtnhb")
+text = "High"
+
+[node name="main" type="Button" parent="c/c2/c/c4"]
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_vtnhb")
+text = "Main"
+
+[node name="dark" type="Button" parent="c/c2/c/c4"]
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+toggle_mode = true
+button_group = SubResource("ButtonGroup_vtnhb")
+text = "Dark"
+
+[node name="red" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="redLabel" type="Label" parent="c/c2/c/red"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+text = "999"
+
+[node name="redSlider" type="HSlider" parent="c/c2/c/red"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+max_value = 255.0
+
+[node name="l" type="Label" parent="c/c2/c/red"]
+layout_mode = 2
+text = "R"
+
+[node name="green" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="greenLabel" type="Label" parent="c/c2/c/green"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+text = "999"
+
+[node name="greenSlider" type="HSlider" parent="c/c2/c/green"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+max_value = 255.0
+
+[node name="l" type="Label" parent="c/c2/c/green"]
+layout_mode = 2
+text = "G"
+
+[node name="blue" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="blueLabel" type="Label" parent="c/c2/c/blue"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(22, 0)
+layout_mode = 2
+text = "999"
+
+[node name="blueSlider" type="HSlider" parent="c/c2/c/blue"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+max_value = 255.0
+
+[node name="l" type="Label" parent="c/c2/c/blue"]
+layout_mode = 2
+text = "B"
+
+[node name="c5" type="HBoxContainer" parent="c/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="setTonesToMain" type="Button" parent="c/c2/c/c5"]
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+text = "Set Tones to Main"
+
+[node name="presets" type="MenuButton" parent="c/c2/c/c5"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"SettingsMenuButton"
+text = "Set All to Preset"
+flat = false
+item_count = 2
+popup/item_0/text = "Default"
+popup/item_0/id = 0
+popup/item_1/text = "Bright"
+popup/item_1/id = 1
+
+[node name="l4" type="Label" parent="c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Accessibility"
+label_settings = SubResource("LabelSettings_vtnhb")
+vertical_alignment = 2
+
 [connection signal="value_changed" from="c/c/volume" to="." method="_volumeSet"]
 [connection signal="toggled" from="c/fullscreen" to="." method="_fullscreenSet"]
 [connection signal="toggled" from="c/smoothingMode" to="." method="_smoothingModeSet"]
 [connection signal="toggled" from="c/simpleLocks" to="." method="_simpleLocksSet"]
+[connection signal="select" from="c/c2/c/c3/colorSelector" to="." method="_colorSelected"]
+[connection signal="value_changed" from="c/c2/c/red/redSlider" to="." method="_redSet"]
+[connection signal="value_changed" from="c/c2/c/green/greenSlider" to="." method="_greenSet"]
+[connection signal="value_changed" from="c/c2/c/blue/blueSlider" to="." method="_blueSet"]
+[connection signal="pressed" from="c/c2/c/c5/setTonesToMain" to="." method="_setTonesToMain"]

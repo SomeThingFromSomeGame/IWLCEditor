@@ -124,59 +124,14 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawCopies)
 	RenderingServer.canvas_item_clear(drawNegative)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
+	drawDoor(drawScaled,drawAuraBreaker,drawGlitch,drawMain,
+		size,colorAfterCurse(),colorAfterGlitch(),type,
+		gateAlpha,
+		len(locks) > 0 and (locks[0].isNegative() if type == TYPE.SIMPLE else ipow().sign() < 0),
+		drawComplex or (Game.playState == Game.PLAY_STATE.EDIT and copies.eq(0)),
+		animState != ANIM_STATE.RELOCK or animPart > 2
+	)
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
-	# fill
-	var texture:Texture2D
-	var tileTexture:bool = false
-	if type == TYPE.GATE:
-		RenderingServer.canvas_item_add_texture_rect(drawMain,rect,GATE_FILL,true,Color(Color.WHITE,lerp(0.35,1.0,gateAlpha)))
-	else:
-		if animState != ANIM_STATE.RELOCK or animPart > 2:
-			match colorAfterCurse():
-				Game.COLOR.MASTER: texture = Game.masterTex()
-				Game.COLOR.PURE: texture = Game.pureTex()
-				Game.COLOR.STONE: texture = Game.stoneTex()
-				Game.COLOR.DYNAMITE: texture = Game.dynamiteTex(); tileTexture = true
-				Game.COLOR.QUICKSILVER: texture = Game.quicksilverTex()
-			if texture:
-				if !tileTexture:
-					RenderingServer.canvas_item_set_material(drawScaled,Game.PIXELATED_MATERIAL.get_rid())
-					RenderingServer.canvas_item_set_instance_shader_parameter(drawScaled, &"size", size)
-				RenderingServer.canvas_item_add_texture_rect(drawScaled,rect,texture,tileTexture)
-			elif colorAfterCurse() == Game.COLOR.GLITCH:
-				RenderingServer.canvas_item_add_nine_patch(drawGlitch,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[Game.COLOR.GLITCH])
-				RenderingServer.canvas_item_add_nine_patch(drawGlitch,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[Game.COLOR.GLITCH])
-				RenderingServer.canvas_item_add_nine_patch(drawGlitch,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[Game.COLOR.GLITCH])
-				if colorAfterGlitch() != Game.COLOR.GLITCH:
-					var glitchTexture:Texture2D
-					match colorAfterGlitch():
-						Game.COLOR.MASTER: glitchTexture = MASTER_GLITCH
-						Game.COLOR.PURE: glitchTexture = PURE_GLITCH
-						Game.COLOR.STONE: glitchTexture = STONE_GLITCH
-						Game.COLOR.DYNAMITE: glitchTexture = DYNAMITE_GLITCH
-						Game.COLOR.QUICKSILVER: glitchTexture = QUICKSILVER_GLITCH
-					if glitchTexture:
-						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,glitchTexture,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE)
-					else:
-						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_HIGH,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterGlitch()])
-						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_MAIN,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterGlitch()])
-						RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,GLITCH_DARK,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.darkTone[colorAfterGlitch()])
-			elif colorAfterCurse() in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
-				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterCurse()])
-				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterCurse()])
-				RenderingServer.canvas_item_add_nine_patch(drawScaled,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[colorAfterCurse()])
-				drawAuras(drawAuraBreaker,drawAuraBreaker,drawAuraBreaker,colorAfterCurse()==Game.COLOR.ICE,colorAfterCurse()==Game.COLOR.MUD,colorAfterCurse()==Game.COLOR.GRAFFITI,rect)
-			else:
-				RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[colorAfterCurse()])
-				RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[colorAfterCurse()])
-				RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[colorAfterCurse()])
-		# frame
-		if drawComplex or (Game.playState == Game.PLAY_STATE.EDIT and copies.eq(0)):
-			RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,0.4901960784,1))
-			RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,0.7058823529,0.9019607843))
-			RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,1,0.7450980392))
-		elif len(locks) > 0 and (locks[0].isNegative() if type == TYPE.SIMPLE else ipow().sign() < 0): RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME_NEGATIVE,CORNER_SIZE,CORNER_SIZE)
-		else: RenderingServer.canvas_item_add_nine_patch(drawMain,rect,TEXTURE_RECT,FRAME,CORNER_SIZE,CORNER_SIZE)
 	# auras
 	drawAuras(drawCrumbled,drawPainted,drawFrozen,
 		frozen if Game.playState == Game.PLAY_STATE.EDIT else gameFrozen,
@@ -192,8 +147,71 @@ func _draw() -> void:
 	else:
 		if gameCopies.neq(1) or infCopies.neq(0): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+gameCopies.strWithInf(infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
 
+
+static func drawDoor(doorDrawScaled:RID,doorDrawAuraBreaker:RID,doorDrawGlitch:RID,doorDrawMain:RID,
+	doorSize:Vector2,
+	doorBaseColor:Game.COLOR, doorGlitchColor:Game.COLOR,
+	doorType:TYPE,
+	doorGateAlpha:float,
+	negative:bool=false, doorDrawComplex:bool=false, drawFill:bool=true
+) -> void:
+	var rect:Rect2 = Rect2(Vector2.ZERO, doorSize)
+	# fill
+	var texture:Texture2D
+	var tileTexture:bool = false
+	if doorType == TYPE.GATE:
+		RenderingServer.canvas_item_add_texture_rect(doorDrawMain,rect,GATE_FILL,true,Color(Color.WHITE,lerp(0.35,1.0,doorGateAlpha)))
+	else:
+		if drawFill:
+			match doorBaseColor:
+				Game.COLOR.MASTER: texture = Game.masterTex()
+				Game.COLOR.PURE: texture = Game.pureTex()
+				Game.COLOR.STONE: texture = Game.stoneTex()
+				Game.COLOR.DYNAMITE: texture = Game.dynamiteTex(); tileTexture = true
+				Game.COLOR.QUICKSILVER: texture = Game.quicksilverTex()
+			if texture:
+				if !tileTexture:
+					RenderingServer.canvas_item_set_material(doorDrawScaled,Game.PIXELATED_MATERIAL.get_rid())
+					RenderingServer.canvas_item_set_instance_shader_parameter(doorDrawScaled, &"size", doorSize)
+				RenderingServer.canvas_item_add_texture_rect(doorDrawScaled,rect,texture,tileTexture)
+			elif doorBaseColor == Game.COLOR.GLITCH:
+				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[Game.COLOR.GLITCH])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[Game.COLOR.GLITCH])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[Game.COLOR.GLITCH])
+				if doorGlitchColor != Game.COLOR.GLITCH:
+					var glitchTexture:Texture2D
+					match doorGlitchColor:
+						Game.COLOR.MASTER: glitchTexture = MASTER_GLITCH
+						Game.COLOR.PURE: glitchTexture = PURE_GLITCH
+						Game.COLOR.STONE: glitchTexture = STONE_GLITCH
+						Game.COLOR.DYNAMITE: glitchTexture = DYNAMITE_GLITCH
+						Game.COLOR.QUICKSILVER: glitchTexture = QUICKSILVER_GLITCH
+					if glitchTexture:
+						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,glitchTexture,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE)
+					else:
+						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_HIGH,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.highTone[doorGlitchColor])
+						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_MAIN,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorGlitchColor])
+						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_DARK,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorGlitchColor])
+			elif doorBaseColor in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorBaseColor])
+				drawAuras(doorDrawAuraBreaker,doorDrawAuraBreaker,doorDrawAuraBreaker,doorBaseColor==Game.COLOR.ICE,doorBaseColor==Game.COLOR.MUD,doorBaseColor==Game.COLOR.GRAFFITI,rect)
+			else:
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorBaseColor])
+		# frame
+		if doorDrawComplex:
+			RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,0.4901960784,1))
+			RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,0.7058823529,0.9019607843))
+			RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,1,0.7450980392))
+		elif negative: RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME_NEGATIVE,CORNER_SIZE,CORNER_SIZE)
+		else: RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME,CORNER_SIZE,CORNER_SIZE)
+
 static func drawAuras(objectDrawCrumbled:RID,objectDrawPainted:RID,objectDrawFrozen:RID,objectFrozen:bool,objectCrumbled:bool,objectPainted:bool,rect:Rect2) -> void:
 	if objectCrumbled:
+		RenderingServer.canvas_item_set_material(objectDrawCrumbled,Game.NO_MATERIAL.get_rid())
 		if rect.size == Vector2(32,32): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_1X1)
 		elif rect.size == Vector2(32,64): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_1X2)
 		elif rect.size == Vector2(64,64): RenderingServer.canvas_item_add_texture_rect(objectDrawCrumbled,rect,CRUMBLED_2X2)
