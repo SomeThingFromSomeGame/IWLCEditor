@@ -13,8 +13,8 @@ var configFile:ConfigFile = ConfigFile.new()
 
 var paused:bool = false
 
-var mainDraw:RID
-var autoRunGradientDraw:RID
+var drawMain:RID
+var drawAutoRunGradient:RID
 
 var roomTransitionPhase:int = -1
 var roomTransitionTimer:float = 0
@@ -23,14 +23,14 @@ var textWiggleAngle:float = 0
 var textOffsetAngle:float = 0
 var pauseAnimPhase:int = -1
 var pauseAnimTimer:float = 0
-var autoRunTimer:float = 0
+var autoRunTimer:float = 2
 
 func _ready() -> void:
-	mainDraw = RenderingServer.canvas_item_create()
-	autoRunGradientDraw = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_material(autoRunGradientDraw, Game.TEXT_GRADIENT_MATERIAL)
-	RenderingServer.canvas_item_set_parent(mainDraw, %worldViewportCont.get_canvas_item())
-	RenderingServer.canvas_item_set_parent(autoRunGradientDraw, %worldViewportCont.get_canvas_item())
+	drawMain = RenderingServer.canvas_item_create()
+	drawAutoRunGradient = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_material(drawAutoRunGradient, Game.TEXT_GRADIENT_MATERIAL)
+	RenderingServer.canvas_item_set_parent(drawMain, %worldViewportCont.get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %worldViewportCont.get_canvas_item())
 	Game.playGame = self
 	Game.playReadied()
 
@@ -77,27 +77,27 @@ func _process(delta:float) -> void:
 	if !paused: Game.timer += delta
 
 func _draw() -> void:
-	RenderingServer.canvas_item_clear(mainDraw)
-	RenderingServer.canvas_item_clear(autoRunGradientDraw)
+	RenderingServer.canvas_item_clear(drawMain)
+	RenderingServer.canvas_item_clear(drawAutoRunGradient)
 	# description box
 	if Game.level.description:
-		RenderingServer.canvas_item_add_texture_rect(mainDraw,Rect2(Vector2(11,519),Vector2(784,80)),DESCRIPTION_BOX,false,Color(Color.BLACK,0.35))
-		RenderingServer.canvas_item_add_texture_rect(mainDraw,Rect2(Vector2(8,516),Vector2(784,80)),DESCRIPTION_BOX)
-		Game.FTALK.draw_multiline_string(mainDraw,Vector2(16,540),Game.level.description,HORIZONTAL_ALIGNMENT_LEFT,666,12,4,Color("#200020"),TEXT_BREAK_FLAGS)
-		TextDraw.outlinedCentered(Game.FROOMNUM,mainDraw,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(732,539))
-		TextDraw.outlinedCentered(Game.FROOMNUM,mainDraw,Game.level.shortNumber,Color("#8c50c8"),Color("#140064"),20,Vector2(733,569))
+		RenderingServer.canvas_item_add_texture_rect(drawMain,Rect2(Vector2(11,519),Vector2(784,80)),DESCRIPTION_BOX,false,Color(Color.BLACK,0.35))
+		RenderingServer.canvas_item_add_texture_rect(drawMain,Rect2(Vector2(8,516),Vector2(784,80)),DESCRIPTION_BOX)
+		Game.FTALK.draw_multiline_string(drawMain,Vector2(16,540),Game.level.description,HORIZONTAL_ALIGNMENT_LEFT,666,12,4,Color("#200020"),TEXT_BREAK_FLAGS)
+		TextDraw.outlinedCentered(Game.FROOMNUM,drawMain,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(732,539))
+		TextDraw.outlinedCentered(Game.FROOMNUM,drawMain,Game.level.shortNumber,Color("#8c50c8"),Color("#140064"),20,Vector2(733,569))
 	# room transition
 	if roomTransitionPhase != -1:
 		var textOffset = Vector2(0,500*sin(textOffsetAngle)-500)
 		var textWiggle:Vector2 = Vector2(sin(textWiggleAngle),cos(textWiggleAngle))*3
 		var textWiggle2:Vector2 = Vector2(sin(textWiggleAngle+0.8726646260),cos(textWiggleAngle+0.8726646260))*6
-		RenderingServer.canvas_item_add_rect(mainDraw,SCREEN_RECT,roomTransitionColor)
-		TextDraw.outlinedCentered2(Game.FLEVELID,mainDraw,Game.level.number,Color.WHITE,Color.BLACK,24,Vector2(400,216)+textWiggle+textOffset)
-		TextDraw.outlinedCentered2(Game.FLEVELNAME,mainDraw,Game.level.name,Color.WHITE,Color.BLACK,36,Vector2(400,280)+textWiggle2+textOffset)
-		TextDraw.outlinedCentered2(Game.FLEVELNAME,mainDraw,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(400,376)+textWiggle+textOffset)
+		RenderingServer.canvas_item_add_rect(drawMain,SCREEN_RECT,roomTransitionColor)
+		TextDraw.outlinedCentered2(Game.FLEVELID,drawMain,Game.level.number,Color.WHITE,Color.BLACK,24,Vector2(400,216)+textWiggle+textOffset)
+		TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,Game.level.name,Color.WHITE,Color.BLACK,36,Vector2(400,280)+textWiggle2+textOffset)
+		TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(400,376)+textWiggle+textOffset)
 	var autoRunAlpha:float = abs(sin(autoRunTimer*PI))
 	if autoRunAlpha > 0:
-		TextDraw.outlinedGradient(Game.FMINIID,mainDraw,autoRunGradientDraw,
+		TextDraw.outlinedGradient(Game.FMINIID,drawMain,drawAutoRunGradient,
 			"[E] Auto-Run is " + ("on" if Game.autoRun else "off"),
 			Color(Color("#e6ffe6") if Game.autoRun else Color("#dcffe6"),autoRunAlpha),
 			Color(Color("#e6c896") if Game.autoRun else Color("#64dc8c"),autoRunAlpha),

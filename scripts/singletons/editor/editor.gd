@@ -54,12 +54,20 @@ var cameraZoom:float = 1
 
 var settingsOpen:bool = false
 
-var descriptionDraw:RID
+var drawDescription:RID
+var drawMain:RID
+var drawAutoRunGradient:RID
+var autoRunTimer:float = 2
 
 func _ready() -> void:
-	descriptionDraw = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_z_index(descriptionDraw, 1)
-	RenderingServer.canvas_item_set_parent(descriptionDraw, %description.get_canvas_item())
+	drawDescription = RenderingServer.canvas_item_create()
+	drawMain = RenderingServer.canvas_item_create()
+	drawAutoRunGradient = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_z_index(drawDescription, 1)
+	RenderingServer.canvas_item_set_material(drawAutoRunGradient, Game.TEXT_GRADIENT_MATERIAL)
+	RenderingServer.canvas_item_set_parent(drawDescription, %description.get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawMain, %gameCont.get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %gameCont.get_canvas_item())
 	Game.setWorld(%world)
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
 	settingsMenu.gameSettings.editor = self
@@ -113,6 +121,11 @@ func _process(delta:float) -> void:
 					componentHovered = element
 
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else 0
+
+	if autoRunTimer < 2:
+		autoRunTimer += delta
+		queue_redraw()
+		if autoRunTimer >= 2: autoRunTimer = 2
 
 func _gui_input(event:InputEvent) -> void:
 	if !objectHovered: objectHovered = null
@@ -365,6 +378,7 @@ func _input(event:InputEvent) -> void:
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
 			match event.keycode:
+				KEY_E: autoRun()
 				KEY_ESCAPE: _toggleSettingsMenu(true)
 				_: Game.player.receiveKey(event)
 		else:
@@ -490,10 +504,27 @@ func _levelDescriptionSet() -> void:
 	Game.anyChanges = true
 
 func _draw() -> void:
-	RenderingServer.canvas_item_clear(descriptionDraw)
-	TextDraw.outlinedCentered(Game.FROOMNUM,descriptionDraw,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(728,27))
-	TextDraw.outlinedCentered(Game.FROOMNUM,descriptionDraw,%levelShortNumber.text,Color("#8c50c8"),Color("#140064"),20,Vector2(728,57))
+	RenderingServer.canvas_item_clear(drawDescription)
+	RenderingServer.canvas_item_clear(drawMain)
+	RenderingServer.canvas_item_clear(drawAutoRunGradient)
+	TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(728,27))
+	TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,%levelShortNumber.text,Color("#8c50c8"),Color("#140064"),20,Vector2(728,57))
+	var autoRunAlpha:float = abs(sin(autoRunTimer*PI))
+	if autoRunAlpha > 0:
+		TextDraw.outlinedGradient(Game.FMINIID,drawMain,drawAutoRunGradient,
+			"[E] Auto-Run is " + ("on" if Game.autoRun else "off"),
+			Color(Color("#e6ffe6") if Game.autoRun else Color("#dcffe6"),autoRunAlpha),
+			Color(Color("#e6c896") if Game.autoRun else Color("#64dc8c"),autoRunAlpha),
+			Color(Color.BLACK,autoRunAlpha),12,Vector2(4,20)
+		)
 
 func _levelShortNumberSet(string:String) -> void:
 	Game.level.shortNumber = string
 	queue_redraw()
+
+func autoRun() -> void:
+	Game.autoRun = !Game.autoRun
+	AudioManager.play(preload("res://resources/sounds/autoRun.wav")).pitch_scale = 1.0 if Game.autoRun else 0.7
+	autoRunTimer = 0
+	%settingsMenu.gameSettings.closed(%settingsMenu.configFile)
+	%settingsMenu.configFile.save("user://config.ini")
