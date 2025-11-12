@@ -5,84 +5,110 @@ const SCENE:PackedScene = preload("res://scenes/objects/keyBulk.tscn")
 const TYPES:int = 9
 enum TYPE {NORMAL, EXACT, STAR, UNSTAR, SIGNFLIP, POSROTOR, NEGROTOR, CURSE, UNCURSE}
 
-const KEYTYPE_TEXTURE_OFFSETS:Array[int] = [0,1,2,3,0,0,0,0,0]
+const KEYTYPE_TEXTURE_OFFSETS:Array[int] = [0,1,2,3,0,0,0,4,5]
 
 const FILL:Array[Texture2D] = [
 	preload("res://assets/game/key/normal/fill.png"),
 	preload("res://assets/game/key/exact/fill.png"),
 	preload("res://assets/game/key/star/fill.png"),
-	preload("res://assets/game/key/unstar/fill.png")
+	preload("res://assets/game/key/unstar/fill.png"),
+	preload("res://assets/game/key/curse/fill.png"),
+	preload("res://assets/game/key/uncurse/fill.png")
 ]
 
 const FRAME:Array[Texture2D] = [
 	preload("res://assets/game/key/normal/frame.png"),
 	preload("res://assets/game/key/exact/frame.png"),
 	preload("res://assets/game/key/star/frame.png"),
-	preload("res://assets/game/key/unstar/frame.png")
+	preload("res://assets/game/key/unstar/frame.png"),
+	preload("res://assets/game/key/curse/frame.png"),
+	preload("res://assets/game/key/uncurse/frame.png")
 ]
 
 const FILL_GLITCH:Array[Texture2D] = [
 	preload("res://assets/game/key/normal/fillGlitch.png"),
 	preload("res://assets/game/key/exact/fillGlitch.png"),
 	preload("res://assets/game/key/star/fillGlitch.png"),
-	preload("res://assets/game/key/unstar/fillGlitch.png")
+	preload("res://assets/game/key/unstar/fillGlitch.png"),
+	preload("res://assets/game/key/curse/fillGlitch.png"),
+	preload("res://assets/game/key/uncurse/fillGlitch.png")
 ]
 
 const FILL_GLITCH_MASTER:Array[Texture2D] = [
 	preload("res://assets/game/key/master/glitchNormal.png"),
 	preload("res://assets/game/key/master/glitchExact.png"),
 	preload("res://assets/game/key/master/glitchStar.png"),
-	preload("res://assets/game/key/master/glitchUnstar.png")
+	preload("res://assets/game/key/master/glitchUnstar.png"),
+	preload("res://assets/game/key/master/glitchNormal.png"),
+	preload("res://assets/game/key/master/glitchNormal.png")
 ]
 const FILL_GLITCH_PURE:Array[Texture2D] = [
 	preload("res://assets/game/key/pure/glitchNormal.png"),
 	preload("res://assets/game/key/pure/glitchExact.png"),
 	preload("res://assets/game/key/pure/glitchStar.png"),
-	preload("res://assets/game/key/pure/glitchUnstar.png")
+	preload("res://assets/game/key/pure/glitchUnstar.png"),
+	preload("res://assets/game/key/pure/glitchNormal.png"),
+	preload("res://assets/game/key/pure/glitchNormal.png")
 ]
 const FILL_GLITCH_STONE:Array[Texture2D] = [
 	preload("res://assets/game/key/stone/glitchNormal.png"),
 	preload("res://assets/game/key/stone/glitchExact.png"),
 	preload("res://assets/game/key/stone/glitchStar.png"),
-	preload("res://assets/game/key/stone/glitchUnstar.png")
+	preload("res://assets/game/key/stone/glitchUnstar.png"),
+	preload("res://assets/game/key/stone/glitchNormal.png"),
+	preload("res://assets/game/key/stone/glitchNormal.png")
 ]
 const FILL_GLITCH_DYNAMITE:Array[Texture2D] = [
 	preload("res://assets/game/key/dynamite/glitchNormal.png"),
 	preload("res://assets/game/key/dynamite/glitchExact.png"),
 	preload("res://assets/game/key/dynamite/glitchStar.png"),
-	preload("res://assets/game/key/dynamite/glitchUnstar.png")
+	preload("res://assets/game/key/dynamite/glitchUnstar.png"),
+	preload("res://assets/game/key/dynamite/glitchNormal.png"),
+	preload("res://assets/game/key/dynamite/glitchNormal.png")
 ]
 const FILL_GLITCH_QUICKSILVER:Array[Texture2D] = [
 	preload("res://assets/game/key/quicksilver/glitchNormal.png"),
 	preload("res://assets/game/key/quicksilver/glitchExact.png"),
 	preload("res://assets/game/key/quicksilver/glitchStar.png"),
-	preload("res://assets/game/key/quicksilver/glitchUnstar.png")
+	preload("res://assets/game/key/quicksilver/glitchUnstar.png"),
+	preload("res://assets/game/key/quicksilver/glitchNormal.png"),
+	preload("res://assets/game/key/quicksilver/glitchNormal.png")
 ]
 const FILL_GLITCH_ICE:Array[Texture2D] = [
 	preload("res://assets/game/key/ice/glitchNormal.png"),
 	preload("res://assets/game/key/ice/glitchExact.png"),
 	preload("res://assets/game/key/ice/glitchStar.png"),
-	preload("res://assets/game/key/ice/glitchUnstar.png")
+	preload("res://assets/game/key/ice/glitchUnstar.png"),
+	preload("res://assets/game/key/ice/glitchNormal.png"),
+	preload("res://assets/game/key/ice/glitchNormal.png")
 ]
 const FILL_GLITCH_MUD:Array[Texture2D] = [
 	preload("res://assets/game/key/mud/glitchNormal.png"),
 	preload("res://assets/game/key/mud/glitchExact.png"),
 	preload("res://assets/game/key/mud/glitchStar.png"),
-	preload("res://assets/game/key/mud/glitchUnstar.png")
+	preload("res://assets/game/key/mud/glitchUnstar.png"),
+	preload("res://assets/game/key/mud/glitchNormal.png"),
+	preload("res://assets/game/key/mud/glitchNormal.png")
 ]
 const FILL_GLITCH_GRAFFITI:Array[Texture2D] = [
 	preload("res://assets/game/key/graffiti/glitchNormal.png"),
 	preload("res://assets/game/key/graffiti/glitchExact.png"),
 	preload("res://assets/game/key/graffiti/glitchStar.png"),
-	preload("res://assets/game/key/graffiti/glitchUnstar.png")
+	preload("res://assets/game/key/graffiti/glitchUnstar.png"),
+	preload("res://assets/game/key/graffiti/glitchNormal.png"),
+	preload("res://assets/game/key/graffiti/glitchNormal.png")
 ]
 
 const FRAME_GLITCH:Array[Texture2D] = [
 	preload("res://assets/game/key/normal/frameGlitch.png"),
 	preload("res://assets/game/key/exact/frameGlitch.png"),
 	preload("res://assets/game/key/star/frameGlitch.png"),
-	preload("res://assets/game/key/unstar/frameGlitch.png")
+	preload("res://assets/game/key/unstar/frameGlitch.png"),
+	preload("res://assets/game/key/curse/frameGlitch.png"),
+	preload("res://assets/game/key/uncurse/frameGlitch.png")
 ]
+
+const CURSE_FILL_DARK:Texture2D = preload("res://assets/game/key/curse/fillDark.png")
 
 const SIGNFLIP_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/signflip.png")
 const POSROTOR_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/posrotor.png")
@@ -129,6 +155,8 @@ static func getOutlineTexture(keyColor:Game.COLOR, keyType:TYPE=TYPE.NORMAL) -> 
 			else:  return preload("res://assets/game/key/exact/outlineMask.png")
 		KeyBulk.TYPE.STAR: return preload("res://assets/game/key/star/outlineMask.png")
 		KeyBulk.TYPE.UNSTAR: return preload("res://assets/game/key/unstar/outlineMask.png")
+		KeyBulk.TYPE.CURSE: return preload("res://assets/game/key/curse/outlineMask.png")
+		KeyBulk.TYPE.UNCURSE: return preload("res://assets/game/key/uncurse/outlineMask.png")
 		_:
 			match keyColor:
 				Game.COLOR.MASTER:
@@ -149,8 +177,8 @@ func _draw() -> void:
 		KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT:
 			if !count.eq(1): TextDraw.outlined2(FKEYBULK,drawSymbol,str(count),keycountColor(),keycountOutlineColor(),14,Vector2(1,25))
 		KeyBulk.TYPE.SIGNFLIP: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,SIGNFLIP_SYMBOL)
-		KeyBulk.TYPE.POSROTOR, KeyBulk.TYPE.CURSE: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
-		KeyBulk.TYPE.NEGROTOR, KeyBulk.TYPE.UNCURSE: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
+		KeyBulk.TYPE.POSROTOR: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
+		KeyBulk.TYPE.NEGROTOR: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
 	if infinite: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
 
 func keycountColor() -> Color: return Color("#363029") if count.sign() < 0 else Color("#ebe3dd")
@@ -173,6 +201,7 @@ static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor
 	elif keyColor == Game.COLOR.GLITCH:
 		RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,FRAME_GLITCH[KEYTYPE_TEXTURE_OFFSETS[keyType]])
 		RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,FILL[KEYTYPE_TEXTURE_OFFSETS[keyType]],false,Game.mainTone[keyColor])
+		if keyType == TYPE.CURSE: RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,CURSE_FILL_DARK,false,Game.darkTone[keyColor])
 		if keyGlitchMimic != Game.COLOR.GLITCH:
 			var glitchTextureSet:Array[Texture2D]
 			match keyGlitchMimic:
@@ -189,6 +218,7 @@ static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor
 	else:
 		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FRAME[KEYTYPE_TEXTURE_OFFSETS[keyType]])
 		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FILL[KEYTYPE_TEXTURE_OFFSETS[keyType]],false,Game.mainTone[keyColor])
+		if keyType == TYPE.CURSE: RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,CURSE_FILL_DARK,false,Game.darkTone[keyColor])
 
 func propertyChangedInit(property:StringName) -> void:
 	if property == &"type":
