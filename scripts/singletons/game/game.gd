@@ -114,8 +114,8 @@ const DYNAMITE_KEY_TEXTURE:Array[Texture2D] = [
 	preload("res://assets/game/key/dynamite/exact0.png"), preload("res://assets/game/key/dynamite/exact1.png"), preload("res://assets/game/key/dynamite/exact2.png"), preload("res://assets/game/key/dynamite/exact3.png"), preload("res://assets/game/key/dynamite/exact4.png"), preload("res://assets/game/key/dynamite/exact5.png"), preload("res://assets/game/key/dynamite/exact6.png"), preload("res://assets/game/key/dynamite/exact7.png"), preload("res://assets/game/key/dynamite/exact8.png"), preload("res://assets/game/key/dynamite/exact9.png"), preload("res://assets/game/key/dynamite/exact10.png"), preload("res://assets/game/key/dynamite/exact11.png"),
 	preload("res://assets/game/key/dynamite/star0.png"), preload("res://assets/game/key/dynamite/star1.png"), preload("res://assets/game/key/dynamite/star2.png"), preload("res://assets/game/key/dynamite/star3.png"), preload("res://assets/game/key/dynamite/star4.png"), preload("res://assets/game/key/dynamite/star5.png"), preload("res://assets/game/key/dynamite/star6.png"), preload("res://assets/game/key/dynamite/star7.png"), preload("res://assets/game/key/dynamite/star8.png"), preload("res://assets/game/key/dynamite/star9.png"), preload("res://assets/game/key/dynamite/star10.png"), preload("res://assets/game/key/dynamite/star11.png"),
 	preload("res://assets/game/key/dynamite/unstar0.png"), preload("res://assets/game/key/dynamite/unstar1.png"), preload("res://assets/game/key/dynamite/unstar2.png"), preload("res://assets/game/key/dynamite/unstar3.png"), preload("res://assets/game/key/dynamite/unstar4.png"), preload("res://assets/game/key/dynamite/unstar5.png"), preload("res://assets/game/key/dynamite/unstar6.png"), preload("res://assets/game/key/dynamite/unstar7.png"), preload("res://assets/game/key/dynamite/unstar8.png"), preload("res://assets/game/key/dynamite/unstar9.png"), preload("res://assets/game/key/dynamite/unstar10.png"), preload("res://assets/game/key/dynamite/unstar11.png"),
-	preload("res://assets/game/key/dynamite/normal0.png"), preload("res://assets/game/key/dynamite/normal1.png"), preload("res://assets/game/key/dynamite/normal2.png"), preload("res://assets/game/key/dynamite/normal3.png"), preload("res://assets/game/key/dynamite/normal4.png"), preload("res://assets/game/key/dynamite/normal5.png"), preload("res://assets/game/key/dynamite/normal6.png"), preload("res://assets/game/key/dynamite/normal7.png"), preload("res://assets/game/key/dynamite/normal8.png"), preload("res://assets/game/key/dynamite/normal9.png"), preload("res://assets/game/key/dynamite/normal10.png"), preload("res://assets/game/key/dynamite/normal11.png"),
-	preload("res://assets/game/key/dynamite/normal0.png"), preload("res://assets/game/key/dynamite/normal1.png"), preload("res://assets/game/key/dynamite/normal2.png"), preload("res://assets/game/key/dynamite/normal3.png"), preload("res://assets/game/key/dynamite/normal4.png"), preload("res://assets/game/key/dynamite/normal5.png"), preload("res://assets/game/key/dynamite/normal6.png"), preload("res://assets/game/key/dynamite/normal7.png"), preload("res://assets/game/key/dynamite/normal8.png"), preload("res://assets/game/key/dynamite/normal9.png"), preload("res://assets/game/key/dynamite/normal10.png"), preload("res://assets/game/key/dynamite/normal11.png")
+	preload("res://assets/game/key/dynamite/curse0.png"), preload("res://assets/game/key/dynamite/curse1.png"), preload("res://assets/game/key/dynamite/curse2.png"), preload("res://assets/game/key/dynamite/curse3.png"), preload("res://assets/game/key/dynamite/curse4.png"), preload("res://assets/game/key/dynamite/curse5.png"), preload("res://assets/game/key/dynamite/curse6.png"), preload("res://assets/game/key/dynamite/curse7.png"), preload("res://assets/game/key/dynamite/curse8.png"), preload("res://assets/game/key/dynamite/curse9.png"), preload("res://assets/game/key/dynamite/curse10.png"), preload("res://assets/game/key/dynamite/curse11.png"),
+	preload("res://assets/game/key/dynamite/uncurse0.png"), preload("res://assets/game/key/dynamite/uncurse1.png"), preload("res://assets/game/key/dynamite/uncurse2.png"), preload("res://assets/game/key/dynamite/uncurse3.png"), preload("res://assets/game/key/dynamite/uncurse4.png"), preload("res://assets/game/key/dynamite/uncurse5.png"), preload("res://assets/game/key/dynamite/uncurse6.png"), preload("res://assets/game/key/dynamite/uncurse7.png"), preload("res://assets/game/key/dynamite/uncurse8.png"), preload("res://assets/game/key/dynamite/uncurse9.png"), preload("res://assets/game/key/dynamite/uncurse10.png"), preload("res://assets/game/key/dynamite/uncurse11.png"),
 ]
 func dynamiteKeyTex(type:KeyBulk.TYPE) -> Texture2D: return DYNAMITE_KEY_TEXTURE[goldIndex + KeyBulk.KEYTYPE_TEXTURE_OFFSETS[type]*12]
 
@@ -202,7 +202,7 @@ const DEFAULT_HIGH:Array[Color] = [
 	Color("#78be00"),
 	Color("#96a0a5"),
 	Color("#d18866"), Color("#ffffff"),
-	Color("#6b2020"), Color("#1d5c2c"), Color("#20326b"),
+	Color("#6d4040"), Color("#3f5c3f"), Color("#49496b"),
 	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
 ]
 const BRIGHT_HIGH:Array[Color] = [
@@ -215,7 +215,7 @@ const BRIGHT_HIGH:Array[Color] = [
 	Color("#78be00"),
 	Color("#96a0a5"),
 	Color("#d18866"), Color("#ffffff"),
-	Color("#6b2020"), Color("#1d5c2c"), Color("#20326b"),
+	Color("#6d4040"), Color("#3f5c3f"), Color("#49496b"),
 	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
 ]
 
@@ -230,7 +230,7 @@ const DEFAULT_MAIN:Array[Color] = [
 	Color("#b49600"),
 	Color("#647378"),
 	Color("#d34728"), Color("#b8b8b8"),
-	Color("#461415"), Color("#163b21"), Color("#182552"),
+	Color("#583232"), Color("#2c3b2c"), Color("#333352"),
 	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
 ]
 const BRIGHT_MAIN:Array[Color] = [
@@ -243,7 +243,7 @@ const BRIGHT_MAIN:Array[Color] = [
 	Color("#b49600"),
 	Color("#647378"),
 	Color("#d34728"), Color("#b8b8b8"),
-	Color("#461415"), Color("#163b21"), Color("#182552"),
+	Color("#583232"), Color("#2c3b2c"), Color("#333352"),
 	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
 ]
 
@@ -258,7 +258,7 @@ const DEFAULT_DARK:Array[Color] = [
 	Color("#dc6e00"),
 	Color("#3c4b50"),
 	Color("#7a3117"), Color("#818181"),
-	Color("#2e0c0c"), Color("#0a2b14"), Color("#101833"),
+	Color("#3b1f1f"), Color("#1d2b1d"), Color("#262633"),
 	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
 ]
 const BRIGHT_DARK:Array[Color] = [
@@ -271,7 +271,7 @@ const BRIGHT_DARK:Array[Color] = [
 	Color("#dc6e00"),
 	Color("#3c4b50"),
 	Color("#7a3117"), Color("#818181"),
-	Color("#2e0c0c"), Color("#0a2b14"), Color("#101833"),
+	Color("#3b1f1f"), Color("#1d2b1d"), Color("#262633"),
 	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
 ]
 

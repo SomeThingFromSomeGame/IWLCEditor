@@ -39,64 +39,64 @@ const FILL_GLITCH_MASTER:Array[Texture2D] = [
 	preload("res://assets/game/key/master/glitchExact.png"),
 	preload("res://assets/game/key/master/glitchStar.png"),
 	preload("res://assets/game/key/master/glitchUnstar.png"),
-	preload("res://assets/game/key/master/glitchNormal.png"),
-	preload("res://assets/game/key/master/glitchNormal.png")
+	preload("res://assets/game/key/master/glitchCurse.png"),
+	preload("res://assets/game/key/master/glitchUncurse.png")
 ]
 const FILL_GLITCH_PURE:Array[Texture2D] = [
 	preload("res://assets/game/key/pure/glitchNormal.png"),
 	preload("res://assets/game/key/pure/glitchExact.png"),
 	preload("res://assets/game/key/pure/glitchStar.png"),
 	preload("res://assets/game/key/pure/glitchUnstar.png"),
-	preload("res://assets/game/key/pure/glitchNormal.png"),
-	preload("res://assets/game/key/pure/glitchNormal.png")
+	preload("res://assets/game/key/pure/glitchCurse.png"),
+	preload("res://assets/game/key/pure/glitchUncurse.png")
 ]
 const FILL_GLITCH_STONE:Array[Texture2D] = [
 	preload("res://assets/game/key/stone/glitchNormal.png"),
 	preload("res://assets/game/key/stone/glitchExact.png"),
 	preload("res://assets/game/key/stone/glitchStar.png"),
 	preload("res://assets/game/key/stone/glitchUnstar.png"),
-	preload("res://assets/game/key/stone/glitchNormal.png"),
-	preload("res://assets/game/key/stone/glitchNormal.png")
+	preload("res://assets/game/key/stone/glitchCurse.png"),
+	preload("res://assets/game/key/stone/glitchUncurse.png")
 ]
 const FILL_GLITCH_DYNAMITE:Array[Texture2D] = [
 	preload("res://assets/game/key/dynamite/glitchNormal.png"),
 	preload("res://assets/game/key/dynamite/glitchExact.png"),
 	preload("res://assets/game/key/dynamite/glitchStar.png"),
 	preload("res://assets/game/key/dynamite/glitchUnstar.png"),
-	preload("res://assets/game/key/dynamite/glitchNormal.png"),
-	preload("res://assets/game/key/dynamite/glitchNormal.png")
+	preload("res://assets/game/key/dynamite/glitchCurse.png"),
+	preload("res://assets/game/key/dynamite/glitchUncurse.png")
 ]
 const FILL_GLITCH_QUICKSILVER:Array[Texture2D] = [
 	preload("res://assets/game/key/quicksilver/glitchNormal.png"),
 	preload("res://assets/game/key/quicksilver/glitchExact.png"),
 	preload("res://assets/game/key/quicksilver/glitchStar.png"),
 	preload("res://assets/game/key/quicksilver/glitchUnstar.png"),
-	preload("res://assets/game/key/quicksilver/glitchNormal.png"),
-	preload("res://assets/game/key/quicksilver/glitchNormal.png")
+	preload("res://assets/game/key/quicksilver/glitchCurse.png"),
+	preload("res://assets/game/key/quicksilver/glitchUncurse.png")
 ]
 const FILL_GLITCH_ICE:Array[Texture2D] = [
 	preload("res://assets/game/key/ice/glitchNormal.png"),
 	preload("res://assets/game/key/ice/glitchExact.png"),
 	preload("res://assets/game/key/ice/glitchStar.png"),
 	preload("res://assets/game/key/ice/glitchUnstar.png"),
-	preload("res://assets/game/key/ice/glitchNormal.png"),
-	preload("res://assets/game/key/ice/glitchNormal.png")
+	preload("res://assets/game/key/ice/glitchCurse.png"),
+	preload("res://assets/game/key/ice/glitchUncurse.png")
 ]
 const FILL_GLITCH_MUD:Array[Texture2D] = [
 	preload("res://assets/game/key/mud/glitchNormal.png"),
 	preload("res://assets/game/key/mud/glitchExact.png"),
 	preload("res://assets/game/key/mud/glitchStar.png"),
 	preload("res://assets/game/key/mud/glitchUnstar.png"),
-	preload("res://assets/game/key/mud/glitchNormal.png"),
-	preload("res://assets/game/key/mud/glitchNormal.png")
+	preload("res://assets/game/key/mud/glitchCurse.png"),
+	preload("res://assets/game/key/mud/glitchUncurse.png")
 ]
 const FILL_GLITCH_GRAFFITI:Array[Texture2D] = [
 	preload("res://assets/game/key/graffiti/glitchNormal.png"),
 	preload("res://assets/game/key/graffiti/glitchExact.png"),
 	preload("res://assets/game/key/graffiti/glitchStar.png"),
 	preload("res://assets/game/key/graffiti/glitchUnstar.png"),
-	preload("res://assets/game/key/graffiti/glitchNormal.png"),
-	preload("res://assets/game/key/graffiti/glitchNormal.png")
+	preload("res://assets/game/key/graffiti/glitchCurse.png"),
+	preload("res://assets/game/key/graffiti/glitchUncurse.png")
 ]
 
 const FRAME_GLITCH:Array[Texture2D] = [
