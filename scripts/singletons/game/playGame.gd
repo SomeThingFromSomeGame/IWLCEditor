@@ -80,7 +80,6 @@ func _process(delta:float) -> void:
 	if !paused: Game.timer += delta
 	var objectHovered:GameObject
 	var mouseWorldPosition = %world.get_local_mouse_position()
-	print(mouseWorldPosition)
 	for object in Game.objects.values():
 		if Rect2(object.position,object.size).has_point(mouseWorldPosition): objectHovered = object
 	%mouseover.describe(objectHovered, %gameViewportCont.get_local_mouse_position(),Vector2(800,608))

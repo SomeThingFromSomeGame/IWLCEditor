@@ -193,7 +193,7 @@ func save(path:String="") -> void:
 		if object is Door: file.store_var(componentArrayToIDs(object.locks))
 		elif object is KeyCounter: file.store_var(componentArrayToIDs(object.elements))
 	file.close()
-	if OS.has_feature('web'):
+	if OS.has_feature('web') and confirmAction != ACTION.SAVE_FOR_PLAY:
 		JavaScriptBridge.download_buffer(FileAccess.get_file_as_bytes(path),Game.level.name+".cedit")
 	
 	if confirmAction == ACTION.SAVE_FOR_PLAY: Game.playSaved()
