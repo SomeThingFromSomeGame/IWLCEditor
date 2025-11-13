@@ -144,7 +144,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawSymbol,get_canvas_item())
-	Game.connect(&"goldIndexChanged",func():if Game.isAnimated(color): queue_redraw())
+	Game.connect(&"goldIndexChanged",func():if color in Game.ANIMATED_COLORS: queue_redraw())
 
 func outlineTex() -> Texture2D: return getOutlineTexture(color, type)
 

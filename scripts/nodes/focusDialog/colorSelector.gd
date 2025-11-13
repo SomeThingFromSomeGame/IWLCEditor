@@ -44,7 +44,7 @@ class ColorSelectorButton extends SelectorButton:
 		RenderingServer.canvas_item_set_z_index(drawMain,-1)
 		RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 		await get_tree().process_frame
-		if Game.isAnimated(value): Game.connect(&"goldIndexChanged",queue_redraw)
+		if value in Game.ANIMATED_COLORS: Game.connect(&"goldIndexChanged",queue_redraw)
 		await get_tree().process_frame
 		queue_redraw()
 	
