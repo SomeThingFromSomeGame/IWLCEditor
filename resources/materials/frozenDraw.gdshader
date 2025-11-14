@@ -1,12 +1,13 @@
 shader_type canvas_item;
 instance uniform vec2 size = vec2(32,32);
-uniform sampler2D bottomLeft:source_color;
-uniform sampler2D topLeftBig:source_color;
-uniform sampler2D topLeftSmall:source_color;
-uniform sampler2D bottomRightBig:source_color;
-uniform sampler2D bottomRightSmall:source_color;
-uniform vec4 colorFilled:source_color;
-uniform vec4 colorBack:source_color;
+const vec4 COLOR_FILL = vec4(1, 1, 1, 0.7058824);
+const vec4 COLOR_BACK = vec4(0.8554, 0.91, 0.91, 0.39215687);
+
+bool stripe(float start, float width, vec2 positer) {
+    float thispos = positer.x + positer.y;
+    float end = start+width;
+    return max(size.x,size.y) > end && thispos > start && thispos < end;
+}
 
 void fragment() {
 	if (size.x > 0.5 && size.y > 0.5) {
@@ -17,20 +18,19 @@ void fragment() {
 		
 		vec2 position = floor(UV*size);
 		vec2 unposition = size - position - vec2(1,1);
-		if (position.x < 4.5 && unposition.y < 4.5 && texture(bottomLeft,vec2(position.x+0.5,4.5-unposition.y)/5.0)==colorFilled) { // bottom left
-			COLOR = colorFilled;
-		} else if (unposition.x < 4.5 && position.y < 4.5 && texture(bottomLeft,vec2(unposition.x+0.5,4.5-position.y)/5.0)==colorFilled) { // bottom right
-			COLOR = colorFilled;
-		} else if (position.x + position.y < topLeftSize+0.5) { // top left
-			if (topLeftSize > 55.5) COLOR = texture(topLeftBig,vec2(position.x+0.5,position.y+0.5)/topLeftSize);
-			else COLOR = texture(topLeftSmall,vec2(position.x+0.5,position.y+0.5)/topLeftSize);
-		} else if (unposition.x + unposition.y < bottomRightSize+0.5) { // bottom right
-			if (bottomRightSize > 45.5) COLOR = texture(bottomRightBig,vec2(bottomRightSize-unposition.x-0.5,bottomRightSize-unposition.y-0.5)/bottomRightSize);
-			else COLOR = texture(bottomRightSmall,vec2(bottomRightSize-unposition.x-0.5,bottomRightSize-unposition.y-0.5)/bottomRightSize);
-		} else if (position.x < 0.5 || position.x + 1.5 > size.x || position.y < 0.5 || position.y + 1.5 > size.y) {
-			COLOR = colorFilled;
-		} else {
-			COLOR = colorBack;
-		}
+		vec2 minposition = vec2(min(position.x,unposition.x),min(position.y,unposition.y));
+
+		if ((minposition.x < 0.5 || minposition.y < 0.5) // border
+            || (minposition.x+minposition.y < 4.5) // corners
+            || ((minposition.x < 1.5 || minposition.y < 1.5) && minposition.x < 4.5 && minposition.y < 4.5) // corners
+            || stripe(14.5,10.0,position)
+            || stripe(42.5,14.0,position)
+            || stripe(10.5,3.0,unposition)
+            || stripe(19.5,5.0,unposition)
+            || stripe(41.5,5.0,unposition)) {
+            COLOR = COLOR_FILL;
+        } else {
+            COLOR = COLOR_BACK;
+        }
 	}
 }
