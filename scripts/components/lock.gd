@@ -504,11 +504,8 @@ func propertyChangedDo(property:StringName) -> void:
 
 # ==== PLAY ==== #
 var glitchMimic:Game.COLOR = Game.COLOR.GLITCH
-var curseGlitchMimic:Game.COLOR = Game.COLOR.GLITCH
-
 func stop() -> void:
 	glitchMimic = Game.COLOR.GLITCH
-	curseGlitchMimic = Game.COLOR.GLITCH
 
 func colorAfterCurse() -> Game.COLOR:
 	if parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament: return parent.curseColor
@@ -516,7 +513,7 @@ func colorAfterCurse() -> Game.COLOR:
 
 func colorAfterGlitch() -> Game.COLOR:
 	var base:Game.COLOR = colorAfterCurse()
-	if base == Game.COLOR.GLITCH: return curseGlitchMimic if (parent.cursed and !armament) else glitchMimic
+	if base == Game.COLOR.GLITCH: return parent.curseGlitchMimic if (parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament) else glitchMimic
 	return base
 
 func colorAfterAurabreaker() -> Game.COLOR:
@@ -543,11 +540,11 @@ static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 		TYPE.BLANK: can = keyCount.eq(0)
 		TYPE.BLAST:
 			if lock.effectiveDenominator().eq(0): can = false
-			elif lock.effectiveDenominator().r.neq(0) and !player.key[lock.colorAfterAurabreaker()].r.times(lock.effectiveDenominator().r).gt(0): can = false
-			elif lock.effectiveDenominator().i.neq(0) and !player.key[lock.colorAfterAurabreaker()].i.times(lock.effectiveDenominator().i).gt(0): can = false
+			elif lock.effectiveDenominator().r.neq(0) and !keyCount.r.times(lock.effectiveDenominator().r).gt(0): can = false
+			elif lock.effectiveDenominator().i.neq(0) and !keyCount.i.times(lock.effectiveDenominator().i).gt(0): can = false
 			elif lock.isPartial:
-				if lock.effectiveDenominator().r.neq(0) and !player.key[lock.colorAfterAurabreaker()].r.divides(lock.effectiveDenominator().r): can = false
-				elif lock.effectiveDenominator().i.neq(0) and !player.key[lock.colorAfterAurabreaker()].i.divides(lock.effectiveDenominator().i): can = false
+				if lock.effectiveDenominator().r.neq(0) and !keyCount.r.divides(lock.effectiveDenominator().r): can = false
+				elif lock.effectiveDenominator().i.neq(0) and !keyCount.i.divides(lock.effectiveDenominator().i): can = false
 		TYPE.ALL:
 			if lock.effectiveDenominator().eq(0): can = false
 			elif keyCount.eq(0): can = false
@@ -564,8 +561,7 @@ static func getLockCost(lock:GameComponent, player:Player, ipow:C) -> C:
 	var cost:C = C.ZERO
 	match lock.type:
 		TYPE.NORMAL, TYPE.EXACT: cost = lock.effectiveCount(ipow)
-		TYPE.BLAST:
-			if lock.effectiveDenominator(ipow).neq(0): cost = player.key[lock.colorAfterAurabreaker()].across(lock.effectiveDenominator(ipow).axibs()).times(lock.effectiveCount(ipow)).over(lock.effectiveDenominator(ipow))
+		TYPE.BLAST: if lock.effectiveDenominator(ipow).neq(0): cost = player.key[lock.colorAfterAurabreaker()].across(lock.effectiveDenominator(ipow).axibs()).times(lock.effectiveCount(ipow)).over(lock.effectiveDenominator(ipow))
 		TYPE.ALL: if lock.effectiveDenominator(ipow).neq(0): cost = player.key[lock.colorAfterAurabreaker()].times(lock.effectiveCount(ipow)).over(lock.effectiveDenominator(ipow))
 	if lock.negated: return cost.times(-1)
 	return cost

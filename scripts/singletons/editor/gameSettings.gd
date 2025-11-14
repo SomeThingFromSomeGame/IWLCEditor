@@ -124,6 +124,14 @@ func _setPreset(id:int) -> void:
 			Game.highTone.assign(Game.BRIGHT_HIGH)
 			Game.mainTone.assign(Game.BRIGHT_MAIN)
 			Game.darkTone.assign(Game.BRIGHT_DARK)
+	#var string = ""
+	#for color in Game.COLORS:
+	#	string += "\n// " + Game.COLOR_NAMES[color]
+	#	var upper = Game.COLOR_NAMES[color].to_upper()
+	#	string += "\nglobal.highTone[color_" + upper + "] = make_color_rgb(" + str(Game.highTone[color].r8) + "," + str(Game.highTone[color].g8) + "," + str(Game.highTone[color].b8) + ");"
+	#	string += "\nglobal.mainTone[color_" + upper + "] = make_color_rgb(" + str(Game.mainTone[color].r8) + "," + str(Game.mainTone[color].g8) + "," + str(Game.mainTone[color].b8) + ");"
+	#	string += "\nglobal.darkTone[color_" + upper + "] = make_color_rgb(" + str(Game.darkTone[color].r8) + "," + str(Game.darkTone[color].g8) + "," + str(Game.darkTone[color].b8) + ");"
+	#DisplayServer.clipboard_set(string)
 	updateLabels()
 
 func _draw() -> void:

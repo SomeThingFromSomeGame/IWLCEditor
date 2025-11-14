@@ -679,8 +679,6 @@ func curseCheck(player:Player) -> void:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",false))
 		if curseColor == Game.COLOR.GLITCH:
 			GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseGlitchMimic",Game.COLOR.GLITCH))
-			for lock in locks:
-				GameChanges.addChange(GameChanges.PropertyChange.new(lock,&"curseGlitchMimic",Game.COLOR.GLITCH))
 		makeCurseParticles(Game.COLOR.BROWN, -1, 0.2, 0.5)
 		AudioManager.play(preload("res://resources/sounds/door/decurse.wav"))
 		GameChanges.bufferSave()
@@ -696,7 +694,7 @@ func colorAfterCurse() -> Game.COLOR:
 
 func colorAfterGlitch() -> Game.COLOR:
 	var base:Game.COLOR = colorAfterCurse()
-	if base == Game.COLOR.GLITCH: return curseGlitchMimic if cursed else glitchMimic
+	if base == Game.COLOR.GLITCH: return curseGlitchMimic if cursed and curseColor != Game.COLOR.PURE else glitchMimic
 	return base
 
 func colorAfterAurabreaker() -> Game.COLOR:
@@ -715,11 +713,10 @@ func complexCheck() -> void:
 	queue_redraw()
 
 func setGlitch(setColor:Game.COLOR) -> void:
-	if !cursed: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"glitchMimic", setColor))
+	if !cursed or curseColor == Game.COLOR.PURE: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"glitchMimic", setColor))
 	elif curseColor == Game.COLOR.GLITCH: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"curseGlitchMimic", setColor))
 	for lock in locks:
-		if !cursed or lock.armament: GameChanges.addChange(GameChanges.PropertyChange.new(lock, &"glitchMimic", setColor))
-		elif cursed and curseColor == Game.COLOR.GLITCH: GameChanges.addChange(GameChanges.PropertyChange.new(lock, &"curseGlitchMimic", setColor))
+		if !cursed or curseColor == Game.COLOR.PURE or lock.armament: GameChanges.addChange(GameChanges.PropertyChange.new(lock, &"glitchMimic", setColor))
 		lock.queue_redraw()
 	queue_redraw()
 	if type == TYPE.GATE:

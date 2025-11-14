@@ -19,7 +19,10 @@ func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void
 		Door:
 			if object.type == Door.TYPE.SIMPLE:
 				string += LOCK_TYPES[object.locks[0].type] + Game.COLOR_NAMES[object.colorSpend] + " Door"
-				if object.locks[0].armament: string += " (Armament)"
+				if object.locks[0].armament:
+					string += " (Armament"
+					if object.locks[0].glitchMimic != object.glitchMimic: string += ", Mimic: " + Game.COLOR_NAMES[object.locks[0].glitchMimic]
+					string += ")"
 				string += "\nCost: " + lockCost(object.locks[0])
 				if object.locks[0].color != object.colorSpend: string += " " + Game.COLOR_NAMES[object.locks[0].color]
 			else:
@@ -61,13 +64,14 @@ func lockCost(lock:GameComponent) -> String:
 		Lock.TYPE.BLAST, Lock.TYPE.ALL:
 			string += "["
 			var numerator:C = lock.count
-			if !lock.denominator.isComplex(): numerator = numerator.over(lock.denominator.axisOrOne())
+			var divideThrough:bool = !lock.denominator.isComplex() and !lock.numerator.isComplex()
+			if divideThrough: numerator = numerator.over(lock.denominator.axisOrOne())
 			if numerator.neq(1): string += str(numerator)
 			string += "All" if lock.type == Lock.TYPE.BLAST else "ALL"
-			if lock.type == Lock.TYPE.BLAST and !lock.denominator.isComplex(): string += (" -" if lock.denominator.sign()<0 else " +") + ("i" if lock.denominator.isNonzeroImag() else "")
+			if lock.type == Lock.TYPE.BLAST and divideThrough: string += (" -" if lock.denominator.sign()<0 else " +") + ("i" if lock.denominator.isNonzeroImag() else "")
 			if lock.isPartial:
-				if lock.denominator.isComplex(): string += " / " + str(lock.denominator)
-				else: string += "/" + str(lock.denominator.over(lock.denominator.axisOrOne()))
+				if divideThrough: string += "/" + str(lock.denominator.over(lock.denominator.axisOrOne()))
+				else: string += " / " + str(lock.denominator)
 			string += "]"
 		Lock.TYPE.EXACT: string += "Exactly " + str(lock.count)
 	return string
