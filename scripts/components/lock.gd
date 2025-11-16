@@ -104,7 +104,7 @@ const CREATE_PARAMETERS:Array[StringName] = [
 ]
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
-	&"parentId", &"color", &"type", &"configuration", &"sizeType", &"count", &"isPartial", &"denominator", &"negated", &"armament",
+	&"parentId", &"color", &"type", &"configuration", &"sizeType", &"count", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
 	&"index", &"displayIndex" # implcit
 ]
 static var ARRAYS:Dictionary[StringName,GDScript] = {}
@@ -116,6 +116,7 @@ var type:TYPE = TYPE.NORMAL
 var configuration:CONFIGURATION = CONFIGURATION.spr1A
 var sizeType:SIZE_TYPE = SIZE_TYPE.AnyS
 var count:C = C.ONE
+var zeroI:bool = false # if the count is zeroI, for exact locks
 var isPartial:bool = false # for partial blast
 var denominator:C = C.ONE # for partial blast
 var negated:bool = false
@@ -156,7 +157,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	if !parent.active and Game.playState == Game.PLAY_STATE.PLAY: return
 	drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
-		size,colorAfterCurse(),colorAfterGlitch(),type,effectiveConfiguration(),sizeType,effectiveCount(),isPartial,effectiveDenominator(),negated,armament,
+		size,colorAfterCurse(),colorAfterGlitch(),type,effectiveConfiguration(),sizeType,effectiveCount(),effectiveZeroI(),isPartial,effectiveDenominator(),negated,armament,
 		getFrameHighColor(isNegative(), negated),
 		getFrameMainColor(isNegative(), negated),
 		getFrameDarkColor(isNegative(), negated),
@@ -172,6 +173,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 	lockConfiguration:CONFIGURATION,
 	lockSizeType:SIZE_TYPE,
 	lockCount:C,
+	lockZeroI:bool,
 	lockIsPartial:bool,
 	lockDenominator,
 	lockNegated:bool,
@@ -222,7 +224,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 			TYPE.NORMAL,TYPE.EXACT:
 				var string:String = str(lockCount.abs())
 				if string == "1": string = ""
-				if lockCount.isNonzeroImag() && lockType == TYPE.NORMAL: string += "i"
+				if lockCount.isNonzeroImag() and lockType == TYPE.NORMAL: string += "i"
 				var lockOffsetX:float = 0
 				var showLock:bool = lockType == TYPE.EXACT || (!lockCount.isNonzeroImag() && (lockSize != Vector2(18,18) || string == ""))
 				if lockType == TYPE.EXACT and !showLock: string = "=" + string
@@ -250,7 +252,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 					else: lockRect = Rect2(Vector2(startX+lockOffsetX/2,lockSize.y/2)-SYMBOL_SIZE/2-offsetFromType(lockSizeType),Vector2(32,32))
 					var lockSymbol:Texture2D
 					if lockType == TYPE.NORMAL: lockSymbol = SYMBOL_NORMAL
-					elif lockCount.isNonzeroImag(): lockSymbol = SYMBOL_EXACTI
+					elif lockCount.isNonzeroImag() or lockZeroI: lockSymbol = SYMBOL_EXACTI
 					else: lockSymbol = SYMBOL_EXACT
 					if lockNegated: lockRect = Rect2(lockSize-lockRect.position-lockRect.size-offsetFromType(lockSizeType)*2,lockRect.size)
 					RenderingServer.canvas_item_add_texture_rect(lockDrawConfiguration,lockRect,lockSymbol,false,getConfigurationColor(negative))
@@ -388,25 +390,28 @@ func propertyChangedInit(property:StringName) -> void:
 	if parent.type != Door.TYPE.SIMPLE:
 		if property == &"size": _comboDoorSizeChanged()
 	if property in [&"count", &"sizeType", &"type"]: _setAutoConfiguration()
-	
-	if property == &"type":
-		if (type == TYPE.BLANK or (type == TYPE.ALL and !Mods.active(&"C3"))) and count.neq(1):
-			Changes.addChange(Changes.PropertyChange.new(self,&"count",C.ONE))
-		if type == TYPE.BLAST:
-			if (count.abs().neq(1)) and !Mods.active(&"C3"): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.ONE if count.eq(0) else count.axis()))
-		elif type == TYPE.ALL:
-			if !isPartial and denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(self,&"denominator",C.ONE))
-		else:
-			if denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(self,&"denominator",C.ONE))
-			if isPartial: Changes.addChange(Changes.PropertyChange.new(self,&"isPartial",false))
-			if count.isComplex():
-				if count.i.abs().gt(count.r.abs()): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.new(0,count.i)))
-				else: Changes.addChange(Changes.PropertyChange.new(self,&"count",C.new(count.r)))
-
+	lockPropertyChangedInit(self, property)
 	if property in [&"color", &"type"] and editor.focusDialog.focused == parent: editor.focusDialog.doorDialog.lockHandler.redrawButton(index)
-	
-	if property == &"isPartial" and !isPartial:
-		Changes.addChange(Changes.PropertyChange.new(self,&"denominator", C.ONE if count.isComplex() or count.eq(0) or type == TYPE.ALL else count.axis()))
+
+static func lockPropertyChangedInit(lock:GameComponent, property:StringName) -> void:
+	if property == &"type":
+		if (lock.type == TYPE.BLANK or (lock.type == TYPE.ALL and !Mods.active(&"C3"))) and lock.count.neq(1):
+			Changes.addChange(Changes.PropertyChange.new(lock,&"count",C.ONE))
+		if lock.type != TYPE.EXACT and lock.zeroI:
+			Changes.addChange(Changes.PropertyChange.new(lock,&"zeroI",false))
+		if lock.type == TYPE.BLAST:
+			if (lock.count.abs().neq(1)) and !Mods.active(&"C3"): Changes.addChange(Changes.PropertyChange.new(lock,&"count",C.ONE if lock.count.eq(0) else lock.count.axis()))
+		elif lock.type == TYPE.ALL:
+			if !lock.isPartial and lock.denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(lock,&"denominator",C.ONE))
+		else:
+			if lock.denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(lock,&"denominator",C.ONE))
+			if lock.isPartial: Changes.addChange(Changes.PropertyChange.new(lock,&"isPartial",false))
+			if lock.count.isComplex():
+				if lock.count.i.abs().gt(lock.count.r.abs()): Changes.addChange(Changes.PropertyChange.new(lock,&"count",C.new(0,lock.count.i)))
+				else: Changes.addChange(Changes.PropertyChange.new(lock,&"count",C.new(lock.count.r)))
+
+	if property == &"isPartial" and !lock.isPartial:
+		Changes.addChange(Changes.PropertyChange.new(lock,&"denominator", C.ONE if lock.count.isComplex() or lock.count.eq(0) or lock.type == TYPE.ALL else lock.count.axis()))
 
 func propertyChangedDo(property:StringName) -> void:
 	if property in [&"count", &"denominator"] and parent: parent.queue_redraw()
@@ -461,7 +466,9 @@ static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 			elif lock.isPartial:
 				if keyCount.modulo(lock.effectiveDenominator()).neq(0): can = false
 		TYPE.EXACT:
-			if lock.effectiveCount().eq(0): can = keyCount.neq(0)
+			if lock.effectiveCount().eq(0):
+				if lock.zeroI: can = keyCount.i.eq(0)
+				else: can = keyCount.r.eq(0)
 			else: can = keyCount.across(lock.effectiveCount().axibs()).eq(lock.effectiveCount())
 	return can != lock.negated
 
@@ -481,6 +488,8 @@ func effectiveCount(ipow:C=parent.ipow()) -> C:
 
 func effectiveDenominator(ipow:C=parent.ipow()) -> C:
 	return denominator.times(ipow)
+
+func effectiveZeroI() -> bool: return zeroI != parent.ipow().isNonzeroImag()
 
 func isNegative() -> bool:
 	if type in [TYPE.BLAST, TYPE.ALL]:

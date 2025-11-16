@@ -11,6 +11,9 @@ var value:C = C.ZERO
 var bufferedSign:C = C.ONE # since -0 (and 0i and -0i) cant exist, activate it when the number is set
 var purpose:NumberEdit.PURPOSE = NumberEdit.PURPOSE.AXIAL
 
+var zeroIValid:bool = false # whether or not zeroI is a vaild state
+var isZeroI:bool = false
+
 func _ready() -> void:
 	Explainer.addControl(self,ControlExplanation.new("Number Edit",{Explainer.ARROWS_UD:"±1","-":"×-1","I":"×i"}))
 
@@ -19,10 +22,11 @@ func _gui_input(event:InputEvent) -> void:
 
 func setValue(_value:C, manual:bool=false) -> void:
 	value = _value
+	isZeroI = false
 	if bufferedSign.neq(1) and value.neq(0):
 		bufferedSign = C.ONE
 	if bufferedSign.eq(-1): %drawText.text = "-0"
-	elif bufferedSign.eq(0,1): %drawText.text = "0i"
+	elif bufferedSign.eq(0,1): %drawText.text = "0i"; isZeroI = zeroIValid
 	elif bufferedSign.eq(0,-1): %drawText.text = "-0i"
 	else: %drawText.text = str(value)
 	if !manual: valueSet.emit(value)
@@ -77,3 +81,7 @@ func receiveKey(key:InputEventKey):
 		if value.axis().eq(0): setValue(bufferedSign.times(number))
 		else: setValue(value.times(10).plus(value.axis().times(bufferedSign).times(number)))
 	return true
+
+func setZeroI() -> void:
+	bufferedSign = C.I
+	setValue(C.ZERO, true)

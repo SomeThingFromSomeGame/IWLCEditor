@@ -73,7 +73,9 @@ func lockCost(lock:GameComponent) -> String:
 				if divideThrough: string += "/" + str(lock.denominator.over(lock.denominator.axisOrOne()))
 				else: string += " / " + str(lock.denominator)
 			string += "]"
-		Lock.TYPE.EXACT: string += "Exactly " + str(lock.count)
+		Lock.TYPE.EXACT:
+			string += "Exactly " + str(lock.count)
+			if lock.zeroI: string += "i"
 	return string
 
 func effects(object:GameObject) -> String:

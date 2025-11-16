@@ -58,7 +58,9 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 	%lockSettings.visible = true
 	
 	%doorAxialNumberEdit.visible = component.type == Lock.TYPE.NORMAL or component.type == Lock.TYPE.EXACT
+	%doorAxialNumberEdit.zeroIValid = component.type == Lock.TYPE.EXACT
 	%doorAxialNumberEdit.setValue(component.count, true)
+	if component.zeroI: %doorAxialNumberEdit.setZeroI()
 
 	%doorCopySettings.visible = false
 	if component is Lock: %doorAuraSettings.visible = false
@@ -154,6 +156,7 @@ func _doorAxialNumberSet(value:C) -> void:
 	if main.componentFocused is not Lock and main.focused is not RemoteLock: return
 	var lock:GameComponent = main.componentFocused if main.componentFocused is Lock else main.focused
 	Changes.addChange(Changes.PropertyChange.new(lock,&"count",value))
+	Changes.addChange(Changes.PropertyChange.new(lock,&"zeroI",%doorAxialNumberEdit.isZeroI))
 	Changes.bufferSave()
 
 func _lockTypeSelected(type:Lock.TYPE) -> void:

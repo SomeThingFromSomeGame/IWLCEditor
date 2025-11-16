@@ -15,7 +15,7 @@ const CREATE_PARAMETERS:Array[StringName] = [
 ]
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
-	&"color", &"type", &"configuration", &"sizeType", &"count", &"isPartial", &"denominator", &"negated", &"armament",
+	&"color", &"type", &"configuration", &"sizeType", &"count", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
 	&"frozen", &"crumbled", &"painted"
 ]
 static var ARRAYS:Dictionary[StringName,GDScript] = {
@@ -27,6 +27,7 @@ var type:Lock.TYPE = Lock.TYPE.NORMAL
 var configuration:Lock.CONFIGURATION = Lock.CONFIGURATION.spr1A
 var sizeType:Lock.SIZE_TYPE = Lock.SIZE_TYPE.AnyS
 var count:C = C.ONE
+var zeroI:bool = false
 var isPartial:bool = false # for partial blast
 var denominator:C = C.ONE # for partial blast
 var negated:bool = false
@@ -83,7 +84,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawFrozen)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	Lock.drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
-		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,isPartial,denominator,negated,armament,
+		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,zeroI,isPartial,denominator,negated,armament,
 		Lock.getFrameHighColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		Lock.getFrameMainColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		Lock.getFrameDarkColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
@@ -116,22 +117,7 @@ func propertyChangedInit(property:StringName) -> void:
 	if property == &"size": _setSizeType()
 	if property in [&"count", &"sizeType", &"type"]: _setAutoConfiguration()
 	
-	if property == &"type":
-		if (type == Lock.TYPE.BLANK or (type == Lock.TYPE.ALL and !Mods.active(&"C3"))) and count.neq(1):
-			Changes.addChange(Changes.PropertyChange.new(self,&"count",C.ONE))
-		if type == Lock.TYPE.BLAST:
-			if (count.abs().neq(1)) and !Mods.active(&"C3"): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.ONE if count.eq(0) else count.axis()))
-		elif type == Lock.TYPE.ALL:
-			if !isPartial and denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(self,&"denominator",C.ONE))
-		else:
-			if denominator.neq(1): Changes.addChange(Changes.PropertyChange.new(self,&"denominator",C.ONE))
-			if isPartial: Changes.addChange(Changes.PropertyChange.new(self,&"isPartial",false))
-			if count.isComplex():
-				if count.i.abs().gt(count.r.abs()): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.new(0,count.i)))
-				else: Changes.addChange(Changes.PropertyChange.new(self,&"count",C.new(count.r)))
-
-	if property == &"isPartial" and !isPartial:
-		Changes.addChange(Changes.PropertyChange.new(self,&"denominator", C.ONE if count.isComplex() or count.eq(0) or type == Lock.TYPE.ALL else count.axis()))
+	Lock.lockPropertyChangedInit(self, property)
 
 func propertyChangedDo(property:StringName) -> void:
 	super(property)
