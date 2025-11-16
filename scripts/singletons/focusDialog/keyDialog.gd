@@ -26,14 +26,19 @@ func receiveKey(event:InputEventKey) -> bool:
 	match event.keycode:
 		KEY_N: _keyTypeSelected(KeyBulk.TYPE.NORMAL)
 		KEY_E: _keyTypeSelected(KeyBulk.TYPE.EXACT if main.focused.type != KeyBulk.TYPE.EXACT else KeyBulk.TYPE.NORMAL)
-		KEY_S: _keyTypeSelected(KeyBulk.TYPE.STAR)
+		KEY_S:
+			if main.focused.type == KeyBulk.TYPE.STAR: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
+			else: _keyTypeSelected(KeyBulk.TYPE.STAR)
 		KEY_R:
 			if main.focused.type != KeyBulk.TYPE.ROTOR: _keyTypeSelected(KeyBulk.TYPE.ROTOR)
 			elif main.focused.count.eq(-1): _keyCountSet(C.I)
 			elif main.focused.count.eq(C.I): _keyCountSet(C.nI)
 			elif main.focused.count.eq(C.nI): _keyTypeSelected(KeyBulk.TYPE.NORMAL); _keyCountSet(C.ONE)
 		KEY_C: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
-		KEY_U: if Mods.active(&"C5"): _keyTypeSelected(KeyBulk.TYPE.CURSE)
+		KEY_U:
+			if Mods.active(&"C5") and main.focused is KeyBulk:
+				if main.focused.type == KeyBulk.TYPE.CURSE: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
+				else: _keyTypeSelected(KeyBulk.TYPE.CURSE)
 		KEY_DELETE:
 			Changes.addChange(Changes.DeleteComponentChange.new(main.focused))
 			Changes.bufferSave()
@@ -50,10 +55,7 @@ func _keyTypeSelected(type:KeyBulk.TYPE) -> void:
 	if main.focused is not KeyBulk: return
 	var beforeType:KeyBulk.TYPE = main.focused.type
 	Changes.addChange(Changes.PropertyChange.new(main.focused,&"type",type))
-	print(beforeType, type)
-	if beforeType != type:
-		if type == KeyBulk.TYPE.ROTOR: Changes.PropertyChange.new(main.focused,&"count",C.nONE)
-	elif type in [KeyBulk.TYPE.STAR, KeyBulk.TYPE.CURSE]: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
+	if beforeType != type and type == KeyBulk.TYPE.ROTOR: Changes.PropertyChange.new(main.focused,&"count",C.nONE)
 	Changes.bufferSave()
 
 func _keyCountSet(count:C) -> void:
@@ -74,7 +76,7 @@ func _keyRotorSelected(value:KeyRotorSelector.VALUE):
 		KeyRotorSelector.VALUE.NEGROTOR: Changes.addChange(Changes.PropertyChange.new(main.focused,&"count",C.nI))
 	Changes.bufferSave()
 
-func _keyUnSet(value:bool):
+func _keyUnToggled(value:bool):
 	if main.focused is not KeyBulk: return
 	Changes.addChange(Changes.PropertyChange.new(main.focused,&"un",!value))
 	Changes.bufferSave()
