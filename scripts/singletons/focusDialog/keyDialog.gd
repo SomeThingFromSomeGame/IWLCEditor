@@ -10,6 +10,8 @@ func focus(focused:KeyBulk,_new:bool) -> void:
 	%keyCountEdit.visible = focused.type in [KeyBulk.TYPE.NORMAL,KeyBulk.TYPE.EXACT]
 	%keyCountEdit.setValue(focused.count, true)
 	%keyInfiniteToggle.button_pressed = focused.infinite
+	%keyRotorSelector.visible = focused.type == KeyBulk.TYPE.ROTOR
+	if focused.type == KeyBulk.TYPE.ROTOR: %keyRotorSelector.setValue(focused.count)
 	if %keyCountEdit.visible:
 		if !main.interacted: main.interact(%keyCountEdit.realEdit)
 	else: main.deinteract()
@@ -20,9 +22,10 @@ func receiveKey(event:InputEventKey) -> bool:
 		KEY_E: _keyTypeSelected(KeyBulk.TYPE.EXACT if main.focused.type != KeyBulk.TYPE.EXACT else KeyBulk.TYPE.NORMAL)
 		KEY_S: _keyTypeSelected(KeyBulk.TYPE.STAR if main.focused.type != KeyBulk.TYPE.STAR else KeyBulk.TYPE.UNSTAR)
 		KEY_R:
-			if main.focused.type == KeyBulk.TYPE.SIGNFLIP: _keyTypeSelected(KeyBulk.TYPE.NEGROTOR)
-			elif main.focused.type == KeyBulk.TYPE.POSROTOR: _keyTypeSelected(KeyBulk.TYPE.SIGNFLIP)
-			else: _keyTypeSelected(KeyBulk.TYPE.POSROTOR)
+			if main.focused.type != KeyBulk.TYPE.ROTOR: _keyTypeSelected(KeyBulk.TYPE.ROTOR)
+			elif main.focused.count.eq(-1): _keyCountSet(C.I)
+			elif main.focused.count.eq(C.I): _keyCountSet(C.nI)
+			elif main.focused.count.eq(C.nI): _keyTypeSelected(KeyBulk.TYPE.NORMAL); _keyCountSet(C.ONE)
 		KEY_C: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
 		KEY_U: if Mods.active(&"C5"): _keyTypeSelected(KeyBulk.TYPE.CURSE if main.focused.type != KeyBulk.TYPE.CURSE else KeyBulk.TYPE.UNCURSE)
 		KEY_DELETE:
@@ -39,7 +42,9 @@ func _keyColorSelected(color:Game.COLOR) -> void:
 
 func _keyTypeSelected(type:KeyBulk.TYPE) -> void:
 	if main.focused is not KeyBulk: return
+	var beforeType:KeyBulk.TYPE = main.focused.type
 	Changes.addChange(Changes.PropertyChange.new(main.focused,&"type",type))
+	if beforeType != KeyBulk.TYPE.ROTOR and type == KeyBulk.TYPE.ROTOR: Changes.PropertyChange.new(main.focused,&"count",C.nONE)
 	Changes.bufferSave()
 
 func _keyCountSet(count:C) -> void:
@@ -50,4 +55,12 @@ func _keyCountSet(count:C) -> void:
 func _keyInfiniteToggled(value:bool) -> void:
 	if main.focused is not KeyBulk: return
 	Changes.addChange(Changes.PropertyChange.new(main.focused,&"infinite",value))
+	Changes.bufferSave()
+
+func _keyRotorSelected(value:KeyRotorSelector.VALUE):
+	if main.focused is not KeyBulk: return
+	match value:
+		KeyRotorSelector.VALUE.SIGNFLIP: Changes.addChange(Changes.PropertyChange.new(main.focused,&"count",C.nONE))
+		KeyRotorSelector.VALUE.POSROTOR: Changes.addChange(Changes.PropertyChange.new(main.focused,&"count",C.I))
+		KeyRotorSelector.VALUE.NEGROTOR: Changes.addChange(Changes.PropertyChange.new(main.focused,&"count",C.nI))
 	Changes.bufferSave()

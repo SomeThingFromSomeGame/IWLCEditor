@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://orse01jajp5v"
-path="res://.godot/imported/posrotor.png-e4685a7bf659f98b980bc6a9bced6ab8.ctex"
+path="res://.godot/imported/posrotor.png-3104b1360cc3524cd0253105bc01c5c7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/focusDialog/keyType/posrotor.png"
-dest_files=["res://.godot/imported/posrotor.png-e4685a7bf659f98b980bc6a9bced6ab8.ctex"]
+source_file="res://assets/ui/focusDialog/keyRotor/posrotor.png"
+dest_files=["res://.godot/imported/posrotor.png-3104b1360cc3524cd0253105bc01c5c7.ctex"]
 
 [params]
 

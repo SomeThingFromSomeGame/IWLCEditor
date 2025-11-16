@@ -1,7 +1,7 @@
 extends PanelContainer
 class_name Mouseover
 
-const KEY_TYPES = ["", "Exact ", "Star ", "Unstar ", "Signflip ", "Rotor (i) ", "Rotor (-i) ", "Curse ", "Uncurse "]
+const KEY_TYPES = ["", "Exact ", "Star ", "Unstar ", "(rotor placeholder)", "Curse ", "Uncurse "]
 const LOCK_TYPES = ["", "Blank ", "Blast ", "All ", "Exact "]
 
 func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void:
@@ -12,7 +12,12 @@ func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void
 	var string:String = ""
 	match object.get_script():
 		KeyBulk:
-			string += KEY_TYPES[object.type] + Game.COLOR_NAMES[object.color] + " Key"
+			if object.type == KeyBulk.TYPE.ROTOR:
+				if object.count.eq(-1): string += "Signflip "
+				elif object.count.eq(C.I): string += "Rotor (i) "
+				elif object.count.eq(C.nI): string += "Rotor (-i) "
+			else: string += KEY_TYPES[object.type]
+			string += Game.COLOR_NAMES[object.color] + " Key"
 			if object.type in [KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT]:
 				string += "\nAmount: " + str(object.count)
 			if object.color == Game.COLOR.GLITCH: string += "\nMimic: " + Game.COLOR_NAMES[object.glitchMimic]

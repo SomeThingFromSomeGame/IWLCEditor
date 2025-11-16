@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://8bth374yqwpe"]
+[gd_scene load_steps=53 format=3 uid="uid://8bth374yqwpe"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_eqegh"]
 [ext_resource type="Script" uid="uid://dm8t82nhqkdlc" path="res://scripts/singletons/focusDialog/focusDialog.gd" id="2_k8bto"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dgllodap6540" path="res://scripts/nodes/focusDialog/keyTypeSelector.gd" id="4_cb7cu"]
 [ext_resource type="PackedScene" uid="uid://tpxbw5vtj5nx" path="res://scenes/complexNumberEdit.tscn" id="5_qjvko"]
 [ext_resource type="Script" uid="uid://c5vkwqyqnu1o7" path="res://scripts/nodes/keepWorldScale.gd" id="6_fr1sg"]
+[ext_resource type="Script" uid="uid://bb323bon0ten5" path="res://scripts/nodes/focusDialog/keyRotorSelector.gd" id="7_q8u4b"]
 [ext_resource type="Texture2D" uid="uid://dl1koipaukdj" path="res://assets/ui/focusDialog/keyInfiniteToggle/normal.png" id="7_w3a3f"]
 [ext_resource type="Texture2D" uid="uid://bulx3wvhsmgvx" path="res://assets/empty.png" id="8_w3a3f"]
 [ext_resource type="Texture2D" uid="uid://qd82dduwyvjj" path="res://assets/ui/focusDialog/keyInfiniteToggle/hover.png" id="9_4nd11"]
@@ -146,6 +147,12 @@ metadata/_custom_type_script = "uid://dgllodap6540"
 [node name="keyCountEdit" parent="keyDialog/c/c/c" instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="keyRotorSelector" type="GridContainer" parent="keyDialog/c/c/c"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("7_q8u4b")
 
 [node name="keepWorldScale" type="Control" parent="keyDialog"]
 anchors_preset = 0
@@ -597,6 +604,7 @@ default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 [connection signal="select" from="keyDialog/c/c/c/keyColorSelector" to="keyDialog" method="_keyColorSelected"]
 [connection signal="select" from="keyDialog/c/c/c/keyTypeSelector" to="keyDialog" method="_keyTypeSelected"]
 [connection signal="valueSet" from="keyDialog/c/c/c/keyCountEdit" to="keyDialog" method="_keyCountSet"]
+[connection signal="select" from="keyDialog/c/c/c/keyRotorSelector" to="keyDialog" method="_keyRotorSelected"]
 [connection signal="toggled" from="keyDialog/keepWorldScale/keyInfiniteToggle" to="keyDialog" method="_keyInfiniteToggled"]
 [connection signal="pressed" from="doorDialog/c/door/c/c/doorTypes/simple" to="doorDialog" method="_doorTypeSelected" binds= [0]]
 [connection signal="pressed" from="doorDialog/c/door/c/c/doorTypes/combo" to="doorDialog" method="_doorTypeSelected" binds= [1]]

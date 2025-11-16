@@ -2,8 +2,8 @@ extends GameObject
 class_name KeyBulk
 const SCENE:PackedScene = preload("res://scenes/objects/keyBulk.tscn")
 
-const TYPES:int = 9
-enum TYPE {NORMAL, EXACT, STAR, UNSTAR, SIGNFLIP, POSROTOR, NEGROTOR, CURSE, UNCURSE}
+const TYPES:int = 7
+enum TYPE {NORMAL, EXACT, STAR, UNSTAR, ROTOR, CURSE, UNCURSE}
 
 # colors that use textures
 const TEXTURE_COLORS:Array[Game.COLOR] = [Game.COLOR.MASTER, Game.COLOR.PURE, Game.COLOR.STONE, Game.COLOR.DYNAMITE, Game.COLOR.QUICKSILVER, Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]
@@ -83,9 +83,10 @@ func _draw() -> void:
 	match type:
 		KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT:
 			if !count.eq(1): TextDraw.outlined2(FKEYBULK,drawSymbol,str(count),keycountColor(),keycountOutlineColor(),14,Vector2(1,25))
-		KeyBulk.TYPE.SIGNFLIP: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,SIGNFLIP_SYMBOL)
-		KeyBulk.TYPE.POSROTOR: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
-		KeyBulk.TYPE.NEGROTOR: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
+		KeyBulk.TYPE.ROTOR:
+			if count.eq(-1): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,SIGNFLIP_SYMBOL)
+			elif count.eq(C.I): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
+			elif count.eq(C.nI): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
 	if infinite: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
 
 func keycountColor() -> Color: return Color("#363029") if count.sign() < 0 else Color("#ebe3dd")
@@ -120,6 +121,7 @@ static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor
 func propertyChangedInit(property:StringName) -> void:
 	if property == &"type":
 		if type not in [TYPE.NORMAL, TYPE.EXACT] and count.neq(1): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.ONE))
+		if type == TYPE.ROTOR and (count.abs().neq(1) or count.eq(1)): Changes.addChange(Changes.PropertyChange.new(self,&"count",C.nONE))
 
 # ==== PLAY ==== #
 var glitchMimic:Game.COLOR = Game.COLOR.GLITCH
@@ -144,9 +146,7 @@ func collect(player:Player) -> void:
 	match type:
 		TYPE.NORMAL: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), player.key[effectiveColor()].plus(count)))
 		TYPE.EXACT: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), count))
-		TYPE.SIGNFLIP: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), player.key[effectiveColor()].times(-1)))
-		TYPE.POSROTOR: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), player.key[effectiveColor()].times(C.I)))
-		TYPE.NEGROTOR: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), player.key[effectiveColor()].times(C.nI)))
+		TYPE.ROTOR: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), player.key[effectiveColor()].times(count)))
 		TYPE.STAR: GameChanges.addChange(GameChanges.StarChange.new(effectiveColor(), true))
 		TYPE.UNSTAR: GameChanges.addChange(GameChanges.StarChange.new(effectiveColor(), false))
 		TYPE.CURSE: GameChanges.addChange(GameChanges.CurseChange.new(effectiveColor(), true))
@@ -160,7 +160,7 @@ func collect(player:Player) -> void:
 		AudioManager.play(preload("res://resources/sounds/key/master.wav"))
 	else:
 		match type:
-			TYPE.SIGNFLIP, TYPE.POSROTOR, TYPE.NEGROTOR: AudioManager.play(preload("res://resources/sounds/key/signflip.wav"))
+			TYPE.ROTOR: AudioManager.play(preload("res://resources/sounds/key/signflip.wav"))
 			TYPE.STAR: AudioManager.play(preload("res://resources/sounds/key/star.wav"))
 			TYPE.UNSTAR: AudioManager.play(preload("res://resources/sounds/key/unstar.wav"))
 			_:

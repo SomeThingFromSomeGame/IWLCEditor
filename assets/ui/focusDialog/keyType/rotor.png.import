@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bk85ul203qgmi"
-path="res://.godot/imported/negrotor.png-8baca8922361142659f2daa3b57c7315.ctex"
+uid="uid://dmw6k5kme205b"
+path="res://.godot/imported/rotor.png-2d24781d8e0b43df4a9a3808c356903c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/focusDialog/keyType/negrotor.png"
-dest_files=["res://.godot/imported/negrotor.png-8baca8922361142659f2daa3b57c7315.ctex"]
+source_file="res://assets/ui/focusDialog/keyType/rotor.png"
+dest_files=["res://.godot/imported/rotor.png-2d24781d8e0b43df4a9a3808c356903c.ctex"]
 
 [params]
 

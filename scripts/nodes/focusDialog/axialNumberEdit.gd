@@ -59,7 +59,7 @@ func receiveKey(key:InputEventKey):
 			theme_type_variation = &"NumberEditPanelContainerSelected"
 			if Input.is_key_pressed(KEY_CTRL) or newlyInteracted: setValue(C.ZERO)
 			else:
-				if (value.r.gt(-10) and value.r.lt(0)): bufferedSign = C.new(-1)
+				if (value.r.gt(-10) and value.r.lt(0)): bufferedSign = C.nONE
 				elif (value.i.gt(0) and value.i.lt(10)): bufferedSign = C.I
 				elif (value.i.gt(-10) and value.i.lt(0)): bufferedSign = C.nI
 				if value.eq(0): bufferedSign = C.ONE

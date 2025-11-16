@@ -161,7 +161,7 @@ func keyTypes() -> Array[KeyBulk.TYPE]:
 		KeyBulk.TYPE.NORMAL,
 		KeyBulk.TYPE.EXACT,
 		KeyBulk.TYPE.STAR, KeyBulk.TYPE.UNSTAR,
-		KeyBulk.TYPE.SIGNFLIP, KeyBulk.TYPE.POSROTOR, KeyBulk.TYPE.NEGROTOR
+		KeyBulk.TYPE.ROTOR
 	]
 	if active(&"C5"): array.append_array([KeyBulk.TYPE.CURSE, KeyBulk.TYPE.UNCURSE])
 	return array
