@@ -19,7 +19,7 @@ func addChange(change:Change) -> Change:
 	return change
 
 func process() -> void:
-	if saveBuffered and Game.player.is_on_floor() and !Game.player.cantSave:
+	if saveBuffered and Game.player.previousIsOnFloor and !Game.player.cantSave:
 		saveBuffered = false
 		if undoStack[-1] is not UndoSeparator: # could happen if something buffers save on the frame before a reset
 			undoStack.append(UndoSeparator.new(Game.player.previousPosition))
@@ -56,6 +56,9 @@ class UndoSeparator extends RefCounted:
 
 	func _init(_position:Vector2) -> void:
 		position = _position
+	
+	func _to_string() -> String:
+		return "<UndoSeparator>"
 
 class ColorChange extends Change:
 	# a change to something in an array of player indexed by colors
@@ -75,6 +78,9 @@ class ColorChange extends Change:
 		Game.player.checkKeys()
 	
 	func undo() -> void: Game.player.get(array())[color] = GameChanges.copy(before)
+
+	func _to_string() -> String:
+		return "<ColorChange:"+str(color)+">"
 
 class KeyChange extends ColorChange:
 	# C major -> A minor, for example
@@ -127,4 +133,4 @@ class PropertyChange extends Change:
 			for lock in component.locks: lock.queue_redraw()
 	
 	func _to_string() -> String:
-		return "<PropetyChange:"+str(id)+"."+str(before)+"->"+str(property)+">"
+		return "<PropertyChange:"+str(id)+"."+str(property)+">"

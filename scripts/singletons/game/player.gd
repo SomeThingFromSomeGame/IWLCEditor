@@ -67,6 +67,7 @@ var complexSwitchAnim:bool = false
 var complexSwitchAngle:float = 0
 
 var previousPosition:Vector2
+var previousIsOnFloor:bool
 
 func _ready() -> void:
 	auraDraw = RenderingServer.canvas_item_create()
@@ -97,6 +98,7 @@ func _ready() -> void:
 		curse.append(color == Game.COLOR.BROWN)
 	
 	previousPosition = position
+	previousIsOnFloor = is_on_floor()
 
 func _physics_process(_delta:float) -> void:
 	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and (Game.playGame.inAnimation() or Game.playGame.paused)) or Game.won:
@@ -140,6 +142,7 @@ func _physics_process(_delta:float) -> void:
 		for area in %interact.get_overlapping_areas(): interacted(area)
 		GameChanges.process()
 		previousPosition = position
+		previousIsOnFloor = is_on_floor()
 
 func _process(delta:float) -> void:
 	masterShineAngle += delta*4.1887902048 # 4 degrees per frame, 60fps
@@ -162,6 +165,7 @@ func receiveKey(event:InputEventKey):
 		KEY_Z: if GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
 		KEY_X: cycleMaster()
 		KEY_S: complexSwitch()
+		KEY_U: print(GameChanges.undoStack)
 
 func _newlyInteracted(area:Area2D) -> void:
 	if pauseFrame: return

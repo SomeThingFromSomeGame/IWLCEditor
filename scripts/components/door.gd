@@ -396,6 +396,7 @@ func _process(delta:float) -> void:
 		if gateBufferCheck and !gateBufferCheck.overlapping(%interact):
 			gateBufferCheck = null
 			GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gateOpen",false))
+			GameChanges.bufferSave()
 		if !gateOpen and gateAlpha < 1:
 			gateAlpha = min(gateAlpha+delta*6, 1)
 			queue_redraw()
@@ -608,7 +609,8 @@ func gateCheck(player:Player, starting:bool=false) -> void:
 	for lock in remoteLocks:
 		if !lock.satisfied: shouldOpen = false
 	if gateOpen and !shouldOpen:
-		gateBufferCheck = player
+		if player.overlapping(%interact): gateBufferCheck = player
+		else: GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gateOpen",false))
 	elif !gateOpen and shouldOpen:
 		gateBufferCheck = null
 		if starting: gateOpen = true; propertyGameChangedDo(&"gateOpen")
