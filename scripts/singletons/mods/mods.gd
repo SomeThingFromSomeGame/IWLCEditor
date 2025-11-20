@@ -154,6 +154,7 @@ func colors() -> Array[Game.COLOR]:
 	]
 	if active(&"C2"): array.append_array([Game.COLOR.DYNAMITE, Game.COLOR.QUICKSILVER])
 	if active(&"C4"): array.append_array([Game.COLOR.MAROON, Game.COLOR.FOREST, Game.COLOR.NAVY, Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI])
+	if active(&"NoneColor"): array.append(Game.COLOR.NONE)
 	return array
 
 func keyTypes() -> Array[KeyBulk.TYPE]:

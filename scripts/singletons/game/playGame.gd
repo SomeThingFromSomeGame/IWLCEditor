@@ -4,6 +4,8 @@ class_name PlayGame
 const SCREEN_RECT:Rect2 = Rect2(Vector2.ZERO,Vector2(800,608))
 const DESCRIPTION_BOX:Texture2D = preload("res://assets/game/gameUI/description.png")
 
+const WARP_ERROR:Texture2D = preload("res://assets/game/gameUI/warpError.png")
+
 const TEXT_BREAK_FLAGS:int = TextServer.LineBreakFlag.BREAK_MANDATORY|TextServer.LineBreakFlag.BREAK_WORD_BOUND|TextServer.LineBreakFlag.BREAK_ADAPTIVE
 
 @onready var world:World = %world
@@ -17,9 +19,9 @@ var drawDescription:RID
 var drawMain:RID
 var drawAutoRunGradient:RID
 
-enum ROOM_TRANSITION_TYPE {ENTER_LEVEL, WIN_LEVEL, WIN_OMEGA}
+enum ROOM_TRANSITION_TYPE {ENTER_LEVEL, WIN_LEVEL, WIN_OMEGA, CRASH}
 var roomTransitionType:ROOM_TRANSITION_TYPE = ROOM_TRANSITION_TYPE.ENTER_LEVEL
-var roomTransitionPhase:int = -1
+var roomTransitionPhase:int = -2
 var roomTransitionTimer:float = 0
 var roomTransitionColor:Color = Color("#5a96c8")
 var textWiggleAngle:float = 0
@@ -42,15 +44,22 @@ func _ready() -> void:
 func _process(delta:float) -> void:
 	textWiggleAngle += 5.8643062867*delta # 5.6 degrees per frame, 60fps
 	textWiggleAngle = fmod(textWiggleAngle,TAU)
-	if roomTransitionPhase != -1:
+	if roomTransitionPhase != -2:
 		roomTransitionTimer += delta
 		match roomTransitionPhase:
+			-1:
+				var nextPhase:float
+				match roomTransitionType:
+					ROOM_TRANSITION_TYPE.CRASH: nextPhase = 1.25
+				if roomTransitionTimer >= nextPhase:
+					roomTransitionTimer = 0
+					roomTransitionPhase += 1
 			0:
 				var nextPhase:float
 				match roomTransitionType:
 					ROOM_TRANSITION_TYPE.ENTER_LEVEL: nextPhase = 0.5833333333
-					ROOM_TRANSITION_TYPE.WIN_LEVEL,\
-					ROOM_TRANSITION_TYPE.WIN_OMEGA: nextPhase = 1; textOffsetAngle = min(textOffsetAngle + 67.5*delta, 90)
+					ROOM_TRANSITION_TYPE.WIN_LEVEL, ROOM_TRANSITION_TYPE.WIN_OMEGA,\
+					ROOM_TRANSITION_TYPE.CRASH: nextPhase = 1; textOffsetAngle = min(textOffsetAngle + 67.5*delta, 90)
 				roomTransitionColor.a = roomTransitionTimer/nextPhase
 				queue_redraw()
 				if roomTransitionTimer >= nextPhase:
@@ -60,8 +69,8 @@ func _process(delta:float) -> void:
 				var nextPhase:float
 				match roomTransitionType:
 					ROOM_TRANSITION_TYPE.ENTER_LEVEL: nextPhase = 2.5; textOffsetAngle = min(textOffsetAngle + 135*delta,90)
-					ROOM_TRANSITION_TYPE.WIN_LEVEL,\
-					ROOM_TRANSITION_TYPE.WIN_OMEGA: nextPhase = 1.6666666667; textOffsetAngle = min(textOffsetAngle + 67.5*delta, 90)
+					ROOM_TRANSITION_TYPE.WIN_LEVEL, ROOM_TRANSITION_TYPE.WIN_OMEGA,\
+					ROOM_TRANSITION_TYPE.CRASH: nextPhase = 1.6666666667; textOffsetAngle = min(textOffsetAngle + 67.5*delta, 90)
 				roomTransitionColor.a = 1
 				queue_redraw()
 				if roomTransitionTimer >= nextPhase:
@@ -72,7 +81,7 @@ func _process(delta:float) -> void:
 					roomTransitionColor.a = 1 - roomTransitionTimer/0.5833333333
 					textOffsetAngle = 90+roomTransitionTimer*154.2857142857
 					if roomTransitionTimer >= 0.4166666667:
-						roomTransitionPhase = -1
+						roomTransitionPhase = -2
 				else:
 					%winMenu.visible = true
 					if Input.is_action_just_pressed("restart"):
@@ -118,7 +127,7 @@ func _draw() -> void:
 		TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(732,539))
 		TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,Game.level.shortNumber,Color("#8c50c8"),Color("#140064"),20,Vector2(733,569))
 	# room transition
-	if roomTransitionPhase != -1:
+	if roomTransitionPhase > -1:
 		var textOffset = Vector2(0,500*sin(deg_to_rad(textOffsetAngle))-500)
 		var textWiggle:Vector2 = Vector2(sin(textWiggleAngle),cos(textWiggleAngle))*3
 		var textWiggle2:Vector2 = Vector2(sin(textWiggleAngle+0.8726646260),cos(textWiggleAngle+0.8726646260))*6
@@ -130,6 +139,9 @@ func _draw() -> void:
 				TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(400,376)+textWiggle+textOffset)
 			ROOM_TRANSITION_TYPE.WIN_LEVEL: TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,"Congratulations!",Color.WHITE,Color.BLACK,36,Vector2(400,280)+textWiggle2+textOffset)
 			ROOM_TRANSITION_TYPE.WIN_OMEGA: TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,"YOWZA!",Color.WHITE,Color.BLACK,36,Vector2(400,280)+textWiggle2+textOffset)
+			ROOM_TRANSITION_TYPE.CRASH:
+				TextDraw.outlinedCentered2(Game.FLEVELNAME,drawMain,"NONE ERROR: None colored lock check failed!",Color.WHITE,Color.RED,36,Vector2(400,216)+textWiggle2+textOffset)
+				RenderingServer.canvas_item_add_texture_rect(drawMain,Rect2(Vector2(368,368)+textOffset,Vector2(64,64)),WARP_ERROR)
 	var autoRunAlpha:float = abs(sin(autoRunTimer*PI))
 	if autoRunAlpha > 0:
 		TextDraw.outlinedGradient(Game.FMINIID,drawMain,drawAutoRunGradient,
@@ -147,7 +159,12 @@ func _input(event:InputEvent) -> void:
 			match roomTransitionType:
 				ROOM_TRANSITION_TYPE.ENTER_LEVEL: skipTransitionThreshold = 0.6666666667
 				ROOM_TRANSITION_TYPE.WIN_LEVEL: skipTransitionThreshold = 0.3333333333
-			if roomTransitionPhase == 1 and roomTransitionTimer >= skipTransitionThreshold:
+			if roomTransitionType == ROOM_TRANSITION_TYPE.CRASH and abs(roomTransitionPhase) < 2:
+				roomTransitionPhase = 2
+				roomTransitionTimer = 0
+				roomTransitionColor.a = 1
+				textOffsetAngle = 90
+			elif roomTransitionPhase == 1 and roomTransitionTimer >= skipTransitionThreshold:
 				if event.keycode == KEY_SPACE:
 					roomTransitionPhase += 1
 					roomTransitionTimer = 0
@@ -180,8 +197,9 @@ func start() -> void:
 
 func restart() -> void:
 	Game.won = false
+	Game.crashState = Game.CRASH_STATE.NONE
 	%winMenu.visible = false
-	roomTransitionPhase = -1
+	roomTransitionPhase = -2
 	queue_redraw()
 	Game.player.pauseFrame = true
 	Game.player.queue_free()
@@ -239,5 +257,11 @@ func win(goal:Goal) -> void:
 	if goal.type == Goal.TYPE.OMEGA: roomTransitionType = ROOM_TRANSITION_TYPE.WIN_OMEGA
 	else: roomTransitionType = ROOM_TRANSITION_TYPE.WIN_LEVEL
 	roomTransitionPhase = 0
+	roomTransitionTimer = 0
+	textOffsetAngle = 0
+
+func crash() -> void:
+	roomTransitionType = ROOM_TRANSITION_TYPE.CRASH
+	roomTransitionPhase = -1
 	roomTransitionTimer = 0
 	textOffsetAngle = 0

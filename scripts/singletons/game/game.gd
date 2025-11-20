@@ -3,10 +3,10 @@ extends Node
 static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, RemoteLock]
 static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
 
-const COLORS:int = 22
-enum COLOR {MASTER, WHITE, ORANGE, PURPLE, RED, GREEN, BLUE, PINK, CYAN, BLACK, BROWN, PURE, GLITCH, STONE, DYNAMITE, QUICKSILVER, MAROON, FOREST, NAVY, ICE, MUD, GRAFFITI}
-const COLOR_NAMES = ["Master", "White", "Orange", "Purple", "Red", "Green", "Blue", "Pink", "Cyan", "Black", "Brown", "Pure", "Glitch", "Stone", "Dynamite", "Quicksilver", "Maroon", "Forest", "Navy", "Ice", "Mud", "Graffiti"]
-const NONFLAT_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.GLITCH, COLOR.STONE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
+const COLORS:int = 23
+enum COLOR {MASTER, WHITE, ORANGE, PURPLE, RED, GREEN, BLUE, PINK, CYAN, BLACK, BROWN, PURE, GLITCH, STONE, DYNAMITE, QUICKSILVER, MAROON, FOREST, NAVY, ICE, MUD, GRAFFITI, NONE}
+const COLOR_NAMES = ["Master", "White", "Orange", "Purple", "Red", "Green", "Blue", "Pink", "Cyan", "Black", "Brown", "Pure", "Glitch", "Stone", "Dynamite", "Quicksilver", "Maroon", "Forest", "Navy", "Ice", "Mud", "Graffiti", "None"]
+const NONFLAT_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.GLITCH, COLOR.STONE, COLOR.DYNAMITE, COLOR.QUICKSILVER, COLOR.NONE] # colors that cant be edited in colorblind settings
 const ANIMATED_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
 const TEXTURED_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.STONE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
 const TILED_TEXTURED_COLORS:Array[COLOR] = [COLOR.DYNAMITE]
@@ -28,7 +28,8 @@ const DEFAULT_HIGH:Array[Color] = [
 	Color("#96a0a5"),
 	Color("#d18866"), Color("#ffffff"),
 	Color("#6d4040"), Color("#3f5c3f"), Color("#49496b"),
-	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
+	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380"),
+	Color("#00000000")
 ]
 const BRIGHT_HIGH:Array[Color] = [
 	Color("#e7bf98"),
@@ -41,7 +42,8 @@ const BRIGHT_HIGH:Array[Color] = [
 	Color("#96a0a5"),
 	Color("#d18866"), Color("#ffffff"),
 	Color("#6d4040"), Color("#3f5c3f"), Color("#49496b"),
-	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380")
+	Color("#d1ffff"), Color("#b57ea7"), Color("#f2e380"),
+	Color("#00000000")
 ]
 
 var mainTone:Array[Color] = DEFAULT_MAIN.duplicate()
@@ -56,7 +58,8 @@ const DEFAULT_MAIN:Array[Color] = [
 	Color("#647378"),
 	Color("#d34728"), Color("#b8b8b8"),
 	Color("#583232"), Color("#2c3b2c"), Color("#333352"),
-	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
+	Color("#82f0ff"), Color("#966489"), Color("#e2c961"),
+	Color("#00000000")
 ]
 const BRIGHT_MAIN:Array[Color] = [
 	Color("#d68f49"),
@@ -69,7 +72,8 @@ const BRIGHT_MAIN:Array[Color] = [
 	Color("#647378"),
 	Color("#d34728"), Color("#b8b8b8"),
 	Color("#583232"), Color("#2c3b2c"), Color("#333352"),
-	Color("#82f0ff"), Color("#966489"), Color("#e2c961")
+	Color("#82f0ff"), Color("#966489"), Color("#e2c961"),
+	Color("#00000000")
 ]
 
 var darkTone:Array[Color] = DEFAULT_DARK.duplicate()
@@ -84,7 +88,8 @@ const DEFAULT_DARK:Array[Color] = [
 	Color("#3c4b50"),
 	Color("#7a3117"), Color("#818181"),
 	Color("#3b1f1f"), Color("#1d2b1d"), Color("#262633"),
-	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
+	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51"),
+	Color("#00000000")
 ]
 const BRIGHT_DARK:Array[Color] = [
 	Color("#9c6023"),
@@ -97,7 +102,8 @@ const BRIGHT_DARK:Array[Color] = [
 	Color("#3c4b50"),
 	Color("#7a3117"), Color("#818181"),
 	Color("#3b1f1f"), Color("#1d2b1d"), Color("#262633"),
-	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51")
+	Color("#62b6c1"), Color("#7f4972"), Color("#c6af51"),
+	Color("#00000000")
 ]
 
 @onready var editor:Editor = get_node("/root/editor")
@@ -191,6 +197,8 @@ var fullJumps:bool = false
 var fastAnimations:bool = false
 
 var won:bool = false
+enum CRASH_STATE {NONE, NONE_COLOR}
+var crashState = CRASH_STATE.NONE # focal point, none color
 
 func setWorld(_world:World) -> void:
 	world = _world
@@ -267,6 +275,7 @@ func stopTest() -> void:
 	GameChanges.saveBuffered = false
 	player.pauseFrame = true
 	won = false
+	crashState = CRASH_STATE.NONE
 	await get_tree().process_frame
 	player.queue_free()
 	for object in objects.values():
@@ -284,6 +293,7 @@ func restart() -> void:
 	else: playGame.restart()
 
 func setGlitch(color:COLOR) -> void:
+	if color == Game.COLOR.NONE: return
 	for object in objects.values():
 		if object.get_script() in [KeyBulk, Door, RemoteLock]:
 			object.setGlitch(color)
@@ -312,6 +322,7 @@ func playReadied() -> void:
 
 func edit() -> void:
 	won = false
+	crashState = CRASH_STATE.NONE
 	awaitingEditor = true
 	playState = PLAY_STATE.EDIT
 	get_tree().change_scene_to_file("res://scenes/editor.tscn")
@@ -364,3 +375,19 @@ func timer(time:float) -> Signal:
 	t.timeout.connect(t.queue_free)
 	t.start(time)
 	return t.timeout
+
+func crash() -> void:
+	crashState = CRASH_STATE.NONE_COLOR
+	for i in 40: particlesParent.add_child(KeyParticle.new(player.position+Vector2(randf_range(-8,8),randf_range(-8,8)), i, Color.from_hsv(i/40.0,0.7058823529,1), 1))
+	for i in 30: particlesParent.add_child(KeyParticle.new(player.position+Vector2(randf_range(-8,8),randf_range(-8,8)), i, Color.from_hsv(i/30.0,0.7058823529,1), 0.6))
+	AudioManager.play(preload("res://resources/sounds/sndAwaken.wav"))
+	AudioManager.play(preload("res://resources/sounds/sndPop.wav"))
+	player.crashAnim()
+	if editor:
+		await timer(0.6666666667)
+		stopTest()
+		editor.cameraZoom = 1
+		editor.editorCamera.zoom = Vector2.ONE
+		editor.home()
+	else:
+		playGame.crash()

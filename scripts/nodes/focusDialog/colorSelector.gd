@@ -1,6 +1,8 @@
 extends Selector
 class_name ColorSelector
 
+const NONE_COLOR:Texture2D = preload("res://assets/ui/focusDialog/noneColor.png")
+
 var spacers:Array[Control]
 
 func _ready() -> void:
@@ -52,4 +54,5 @@ class ColorSelectorButton extends SelectorButton:
 		RenderingServer.canvas_item_clear(drawMain)
 		var rect:Rect2 = Rect2(Vector2.ONE, size-Vector2(2,2))
 		if value in Game.TEXTURED_COLORS: RenderingServer.canvas_item_add_texture_rect(drawMain,rect,Game.COLOR_TEXTURES.current([value]))
+		elif value == Game.COLOR.NONE: RenderingServer.canvas_item_add_texture_rect(drawMain,rect,NONE_COLOR)
 		else: RenderingServer.canvas_item_add_rect(drawMain,rect,Game.mainTone[value])

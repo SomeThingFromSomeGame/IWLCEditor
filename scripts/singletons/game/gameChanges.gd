@@ -19,7 +19,7 @@ func addChange(change:Change) -> Change:
 	return change
 
 func process() -> void:
-	if saveBuffered and Game.player.previousIsOnFloor and !Game.player.cantSave:
+	if saveBuffered and Game.player.previousIsOnFloor and Game.player.is_on_floor() and !Game.player.cantSave:
 		saveBuffered = false
 		if undoStack[-1] is not UndoSeparator: # could happen if something buffers save on the frame before a reset
 			undoStack.append(UndoSeparator.new(Game.player.previousPosition))
@@ -29,6 +29,7 @@ func undo() -> bool:
 	if undoStack[-1] is UndoSeparator: undoStack.pop_back()
 	saveBuffered = false
 	Game.player.pauseFrame = true
+	Game.player.velocity = Vector2.ZERO
 	while true:
 		if undoStack[-1] is UndoSeparator:
 			Game.player.position = undoStack[-1].position
@@ -58,7 +59,7 @@ class UndoSeparator extends RefCounted:
 		position = _position
 	
 	func _to_string() -> String:
-		return "<UndoSeparator>"
+		return "<UndoSeparator:"+str(position)+">"
 
 class ColorChange extends Change:
 	# a change to something in an array of player indexed by colors
@@ -71,7 +72,7 @@ class ColorChange extends Change:
 	func _init(_color:Game.COLOR, after:Variant) -> void:
 		color = _color
 		before = GameChanges.copy(Game.player.get(array())[color])
-		if before == after:
+		if before == after or color == Game.COLOR.NONE:
 			cancelled = true
 			return
 		Game.player.get(array())[color] = GameChanges.copy(after)
@@ -87,7 +88,7 @@ class KeyChange extends ColorChange:
 	static func array() -> StringName: return &"key"
 
 	func _init(_color:Game.COLOR, after:Variant) -> void:
-		if Game.player.star[_color]:
+		if Game.player.star[_color] or color == Game.COLOR.NONE:
 			cancelled = true
 			return
 		super(_color,after)

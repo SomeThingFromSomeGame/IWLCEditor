@@ -69,7 +69,16 @@ var complexSwitchAngle:float = 0
 var previousPosition:Vector2
 var previousIsOnFloor:bool
 
+const WARP_1:Texture2D = preload("res://assets/game/player/lily/warp1.png")
+const WARP_2:Texture2D = preload("res://assets/game/player/lily/warp2.png")
+var warpDraw:RID
+var crashAnimAngle:float = 0
+var crashAnimHue:float = 0
+var crashAnimSat:float = 0
+var crashAnimVal:float = 0
+
 func _ready() -> void:
+	warpDraw = RenderingServer.canvas_item_create()
 	auraDraw = RenderingServer.canvas_item_create()
 	masterShineDraw = RenderingServer.canvas_item_create()
 	masterKeyDraw = RenderingServer.canvas_item_create()
@@ -79,11 +88,13 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_material(masterShineDraw, Game.ADDITIVE_MATERIAL)
 	RenderingServer.canvas_item_set_material(complexSwitchDraw, Game.ADDITIVE_MATERIAL)
 	drawCurse.z_index = 4
+	RenderingServer.canvas_item_set_z_index(warpDraw,2)
 	RenderingServer.canvas_item_set_z_index(auraDraw,6)
 	RenderingServer.canvas_item_set_z_index(masterShineDraw,6)
 	RenderingServer.canvas_item_set_z_index(masterKeyDraw,6)
 	RenderingServer.canvas_item_set_z_index(complexModeTextDraw,6)
 	RenderingServer.canvas_item_set_z_index(complexSwitchDraw,6)
+	RenderingServer.canvas_item_set_parent(warpDraw, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(auraDraw, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(masterShineDraw, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(masterKeyDraw, get_canvas_item())
@@ -100,8 +111,11 @@ func _ready() -> void:
 	previousPosition = position
 	previousIsOnFloor = is_on_floor()
 
+func paused() -> bool:
+	return Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and (Game.playGame.inAnimation() or Game.playGame.paused)) or Game.won or Game.crashState
+
 func _physics_process(_delta:float) -> void:
-	if Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and (Game.playGame.inAnimation() or Game.playGame.paused)) or Game.won:
+	if paused():
 		if Game.won: visible = false
 		else: %sprite.pause()
 		return
@@ -150,6 +164,12 @@ func _process(delta:float) -> void:
 	if complexSwitchAnim:
 		complexSwitchAngle += delta*5.2359877560 # 5 degrees per frame, 60fps
 		if complexSwitchAngle >= 1.5707963268: complexSwitchAnim = false
+	if Game.crashState:
+		crashAnimAngle += delta*4.7123889804 # 4.5 degrees per frame, 60fps
+		crashAnimHue += delta*2.3529411765
+		if crashAnimHue >= 1: crashAnimHue -= 1
+		crashAnimVal = min(crashAnimHue+15*delta,1)
+		crashAnimSat = min(crashAnimSat+1.5*delta,1)
 	queue_redraw()
 
 	drawCurse.mode = curseMode
@@ -157,7 +177,7 @@ func _process(delta:float) -> void:
 	drawCurse.queue_redraw()
 
 func receiveKey(event:InputEventKey):
-	if event.echo: return
+	if event.echo or paused(): return
 	match event.keycode:
 		KEY_P: if Game.editor: Game.pauseTest()
 		KEY_O: if Game.editor: Game.stopTest()
@@ -283,12 +303,26 @@ func complexSwitch() -> void:
 	for object in Game.objects.values(): if object is Door: object.complexCheck()
 	for component in Game.components.values(): if component is Lock: component.queue_redraw()
 
+func crashAnim() -> void:
+	%sprite.visible = false
+	crashAnimAngle = 0
+	crashAnimHue = 0
+	crashAnimSat = 0
+	crashAnimVal = 0.3137254902
+
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(warpDraw)
 	RenderingServer.canvas_item_clear(auraDraw)
 	RenderingServer.canvas_item_clear(masterShineDraw)
 	RenderingServer.canvas_item_clear(masterKeyDraw)
 	RenderingServer.canvas_item_clear(complexModeTextDraw)
 	RenderingServer.canvas_item_clear(complexSwitchDraw)
+	# warps
+	if Game.crashState:
+		var offset:int = int(12*sin(crashAnimAngle))
+		RenderingServer.canvas_item_add_texture_rect(warpDraw,Rect2(Vector2(-16+offset,-23),Vector2(32,32)),WARP_1,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
+		RenderingServer.canvas_item_add_texture_rect(warpDraw,Rect2(Vector2(-16-offset,-23),Vector2(32,32)),WARP_2,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
+		return
 	# auras
 	if auraRed: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_RED,false,AURA_DRAW_OPACITY)
 	if auraMaroon: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_MAROON,false,AURA_DRAW_OPACITY)

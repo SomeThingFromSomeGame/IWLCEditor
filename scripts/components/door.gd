@@ -445,11 +445,15 @@ func tryOpen(player:Player) -> void:
 		if player.masterCycle == 2 and tryQuicksilverOpen(player): return
 
 	if gameCopies.neq(0): # although nothing (yet) can make a door 0 copy without destroying it
+		var willCrash:bool = false
 		for lock in locks:
-			if !lock.canOpen(player): return
+			if !lock.canOpen(player):
+				if lock.color == Game.COLOR.NONE: willCrash = true
+				else: return
 		for lock in remoteLocks:
 			if !lock.satisfied: return
-	
+		if willCrash: Game.crash(); return
+	if hasColor(Game.COLOR.NONE): return
 	var cost:C = C.ZERO
 	for lock in locks:
 		cost = cost.plus(lock.getCost(player))
@@ -604,10 +608,15 @@ func propertyGameChangedDo(property:StringName) -> void:
 
 func gateCheck(player:Player, starting:bool=false) -> void:
 	var shouldOpen:bool = true
+	var willCrash:bool = false
 	for lock in locks:
-		if !lock.canOpen(player): shouldOpen = false
+		if !lock.canOpen(player):
+			if lock.colorAfterGlitch() == Game.COLOR.NONE: willCrash = true
+			else: shouldOpen = false
 	for lock in remoteLocks:
 		if !lock.satisfied: shouldOpen = false
+	if shouldOpen and willCrash: Game.crash(); return
+	if hasColor(Game.COLOR.NONE): shouldOpen = false
 	if gateOpen and !shouldOpen:
 		if player.overlapping(%interact): gateBufferCheck = player
 		else: GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gateOpen",false))
@@ -735,7 +744,6 @@ class Debris extends Node2D:
 	const FPS:float = 60
 
 	func _init(_color:Game.COLOR,_position) -> void:
-
 		color = _color
 		position = _position
 	

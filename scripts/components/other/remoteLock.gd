@@ -218,6 +218,7 @@ func check(player:Player) -> void:
 	var costBefore:C = cost.copy()
 	GameChanges.addChange(GameChanges.PropertyChange.new(self,&"satisfied",canOpen(player)))
 	GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cost",getCost(player)))
+	if colorAfterGlitch() == Game.COLOR.NONE and !satisfied: Game.crash(); return
 	if !(satisfiedBefore == satisfied and costBefore.eq(cost)):
 		if satisfied: AudioManager.play(preload("res://resources/sounds/remoteLock/success.wav"))
 		else: AudioManager.play(preload("res://resources/sounds/remoteLock/fail.wav"))

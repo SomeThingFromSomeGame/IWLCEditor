@@ -55,6 +55,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawStar)
 	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawMain)
+	if color == Game.COLOR.NONE: return
 	if Game.player and Game.player.star[color]:
 		RenderingServer.canvas_item_set_transform(drawStar,Transform2D(parent.starAngle,Vector2(16,16)))
 		RenderingServer.canvas_item_add_texture_rect(drawStar,Rect2(Vector2(-25.6,-25.6),Vector2(51.2,51.2)),STAR,false,STAR_COLOR)
