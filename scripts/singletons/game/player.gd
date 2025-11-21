@@ -139,9 +139,8 @@ func _physics_process(_delta:float) -> void:
 	var onAnything:bool = Game.tiles in %floor.get_overlapping_bodies()
 	for area in %floor.get_overlapping_areas():
 		if area.get_parent() is Door:
-			if !area.get_parent().justOpened: onAnything = true
+			if area.get_parent().type == Door.TYPE.COMBO or !area.get_parent().justOpened: onAnything = true
 	if is_on_floor() and onAnything:
-		print("yup")
 		canDoubleJump = true
 
 	if Input.is_action_just_pressed(&"jump"):
