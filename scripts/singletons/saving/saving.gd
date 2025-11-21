@@ -132,6 +132,7 @@ func clear() -> void:
 	Game.level = Level.new()
 	Game.anyChanges = false
 	Game.tiles.clear()
+	Game.tilesDropShadow.clear()
 	Changes.undoStack.clear()
 	Changes.undoStack.append(Changes.UndoSeparator.new())
 	Changes.stackPosition = 0

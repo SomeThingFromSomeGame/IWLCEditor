@@ -41,16 +41,20 @@ var count:C = C.ONE
 var infinite:bool = false
 var un:bool = false # whether a star or curse key is an unstar or uncurse key
 
+var drawDropShadow:RID
 var drawGlitch:RID
 var drawMain:RID
 var drawSymbol:RID
 func _init() -> void: size = Vector2(32,32)
 
 func _ready() -> void:
+	drawDropShadow = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawSymbol = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawGlitch,Game.GLITCH_MATERIAL.get_rid())
+	RenderingServer.canvas_item_set_z_index(drawDropShadow,-3)
+	RenderingServer.canvas_item_set_parent(drawDropShadow,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawSymbol,get_canvas_item())
@@ -74,11 +78,13 @@ static func getOutlineTexture(keyColor:Game.COLOR, keyType:TYPE=TYPE.NORMAL, key
 	return OUTLINE_MASK.current([textureType])
 
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(drawDropShadow)
 	RenderingServer.canvas_item_clear(drawGlitch)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawSymbol)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
+	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(3,3),size),getOutlineTexture(color,type,un),false,Game.DROP_SHADOW_COLOR)
 	drawKey(drawGlitch,drawMain,Vector2.ZERO,color,type,un,glitchMimic)
 	if animState == ANIM_STATE.FLASH: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,outlineTex(),false,Color(Color.WHITE,animAlpha))
 	match type:

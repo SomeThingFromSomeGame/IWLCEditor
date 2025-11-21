@@ -30,6 +30,7 @@ const PROPERTIES:Array[StringName] = [
 ]
 static var ARRAYS:Dictionary[StringName,GDScript] = {}
 
+var drawDropShadow:RID
 var drawMain:RID
 var drawGlitch:RID
 
@@ -39,17 +40,22 @@ func _init() -> void :
 	size = Vector2(WIDTHS[0],63)
 
 func _ready() -> void:
+	drawDropShadow = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawGlitch,Game.GLITCH_MATERIAL.get_rid())
+	RenderingServer.canvas_item_set_z_index(drawDropShadow,-2)
+	RenderingServer.canvas_item_set_parent(drawDropShadow,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(drawDropShadow)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawGlitch)
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
 	var textureRect:Rect2 = Rect2(Vector2.ZERO, Vector2(size.x, 63))
+	RenderingServer.canvas_item_add_rect(drawDropShadow,Rect2(Vector2(3,3),size),Game.DROP_SHADOW_COLOR)
 	RenderingServer.canvas_item_add_nine_patch(drawMain,rect,textureRect,getSprite(),TOP_LEFT,BOTTOM_RIGHT,TILE,TILE,true)
 
 func receiveMouseInput(event:InputEventMouse) -> bool:

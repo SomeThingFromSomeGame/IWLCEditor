@@ -38,6 +38,7 @@ var painted:bool = false
 
 var doors:Array[Door] = []
 
+var drawDropShadow:RID
 var drawConnections:RID
 var drawGlitch:RID
 var drawScaled:RID
@@ -51,6 +52,7 @@ var drawFrozen:RID
 func _init() -> void: size = Vector2(18,18)
 
 func _ready() -> void:
+	drawDropShadow = RenderingServer.canvas_item_create()
 	drawConnections = RenderingServer.canvas_item_create()
 	drawScaled = RenderingServer.canvas_item_create()
 	drawAuraBreaker = RenderingServer.canvas_item_create()
@@ -60,7 +62,9 @@ func _ready() -> void:
 	drawCrumbled = RenderingServer.canvas_item_create()
 	drawPainted = RenderingServer.canvas_item_create()
 	drawFrozen = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_z_index(drawDropShadow,-2)
 	RenderingServer.canvas_item_set_z_index(drawConnections,-1)
+	RenderingServer.canvas_item_set_parent(drawDropShadow,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConnections,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
@@ -73,6 +77,7 @@ func _ready() -> void:
 	Game.connect(&"goldIndexChanged",queue_redraw)
 
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(drawDropShadow)
 	RenderingServer.canvas_item_clear(drawConnections)
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawAuraBreaker)
@@ -83,6 +88,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawPainted)
 	RenderingServer.canvas_item_clear(drawFrozen)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
+	RenderingServer.canvas_item_add_rect(drawDropShadow,Rect2(Vector2(3,3)-getOffset(),size),Game.DROP_SHADOW_COLOR)
 	Lock.drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,zeroI,isPartial,denominator,negated,armament,
 		Lock.getFrameHighColor(isNegative(), negated).blend(Color(animColor,animAlpha)),

@@ -79,6 +79,7 @@ static func load(file:FileAccess) -> void:
 	# LEVEL DATA
 	# tiles
 	Game.tiles.tile_map_data = file.get_var()
+	Game.tilesDropShadow.tile_map_data = Game.tiles.tile_map_data
 	# components
 	Game.componentIdIter = file.get_64()
 	var componentBufferedArrays:Dictionary[int,Dictionary] = {} # dictionary[object id, dictionary[property name, array]]

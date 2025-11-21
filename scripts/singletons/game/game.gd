@@ -11,6 +11,8 @@ const ANIMATED_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.DYNAMITE, 
 const TEXTURED_COLORS:Array[COLOR] = [COLOR.MASTER, COLOR.PURE, COLOR.STONE, COLOR.DYNAMITE, COLOR.QUICKSILVER]
 const TILED_TEXTURED_COLORS:Array[COLOR] = [COLOR.DYNAMITE]
 
+const DROP_SHADOW_COLOR:Color = Color(Color.BLACK, 0.35)
+
 static var COLOR_TEXTURES:ColorsTextureLoader = ColorsTextureLoader.new("res://assets/game/colorTexture/$c.png",TEXTURED_COLORS)
 
 const EMPTY:Texture2D = preload("res://assets/empty.png")
@@ -110,6 +112,7 @@ const BRIGHT_DARK:Array[Color] = [
 var playGame:PlayGame
 var world:World
 var tiles:TileMapLayer
+var tilesDropShadow:TileMapLayer
 var objectsParent:Node2D
 var particlesParent:Node2D
 
@@ -203,6 +206,7 @@ var crashState = CRASH_STATE.NONE # focal point, none color
 func setWorld(_world:World) -> void:
 	world = _world
 	tiles = world.tiles
+	tilesDropShadow = world.tilesDropShadow
 	objectsParent = world.objectsParent
 	particlesParent = world.particlesParent
 	updateWindowName()

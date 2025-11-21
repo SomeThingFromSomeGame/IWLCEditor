@@ -41,8 +41,10 @@ const MASTER_CYCLE_COLORS:Array[Game.COLOR] = [Game.COLOR.WHITE, Game.COLOR.MAST
 
 var complexMode:C = C.ONE # C(1,0) for real view, C(0,1) for i-view
 
-var masterShineDraw:RID
-var masterKeyDraw:RID
+var drawDropShadow:RID
+
+var drawMasterShine:RID
+var drawMasterKey:RID
 var masterShineAngle:float = 0
 
 var pauseFrame:bool = true # jank prevention
@@ -53,7 +55,7 @@ var auraBlue:bool = false
 var auraMaroon:bool = false
 var auraForest:bool = false
 var auraNavy:bool = false
-var auraDraw:RID
+var drawAura:RID
 
 var explodey:bool = false
 
@@ -61,8 +63,8 @@ var curseMode:int = 0 # 0 = none, 1 = curse, -1 = uncurse
 var curseColor:Game.COLOR
 var drawCurse:CurseParticle
 
-var complexModeTextDraw:RID
-var complexSwitchDraw:RID
+var drawComplexModeText:RID
+var drawComplexSwitch:RID
 var complexSwitchAnim:bool = false
 var complexSwitchAngle:float = 0
 
@@ -71,35 +73,38 @@ var previousIsOnFloor:bool
 
 const WARP_1:Texture2D = preload("res://assets/game/player/lily/warp1.png")
 const WARP_2:Texture2D = preload("res://assets/game/player/lily/warp2.png")
-var warpDraw:RID
+var drawWarp:RID
 var crashAnimAngle:float = 0
 var crashAnimHue:float = 0
 var crashAnimSat:float = 0
 var crashAnimVal:float = 0
 
 func _ready() -> void:
-	warpDraw = RenderingServer.canvas_item_create()
-	auraDraw = RenderingServer.canvas_item_create()
-	masterShineDraw = RenderingServer.canvas_item_create()
-	masterKeyDraw = RenderingServer.canvas_item_create()
-	complexModeTextDraw = RenderingServer.canvas_item_create()
-	complexSwitchDraw = RenderingServer.canvas_item_create()
+	drawDropShadow = RenderingServer.canvas_item_create()
+	drawWarp = RenderingServer.canvas_item_create()
+	drawAura = RenderingServer.canvas_item_create()
+	drawMasterShine = RenderingServer.canvas_item_create()
+	drawMasterKey = RenderingServer.canvas_item_create()
+	drawComplexModeText = RenderingServer.canvas_item_create()
+	drawComplexSwitch = RenderingServer.canvas_item_create()
 	drawCurse = CurseParticle.new(curseColor,curseMode)
-	RenderingServer.canvas_item_set_material(masterShineDraw, Game.ADDITIVE_MATERIAL)
-	RenderingServer.canvas_item_set_material(complexSwitchDraw, Game.ADDITIVE_MATERIAL)
+	RenderingServer.canvas_item_set_material(drawMasterShine, Game.ADDITIVE_MATERIAL)
+	RenderingServer.canvas_item_set_material(drawComplexSwitch, Game.ADDITIVE_MATERIAL)
 	drawCurse.z_index = 4
-	RenderingServer.canvas_item_set_z_index(warpDraw,2)
-	RenderingServer.canvas_item_set_z_index(auraDraw,6)
-	RenderingServer.canvas_item_set_z_index(masterShineDraw,6)
-	RenderingServer.canvas_item_set_z_index(masterKeyDraw,6)
-	RenderingServer.canvas_item_set_z_index(complexModeTextDraw,6)
-	RenderingServer.canvas_item_set_z_index(complexSwitchDraw,6)
-	RenderingServer.canvas_item_set_parent(warpDraw, get_canvas_item())
-	RenderingServer.canvas_item_set_parent(auraDraw, get_canvas_item())
-	RenderingServer.canvas_item_set_parent(masterShineDraw, get_canvas_item())
-	RenderingServer.canvas_item_set_parent(masterKeyDraw, get_canvas_item())
-	RenderingServer.canvas_item_set_parent(complexModeTextDraw, get_canvas_item())
-	RenderingServer.canvas_item_set_parent(complexSwitchDraw, get_canvas_item())
+	RenderingServer.canvas_item_set_z_index(drawDropShadow,-3)
+	RenderingServer.canvas_item_set_z_index(drawWarp,2)
+	RenderingServer.canvas_item_set_z_index(drawAura,6)
+	RenderingServer.canvas_item_set_z_index(drawMasterShine,6)
+	RenderingServer.canvas_item_set_z_index(drawMasterKey,6)
+	RenderingServer.canvas_item_set_z_index(drawComplexModeText,6)
+	RenderingServer.canvas_item_set_z_index(drawComplexSwitch,6)
+	RenderingServer.canvas_item_set_parent(drawDropShadow, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawWarp, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawAura, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawMasterShine, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawMasterKey, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawComplexModeText, get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawComplexSwitch, get_canvas_item())
 	add_child(drawCurse)
 
 	for color in Game.COLORS:
@@ -321,34 +326,37 @@ func crashAnim() -> void:
 	crashAnimVal = 0.3137254902
 
 func _draw() -> void:
-	RenderingServer.canvas_item_clear(warpDraw)
-	RenderingServer.canvas_item_clear(auraDraw)
-	RenderingServer.canvas_item_clear(masterShineDraw)
-	RenderingServer.canvas_item_clear(masterKeyDraw)
-	RenderingServer.canvas_item_clear(complexModeTextDraw)
-	RenderingServer.canvas_item_clear(complexSwitchDraw)
+	RenderingServer.canvas_item_clear(drawDropShadow)
+	RenderingServer.canvas_item_clear(drawWarp)
+	RenderingServer.canvas_item_clear(drawAura)
+	RenderingServer.canvas_item_clear(drawMasterShine)
+	RenderingServer.canvas_item_clear(drawMasterKey)
+	RenderingServer.canvas_item_clear(drawComplexModeText)
+	RenderingServer.canvas_item_clear(drawComplexSwitch)
 	# warps
 	if Game.crashState:
 		var offset:int = int(12*sin(crashAnimAngle))
-		RenderingServer.canvas_item_add_texture_rect(warpDraw,Rect2(Vector2(-16+offset,-23),Vector2(32,32)),WARP_1,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
-		RenderingServer.canvas_item_add_texture_rect(warpDraw,Rect2(Vector2(-16-offset,-23),Vector2(32,32)),WARP_2,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
+		RenderingServer.canvas_item_add_texture_rect(drawWarp,Rect2(Vector2(-16+offset,-23),Vector2(32,32)),WARP_1,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
+		RenderingServer.canvas_item_add_texture_rect(drawWarp,Rect2(Vector2(-16-offset,-23),Vector2(32,32)),WARP_2,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
 		return
+	# drop shadow
+	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(-13,-20),Vector2(32,32)),%sprite.sprite_frames.get_frame_texture(%sprite.animation,%sprite.frame),false,Game.DROP_SHADOW_COLOR)
 	# auras
-	if auraRed: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_RED,false,AURA_DRAW_OPACITY)
-	if auraMaroon: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_MAROON,false,AURA_DRAW_OPACITY)
-	if auraGreen: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_GREEN,false,AURA_DRAW_OPACITY)
-	if auraForest: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_FOREST,false,AURA_DRAW_OPACITY)
-	if auraBlue: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_BLUE,false,AURA_DRAW_OPACITY)
-	if auraNavy: RenderingServer.canvas_item_add_texture_rect(auraDraw,AURA_RECT,AURA_NAVY,false,AURA_DRAW_OPACITY)
+	if auraRed: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_RED,false,AURA_DRAW_OPACITY)
+	if auraMaroon: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_MAROON,false,AURA_DRAW_OPACITY)
+	if auraGreen: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_GREEN,false,AURA_DRAW_OPACITY)
+	if auraForest: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_FOREST,false,AURA_DRAW_OPACITY)
+	if auraBlue: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_BLUE,false,AURA_DRAW_OPACITY)
+	if auraNavy: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_NAVY,false,AURA_DRAW_OPACITY)
 	# held
 	if masterCycle != 0:
 		var masterShineScale:float = 0.8 + 0.2*sin(masterShineAngle)
 		var masterDrawOpacity:Color = Color(Color.WHITE,masterShineScale*0.6)
-		RenderingServer.canvas_item_add_texture_rect(masterShineDraw,Rect2(Vector2(-32,-32)*masterShineScale,Vector2(64,64)*masterShineScale),HELD_SHINE,false,getMasterShineColor())
-		RenderingServer.canvas_item_add_texture_rect(masterKeyDraw,Rect2(Vector2(-16,-16),Vector2(32,32)),getHeldKeySprite(),false,masterDrawOpacity)
+		RenderingServer.canvas_item_add_texture_rect(drawMasterShine,Rect2(Vector2(-32,-32)*masterShineScale,Vector2(64,64)*masterShineScale),HELD_SHINE,false,getMasterShineColor())
+		RenderingServer.canvas_item_add_texture_rect(drawMasterKey,Rect2(Vector2(-16,-16),Vector2(32,32)),getHeldKeySprite(),false,masterDrawOpacity)
 	if complexMode.eq(C.I):
-		TextDraw.outlinedCentered(Game.FTALK,complexModeTextDraw,"I-View",Color.from_hsv(Game.complexViewHue,0.4901960784,1),Color.BLACK,12,Vector2(0,-10))
+		TextDraw.outlinedCentered(Game.FTALK,drawComplexModeText,"I-View",Color.from_hsv(Game.complexViewHue,0.4901960784,1),Color.BLACK,12,Vector2(0,-10))
 	# complex switch
 	if complexSwitchAnim:
 		var switchScale:float = sin(complexSwitchAngle)
-		RenderingServer.canvas_item_add_texture_rect(complexSwitchDraw,Rect2(Vector2(-64*switchScale,-64*switchScale),Vector2(128*switchScale,128*switchScale)),CurseParticle.TEXTURE_GENERIC,false,Color(Color.WHITE,cos(complexSwitchAngle)))
+		RenderingServer.canvas_item_add_texture_rect(drawComplexSwitch,Rect2(Vector2(-64*switchScale,-64*switchScale),Vector2(128*switchScale,128*switchScale)),CurseParticle.TEXTURE_GENERIC,false,Color(Color.WHITE,cos(complexSwitchAngle)))

@@ -23,6 +23,13 @@ sources/1 = SubResource("TileSetAtlasSource_w7c3h")
 [node name="world" type="Node2D"]
 script = ExtResource("1_k0juu")
 
+[node name="tilesDropShadow" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+modulate = Color(0, 0, 0, 0.34901962)
+z_index = -2
+position = Vector2(3, 3)
+tile_set = SubResource("TileSet_w8frs")
+
 [node name="tiles" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
 z_index = -2

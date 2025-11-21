@@ -64,6 +64,7 @@ var frozen:bool = false
 var crumbled:bool = false
 var painted:bool = false
 
+var drawDropShadow:RID
 var drawScaled:RID # also draws aura breaker fills
 var drawAuraBreaker:RID
 var drawGlitch:RID
@@ -85,6 +86,7 @@ const COPIES_OUTLINE_COLOR = Color("#3e2d1c")
 func _init() -> void: size = Vector2(32,32)
 
 func _ready() -> void:
+	drawDropShadow = RenderingServer.canvas_item_create()
 	drawScaled = RenderingServer.canvas_item_create()
 	drawAuraBreaker = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
@@ -96,8 +98,10 @@ func _ready() -> void:
 	drawNegative = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawGlitch,Game.GLITCH_MATERIAL.get_rid())
 	RenderingServer.canvas_item_set_material(drawNegative,Game.NEGATIVE_MATERIAL.get_rid())
+	RenderingServer.canvas_item_set_z_index(drawDropShadow,-3)
 	RenderingServer.canvas_item_set_z_index(drawCopies,2)
 	RenderingServer.canvas_item_set_z_index(drawNegative,2)
+	RenderingServer.canvas_item_set_parent(drawDropShadow,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
@@ -110,6 +114,7 @@ func _ready() -> void:
 	Game.connect(&"goldIndexChanged",queue_redraw)
 
 func _draw() -> void:
+	RenderingServer.canvas_item_clear(drawDropShadow)
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawAuraBreaker)
 	RenderingServer.canvas_item_clear(drawGlitch)
@@ -120,6 +125,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawCopies)
 	RenderingServer.canvas_item_clear(drawNegative)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
+	RenderingServer.canvas_item_add_rect(drawDropShadow,Rect2(Vector2(3,3),size),Game.DROP_SHADOW_COLOR)
 	drawDoor(drawScaled,drawAuraBreaker,drawGlitch,drawMain,
 		size,colorAfterCurse(),colorAfterGlitch(),type,
 		gateAlpha,

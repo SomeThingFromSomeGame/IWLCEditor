@@ -81,12 +81,20 @@ class TileChange extends Change:
 		do()
 
 	func do() -> void:
-		if afterTile: Game.tiles.set_cell(position,1,Vector2i(1,1))
-		else: Game.tiles.erase_cell(position)
+		if afterTile:
+			Game.tiles.set_cell(position,1,Vector2i(1,1))
+			Game.tilesDropShadow.set_cell(position,1,Vector2i(1,1))
+		else:
+			Game.tiles.erase_cell(position)
+			Game.tilesDropShadow.erase_cell(position)
 
 	func undo() -> void:
-		if beforeTile: Game.tiles.set_cell(position,1,Vector2i(1,1))
-		else: Game.tiles.erase_cell(position)
+		if beforeTile:
+			Game.tiles.set_cell(position,1,Vector2i(1,1))
+			Game.tilesDropShadow.set_cell(position,1,Vector2i(1,1))
+		else:
+			Game.tiles.erase_cell(position)
+			Game.tilesDropShadow.erase_cell(position)
 
 	func _to_string() -> String:
 		return "<TileChange:"+str(position.x)+","+str(position.y)+">"
