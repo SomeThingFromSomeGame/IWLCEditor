@@ -446,14 +446,16 @@ func tryOpen(player:Player) -> void:
 
 	if gameCopies.neq(0): # although nothing (yet) can make a door 0 copy without destroying it
 		var willCrash:bool = false
+		var wontOpen:bool = false
 		for lock in locks:
 			if !lock.canOpen(player):
-				if lock.color == Game.COLOR.NONE: willCrash = true
+				if lock.colorAfterAurabreaker() == Game.COLOR.NONE: willCrash = true
 				else: return
+			elif lock.colorAfterAurabreaker() == Game.COLOR.NONE: wontOpen = true
 		for lock in remoteLocks:
 			if !lock.satisfied: return
 		if willCrash: Game.crash(); return
-	if hasColor(Game.COLOR.NONE): return
+		if wontOpen: return
 	var cost:C = C.ZERO
 	for lock in locks:
 		cost = cost.plus(lock.getCost(player))
@@ -613,10 +615,10 @@ func gateCheck(player:Player, starting:bool=false) -> void:
 		if !lock.canOpen(player):
 			if lock.colorAfterGlitch() == Game.COLOR.NONE: willCrash = true
 			else: shouldOpen = false
+		elif lock.colorAfterGlitch() == Game.COLOR.NONE: shouldOpen = false
 	for lock in remoteLocks:
 		if !lock.satisfied: shouldOpen = false
 	if shouldOpen and willCrash: Game.crash(); return
-	if hasColor(Game.COLOR.NONE): shouldOpen = false
 	if gateOpen and !shouldOpen:
 		if player.overlapping(%interact): gateBufferCheck = player
 		else: GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gateOpen",false))
