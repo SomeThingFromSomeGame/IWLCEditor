@@ -59,7 +59,13 @@ var drawMain:RID
 var drawAutoRunGradient:RID
 var autoRunTimer:float = 2
 
+var screenshot:Image
+
 func _ready() -> void:
+	Changes.editor = self
+	Mods.editor = self
+	Saving.editor = self
+	Explainer.editor = self
 	drawDescription = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawAutoRunGradient = RenderingServer.canvas_item_create()
@@ -72,11 +78,11 @@ func _ready() -> void:
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
 	settingsMenu.gameSettings.editor = self
 	settingsMenu.opened()
-	if Game.awaitingEditor: Game.editReadied()
 	Saving.editorReady()
 	if OS.has_feature('web'):
-		%fileMenu.menu.remove_item(6)
-		%fileMenu.menu.remove_item(4)
+		%fileMenu.menu.remove_item(5)
+		%fileMenu.menu.remove_item(3)
+	%screenshotViewport.world_2d = %gameViewport.world_2d
 
 func _process(delta:float) -> void:
 	queue_redraw()
@@ -435,6 +441,7 @@ func _input(event:InputEvent) -> void:
 						else: Game.playTest(Game.levelStart)
 				KEY_DELETE: multiselect.delete()
 				KEY_TAB: grab_focus()
+				KEY_F2: takeScreenshot()
 
 func home() -> void:
 	targetCameraZoom = 1
@@ -534,3 +541,7 @@ func autoRun() -> void:
 	autoRunTimer = 0
 	%settingsMenu.gameSettings.closed(%settingsMenu.configFile)
 	%settingsMenu.configFile.save("user://config.ini")
+
+func takeScreenshot() -> void:
+	screenshot = %screenshotViewport.get_texture().get_image()
+	screenshot.resize(200,152)

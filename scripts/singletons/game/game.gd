@@ -183,8 +183,6 @@ var complexViewHue:float = 0
 var editorWindowSize:Vector2
 var editorWindowMode:Window.Mode
 
-var awaitingEditor:bool = false
-
 var simpleLocks:bool = false:
 	set(value):
 		simpleLocks = value
@@ -209,6 +207,7 @@ func setWorld(_world:World) -> void:
 	tilesDropShadow = world.tilesDropShadow
 	objectsParent = world.objectsParent
 	particlesParent = world.particlesParent
+	level.activate()
 	updateWindowName()
 
 func _process(delta:float) -> void:
@@ -303,12 +302,12 @@ func setGlitch(color:COLOR) -> void:
 			object.setGlitch(color)
 
 func play() -> void:
-	if !levelStart: return Saving.loadError("No level start found,\nCannot play level.", "Play Error")
+	if !levelStart: return Saving.errorPopup("No level start found,\nCannot play level.", "Play Error")
 	Saving.confirmAction = Saving.ACTION.SAVE_FOR_PLAY
 	Saving.save()
 	playTime = 0
 
-func playSaved() -> void:
+func playSaved(fromOpenWindow:OpenWindow=null) -> void:
 	editorWindowMode = get_window().mode
 	editorWindowSize = get_window().size
 	get_tree().change_scene_to_file("res://scenes/playGame.tscn")
@@ -316,10 +315,10 @@ func playSaved() -> void:
 	if !OS.has_feature("web"): get_window().size = Vector2(800,608)
 	objects.clear()
 	components.clear()
-
-func playReadied() -> void:
+	await get_tree().scene_changed
 	setWorld(playGame.world)
-	Saving.loadFile(Saving.savePath)
+	if fromOpenWindow: fromOpenWindow.resolve()
+	else: Saving.loadFile(Saving.savePath, true)
 	playState = PLAY_STATE.PLAY
 	playGame.loadSettings()
 	playGame.startLevel()
@@ -327,21 +326,15 @@ func playReadied() -> void:
 func edit() -> void:
 	won = false
 	crashState = CRASH_STATE.NONE
-	awaitingEditor = true
 	playState = PLAY_STATE.EDIT
 	get_tree().change_scene_to_file("res://scenes/editor.tscn")
 	get_window().mode = editorWindowMode
 	if !OS.has_feature("web"): get_window().size = editorWindowSize
 	objects.clear()
 	components.clear()
-
-func editReadied() -> void:
+	await get_tree().scene_changed
 	editor = get_node("/root/editor")
-	Changes.editor = editor
-	Mods.editor = editor
-	Saving.editor = editor
-	Explainer.editor = editor
-	Saving.loadFile(Saving.savePath)
+	Saving.loadFile(Saving.savePath, true)
 	await get_tree().process_frame
 	editor.home()
 

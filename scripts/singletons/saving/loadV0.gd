@@ -64,18 +64,18 @@ static var ARRAYS:Dictionary[GDScript,Dictionary] = {
 # - components
 # - objects
 
-static func load(file:FileAccess) -> void:
-	Game.level = file.get_var(true)
-	Game.levelBounds.size = file.get_var()
-	for mod in file.get_var(): Mods.mods[mod].active = true
-	var modpackId:StringName = file.get_var()
-	if modpackId:
-		Mods.activeModpack = Mods.modpacks[modpackId]
-		Mods.activeVersion = Mods.activeModpack.versions[file.get_32()]
-	else:
-		Mods.activeModpack = null
-		Mods.activeVersion = null
-	var levelStart:int = file.get_64()
+static func loadFile(file:FileAccess) -> void:
+	#Game.level = file.get_var(true)
+	#Game.levelBounds.size = file.get_var()
+	#for mod in file.get_var(): Mods.mods[mod].active = true
+	#var modpackId:StringName = file.get_var()
+	#if modpackId:
+	#	Mods.activeModpack = Mods.modpacks[modpackId]
+	#	Mods.activeVersion = Mods.activeModpack.versions[file.get_32()]
+	#else:
+	#	Mods.activeModpack = null
+	#	Mods.activeVersion = null
+	#var levelStart:int = file.get_64()
 	# LEVEL DATA
 	# tiles
 	Game.tiles.tile_map_data = file.get_var()
@@ -140,9 +140,9 @@ static func load(file:FileAccess) -> void:
 			if arrayType in COMPONENTS: value = Saving.IDArraytoComponents(arrayType,value)
 			object.get(array).assign(value)
 
-	if levelStart != -1:
-		Game.levelStart = Game.objects[levelStart]
-		if Game.editor: Game.editor.topBar._updateButtons()
+	#if levelStart != -1:
+	#	Game.levelStart = Game.objects[levelStart]
+	#	if Game.editor: Game.editor.topBar._updateButtons()
 	
 	Game.updateWindowName()
 	if Game.editor:

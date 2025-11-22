@@ -1,8 +1,8 @@
 extends Node
 
-@onready var editor:Editor = get_node("/root/editor")
+var editor:Editor
 
-enum ACTION {NEW, OPEN, SAVE_FOR_PLAY, OPEN_FOR_PLAY, NONE}
+enum ACTION {NEW, OPEN, SAVE_FOR_PLAY, NONE}
 
 var savePath:String = ""
 var confirmAction:ACTION
@@ -18,7 +18,7 @@ const FILE_FORMAT_VERSION:int = 0
 # - file format version number
 # LEVEL METADATA:
 # - level object
-# - level size
+# - screenshot
 # - active mods
 # - modpack
 # - modpack version
@@ -51,14 +51,6 @@ func open() -> void:
 		editor.unsavedChangesPopup.grab_focus()
 	else: confirmed()
 
-func openForPlay() -> void:
-	confirmAction = ACTION.OPEN_FOR_PLAY
-	if Game.anyChanges:
-		editor.unsavedChangesPopup.position = get_window().position+(get_window().size-editor.unsavedChangesPopup.size)/2
-		editor.unsavedChangesPopup.visible = true
-		editor.unsavedChangesPopup.grab_focus()
-	else: confirmed()
-
 func saveAs() -> void:
 	editor.saveAsDialog.current_dir = "puzzles"
 	editor.saveAsDialog.current_file = "puzzles/"+Game.level.name+".cedit"
@@ -76,7 +68,7 @@ func new() -> void:
 func confirmed() -> void:
 	match confirmAction:
 		ACTION.NEW: clear()
-		ACTION.OPEN, ACTION.OPEN_FOR_PLAY:
+		ACTION.OPEN:
 			if OS.has_feature('web'):
 				jsCallback = JavaScriptBridge.create_callback(loadJs)
 				JavaScriptBridge.get_interface("callbacks").loadJs = jsCallback
@@ -162,7 +154,8 @@ func save(path:String="") -> void:
 	file.store_32(FILE_FORMAT_VERSION)
 	# LEVEL METADATA
 	file.store_var(Game.level,true)
-	file.store_var(Game.levelBounds.size)
+	editor.takeScreenshot()
+	file.store_var(editor.screenshot,true)
 	file.store_var(Mods.getActiveMods())
 	var modpackId = Mods.modpacks.find_key(Mods.activeModpack)
 	file.store_var(modpackId if modpackId else &"")
@@ -204,19 +197,32 @@ func IDArraytoComponents(type:GDScript,array:Array) -> Array:
 	if type in Game.NON_OBJECT_COMPONENTS: return array.map(func(id):return Game.components[id])
 	else: return array.map(func(id):return Game.objects[id])
 
-func loadFile(path:String) -> void:
-	clear()
-	savePath = path
-	if confirmAction == ACTION.OPEN_FOR_PLAY:
-		confirmAction = ACTION.OPEN
-		return Game.playSaved()
+func loadFile(path:String, immediate:bool=false) -> OpenWindow:
+	var openWindow:OpenWindow = preload("res://scenes/openWindow.tscn").instantiate()
+	openWindow.position = get_window().position+(get_window().size-openWindow.size)/2
+	openWindow.path = path
 
 	var file:FileAccess = FileAccess.open(path,FileAccess.ModeFlags.READ)
 
-	if file.get_pascal_string() != "IWLCEditorPuzzle": return loadError("Unrecognised file format")
+	if file.get_pascal_string() != "IWLCEditorPuzzle": errorPopup("Unrecognised file format"); return null
 	match file.get_32():
-		0: LoadV0.load(file)
-		_: return loadError("Unrecognised version")
+		0: openWindow.loader = LoadV0
+		_:
+			openWindow.queue_free()
+			errorPopup("Unrecognised file version"); return null
+
+	openWindow.level = file.get_var(true)
+	openWindow.screenshot = file.get_var(true)
+	openWindow.mods = file.get_var()
+	var modpackId:StringName = file.get_var()
+	if modpackId:
+		openWindow.modpack = Mods.modpacks[modpackId]
+		openWindow.version = Mods.modpacks[modpackId].versions[file.get_32()]
+	openWindow.levelStart = file.get_64()
+	openWindow.file = file
+	if immediate: openWindow.resolve()
+	else: editor.add_child(openWindow)
+	return openWindow
 
 func loadJs(result) -> void:
 	var buffer:PackedByteArray = Marshalls.base64_to_raw(result[0])
@@ -225,7 +231,7 @@ func loadJs(result) -> void:
 	file.close()
 	loadFile("user://temp.cedit")
 
-func loadError(message:String,title:="Load Error") -> void:
+func errorPopup(message:String,title:="Load Error") -> void:
 	editor.loadErrorPopup.title = title
 	editor.loadErrorPopup.dialog_text = message
 	editor.loadErrorPopup.position = get_window().position+(get_window().size-editor.loadErrorPopup.size)/2

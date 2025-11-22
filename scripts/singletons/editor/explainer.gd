@@ -10,7 +10,7 @@ const ARROWS:String = "[img]res://assets/ui/explainer/arrows.png[/img]"
 var explainedControl:Control
 var controlExplanation:ControlExplanation
 
-@onready var editor:Editor = get_node("/root/editor")
+var editor:Editor
 
 func _ready() -> void:
 	for control:Control in get_tree().get_nodes_in_group("explained"):

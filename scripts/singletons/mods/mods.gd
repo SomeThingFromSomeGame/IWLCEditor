@@ -1,5 +1,5 @@
 extends Node
-@onready var editor:Editor = get_node("/root/editor")
+var editor:Editor
 
 static var mods:Dictionary[StringName, Mod] = {
 	&"NstdLockSize": Mod.new(

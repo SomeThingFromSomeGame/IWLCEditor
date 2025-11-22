@@ -6,9 +6,21 @@ var number:String = ""
 var name:String = "Unnamed Level":
 	set(value):
 		name = value
-		Game.updateWindowName()
+		if active: Game.updateWindowName()
 var description:String = ""
 var author:String = ""
+var size:Vector2i = Vector2i(800,608):
+	set(value):
+		size = value
+		if active: Game.levelBounds.size = size
+
+var active:bool = false
+
+func activate() -> void:
+	active = true
+	Game.level = self
+	Game.updateWindowName()
+	Game.levelBounds.size = size
 
 func _get_property_list() -> Array[Dictionary]:
 	return [
@@ -17,4 +29,5 @@ func _get_property_list() -> Array[Dictionary]:
 		{"name":"name","type":TYPE_STRING,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE},
 		{"name":"description","type":TYPE_STRING,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE},
 		{"name":"author","type":TYPE_STRING,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE},
+		{"name":"size","type":TYPE_VECTOR2I,"usage":PROPERTY_USAGE_SCRIPT_VARIABLE|PROPERTY_USAGE_STORAGE},
 	]

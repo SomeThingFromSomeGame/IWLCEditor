@@ -151,27 +151,25 @@ unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("5_m12ww")
 flat = false
-item_count = 10
+item_count = 9
 popup/item_0/text = "New"
 popup/item_0/id = 0
-popup/item_1/text = "Open To Edit"
+popup/item_1/text = "Open"
 popup/item_1/id = 1
-popup/item_2/text = "Open To Play"
+popup/item_2/text = "Save"
 popup/item_2/id = 2
-popup/item_3/text = "Save"
+popup/item_3/text = "Save As"
 popup/item_3/id = 3
-popup/item_4/text = "Save As"
+popup/item_4/text = "Export"
 popup/item_4/id = 4
-popup/item_5/text = "Export"
+popup/item_5/text = "Open Puzzles Folder"
 popup/item_5/id = 5
-popup/item_6/text = "Open Puzzles Folder"
 popup/item_6/id = 6
+popup/item_6/separator = true
+popup/item_7/text = "Mods "
 popup/item_7/id = 7
-popup/item_7/separator = true
-popup/item_8/text = "Mods "
+popup/item_8/text = "Play Current"
 popup/item_8/id = 8
-popup/item_9/text = "Play Current"
-popup/item_9/id = 9
 script = ExtResource("6_7msgv")
 
 [node name="spacer" type="Control" parent="c/c/topBar/c/modes"]
@@ -519,6 +517,21 @@ layout_mode = 2
 toggle_mode = true
 icon = ExtResource("27_1abrv")
 metadata/explanation = SubResource("Resource_jke8t")
+
+[node name="screenshotViewportCont" type="SubViewportContainer" parent="."]
+layout_mode = 0
+offset_top = -608.0
+offset_right = 800.0
+
+[node name="screenshotViewport" type="SubViewport" parent="screenshotViewportCont"]
+unique_name_in_owner = true
+handle_input_locally = false
+size = Vector2i(800, 608)
+render_target_update_mode = 4
+
+[node name="screenshotCamera" type="Camera2D" parent="screenshotViewportCont/screenshotViewport"]
+unique_name_in_owner = true
+anchor_mode = 0
 
 [node name="focusDialog" parent="." instance=ExtResource("12_74j0u")]
 unique_name_in_owner = true

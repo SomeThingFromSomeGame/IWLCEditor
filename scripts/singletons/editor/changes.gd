@@ -1,6 +1,6 @@
 extends Node
 
-@onready var editor:Editor = get_node("/root/editor")
+var editor:Editor
 
 var undoStack:Array[RefCounted] = [UndoSeparator.new()]
 var stackPosition:int = 0

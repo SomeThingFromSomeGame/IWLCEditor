@@ -39,7 +39,6 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawMain, %drawParent.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %drawParent.get_canvas_item())
 	Game.playGame = self
-	Game.playReadied()
 
 func _process(delta:float) -> void:
 	textWiggleAngle += 5.8643062867*delta # 5.6 degrees per frame, 60fps
