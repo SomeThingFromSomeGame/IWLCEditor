@@ -41,7 +41,10 @@ func getProblemName() -> String:
 		[&"C4", &"AuraBreakerColor"]: return "Aura Breaker Color"
 		[&"C5", &"CurseKeyType"]: return "Curse/Decurse Key"
 		[&"C5", &"LockArmament"]: return "Lock Armament"
-	return "huh?? what??"
+
+		[&"DisconnectedLock", &"DisconnectedLock"]: return "Disconnected Lock"
+		[&"OutOfBounds", &"OutOfBounds"]: return "Object Out of Bounds"
+	return "Somebody forgot to set the ProblemDisplay text for this error :)"
 
 func showInstance(index:int) -> void:
 	showIndex = index

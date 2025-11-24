@@ -62,6 +62,16 @@ func _modSelected(button:ModSelectButton) -> void:
 	%problemsLabel.text = "Problems found:" if anyProblems else "No problems here"
 
 func findProblems(component:GameComponent) -> void:
+	if component is Lock:
+		if &"DisconnectedLock" in modsWindow.modsRemoved:
+			var rect:Rect2 = Rect2(component.position, component.size)
+			var bounds:Rect2 = Rect2(component.getOffset(), component.parent.size)
+			noteProblem(&"DisconnectedLock", &"DisconnectedLock", component, !bounds.intersects(rect))
+	else:
+		if &"OutOfBounds" in modsWindow.modsRemoved:
+			var rect:Rect2 = Rect2(component.position, component.size)
+			noteProblem(&"OutOfBounds", &"OutOfBounds", component, !Game.levelBounds.intersects(rect))
+
 	match component.get_script():
 		KeyBulk:
 			findColorProblems(component, component.color)
