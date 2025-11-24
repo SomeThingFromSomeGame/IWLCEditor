@@ -37,13 +37,15 @@ var zoomPoint:Vector2 # the point where the latest zoom was targetted
 var objectHovered:GameObject
 var componentHovered:GameComponent # you can hover both a door and a lock at the same time so
 
-enum DRAG_MODE {POSITION, SIZE_FDIAG, SIZE_BDIAG, SIZE_VERT, SIZE_HORIZ}
+enum DRAG_MODE {POSITION, SIZE_DIAG, SIZE_VERT, SIZE_HORIZ}
 enum SIZE_DRAG_PIVOT {TOP_LEFT, TOP, TOP_RIGHT, LEFT, RIGHT, BOTTOM_LEFT, BOTTOM, BOTTOM_RIGHT, NONE}
+const SIZE_DRAG_DIRECTIONS:Array[Vector2] = [Vector2(-1,-1), Vector2(0,-1), Vector2(1,-1), Vector2(-1,0), Vector2(1,0), Vector2(-1,1), Vector2(0,1), Vector2(1,1), Vector2(0,0)]
 var componentDragged:GameComponent
 var dragMode:DRAG_MODE
-var dragOffset:Vector2 # the offset for position dragging
 var dragPivotRect:Rect2 # the pivot for size dragging
-var previousDragPosition:Vector2i # to check whether or not a drag would do anything
+var dragHandlePosition:Vector2
+var previousDragPosition:Vector2i
+var dragHandle:Vector2 # direction of the handle (initially), so that size_vert and size_horiz behave as they do
 
 var lockBufferConvert:bool = false
 var connectionSource:GameObject # for pulling connections between remote locks and doors
@@ -105,7 +107,7 @@ func _process(delta:float) -> void:
 
 
 	mouseWorldPosition = screenspaceToWorldspace(get_global_mouse_position())
-	mouseTilePosition = Vector2i(mouseWorldPosition) / tileSize * tileSize
+	mouseTilePosition = Vector2i(floor(mouseWorldPosition / Vector2(tileSize))) * tileSize
 	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
 	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition)
 	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
@@ -177,7 +179,7 @@ func _gui_input(event:InputEvent) -> void:
 			elif componentDragged:
 				match dragMode:
 					DRAG_MODE.POSITION: mouse_default_cursor_shape = CURSOR_DRAG
-					DRAG_MODE.SIZE_FDIAG, DRAG_MODE.SIZE_BDIAG:
+					DRAG_MODE.SIZE_DIAG:
 						pass
 						var diffSign:Vector2 = rectSign(dragPivotRect, Vector2(mouseTilePosition))
 						match diffSign:
@@ -205,7 +207,7 @@ func _gui_input(event:InputEvent) -> void:
 			elif objectHovered:
 				if objectHovered.receiveMouseInput(event): return
 			# dragging
-			if componentDragged and dragComponent(): return
+			if componentDragged: dragComponent(); return
 			# other
 			match mode:
 				MODE.SELECT:
@@ -291,94 +293,86 @@ func startPositionDrag(component:GameComponent) -> void:
 	if component is GameObject: focusDialog.focus(component)
 	else: focusDialog.focusComponent(component)
 	componentDragged = component
-	dragOffset = component.position - Vector2(mouseTilePosition)
 	dragMode = DRAG_MODE.POSITION
 	previousDragPosition = mouseTilePosition
 
-func startSizeDrag(component:GameComponent, pivot:SIZE_DRAG_PIVOT=SIZE_DRAG_PIVOT.BOTTOM_RIGHT) -> void:
+func startSizeDrag(component:GameComponent, handle:Vector2=Vector2(1,1)) -> void:
 	focusDialog.defocus()
 	componentDragged = component
-	var rectPos:Vector2 = Vector2.ZERO
 	var minSize:Vector2
 	if component is Door: minSize = Vector2(32,32)
 	elif component is Lock or component is RemoteLock: minSize = Vector2(18,18)
 	elif component is KeyCounter: minSize = Vector2(107,63)
-	if component is not GameObject: rectPos += component.parent.position
-	match pivot:
-		SIZE_DRAG_PIVOT.BOTTOM_RIGHT: rectPos += componentDragged.position; dragMode = DRAG_MODE.SIZE_FDIAG
-		SIZE_DRAG_PIVOT.TOP_LEFT: rectPos += componentDragged.position+componentDragged.size-minSize; dragMode = DRAG_MODE.SIZE_FDIAG
-		SIZE_DRAG_PIVOT.TOP_RIGHT: rectPos += componentDragged.position+Vector2(0,componentDragged.size.y-minSize.y); dragMode = DRAG_MODE.SIZE_BDIAG
-		SIZE_DRAG_PIVOT.BOTTOM_LEFT: rectPos += componentDragged.position+Vector2(componentDragged.size.x-minSize.x,0); dragMode = DRAG_MODE.SIZE_BDIAG
-		SIZE_DRAG_PIVOT.BOTTOM: rectPos += componentDragged.position; dragMode = DRAG_MODE.SIZE_VERT
-		SIZE_DRAG_PIVOT.TOP: rectPos += componentDragged.position+Vector2(0,componentDragged.size.y-minSize.y); dragMode = DRAG_MODE.SIZE_VERT
-		SIZE_DRAG_PIVOT.RIGHT: rectPos += componentDragged.position; dragMode = DRAG_MODE.SIZE_HORIZ
-		SIZE_DRAG_PIVOT.LEFT: rectPos += componentDragged.position+Vector2(componentDragged.size.x-minSize.x,0); dragMode = DRAG_MODE.SIZE_HORIZ
-	if dragMode == DRAG_MODE.SIZE_VERT:  minSize.x = componentDragged.size.x
-	if dragMode == DRAG_MODE.SIZE_HORIZ:  minSize.y = componentDragged.size.y
-	dragPivotRect = Rect2(rectPos, minSize)
+	if handle.x and handle.y: dragMode = DRAG_MODE.SIZE_DIAG
+	elif handle.x: dragMode = DRAG_MODE.SIZE_HORIZ; minSize.y = componentDragged.size.y
+	elif handle.y: dragMode = DRAG_MODE.SIZE_VERT; minSize.x = componentDragged.size.x
+	
+	var parentPosition:Vector2i = component.parent.position if component.get_script() in Game.NON_OBJECT_COMPONENTS else Vector2i.ZERO
+	dragPivotRect = Rect2(component.position + (component.size - minSize) * Vector2.ZERO.max(-handle), minSize)
+	dragHandlePosition = mouseTilePosition - parentPosition
 	previousDragPosition = mouseTilePosition
+	dragHandle = handle
 
-func dragComponent() -> bool: # returns whether or not an object is being dragged, for laziness
-	if !componentDragged: return false
-	if mouseTilePosition == previousDragPosition and componentDragged is not KeyCounterElement: return true
-	lockBufferConvert = false
-	previousDragPosition = mouseTilePosition
-	var dragPosition:Vector2 = mouseTilePosition
-	var parentPosition:Vector2 = Vector2.ZERO
-	if componentDragged is not GameObject: parentPosition = componentDragged.parent.position
-	# clamp to bounds
-	if dragMode == DRAG_MODE.POSITION: dragPosition += Vector2(dragOffset)
-	else: dragPosition -= parentPosition
+func dragComponent() -> void: # returns whether or not an object is being dragged, for laziness
+	var dragOffset:Vector2 = mouseTilePosition - previousDragPosition
+	lockBufferConvert = false # whether or not to buffer a conversion to remotelock
+	var bounds:Rect2
+	var allowOutOfBounds:bool = Mods.active(&"OutOfBounds")
 	if componentDragged is Lock:
-		var topLeft:Vector2 = componentDragged.getOffset()
-		var bottomRight:Vector2 = componentDragged.getOffset()+componentDragged.parent.size-Vector2.ONE
-		# this shit sucks
-		if dragPosition.x < topLeft.x or dragPosition.y < topLeft.y:
-			if Mods.active(&"C1"): lockBufferConvert = true
-			elif !Mods.active(&"DisconnectedLock"): dragPosition += ceil(Vector2.ZERO.max(topLeft-dragPosition)/Vector2(tileSize))*Vector2(tileSize)
-		if dragMode == DRAG_MODE.POSITION and (dragPosition.x > bottomRight.x or dragPosition.y > bottomRight.y):
-			if Mods.active(&"C1"): lockBufferConvert = true
-			elif !Mods.active(&"DisconnectedLock"): dragPosition += floor(Vector2.ZERO.min(bottomRight-dragPosition)/Vector2(tileSize))*Vector2(tileSize)
-	elif componentDragged is not KeyCounterElement and !Mods.active(&"OutOfBounds"):
-		var topLeft:Vector2 = Game.levelBounds.position
-		var bottomRight:Vector2 = Game.levelBounds.end-Vector2i.ONE
-		# this shit sucks
-		if dragPosition.x < topLeft.x or dragPosition.y < topLeft.y: dragPosition += ceil(Vector2.ZERO.max(topLeft-dragPosition)/Vector2(tileSize))*Vector2(tileSize)
-		if dragMode == DRAG_MODE.POSITION and (dragPosition.x > bottomRight.x or dragPosition.y > bottomRight.y): dragPosition += floor(Vector2.ZERO.min(bottomRight-dragPosition)/Vector2(tileSize))*Vector2(tileSize)
-	if dragMode == DRAG_MODE.POSITION: dragPosition -= Vector2(dragOffset)
-	else: dragPosition += parentPosition
+		allowOutOfBounds = (Mods.active(&"C1") and dragMode == DRAG_MODE.POSITION) or Mods.active(&"DisconnectedLock")
+		bounds = Rect2(componentDragged.getOffset(), componentDragged.parent.size)
+	else: bounds = Game.levelBounds
+	var innerBounds:Rect2 = bounds.grow(-1) # require strictly within
 	match dragMode:
 		DRAG_MODE.POSITION:
 			if componentDragged is KeyCounterElement:
-				dragPosition = mouseWorldPosition - Vector2(0,20)
-				if componentDragged.index > 0 and (componentDragged.position+parentPosition).y - dragPosition.y >= 20:
+				var dragPosition = mouseWorldPosition - Vector2(0,20)
+				if componentDragged.index > 0 and (componentDragged.getDrawPosition()).y - dragPosition.y >= 20:
 					componentDragged.parent._swapElements(componentDragged.index, componentDragged.index-1)
-				elif componentDragged.index < len(componentDragged.parent.elements) - 1 and (componentDragged.position+parentPosition).y - dragPosition.y <= -20:
+				elif componentDragged.index < len(componentDragged.parent.elements) - 1 and (componentDragged.getDrawPosition()).y - dragPosition.y <= -20:
 					componentDragged.parent._swapElements(componentDragged.index, componentDragged.index+1)
 			else:
-				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position",dragPosition + dragOffset))
-		DRAG_MODE.SIZE_FDIAG, DRAG_MODE.SIZE_BDIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ:
-			# since mousetileposition rounds down, dragging down or right should go one tile farther
-			if mouseWorldPosition.x > dragPivotRect.position.x:
-				dragPosition.x += tileSize.x
-				if componentDragged is Lock or componentDragged is RemoteLock: dragPosition.x += componentDragged.getOffset().x*2
-			if mouseWorldPosition.y > dragPivotRect.position.y:
-				dragPosition.y += tileSize.y
-				if componentDragged is Lock or componentDragged is RemoteLock: dragPosition.y += componentDragged.getOffset().y*2
+				var goingTo:Rect2 = Rect2(componentDragged.position + dragOffset, componentDragged.size)
+				if !bounds.intersects(goingTo):
+					if !allowOutOfBounds:
+						dragOffset += snappedAway(Vector2.ZERO.max(innerBounds.position - goingTo.end) - Vector2.ZERO.max(goingTo.position - innerBounds.end), Vector2(tileSize))
+					elif componentDragged is Lock and Mods.active(&"C1"): lockBufferConvert = true
+				previousDragPosition += Vector2i(dragOffset)
+				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position", componentDragged.position + dragOffset))
+		DRAG_MODE.SIZE_DIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ:
+			dragHandlePosition += dragOffset
+			var toPosition:Vector2 = dragPivotRect.position
+			# dragging up/left
+			toPosition += snappedTrunc(dragHandlePosition - dragPivotRect.position, Vector2(tileSize)) * Vector2.ZERO.max(sign(dragPivotRect.position - dragHandlePosition))
+			# dragging down/right (we add another tileSize because itd otherwise be at the top left corner)
+			toPosition += (dragPivotRect.size * abs(dragHandle) + snappedTrunc(dragHandlePosition - dragPivotRect.end, Vector2(tileSize)) + Vector2(tileSize)) * Vector2.ZERO.max(sign(dragHandlePosition - dragPivotRect.position))
+			
 			# keycounter has only a few possible widths
 			if componentDragged is KeyCounter:
-				dragPosition -= dragPivotRect.position
-				if dragPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]: dragPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]
-				elif dragPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]: dragPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]
-				elif dragPosition.x > KeyCounter.WIDTHS[2]: dragPosition.x = KeyCounter.WIDTHS[2]
-				elif dragPosition.x > KeyCounter.WIDTHS[1]: dragPosition.x = KeyCounter.WIDTHS[1]
-				else: dragPosition.x = 0
-				dragPosition.y = 0
-				dragPosition += dragPivotRect.position
-			var toRect:Rect2 = dragPivotRect.expand(dragPosition)
-			Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position",toRect.position-parentPosition))
+				toPosition -= dragPivotRect.position
+				if toPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]: toPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]
+				elif toPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]: toPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]
+				elif toPosition.x >= KeyCounter.WIDTHS[2]: toPosition.x = KeyCounter.WIDTHS[2]
+				elif toPosition.x >= KeyCounter.WIDTHS[1]: toPosition.x = KeyCounter.WIDTHS[1]
+				else: toPosition.x = 0
+				toPosition.y = 0
+				toPosition += dragPivotRect.position
+
+			# keep in bounds
+			if !allowOutOfBounds:
+				toPosition += Vector2.ZERO.max(sign(dragHandle)) * snappedAway(Vector2.ZERO.max(innerBounds.position - toPosition), Vector2(tileSize))
+				toPosition -= Vector2.ZERO.max(-sign(dragHandle)) * snappedAway(Vector2.ZERO.max(toPosition - innerBounds.end), Vector2(tileSize))
+			
+			var toRect:Rect2 = dragPivotRect.expand(toPosition)
+			if componentDragged is Door:
+				for lock in componentDragged.locks:
+					var doorInnerBounds:Rect2 = Rect2(lock.getOffset(), componentDragged.size).grow(-1)
+					var lockGoingTo:Rect2 = Rect2(lock.position-toRect.position+componentDragged.position, lock.size) # keep relative position even if the door moves
+					lockGoingTo.position += snappedAway(Vector2.ZERO.max(doorInnerBounds.position - lockGoingTo.end) - Vector2.ZERO.max(lockGoingTo.position - doorInnerBounds.end), Vector2(tileSize)) # keep in bounds
+					Changes.addChange(Changes.PropertyChange.new(lock,&"position",lockGoingTo.position))
+			previousDragPosition += Vector2i(dragOffset)
+			Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position",toRect.position))
 			Changes.addChange(Changes.PropertyChange.new(componentDragged,&"size",toRect.size))
-	return true
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventKey and event.is_pressed():
@@ -468,7 +462,7 @@ static func isRightClick(event:InputEvent) -> bool: return event is InputEventMo
 static func isLeftUnclick(event:InputEvent) -> bool: return event is InputEventMouseButton and !event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT
 static func isRightUnclick(event:InputEvent) -> bool: return event is InputEventMouseButton and !event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT
 
-func sizeDragging() -> bool: return dragMode in [DRAG_MODE.SIZE_FDIAG, DRAG_MODE.SIZE_BDIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ]
+func sizeDragging() -> bool: return dragMode in [DRAG_MODE.SIZE_DIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ]
 
 static func rectSign(rect:Rect2, point:Vector2) -> Vector2: # the "sign" of a point minus a rectangle, ie. where it is in relation
 	var signX:float = 0
@@ -478,6 +472,12 @@ static func rectSign(rect:Rect2, point:Vector2) -> Vector2: # the "sign" of a po
 	if point.y < rect.position.y: signY = -1
 	if point.y >= rect.end.y: signY = 1
 	return Vector2(signX, signY)
+
+static func snappedAway(vector:Variant, to:Variant) -> Variant: # snap, round away from 0
+	return sign(vector) * ceil(abs(vector)/to)*to
+
+static func snappedTrunc(vector:Variant, to:Variant) -> Variant: # snap, round towards 0
+	return sign(vector) * floor(abs(vector)/to)*to
 
 func scrollIntoView(component:GameComponent) -> void:
 	var rect:Rect2 = Rect2(component.getDrawPosition()-Vector2(16,16), component.size+Vector2(32,32))

@@ -15,7 +15,7 @@ func getSprite() -> Texture2D:
 		WIDTHS[0]: return SHORT
 		WIDTHS[1]: return MEDIUM
 		WIDTHS[2]: return LONG
-	return null
+	return LONG
 
 # the ninepatch (or i guess 3 since we dont care about horizontally) tiling for this is weird
 const TOP_LEFT:Vector2 = Vector2(16,16)
@@ -63,12 +63,10 @@ func receiveMouseInput(event:InputEventMouse) -> bool:
 	if editor.componentDragged: return false
 	var dragCornerSize:Vector2 = Vector2(8,8)/editor.cameraZoom
 	var diffSign:Vector2 = Editor.rectSign(Rect2(position+dragCornerSize,size-dragCornerSize*2), editor.mouseWorldPosition)
-	var dragPivot:Editor.SIZE_DRAG_PIVOT = Editor.SIZE_DRAG_PIVOT.NONE
-	match diffSign.x:
-		-1.0: dragPivot = Editor.SIZE_DRAG_PIVOT.LEFT;			editor.mouse_default_cursor_shape = Control.CURSOR_HSIZE
-		1.0: dragPivot = Editor.SIZE_DRAG_PIVOT.RIGHT;			editor.mouse_default_cursor_shape = Control.CURSOR_HSIZE
-	if dragPivot != Editor.SIZE_DRAG_PIVOT.NONE and Editor.isLeftClick(event):
-		editor.startSizeDrag(self, dragPivot)
+	if !diffSign.x: return false
+	editor.mouse_default_cursor_shape = Control.CURSOR_HSIZE
+	if Editor.isLeftClick(event):
+		editor.startSizeDrag(self, Vector2(diffSign.x,0))
 		return true
 	return false
 
