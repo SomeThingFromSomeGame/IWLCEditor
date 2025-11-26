@@ -22,7 +22,8 @@ func _ready() -> void:
 	%image.texture = ImageTexture.create_from_image(screenshot)
 	if modpack: %modpack.texture = modpack.iconSmall
 	else: %modpack.visible = false
-	if mods: %mods.text = ", ".join(mods.map(func(mod): return Mods.mods[mod].name))
+	if mods: %mods.text = ", ".join(mods.filter(func(mod): return Mods.mods[mod].disclosatory).map(func(mod): return Mods.mods[mod].name))
+	if modpack: %mods.text += ", " + modpack.name + " (" + version.name + ": " + ", ".join(version.mods.map(func(mod): return Mods.mods[mod].name)) + ")"
 	if levelStart == -1:
 		%play.disabled = true
 		%play.text = "Play (disabled; no level start)"
