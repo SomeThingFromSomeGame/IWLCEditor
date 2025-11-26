@@ -112,10 +112,10 @@ func getActiveMods() -> Array[StringName]:
 		if mods[mod].active: array.append(mod)
 	return array
 
-func getTempActiveMods() -> Array[StringName]:
+func getTempActiveMods(includeDisclosatory:bool=true) -> Array[StringName]:
 	var array:Array[StringName] = []
 	for mod in mods.keys():
-		if mods[mod].tempActive: array.append(mod)
+		if mods[mod].tempActive and (includeDisclosatory or !mods[mod].disclosatory): array.append(mod)
 	return array
 
 

@@ -18,7 +18,7 @@ var saveBuffered:bool = false
 
 func setup() -> void:
 	updateModpacks()
-	updateversions()
+	updateVersions()
 	updateMods()
 	setInfoModpack(modsWindow.tempActiveModpack)
 
@@ -34,7 +34,7 @@ func updateModpacks() -> void:
 		%modpacks.set_item_disabled(-1, true)
 		%modpacks.select(-1)
 
-func updateversions() -> void:
+func updateVersions() -> void:
 	%versions.clear()
 	if modsWindow.tempActiveModpack:
 		%versionsLabel.visible = true
@@ -84,10 +84,10 @@ func _modpackSelected(index:int, manual:bool=false) -> void:
 		modsWindow.tempActiveModpack = Mods.modpacks.values()[index]
 		modsWindow.tempActiveVersion = modsWindow.tempActiveModpack.versions[0]
 	updateModpacks()
-	updateversions()
+	updateVersions()
 	if index != -1 and !manual:
 		for modId in Mods.mods.keys():
-			addChange(ModChange.new(self, modId, modId in modsWindow.tempActiveVersion.mods))
+			if !Mods.mods[modId].disclosatory: addChange(ModChange.new(self, modId, modId in modsWindow.tempActiveVersion.mods))
 	setInfoModpack(modsWindow.tempActiveModpack)
 	if !manual: bufferSave()
 
@@ -107,7 +107,7 @@ func _modsSelected() -> void:
 func findModpack() -> void:
 	# get the current modpack (and version) (or none) from selected Mods
 	# assumes modpack Mods are in the correct order
-	var activeMods:Array[StringName] = Mods.getTempActiveMods()
+	var activeMods:Array[StringName] = Mods.getTempActiveMods(false)
 	var modpackIndex:int = 0
 	for modpackId in Mods.modpacks.keys():
 		var modpack:Mods.Modpack = Mods.modpacks[modpackId]
