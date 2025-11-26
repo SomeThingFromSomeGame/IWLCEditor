@@ -209,6 +209,7 @@ func _gui_input(event:InputEvent) -> void:
 			# dragging
 			if componentDragged: dragComponent(); return
 			# other
+			var inBounds:bool = Mods.active(&"OutOfBounds") or Game.levelBounds.has_point(mouseTilePosition)
 			match mode:
 				MODE.SELECT:
 					if isLeftClick(event): # if youre hovering something and you leftclick, focus it
@@ -223,7 +224,7 @@ func _gui_input(event:InputEvent) -> void:
 							multiselect.pivot = get_global_mouse_position()
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and event is InputEventMouseMotion and multiselect.state == Multiselect.STATE.HOLDING: multiselect.startSelect()
 				MODE.TILE:
-					if Mods.active(&"OutOfBounds") or Game.levelBounds.has_point(mouseWorldPosition):
+					if inBounds:
 						if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 							Changes.addChange(Changes.TileChange.new(mouseTilePosition/32,true))
 							focusDialog.defocus()
@@ -236,7 +237,7 @@ func _gui_input(event:InputEvent) -> void:
 							startPositionDrag(objectHovered)
 						else: focusDialog.defocus()
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-						if objectHovered is not KeyBulk and Game.levelBounds.has_point(mouseWorldPosition):
+						if objectHovered is not KeyBulk and inBounds:
 							var key:KeyBulk = Changes.addChange(Changes.CreateComponentChange.new(KeyBulk,{&"position":mouseTilePosition})).result
 							focusDialog.defocus()
 							if !Input.is_key_pressed(KEY_SHIFT):
@@ -254,7 +255,7 @@ func _gui_input(event:InputEvent) -> void:
 						if componentHovered is Lock: startPositionDrag(componentHovered)
 						elif objectHovered is Door: startPositionDrag(objectHovered)
 						else:
-							if objectHovered is not Door and Game.levelBounds.has_point(mouseWorldPosition):
+							if objectHovered is not Door and inBounds:
 								var door:Door = Changes.addChange(Changes.CreateComponentChange.new(Door,{&"position":mouseTilePosition})).result
 								startSizeDrag(door)
 								Changes.addChange(Changes.CreateComponentChange.new(Lock,{&"position":Vector2.ZERO,&"parentId":door.id}))
@@ -271,7 +272,7 @@ func _gui_input(event:InputEvent) -> void:
 							startPositionDrag(objectHovered)
 						else: focusDialog.defocus()
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-						if (!objectHovered or objectHovered.get_script() != otherObjects.selected) and Game.levelBounds.has_point(mouseWorldPosition):
+						if (!objectHovered or objectHovered.get_script() != otherObjects.selected) and inBounds:
 							var object:GameObject = Changes.addChange(Changes.CreateComponentChange.new(otherObjects.selected,{&"position":mouseTilePosition})).result
 							focusDialog.defocus()
 							if otherObjects.selected == KeyCounter:
@@ -346,7 +347,14 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 			toPosition += snappedTrunc(dragHandlePosition - dragPivotRect.position, Vector2(tileSize)) * Vector2.ZERO.max(sign(dragPivotRect.position - dragHandlePosition))
 			# dragging down/right (we add another tileSize because itd otherwise be at the top left corner)
 			toPosition += (dragPivotRect.size + snappedTrunc(dragHandlePosition - dragPivotRect.end, Vector2(tileSize)) + Vector2(tileSize)) * Vector2.ZERO.max(sign(dragHandlePosition - dragPivotRect.position))
+
+			# keep in bounds
+			var clampedToPosition:Vector2 = toPosition
+			if !allowOutOfBounds:
+				clampedToPosition += Vector2.ZERO.max(sign(dragHandle)) * snappedAway(Vector2.ZERO.max(innerBounds.position - toPosition), Vector2(tileSize))
+				clampedToPosition -= Vector2.ZERO.max(-sign(dragHandle)) * snappedAway(Vector2.ZERO.max(toPosition - innerBounds.end), Vector2(tileSize))
 			
+			var toRect:Rect2 = dragPivotRect.expand(clampedToPosition).expand(toPosition)
 			# keycounter has only a few possible widths
 			if componentDragged is KeyCounter:
 				toPosition -= dragPivotRect.position
@@ -357,15 +365,6 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 				else: toPosition.x = 0
 				toPosition.y = 0
 				toPosition += dragPivotRect.position
-
-			# keep in bounds
-			var clampedToPosition:Vector2 = toPosition
-			if !allowOutOfBounds:
-				clampedToPosition += Vector2.ZERO.max(sign(dragHandle)) * snappedAway(Vector2.ZERO.max(innerBounds.position - toPosition), Vector2(tileSize))
-				clampedToPosition -= Vector2.ZERO.max(-sign(dragHandle)) * snappedAway(Vector2.ZERO.max(toPosition - innerBounds.end), Vector2(tileSize))
-			
-			var toRect:Rect2 = dragPivotRect.expand(clampedToPosition)
-			if componentDragged is not KeyCounter: toRect = toRect.expand(toPosition)
 			if componentDragged is Door:
 				for lock in componentDragged.locks:
 					var doorInnerBounds:Rect2 = Rect2(lock.getOffset(), componentDragged.size).grow(-1)
