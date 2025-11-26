@@ -349,22 +349,25 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 			toPosition += (dragPivotRect.size + snappedTrunc(dragHandlePosition - dragPivotRect.end, Vector2(tileSize)) + Vector2(tileSize)) * Vector2.ZERO.max(sign(dragHandlePosition - dragPivotRect.position))
 
 			# keep in bounds
-			var clampedToPosition:Vector2 = toPosition
+			var effectiveDragPivotRect:Rect2 = dragPivotRect
 			if !allowOutOfBounds:
-				clampedToPosition += Vector2.ZERO.max(sign(dragHandle)) * snappedAway(Vector2.ZERO.max(innerBounds.position - toPosition), Vector2(tileSize))
-				clampedToPosition -= Vector2.ZERO.max(-sign(dragHandle)) * snappedAway(Vector2.ZERO.max(toPosition - innerBounds.end), Vector2(tileSize))
-			
-			var toRect:Rect2 = dragPivotRect.expand(clampedToPosition).expand(toPosition)
+				effectiveDragPivotRect = effectiveDragPivotRect.expand(dragPivotRect.position + snappedAway(Vector2.ZERO.max(innerBounds.position - dragPivotRect.position) - Vector2.ZERO.max(dragPivotRect.position - innerBounds.end), Vector2(tileSize)))
+
 			# keycounter has only a few possible widths
 			if componentDragged is KeyCounter:
-				toPosition -= dragPivotRect.position
-				if toPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]: toPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[2]
-				elif toPosition.x <= KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]: toPosition.x = KeyCounter.WIDTHS[0] - KeyCounter.WIDTHS[1]
+				toPosition -= effectiveDragPivotRect.position
+				if toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[2]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[2]
+				elif toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[1]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[1]
 				elif toPosition.x >= KeyCounter.WIDTHS[2]: toPosition.x = KeyCounter.WIDTHS[2]
 				elif toPosition.x >= KeyCounter.WIDTHS[1]: toPosition.x = KeyCounter.WIDTHS[1]
 				else: toPosition.x = 0
 				toPosition.y = 0
-				toPosition += dragPivotRect.position
+				toPosition += effectiveDragPivotRect.position
+				if effectiveDragPivotRect.grow(-1).has_point(toPosition):
+					previousDragPosition += Vector2i(dragOffset)
+					return
+
+			var toRect:Rect2 = effectiveDragPivotRect.expand(toPosition)
 			if componentDragged is Door:
 				for lock in componentDragged.locks:
 					var doorInnerBounds:Rect2 = Rect2(lock.getOffset(), componentDragged.size).grow(-1)
