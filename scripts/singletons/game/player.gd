@@ -142,14 +142,16 @@ func _physics_process(_delta:float) -> void:
 		previousIsOnFloor = is_on_floor()
 
 	var onAnything:bool = Game.tiles in %floor.get_overlapping_bodies()
+	var onOpeningDoor:bool = false
 	for area in %floor.get_overlapping_areas():
 		if area.get_parent() is Door:
 			if area.get_parent().type == Door.TYPE.COMBO or !area.get_parent().justOpened: onAnything = true
+			else: onOpeningDoor = true
 	if is_on_floor() and onAnything:
 		canDoubleJump = true
 
 	if Input.is_action_just_pressed(&"jump"):
-		if is_on_floor():
+		if onAnything or onOpeningDoor:
 			velocity.y = -JUMP_SPEED*FPS
 			AudioManager.play(preload("res://resources/sounds/player/jump.wav"))
 			if !onAnything:
@@ -192,13 +194,13 @@ func _process(delta:float) -> void:
 
 func receiveKey(event:InputEventKey):
 	if event.echo or paused(): return
+	if event.is_action_pressed(&"gameRestart"): Game.restart()
+	elif event.is_action_pressed(&"gameUndo") and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
+	elif event.is_action_pressed(&"gameAction"): cycleMaster()
+	elif event.is_action_pressed(&"gameComplexSwitch"): complexSwitch()
+	elif event.is_action_pressed(&"editPausePlaytest") and Game.editor: Game.pauseTest()
+	elif event.is_action_pressed(&"editStopPlaytest") and Game.editor: Game.stopTest()
 	match event.keycode:
-		KEY_P: if Game.editor: Game.pauseTest()
-		KEY_O: if Game.editor: Game.stopTest()
-		KEY_R: Game.restart()
-		KEY_Z: if GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
-		KEY_X: cycleMaster()
-		KEY_S: complexSwitch()
 		KEY_U: print(GameChanges.undoStack)
 
 func _newlyInteracted(area:Area2D) -> void:

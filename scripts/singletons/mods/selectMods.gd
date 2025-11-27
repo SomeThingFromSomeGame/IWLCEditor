@@ -79,7 +79,7 @@ func updateMods() -> void:
 		if element is StringName:
 			addModTreeItem(%mods, element)
 		elif element is SubTree:
-			var subTree:ModTreeSubTree = preload("res://scenes/modTreeSubTree.tscn").instantiate()
+			var subTree:ModTreeSubTree = preload("res://scenes/mods/modTreeSubTree.tscn").instantiate()
 			subTree.selectMods = self
 			subTree.subTree = element
 			%mods.add_child(subTree)
@@ -87,7 +87,7 @@ func updateMods() -> void:
 				addModTreeItem(subTree.cont, subElement)
 
 func addModTreeItem(root:VBoxContainer, id:StringName) -> void:
-	var item:ModTreeItem = preload("res://scenes/modTreeItem.tscn").instantiate()
+	var item:ModTreeItem = preload("res://scenes/mods/modTreeItem.tscn").instantiate()
 	item.selectMods = self
 	item.modId = id
 	item.mod = Mods.mods[id]

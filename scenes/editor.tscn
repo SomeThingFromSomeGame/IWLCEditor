@@ -18,7 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://b2ouh1fqa64em" path="res://assets/ui/modes/search.png" id="10_8g6du"]
 [ext_resource type="Texture2D" uid="uid://di4cbwrveccbg" path="res://assets/game/playerSpawn/levelStart.png" id="10_aa8l6"]
 [ext_resource type="FontFile" uid="uid://cjub6sxbu8elx" path="res://resources/fonts/RobotoMono-SemiBold.ttf" id="12_2w0at"]
-[ext_resource type="PackedScene" uid="uid://8bth374yqwpe" path="res://scenes/focusDialog.tscn" id="12_74j0u"]
+[ext_resource type="PackedScene" uid="uid://8bth374yqwpe" path="res://scenes/focusDialog/focusDialog.tscn" id="12_74j0u"]
 [ext_resource type="PackedScene" uid="uid://c1kt2qxw6ooqf" path="res://scenes/multiselect.tscn" id="12_q8l03"]
 [ext_resource type="Script" uid="uid://pssxp78klup" path="res://scripts/singletons/editor/multiselect.gd" id="13_0u1f5"]
 [ext_resource type="Texture2D" uid="uid://dn5r7rhgoxtrt" path="res://assets/ui/playControls/play.png" id="13_wyx26"]

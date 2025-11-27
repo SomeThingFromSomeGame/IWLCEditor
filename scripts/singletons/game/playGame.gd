@@ -83,7 +83,7 @@ func _process(delta:float) -> void:
 						roomTransitionPhase = -2
 				else:
 					%winMenu.visible = true
-					if Input.is_action_just_pressed("restart"):
+					if Input.is_action_just_pressed(&"gameRestart"):
 						restart()
 				queue_redraw()
 	if pauseAnimPhase != -1:
@@ -111,7 +111,7 @@ func _process(delta:float) -> void:
 	var objectHovered:GameObject
 	var mouseWorldPosition = %world.get_local_mouse_position()
 	for object in Game.objects.values():
-		if object.active and Rect2(object.position,object.size).has_point(mouseWorldPosition): objectHovered = object
+		if object.active and Rect2(object.getDrawPosition(),object.size).has_point(mouseWorldPosition): objectHovered = object
 	%mouseover.describe(objectHovered, %gameViewportCont.get_local_mouse_position()*Vector2(800,608)/%gameViewportCont.size,Vector2(800,608))
 
 func _draw() -> void:

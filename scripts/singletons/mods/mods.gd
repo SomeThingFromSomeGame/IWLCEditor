@@ -123,7 +123,7 @@ func openModsWindow() -> void:
 	if editor.modsWindow:
 		editor.modsWindow.grab_focus()
 	else:
-		var window:Window = preload("res://scenes/modsWindow.tscn").instantiate()
+		var window:Window = preload("res://scenes/mods/modsWindow.tscn").instantiate()
 		editor.add_child(window)
 		window.position = get_window().position+(get_window().size-window.size)/2
 

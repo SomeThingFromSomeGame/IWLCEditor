@@ -56,11 +56,13 @@ vertical_alignment = 2
 [node name="fullscreen" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Enable Fullscreen (in game)"
 
 [node name="smoothingMode" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Smoothing Mode"
 
 [node name="CheckBox3" type="CheckBox" parent="c"]
@@ -71,6 +73,7 @@ text = "Low FX"
 [node name="simpleLocks" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Simple Locks"
 
 [node name="l3" type="Label" parent="c"]
@@ -236,22 +239,26 @@ vertical_alignment = 2
 [node name="hideTimer" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Hide Timer"
 
 [node name="autoRun" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 button_pressed = true
 text = "Auto-Run"
 
 [node name="fullJumps" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Full Jumps"
 
 [node name="fastAnimations" type="CheckBox" parent="c"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 0
 text = "Fast Animations"
 
 [connection signal="value_changed" from="c/c/volume" to="." method="_volumeSet"]

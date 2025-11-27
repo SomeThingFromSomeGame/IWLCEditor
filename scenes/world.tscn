@@ -29,6 +29,7 @@ modulate = Color(0, 0, 0, 0.34901962)
 z_index = -2
 position = Vector2(3, 3)
 tile_set = SubResource("TileSet_w8frs")
+collision_enabled = false
 
 [node name="tiles" type="TileMapLayer" parent="."]
 unique_name_in_owner = true

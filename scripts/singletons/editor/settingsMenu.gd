@@ -16,6 +16,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(textDraw,get_canvas_item())
 	if !FileAccess.file_exists("user://config.ini"): closed()
 	if OS.has_feature("web"): %fileDialogWorkaroundCont.visible = false
+	_tabSelected(0)
 
 func _input(event:InputEvent):
 	if !editor.settingsOpen: return

@@ -398,6 +398,12 @@ func _input(event:InputEvent) -> void:
 			if quickSet.quick: quickSet.receiveKey(event); return
 			if focusDialog.interacted and focusDialog.interacted.receiveKey(event): return
 			if focusDialog.focused and focusDialog.receiveKey(event): return
+			if event.is_action_pressed(&"editStartPlaytest"):
+				if !topBar.play.disabled:
+					var ctrlHeld:bool = Input.is_key_pressed(KEY_CTRL)
+					await get_tree().process_frame
+					if ctrlHeld: Game.playTest(Game.latestSpawn)
+					else: Game.playTest(Game.levelStart)
 			match event.keycode:
 				KEY_ESCAPE:
 					if Input.is_key_pressed(KEY_SHIFT):
@@ -430,13 +436,6 @@ func _input(event:InputEvent) -> void:
 					if focusDialog.componentFocused: startPositionDrag(focusDialog.componentFocused)
 					elif focusDialog.focused: startPositionDrag(focusDialog.focused)
 				KEY_H: home()
-				KEY_SPACE:
-					if !topBar.play.disabled:
-						var ctrlHeld:bool = Input.is_key_pressed(KEY_CTRL)
-						await get_tree().process_frame
-						await get_tree().process_frame # bullshit to make sure you dont jump at the start
-						if ctrlHeld: Game.playTest(Game.latestSpawn)
-						else: Game.playTest(Game.levelStart)
 				KEY_DELETE: multiselect.delete()
 				KEY_TAB: grab_focus()
 				KEY_F2: takeScreenshot()
