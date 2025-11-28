@@ -20,17 +20,18 @@ func focusComponent(component:KeyCounterElement, _new:bool) -> void:
 	%keyCounterColorSelector.setSelect(component.color)
 
 func receiveKey(event:InputEvent) -> bool:
-	match event.keycode:
-		KEY_C: if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
-		KEY_E: if Input.is_key_pressed(KEY_CTRL): main.focused.addElement()
-		KEY_DELETE:
-			if main.componentFocused and len(main.focused.elements) > 1:
-				main.focused.removeElement(main.componentFocused.index)
-				if len(main.focused.elements) != 0: main.focusComponent(main.focused.elements[-1])
-				else: main.focus(main.focused)
-			else: Changes.addChange(Changes.DeleteComponentChange.new(main.focused))
-			Changes.bufferSave()
-		_: return false
+	if Editor.eventIs(event, &"focusKeyCounterAddElement"): main.focused.addElement()
+	elif Editor.eventIs(event, &"editDelete"):
+		if main.componentFocused and len(main.focused.elements) > 1:
+			main.focused.removeElement(main.componentFocused.index)
+			if len(main.focused.elements) != 0: main.focusComponent(main.focused.elements[-1])
+			else: main.focus(main.focused)
+		else: Changes.addChange(Changes.DeleteComponentChange.new(main.focused))
+		Changes.bufferSave()
+	else:
+		match event.keycode:
+			KEY_C: if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
+			_: return false
 	return true
 
 func _keyCounterWidthSelected(width:int):

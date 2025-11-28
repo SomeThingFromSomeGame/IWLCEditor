@@ -1,8 +1,9 @@
-extends HBoxContainer
+extends MarginContainer
 class_name HotkeySetting
 
 @export var label:String
 @export var action:StringName
+@export var prerequisite:StringName
 var input:InputEvent
 
 var default:Array[InputEvent]
@@ -17,8 +18,14 @@ func _ready() -> void:
 		%buttons.add_child(button)
 		buttons.append(button)
 
-func _hover() -> void: %label.add_theme_color_override("font_color", Color("#ffffff"))
-func _unhover() -> void: %label.add_theme_color_override("font_color", Color("#bfbfbf"))
+func changedMods() -> void:
+	visible = !prerequisite or Mods.mods[prerequisite].active
+
+func changedModsAfter() -> void:
+	for button in buttons: button.check()
+
+func _hover() -> void: %label.add_theme_color_override("font_color", Color("#ffffff")); %hover.visible = true
+func _unhover() -> void: %label.add_theme_color_override("font_color", Color("#bfbfbf")); %hover.visible = false
 
 func _add():
 	var button:HotkeySettingButton = HotkeySettingButton.new(self)
@@ -130,6 +137,7 @@ class HotkeySettingButton extends Button:
 		clearConflicts()
 		for checkHotkey in hotkey.get_parent().get_children():
 			if checkHotkey is not HotkeySetting: continue
+			if !checkHotkey.visible: continue
 			for button in checkHotkey.buttons:
 				if button == self: continue
 				if button.event.is_match(event):

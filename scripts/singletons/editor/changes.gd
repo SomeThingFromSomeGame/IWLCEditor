@@ -28,6 +28,7 @@ func _process(_delta) -> void:
 		stackPosition += 1
 
 func undo() -> void:
+	editor.stopDrag()
 	if stackPosition == 0: return
 	Game.anyChanges = true
 	if undoStack[stackPosition] is UndoSeparator: stackPosition -= 1

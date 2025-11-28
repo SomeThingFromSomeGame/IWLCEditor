@@ -23,27 +23,24 @@ func focus(focused:KeyBulk,_new:bool) -> void:
 	else: main.deinteract()
 
 func receiveKey(event:InputEventKey) -> bool:
-	match event.keycode:
-		KEY_N: _keyTypeSelected(KeyBulk.TYPE.NORMAL)
-		KEY_E: _keyTypeSelected(KeyBulk.TYPE.EXACT if main.focused.type != KeyBulk.TYPE.EXACT else KeyBulk.TYPE.NORMAL)
-		KEY_S:
-			if main.focused.type == KeyBulk.TYPE.STAR: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
-			else: _keyTypeSelected(KeyBulk.TYPE.STAR)
-		KEY_R:
-			if main.focused.type != KeyBulk.TYPE.ROTOR: _keyTypeSelected(KeyBulk.TYPE.ROTOR)
-			elif main.focused.count.eq(-1): _keyCountSet(C.I)
-			elif main.focused.count.eq(C.I): _keyCountSet(C.nI)
-			elif main.focused.count.eq(C.nI): _keyTypeSelected(KeyBulk.TYPE.NORMAL); _keyCountSet(C.ONE)
-		KEY_C: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
-		KEY_U:
-			if Mods.active(&"C5") and main.focused is KeyBulk:
-				if main.focused.type == KeyBulk.TYPE.CURSE: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
-				else: _keyTypeSelected(KeyBulk.TYPE.CURSE)
-		KEY_DELETE:
-			Changes.addChange(Changes.DeleteComponentChange.new(main.focused))
-			Changes.bufferSave()
-		KEY_Y: _keyInfiniteToggled(!main.focused.infinite)
-		_: return false
+	if Editor.eventIs(event, &"focusKeyNormal"): _keyTypeSelected(KeyBulk.TYPE.NORMAL)
+	elif Editor.eventIs(event, &"focusKeyExact"): _keyTypeSelected(KeyBulk.TYPE.EXACT if main.focused.type != KeyBulk.TYPE.EXACT else KeyBulk.TYPE.NORMAL)
+	elif Editor.eventIs(event, &"focusKeyStar"):
+		if main.focused.type == KeyBulk.TYPE.STAR: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
+		else: _keyTypeSelected(KeyBulk.TYPE.STAR)
+	elif Editor.eventIs(event, &"focusKeyRotor"):
+		if main.focused.type != KeyBulk.TYPE.ROTOR: _keyTypeSelected(KeyBulk.TYPE.ROTOR)
+		elif main.focused.count.eq(-1): _keyCountSet(C.I)
+		elif main.focused.count.eq(C.I): _keyCountSet(C.nI)
+		elif main.focused.count.eq(C.nI): _keyTypeSelected(KeyBulk.TYPE.NORMAL); _keyCountSet(C.ONE)
+	elif Editor.eventIs(event, &"focusKeyCurse") and Mods.active(&"C5"):
+			if main.focused.type == KeyBulk.TYPE.CURSE: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
+			else: _keyTypeSelected(KeyBulk.TYPE.CURSE)
+	elif Editor.eventIs(event, &"focusKeyInfinite"): _keyInfiniteToggled(!main.focused.infinite)
+	else:
+		match event.keycode:
+			KEY_C: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
+			_: return false
 	return true
 
 func _keyColorSelected(color:Game.COLOR) -> void:

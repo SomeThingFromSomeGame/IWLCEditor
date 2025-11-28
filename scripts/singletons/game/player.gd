@@ -194,12 +194,12 @@ func _process(delta:float) -> void:
 
 func receiveKey(event:InputEventKey):
 	if event.echo or paused(): return
-	if event.is_action_pressed(&"gameRestart"): Game.restart()
-	elif event.is_action_pressed(&"gameUndo") and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
-	elif event.is_action_pressed(&"gameAction"): cycleMaster()
-	elif event.is_action_pressed(&"gameComplexSwitch"): complexSwitch()
-	elif event.is_action_pressed(&"editPausePlaytest") and Game.editor: Game.pauseTest()
-	elif event.is_action_pressed(&"editStopPlaytest") and Game.editor: Game.stopTest()
+	if Editor.eventIs(event, &"gameRestart"): Game.restart()
+	elif Editor.eventIs(event, &"gameUndo") and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
+	elif Editor.eventIs(event, &"gameAction"): cycleMaster()
+	elif Editor.eventIs(event, &"gameComplexSwitch"): complexSwitch()
+	elif Editor.eventIs(event, &"editPausePlaytest") and Game.editor: Game.pauseTest()
+	elif Editor.eventIs(event, &"editStopPlaytest") and Game.editor: Game.stopTest()
 	match event.keycode:
 		KEY_U: print(GameChanges.undoStack)
 

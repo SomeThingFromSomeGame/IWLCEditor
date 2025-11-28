@@ -103,7 +103,7 @@ func _process(delta:float) -> void:
 	else: tileSize = Vector2i(32,32)
 	
 	if Game.playState != Game.PLAY_STATE.PLAY and !focusDialog.focused and get_window().has_focus() and has_focus():
-		editorCamera.position += Vector2(Input.get_axis(&"camera_left", &"camera_right"),Input.get_axis(&"camera_up", &"camera_down"))*delta/editorCamera.zoom*700
+		editorCamera.position += Vector2(Input.get_axis(&"editCameraLeft", &"editCameraRight"),Input.get_axis(&"editCameraUp", &"editCameraDown"))*delta/editorCamera.zoom*700
 
 
 	mouseWorldPosition = screenspaceToWorldspace(get_global_mouse_position())
@@ -156,32 +156,15 @@ func _gui_input(event:InputEvent) -> void:
 					MOUSE_BUTTON_WHEEL_DOWN: zoomCamera(0.8)
 			# modes
 			if isLeftUnclick(event) or isRightUnclick(event):
-				if componentDragged:
-					if sizeDragging():
-						if !Mods.active(&"NstdLockSize") and componentDragged is Lock and componentDragged.parent.type != Door.TYPE.SIMPLE:
-							componentDragged._coerceSize()
-						if componentDragged is GameObject: focusDialog.focus(componentDragged)
-						else: focusDialog.focusComponent(componentDragged)
-					elif dragMode == DRAG_MODE.POSITION:
-						if lockBufferConvert:
-							lockBufferConvert = false
-							var remoteLock = Changes.addChange(Changes.CreateComponentChange.new(RemoteLock,{&"position":componentDragged.position+componentDragged.parent.position})).result
-							for property in Lock.PROPERTIES:
-								if property not in [&"id", &"position", &"parentId", &"index"]:
-									Changes.addChange(Changes.PropertyChange.new(remoteLock,property,componentDragged.get(property)))
-							focusDialog.focus(remoteLock)
-							remoteLock._connectTo(componentDragged.parent)
-							Changes.addChange(Changes.DeleteComponentChange.new(componentDragged))
+				if componentDragged: stopDrag()
 				Changes.bufferSave()
-				componentDragged = null
 			# set mouse cursor
 			if multiselect.state == Multiselect.STATE.DRAGGING: mouse_default_cursor_shape = CURSOR_DRAG
 			elif componentDragged:
 				match dragMode:
 					DRAG_MODE.POSITION: mouse_default_cursor_shape = CURSOR_DRAG
 					DRAG_MODE.SIZE_DIAG:
-						pass
-						var diffSign:Vector2 = rectSign(dragPivotRect, Vector2(mouseTilePosition))
+						var diffSign:Vector2 = rectSign(dragPivotRect, dragHandlePosition)
 						match diffSign:
 							Vector2(-1,-1), Vector2(0,0), Vector2(1,1): mouse_default_cursor_shape = CURSOR_FDIAGSIZE
 							Vector2(-1,1), Vector2(1,-1): mouse_default_cursor_shape = CURSOR_BDIAGSIZE
@@ -289,6 +272,25 @@ func _gui_input(event:InputEvent) -> void:
 						multiselect.paste()
 						if !Input.is_key_pressed(KEY_SHIFT):
 							modes.setMode(MODE.SELECT)
+
+func stopDrag() -> void:
+	if sizeDragging():
+		if !Mods.active(&"NstdLockSize") and componentDragged is Lock and componentDragged.parent.type != Door.TYPE.SIMPLE:
+			componentDragged._coerceSize()
+		if componentDragged is GameObject: focusDialog.focus(componentDragged)
+		else: focusDialog.focusComponent(componentDragged)
+	elif dragMode == DRAG_MODE.POSITION:
+		if lockBufferConvert:
+			lockBufferConvert = false
+			var remoteLock = Changes.addChange(Changes.CreateComponentChange.new(RemoteLock,{&"position":componentDragged.position+componentDragged.parent.position})).result
+			for property in Lock.PROPERTIES:
+				if property not in [&"id", &"position", &"parentId", &"index"]:
+					Changes.addChange(Changes.PropertyChange.new(remoteLock,property,componentDragged.get(property)))
+			remoteLock._connectTo(componentDragged.parent)
+			Changes.addChange(Changes.DeleteComponentChange.new(componentDragged))
+		if componentDragged.get_script() in Game.NON_OBJECT_COMPONENTS: focusDialog.focusComponent(componentDragged)
+		else: focusDialog.focus(componentDragged)
+	componentDragged = null
 
 func startPositionDrag(component:GameComponent) -> void:
 	if component is GameObject: focusDialog.focus(component)
@@ -398,37 +400,40 @@ func _input(event:InputEvent) -> void:
 			if quickSet.quick: quickSet.receiveKey(event); return
 			if focusDialog.interacted and focusDialog.interacted.receiveKey(event): return
 			if focusDialog.focused and focusDialog.receiveKey(event): return
-			if event.is_action_pressed(&"editStartPlaytest") and !topBar.play.disabled: await get_tree().process_frame; Game.playTest(Game.levelStart)
-			elif event.is_action_pressed(&"editStartPlaytestFromState") and !topBar.play.disabled: await get_tree().process_frame; Game.playTest(Game.latestSpawn)
-			elif event.is_action_pressed(&"editStopPlaytest") and Game.playstate == Game.PLAY_STATE.PAUSED: Game.stopTest()
-			elif event.is_action_pressed(&"editModeSelect"): modes.setMode(MODE.SELECT); focusDialog.defocus(); componentDragged = null; multiselect.deselect()
-			elif event.is_action_pressed(&"editModeTile"): modes.setMode(MODE.TILE)
-			elif event.is_action_pressed(&"editModeKey"): modes.setMode(MODE.KEY)
-			elif event.is_action_pressed(&"editModeDoor"): modes.setMode(MODE.DOOR)
-			elif event.is_action_pressed(&"editModeOther"): modes.setMode(MODE.OTHER)
-			elif event.is_action_pressed(&"editObjectSearch"): otherObjects.objectSearch.grab_focus()
-			elif event.is_action_pressed(&"editOpenSettings"): _toggleSettingsMenu(true)
-			elif event.is_action_pressed(&"editNew"): Saving.confirmAction = Saving.ACTION.NONE; Saving.new()
-			elif event.is_action_pressed(&"editOpen"): Saving.open()
-			elif event.is_action_pressed(&"editSave"): Saving.confirmAction = Saving.ACTION.NONE; Saving.save()
-			elif event.is_action_pressed(&"editSaveAs"):
+			if Editor.eventIs(event, &"editStartPlaytest") and !topBar.play.disabled: await get_tree().process_frame; Game.playTest(Game.levelStart)
+			elif Editor.eventIs(event, &"editStartPlaytestFromState") and !topBar.play.disabled: await get_tree().process_frame; Game.playTest(Game.latestSpawn)
+			elif Editor.eventIs(event, &"editStopPlaytest") and Game.playstate == Game.PLAY_STATE.PAUSED: Game.stopTest()
+			elif Editor.eventIs(event, &"editModeSelect"): modes.setMode(MODE.SELECT); focusDialog.defocus(); componentDragged = null; multiselect.deselect()
+			elif Editor.eventIs(event, &"editModeTile"): modes.setMode(MODE.TILE)
+			elif Editor.eventIs(event, &"editModeKey"): modes.setMode(MODE.KEY)
+			elif Editor.eventIs(event, &"editModeDoor"): modes.setMode(MODE.DOOR)
+			elif Editor.eventIs(event, &"editModeOther"): modes.setMode(MODE.OTHER)
+			elif Editor.eventIs(event, &"editObjectSearch"): otherObjects.objectSearch.grab_focus()
+			elif Editor.eventIs(event, &"editOpenSettings"): _toggleSettingsMenu(true)
+			elif Editor.eventIs(event, &"editNew"): Saving.confirmAction = Saving.ACTION.NONE; Saving.new()
+			elif Editor.eventIs(event, &"editOpen"): Saving.open()
+			elif Editor.eventIs(event, &"editSave"): Saving.confirmAction = Saving.ACTION.NONE; Saving.save()
+			elif Editor.eventIs(event, &"editSaveAs"):
 				Saving.confirmAction = Saving.ACTION.NONE
 				if OS.has_feature('web'): Saving.save()
 				else: Saving.saveAs()
-			elif event.is_action_pressed(&"editExport"): pass
-			elif event.is_action_pressed(&"editHome"): home()
-			elif event.is_action_pressed(&"editCopy"): multiselect.copySelection()
-			elif event.is_action_pressed(&"editCut"): multiselect.copySelection(); multiselect.delete()
-			elif event.is_action_pressed(&"editPaste") and multiselect.clipboard != []: modes.setMode(MODE.PASTE)
-			elif event.is_action_pressed(&"editUndo"): Changes.undo()
-			elif event.is_action_pressed(&"editRedo"): Changes.redo()
-			elif event.is_action_pressed(&"editDrag"):
-				if focusDialog.componentFocused: startPositionDrag(focusDialog.componentFocused)
+			elif Editor.eventIs(event, &"editExport"): pass
+			elif Editor.eventIs(event, &"editHome"): home()
+			elif Editor.eventIs(event, &"editCopy"): multiselect.copySelection()
+			elif Editor.eventIs(event, &"editCut"): multiselect.copySelection(); multiselect.delete()
+			elif Editor.eventIs(event, &"editPaste") and multiselect.clipboard != []: modes.setMode(MODE.PASTE)
+			elif Editor.eventIs(event, &"editUndo"): Changes.undo()
+			elif Editor.eventIs(event, &"editRedo"): Changes.redo()
+			elif Editor.eventIs(event, &"editDrag"):
+				if focusDialog.componentFocused and !(focusDialog.componentFocused.parent is Door and focusDialog.componentFocused.parent.type == Door.TYPE.SIMPLE): startPositionDrag(focusDialog.componentFocused)
 				elif focusDialog.focused: startPositionDrag(focusDialog.focused)
-			elif event.is_action_pressed(&"editDelete"): multiselect.delete()
+				focusDialog.defocus()
+			elif Editor.eventIs(event, &"editDelete"): multiselect.delete()
 			match event.keycode:
 				KEY_TAB: grab_focus()
 				KEY_F2: takeScreenshot()
+
+static func eventIs(event:InputEvent, action:StringName) -> bool: return event.is_action_pressed(action, false, true)
 
 func home() -> void:
 	targetCameraZoom = 1

@@ -200,8 +200,7 @@ vertical_alignment = 2
 [node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c"]
 layout_mode = 2
 size_flags_vertical = 0
-tooltip_text = "Indents represent a context in which indented hotkeys are active and take priority over unindented ones.
-Otherwise, earlier listed hotkeys take priority."
+tooltip_text = "Contextual hotkeys (marked by context and indent) are only active within the described context and take priority over others."
 texture = ExtResource("5_iswfj")
 
 [node name="hotkeys" type="VBoxContainer" parent="c/editorSettings/c2/c"]
@@ -330,15 +329,247 @@ layout_mode = 2
 label = "Redo"
 action = &"editRedo"
 
+[node name="editCameraUp" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Move Camera Up"
+action = &"editCameraUp"
+
+[node name="editCameraLeft" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Move Camera Left"
+action = &"editCameraLeft"
+
+[node name="editCameraDown" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Move Camera Down"
+action = &"editCameraDown"
+
+[node name="editCameraRight" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Move Camera Right"
+action = &"editCameraRight"
+
 [node name="editDrag" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
 layout_mode = 2
-label = "Drag Focused Component"
+label = "Drag Selected Component(s)"
 action = &"editDrag"
 
 [node name="editDelete" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
 layout_mode = 2
-label = "Delete Focused Component"
+label = "Delete Selected Component(s)"
 action = &"editDelete"
+
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys"]
+layout_mode = 2
+text = "Component Focused"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c2" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2"]
+layout_mode = 2
+
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+text = "Key Focused"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c"]
+layout_mode = 2
+
+[node name="focusKeyNormal" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Normal Type"
+action = &"focusKeyNormal"
+
+[node name="focusKeyExact" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Exact Type"
+action = &"focusKeyExact"
+
+[node name="focusKeyStar" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Star Type"
+action = &"focusKeyStar"
+
+[node name="focusKeyRotor" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Advance Rotor Type"
+action = &"focusKeyRotor"
+
+[node name="focusKeyCurse" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Curse Type"
+action = &"focusKeyCurse"
+prerequisite = &"C5"
+
+[node name="focusKeyInfinite" parent="c/editorSettings/c2/c/hotkeys/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Infinite"
+action = &"focusKeyInfinite"
+
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+text = "Door Focused"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c2" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2"]
+layout_mode = 2
+
+[node name="focusDoorAddLock" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Add Lock"
+action = &"focusDoorAddLock"
+
+[node name="focusDoorColorLink" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Color Link"
+action = &"focusDoorColorLink"
+
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c"]
+layout_mode = 2
+text = "Editing Door Properties"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c"]
+layout_mode = 2
+
+[node name="focusDoorFrozen" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Frozen"
+action = &"focusDoorFrozen"
+
+[node name="focusDoorCrumbled" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Crumbled"
+action = &"focusDoorCrumbled"
+
+[node name="focusDoorPainted" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Painted"
+action = &"focusDoorPainted"
+
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c"]
+layout_mode = 2
+text = "Editing Lock Properties"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c2" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2"]
+layout_mode = 2
+
+[node name="focusLockNormalType" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Normal Type"
+action = &"focusLockNormalType"
+
+[node name="focusLockBlankType" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Blank Type"
+action = &"focusLockBlankType"
+
+[node name="focusLockBlastType" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Blast Type"
+action = &"focusLockBlastType"
+
+[node name="focusLockAllType" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set All Type"
+action = &"focusLockAllType"
+
+[node name="focusLockExactType" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Set Exact Type"
+action = &"focusLockExactType"
+prerequisite = &"C3"
+
+[node name="focusLockNegated" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Negated"
+action = &"focusLockNegated"
+prerequisite = &"C1"
+
+[node name="focusLockArmament" parent="c/editorSettings/c2/c/hotkeys/c2/c/c2/c/c2/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Armament"
+action = &"focusLockArmament"
+prerequisite = &"C5"
+
+[node name="l3" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+text = "Key Counter Focused"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="c3" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c3"]
+layout_mode = 2
+
+[node name="focusKeyCounterAddElement" parent="c/editorSettings/c2/c/hotkeys/c2/c/c3/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Add Element"
+action = &"focusKeyCounterAddElement"
+
+[node name="c4" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c2/c/c4"]
+layout_mode = 2
+text = "Remote Lock Focused"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/c2/c/c4"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "\"Editing Lock Properties\" hotkeys also apply and take priority."
+texture = ExtResource("5_iswfj")
+
+[node name="c5" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c"]
+layout_mode = 2
+
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/c2/c/c5"]
+layout_mode = 2
+
+[node name="focusRemoteLockAddConnection" parent="c/editorSettings/c2/c/hotkeys/c2/c/c5/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Add Connection"
+action = &"focusRemoteLockAddConnection"
+
+[node name="focusRemoteLockFrozen" parent="c/editorSettings/c2/c/hotkeys/c2/c/c5/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Frozen"
+action = &"focusRemoteLockFrozen"
+
+[node name="focusRemoteLockCrumbled" parent="c/editorSettings/c2/c/hotkeys/c2/c/c5/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Crumbled"
+action = &"focusRemoteLockCrumbled"
+
+[node name="focusRemoteLockPainted" parent="c/editorSettings/c2/c/hotkeys/c2/c/c5/c" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Toggle Painted"
+action = &"focusRemoteLockPainted"
 
 [node name="gameSettings" parent="c" instance=ExtResource("6_tyaol")]
 unique_name_in_owner = true

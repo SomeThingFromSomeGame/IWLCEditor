@@ -89,31 +89,11 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 
 func receiveKey(event:InputEvent) -> bool:
 	match event.keycode:
-		KEY_N:
-			if Input.is_key_pressed(KEY_SHIFT) and Mods.active(&"C1"): _lockNegatedSet(!%lockNegated.button_pressed)
-			else: _lockTypeSelected(Lock.TYPE.NORMAL)
-		KEY_B: _lockTypeSelected(Lock.TYPE.BLANK)
-		KEY_X: _lockTypeSelected(Lock.TYPE.BLAST)
-		KEY_A:
-			if Input.is_key_pressed(KEY_SHIFT) and Mods.active(&"C5"): _lockArmamentSet(!%lockArmament.button_pressed)
-			else: _lockTypeSelected(Lock.TYPE.ALL)
-		KEY_E: if Mods.active(&"C3"): _lockTypeSelected(Lock.TYPE.EXACT)
 		KEY_C:
 			if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
 			else: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
-		KEY_L:
-			if Input.is_key_pressed(KEY_CTRL): main.focused.addLock()
-			else: %colorLink.button_pressed = !%colorLink.button_pressed
-		KEY_F: if main.focused is RemoteLock: %doorsHandler.addComponent()
 		KEY_MINUS: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockSignSet(!%blastLockSign.button_pressed)
 		KEY_I: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockAxisSet(!%blastLockAxis.button_pressed)
-		KEY_DELETE:
-			if main.componentFocused:
-				main.focused.removeLock(main.componentFocused.index)
-				if len(main.focused.locks) != 0: main.focusComponent(main.focused.locks[-1])
-				else: main.focus(main.focused)
-			else: Changes.addChange(Changes.DeleteComponentChange.new(main.focused))
-			Changes.bufferSave()
 		KEY_TAB:
 			assert(main.componentFocused) # should be handled by interact otherwise
 			if Input.is_key_pressed(KEY_SHIFT):
@@ -122,7 +102,34 @@ func receiveKey(event:InputEvent) -> bool:
 			else:
 				if main.componentFocused.index == len(main.componentFocused.parent.locks)-1: main.interactDoorFirstEdit()
 				else: main.interactLockFirstEdit(main.componentFocused.index+1)
-		_: return false
+	if main.focused is RemoteLock or main.componentFocused is Lock:
+		if Editor.eventIs(event, &"focusLockNormalType"): _lockTypeSelected(Lock.TYPE.NORMAL)
+		elif Editor.eventIs(event, &"focusLockBlankType"): _lockTypeSelected(Lock.TYPE.BLANK)
+		elif Editor.eventIs(event, &"focusLockBlastType"): _lockTypeSelected(Lock.TYPE.BLAST)
+		elif Editor.eventIs(event, &"focusLockAllType"): _lockTypeSelected(Lock.TYPE.ALL)
+		elif Editor.eventIs(event, &"focusLockExactType") and Mods.active(&"C3"): _lockTypeSelected(Lock.TYPE.EXACT)
+		elif Editor.eventIs(event, &"focusLockNegated") and Mods.active(&"C1"): _lockNegatedSet(!%lockNegated.button_pressed)
+		elif Editor.eventIs(event, &"focusLockArmament") and Mods.active(&"C5"): _lockArmamentSet(!%lockArmament.button_pressed)
+		elif main.focused is RemoteLock:
+			if Editor.eventIs(event, &"focusRemoteLockAddConnection"): %doorsHandler.addComponent()
+			elif Editor.eventIs(event, &"focusRemoteLockFrozen"): _frozenSet(!main.focused.frozen)
+			elif Editor.eventIs(event, &"focusRemoteLockCrumbled"): _frozenSet(!main.focused.crumbled)
+			elif Editor.eventIs(event, &"focusRemoteLockPainted"): _frozenSet(!main.focused.painted)
+			else: return false
+		else:
+			if Editor.eventIs(event, &"editDelete"):
+				main.focused.removeLock(main.componentFocused.index)
+				if len(main.focused.locks) != 0: main.focusComponent(main.focused.locks[-1])
+				else: main.focus(main.focused)
+			else: return false
+	else:
+		if Editor.eventIs(event, &"focusDoorAddLock"): main.focused.addLock()
+		elif Editor.eventIs(event, &"focusDoorColorLink"): %colorLink.button_pressed = !%colorLink.button_pressed
+		else:
+			if Editor.eventIs(event, &"focusDoorFrozen"): _frozenSet(!main.focused.frozen)
+			elif Editor.eventIs(event, &"focusDoorCrumbled"): _frozenSet(!main.focused.crumbled)
+			elif Editor.eventIs(event, &"focusDoorPainted"): _frozenSet(!main.focused.painted)
+			else: return false
 	return true
 
 func changedMods() -> void:

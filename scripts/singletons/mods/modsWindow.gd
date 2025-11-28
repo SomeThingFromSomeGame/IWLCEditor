@@ -51,6 +51,7 @@ func _saveChanges():
 	Changes.bufferSave()
 	editor.grab_focus()
 	get_tree().call_group("modUI", "changedMods")
+	get_tree().call_group("modUIAfter", "changedModsAfter")
 	queue_free()
 
 func addMod(mod:StringName):

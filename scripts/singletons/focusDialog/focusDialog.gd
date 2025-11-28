@@ -18,6 +18,7 @@ var above:bool = false # display above the object instead
 
 func _ready() -> void:
 	get_tree().call_group("modUI", "changedMods")
+	get_tree().call_group("modUIAfter", "changedModsAfter")
 
 func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	var new:bool = object != focused
@@ -140,15 +141,14 @@ func tabbed(numberEdit:PanelContainer) -> void:
 				else: interactLockFirstEdit(componentFocused.index+1)
 
 func receiveKey(event:InputEvent) -> bool:
-	if focused is KeyBulk: return keyDialog.receiveKey(event)
-	elif focused is Door or focused is RemoteLock: return doorDialog.receiveKey(event)
-	elif focused is KeyCounter: return keyCounterDialog.receiveKey(event)
+	if focused is KeyBulk and keyDialog.receiveKey(event): return true
+	elif (focused is Door or focused is RemoteLock) and doorDialog.receiveKey(event): return true
+	elif focused is KeyCounter and keyCounterDialog.receiveKey(event): return true
 	else:
-		match event.keycode:
-			KEY_DELETE:
-				Changes.addChange(Changes.DeleteComponentChange.new(focused))
-				Changes.bufferSave()
-			_: return false
+		if Editor.eventIs(event, &"editDelete"):
+			Changes.addChange(Changes.DeleteComponentChange.new(focused))
+			Changes.bufferSave()
+		else: return false
 	return true
 
 func _process(_delta:float) -> void:
