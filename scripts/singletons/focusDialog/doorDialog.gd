@@ -89,9 +89,6 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 
 func receiveKey(event:InputEvent) -> bool:
 	match event.keycode:
-		KEY_C:
-			if main.componentFocused: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.componentFocused)
-			else: editor.quickSet.startQuick(QuickSet.QUICK.COLOR, main.focused)
 		KEY_MINUS: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockSignSet(!%blastLockSign.button_pressed)
 		KEY_I: if !main.interacted and main.componentFocused and main.componentFocused.type == Lock.TYPE.BLAST: _blastLockAxisSet(!%blastLockAxis.button_pressed)
 		KEY_TAB:
@@ -102,7 +99,10 @@ func receiveKey(event:InputEvent) -> bool:
 			else:
 				if main.componentFocused.index == len(main.componentFocused.parent.locks)-1: main.interactDoorFirstEdit()
 				else: main.interactLockFirstEdit(main.componentFocused.index+1)
-	if main.focused is RemoteLock or main.componentFocused is Lock:
+	if Editor.eventIs(event, &"quicksetColor"):
+		if main.componentFocused: editor.quickSet.startQuick(&"quicksetColor", main.componentFocused)
+		else: editor.quickSet.startQuick(&"quicksetColor", main.focused)
+	elif main.focused is RemoteLock or main.componentFocused is Lock:
 		if Editor.eventIs(event, &"focusLockNormalType"): _lockTypeSelected(Lock.TYPE.NORMAL)
 		elif Editor.eventIs(event, &"focusLockBlankType"): _lockTypeSelected(Lock.TYPE.BLANK)
 		elif Editor.eventIs(event, &"focusLockBlastType"): _lockTypeSelected(Lock.TYPE.BLAST)

@@ -7,7 +7,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8d666"]
 bg_color = Color(1, 1, 1, 0.07058824)
 
-[node name="hotkeySetting" type="MarginContainer" groups=["hotkeySetting", "modUI", "modUIAfter"]]
+[node name="hotkeySetting" type="MarginContainer" groups=["hotkeySetting", "modUI"]]
 custom_minimum_size = Vector2(0, 30)
 offset_right = 273.0
 offset_bottom = 34.0

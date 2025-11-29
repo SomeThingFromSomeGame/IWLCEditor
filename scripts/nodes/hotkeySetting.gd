@@ -20,8 +20,6 @@ func _ready() -> void:
 
 func changedMods() -> void:
 	visible = !prerequisite or Mods.mods[prerequisite].active
-
-func changedModsAfter() -> void:
 	for button in buttons: button.check()
 
 func _hover() -> void: %label.add_theme_color_override("font_color", Color("#ffffff")); %hover.visible = true

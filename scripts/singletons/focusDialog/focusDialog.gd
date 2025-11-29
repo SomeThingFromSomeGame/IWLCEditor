@@ -18,7 +18,6 @@ var above:bool = false # display above the object instead
 
 func _ready() -> void:
 	get_tree().call_group("modUI", "changedMods")
-	get_tree().call_group("modUIAfter", "changedModsAfter")
 
 func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	var new:bool = object != focused

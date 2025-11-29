@@ -103,7 +103,7 @@ func clear() -> void:
 		editor.lockBufferConvert = false
 		editor.connectionSource = null
 		if editor.modsWindow: editor.modsWindow._close()
-		editor.quickSet.cancel()
+		editor.quickSet.applyOrCancel()
 		editor.modes.setMode(Editor.MODE.SELECT)
 		editor.otherObjects.objectSelected(PlayerSpawn, true)
 		editor.multiselect.stopDrag()
