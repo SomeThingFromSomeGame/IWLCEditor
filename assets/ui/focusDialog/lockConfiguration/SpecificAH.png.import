@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b43g848fo6m34"
-path="res://.godot/imported/specificAH.png-92c4c70a0a14bf5d9822d56fb6cb80fd.ctex"
+path="res://.godot/imported/SpecificAH.png-307635ca1290903a2eeec42acb6081e8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/focusDialog/lockConfiguration/specificAH.png"
-dest_files=["res://.godot/imported/specificAH.png-92c4c70a0a14bf5d9822d56fb6cb80fd.ctex"]
+source_file="res://assets/ui/focusDialog/lockConfiguration/SpecificAH.png"
+dest_files=["res://.godot/imported/SpecificAH.png-307635ca1290903a2eeec42acb6081e8.ctex"]
 
 [params]
 
