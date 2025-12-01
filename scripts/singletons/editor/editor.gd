@@ -96,10 +96,9 @@ func _process(delta:float) -> void:
 		editorCamera.zoom *= scaleFactor
 		editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameCont.position) / editorCamera.zoom
 	
-	if Input.is_key_pressed(KEY_ALT):
-		if Input.is_key_pressed(KEY_CTRL): tileSize = Vector2i(1,1)
-		else: tileSize = Vector2i(4,4)
-	elif Input.is_key_pressed(KEY_CTRL): tileSize = Vector2i(16,16)
+	if Input.is_action_pressed(&"heldTileSize1"): tileSize = Vector2i(1,1)
+	elif Input.is_action_pressed(&"heldTileSize4"): tileSize = Vector2i(4,4)
+	elif Input.is_action_pressed(&"heldTileSize16"): tileSize = Vector2i(16,16)
 	else: tileSize = Vector2i(32,32)
 	
 	if Game.playState != Game.PLAY_STATE.PLAY and !focusDialog.focused and get_window().has_focus() and has_focus():
@@ -223,7 +222,7 @@ func _gui_input(event:InputEvent) -> void:
 						if objectHovered is not KeyBulk and inBounds:
 							var key:KeyBulk = Changes.addChange(Changes.CreateComponentChange.new(KeyBulk,{&"position":mouseTilePosition})).result
 							focusDialog.defocus()
-							if !Input.is_key_pressed(KEY_SHIFT):
+							if !Input.is_action_pressed(&"heldKeepMode"):
 								modes.setMode(MODE.SELECT)
 								startPositionDrag(key)
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
@@ -242,7 +241,7 @@ func _gui_input(event:InputEvent) -> void:
 								var door:Door = Changes.addChange(Changes.CreateComponentChange.new(Door,{&"position":mouseTilePosition})).result
 								startSizeDrag(door)
 								Changes.addChange(Changes.CreateComponentChange.new(Lock,{&"position":Vector2.ZERO,&"parentId":door.id}))
-								if !Input.is_key_pressed(KEY_SHIFT):
+								if !Input.is_action_pressed(&"heldKeepMode"):
 									modes.setMode(MODE.SELECT)
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 						if objectHovered is Door:
@@ -260,7 +259,7 @@ func _gui_input(event:InputEvent) -> void:
 							focusDialog.defocus()
 							if otherObjects.selected == KeyCounter:
 								Changes.addChange(Changes.CreateComponentChange.new(KeyCounterElement,{&"position":Vector2(12,12),&"parentId":object.id}))
-							if !Input.is_key_pressed(KEY_SHIFT):
+							if !Input.is_action_pressed(&"heldKeepMode"):
 								modes.setMode(MODE.SELECT)
 								startPositionDrag(object)
 					if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
@@ -270,7 +269,7 @@ func _gui_input(event:InputEvent) -> void:
 				MODE.PASTE:
 					if isLeftClick(event):
 						multiselect.paste()
-						if !Input.is_key_pressed(KEY_SHIFT):
+						if !Input.is_action_pressed(&"heldKeepMode"):
 							modes.setMode(MODE.SELECT)
 
 func stopDrag() -> void:

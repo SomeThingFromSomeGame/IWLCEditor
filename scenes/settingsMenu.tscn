@@ -211,6 +211,30 @@ texture = ExtResource("5_iswfj")
 layout_mode = 2
 theme = SubResource("Theme_dkncv")
 
+[node name="heldTileSize16" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Half Tile Snap"
+action = &"heldTileSize16"
+held = true
+
+[node name="heldTileSize4" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Eighth Tile Snap"
+action = &"heldTileSize4"
+held = true
+
+[node name="heldTileSize1" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "No Snap"
+action = &"heldTileSize1"
+held = true
+
+[node name="heldKeepMode" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+layout_mode = 2
+label = "Keep Mode"
+action = &"heldKeepMode"
+held = true
+
 [node name="editStartPlaytest" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Start Playtest"
@@ -221,11 +245,20 @@ layout_mode = 2
 label = "Start Playtest From Latest Spawn"
 action = &"editStartPlaytestFromState"
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys"]
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys"]
+layout_mode = 2
+
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c"]
 layout_mode = 2
 text = "Playtesting"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
+
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/c"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Game controls also apply, though these hotkeys take priority."
+texture = ExtResource("5_iswfj")
 
 [node name="playtesting" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys"]
 layout_mode = 2

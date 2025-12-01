@@ -4,13 +4,14 @@ class_name HotkeySetting
 @export var label:String
 @export var action:StringName
 @export var prerequisite:StringName
+@export var held:bool = false
 var input:InputEvent
 
 var default:Array[InputEvent]
 var buttons:Array[HotkeySettingButton]
 
 func _ready() -> void:
-	%label.text = label
+	%label.text = label + (" (held modifier)" if held else "")
 	default = InputMap.action_get_events(action)
 	for event in InputMap.action_get_events(action):
 		var button:HotkeySettingButton = HotkeySettingButton.new(self)
@@ -83,7 +84,8 @@ class HotkeySettingButton extends Button:
 			if Input.is_key_pressed(KEY_CTRL): text += "Ctrl+"
 			if Input.is_key_pressed(KEY_SHIFT): text += "Shift+"
 			if Input.is_key_pressed(KEY_ALT): text += "Alt+"
-			if !text: text = "(Unhover to cancel)"
+			if !text: text = "(Unhover to confirm)" if hotkey.held else "(Unhover to cancel)"
+			elif hotkey.held: text = text.left(-1)
 		else:
 			assert(event is InputEventKey)
 			text = event.as_text_physical_keycode()
@@ -121,7 +123,10 @@ class HotkeySettingButton extends Button:
  
 	func _input(_event:InputEvent) -> void:
 		if !setting or _event is InputEventMouse or !_event.pressed: return
-		if _event is InputEventKey and _event.keycode in [KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META]: return
+		var modifier:bool = false
+		if _event is InputEventKey and _event.keycode in [KEY_SHIFT, KEY_CTRL, KEY_ALT, KEY_META]:
+			modifier = true
+			if !hotkey.held: return
 		_event.keycode = 0
 		_event.unicode = 0
 		_event.pressed = false
@@ -130,7 +135,7 @@ class HotkeySettingButton extends Button:
 		event = _event
 		changed = true
 		get_viewport().set_input_as_handled()
-		_cancelSet()
+		if !modifier: _cancelSet()
 
 	func remove() -> void:
 		mouse_exited.disconnect(_cancelSet) # sneaky
