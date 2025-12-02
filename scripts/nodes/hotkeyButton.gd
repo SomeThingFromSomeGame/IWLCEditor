@@ -5,8 +5,8 @@ const fTalk:FontVariation = preload("res://resources/fonts/fControls.tres")
 
 @onready var editor:Editor = get_node("/root/editor")
 
-@export var defaultHotkey:String
-@export var pressedHotkey:String
+@export var defaultHotkey:StringName
+@export var pressedHotkey:StringName
 
 func _ready() -> void:
 	connect("toggled", queue_redraw.unbind(1))
@@ -19,7 +19,7 @@ func _draw() -> void:
 
 func getCurrentHotkey() -> String:
 	if button_pressed:
-		if pressedHotkey: return pressedHotkey
+		if pressedHotkey: return Explainer.hotkeyMap(pressedHotkey)
 		else: return ""
-	if defaultHotkey: return defaultHotkey
+	if defaultHotkey: return Explainer.hotkeyMap(defaultHotkey)
 	else: return ""

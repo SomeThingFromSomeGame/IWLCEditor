@@ -182,7 +182,7 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("4_78fwb")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "Esc"
+defaultHotkey = &"editModeSelect"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="tile" type="Button" parent="c/c/topBar/c/modes"]
@@ -191,7 +191,8 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("5_74j0u")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "T"
+defaultHotkey = &"editModeTile"
+pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="key" type="Button" parent="c/c/topBar/c/modes"]
@@ -200,8 +201,8 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("6_sdh1e")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "B"
-pressedHotkey = "Shift"
+defaultHotkey = &"editModeKey"
+pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="door" type="Button" parent="c/c/topBar/c/modes"]
@@ -210,8 +211,8 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("7_2w0at")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "D"
-pressedHotkey = "Shift"
+defaultHotkey = &"editModeDoor"
+pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="otherObjects" type="HBoxContainer" parent="c/c/topBar/c/modes"]
@@ -237,8 +238,8 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("10_aa8l6")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "X"
-pressedHotkey = "Shift"
+defaultHotkey = &"editModeOther"
+pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="objectSearch" type="LineEdit" parent="c/c/topBar/c/modes/otherObjects/c/c"]
@@ -271,8 +272,8 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
 icon = ExtResource("9_0u1f5")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "Ctrl+V"
-pressedHotkey = "Shift"
+defaultHotkey = &"editPaste"
+pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
 [node name="settingTabs" type="TabBar" parent="c/c/topBar/c"]
@@ -297,7 +298,7 @@ layout_mode = 2
 disabled = true
 icon = ExtResource("13_wyx26")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "Space"
+defaultHotkey = &"editStartPlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_1abrv")
 
@@ -307,7 +308,7 @@ visible = false
 layout_mode = 2
 icon = ExtResource("15_fce0a")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "P"
+defaultHotkey = &"editPausePlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_bn54a")
 
@@ -317,7 +318,7 @@ visible = false
 layout_mode = 2
 icon = ExtResource("16_m12ww")
 script = ExtResource("5_3vi5u")
-defaultHotkey = "O"
+defaultHotkey = &"editStopPlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_6lm8n")
 
