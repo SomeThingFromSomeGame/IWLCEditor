@@ -147,5 +147,4 @@ static func loadFile(file:FileAccess) -> void:
 	Game.updateWindowName()
 	if Game.editor:
 		Game.editor.settingsMenu.opened()
-		Game.editor.updateDescription()
 	Game.get_tree().call_group("modUI", "changedMods")

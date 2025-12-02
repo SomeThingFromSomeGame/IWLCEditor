@@ -46,6 +46,7 @@ var dragPivotRect:Rect2 # the pivot for size dragging
 var dragHandlePosition:Vector2
 var previousDragPosition:Vector2i
 var dragHandle:Vector2 # direction of the handle (initially), so that size_vert and size_horiz behave as they do
+var levelBoundsComponent:GameComponent = PlaceholderComponent.new() # spoof
 
 var lockBufferConvert:bool = false
 var connectionSource:GameObject # for pulling connections between remote locks and doors
@@ -56,7 +57,6 @@ var cameraZoom:float = 1
 
 var settingsOpen:bool = false
 
-var drawDescription:RID
 var drawMain:RID
 var drawAutoRunGradient:RID
 var autoRunTimer:float = 2
@@ -68,12 +68,9 @@ func _ready() -> void:
 	Mods.editor = self
 	Saving.editor = self
 	Explainer.editor = self
-	drawDescription = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
 	drawAutoRunGradient = RenderingServer.canvas_item_create()
-	RenderingServer.canvas_item_set_z_index(drawDescription, 1)
 	RenderingServer.canvas_item_set_material(drawAutoRunGradient, Game.TEXT_GRADIENT_MATERIAL)
-	RenderingServer.canvas_item_set_parent(drawDescription, %description.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain, %gameCont.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %gameCont.get_canvas_item())
 	Game.setWorld(%world)
@@ -96,11 +93,13 @@ func _process(delta:float) -> void:
 		editorCamera.zoom *= scaleFactor
 		editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameCont.position) / editorCamera.zoom
 	
-	if Input.is_action_pressed(&"heldTileSize1"): tileSize = Vector2i(1,1)
-	elif Input.is_action_pressed(&"heldTileSize4"): tileSize = Vector2i(4,4)
-	elif Input.is_action_pressed(&"heldTileSize16"): tileSize = Vector2i(16,16)
-	else: tileSize = Vector2i(32,32)
-	
+	if settingsOpen: tileSize = Vector2i(32,32)
+	else:
+		if Input.is_action_pressed(&"heldTileSize1"): tileSize = Vector2i(1,1)
+		elif Input.is_action_pressed(&"heldTileSize4"): tileSize = Vector2i(4,4)
+		elif Input.is_action_pressed(&"heldTileSize16"): tileSize = Vector2i(16,16)
+		else: tileSize = Vector2i(32,32)
+		
 	if Game.playState != Game.PLAY_STATE.PLAY and !focusDialog.focused and get_window().has_focus() and has_focus():
 		editorCamera.position += Vector2(Input.get_axis(&"editCameraLeft", &"editCameraRight"),Input.get_axis(&"editCameraUp", &"editCameraDown"))*delta/editorCamera.zoom*700
 
@@ -141,9 +140,7 @@ func _gui_input(event:InputEvent) -> void:
 	if !objectHovered: objectHovered = null
 	if !componentHovered: componentHovered = null
 	if event is InputEventMouse:
-		if settingsOpen:
-			mouse_default_cursor_shape = CURSOR_ARROW
-		elif Game.playState == Game.PLAY_STATE.PLAY:
+		if Game.playState == Game.PLAY_STATE.PLAY:
 			mouse_default_cursor_shape = CURSOR_ARROW
 		else:
 			# move camera
@@ -165,13 +162,18 @@ func _gui_input(event:InputEvent) -> void:
 					DRAG_MODE.SIZE_DIAG:
 						var diffSign:Vector2 = rectSign(dragPivotRect, dragHandlePosition)
 						match diffSign:
-							Vector2(-1,-1), Vector2(0,0), Vector2(1,1): mouse_default_cursor_shape = CURSOR_FDIAGSIZE
+							Vector2(-1,-1), Vector2(1,1): mouse_default_cursor_shape = CURSOR_FDIAGSIZE
 							Vector2(-1,1), Vector2(1,-1): mouse_default_cursor_shape = CURSOR_BDIAGSIZE
 							Vector2(-1,0), Vector2(1,0): mouse_default_cursor_shape = CURSOR_HSIZE
 							Vector2(0,-1), Vector2(0,1): mouse_default_cursor_shape = CURSOR_VSIZE
+							Vector2(0,0): mouse_default_cursor_shape = CURSOR_MOVE
 					DRAG_MODE.SIZE_VERT: mouse_default_cursor_shape = CURSOR_VSIZE
 					DRAG_MODE.SIZE_HORIZ: mouse_default_cursor_shape = CURSOR_HSIZE
 			else: mouse_default_cursor_shape = CURSOR_ARROW
+			if settingsOpen:
+				settingsMenu.mouse_default_cursor_shape = mouse_default_cursor_shape
+				if componentDragged: return dragComponent()
+				return settingsMenu.receiveMouseInput(event)
 			# connection pulling
 			if connectionSource and isLeftClick(event):
 				if connectionSource is RemoteLock and objectHovered is Door: connectionSource._connectTo(objectHovered)
@@ -273,6 +275,9 @@ func _gui_input(event:InputEvent) -> void:
 							modes.setMode(MODE.SELECT)
 
 func stopDrag() -> void:
+	if componentDragged == levelBoundsComponent:
+		componentDragged = null
+		return
 	if sizeDragging():
 		if !Mods.active(&"NstdLockSize") and componentDragged is Lock and componentDragged.parent.type != Door.TYPE.SIMPLE:
 			componentDragged._coerceSize()
@@ -306,6 +311,7 @@ func startSizeDrag(component:GameComponent, handle:Vector2=Vector2(1,1)) -> void
 	if component is Door: minSize = Vector2(32,32)
 	elif component is Lock or component is RemoteLock: minSize = Vector2(18,18)
 	elif component is KeyCounter: minSize = Vector2(107,63)
+	elif component == levelBoundsComponent: minSize = Vector2(800, 608)
 	if handle.x and handle.y: dragMode = DRAG_MODE.SIZE_DIAG
 	elif handle.x: dragMode = DRAG_MODE.SIZE_HORIZ; minSize.y = componentDragged.size.y
 	elif handle.y: dragMode = DRAG_MODE.SIZE_VERT; minSize.x = componentDragged.size.x
@@ -377,14 +383,18 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 					lockGoingTo.position += snappedAway(Vector2.ZERO.max(doorInnerBounds.position - lockGoingTo.end) - Vector2.ZERO.max(lockGoingTo.position - doorInnerBounds.end), Vector2(tileSize)) # keep in bounds
 					Changes.addChange(Changes.PropertyChange.new(lock,&"position",lockGoingTo.position))
 			previousDragPosition += Vector2i(dragOffset)
-			Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position",toRect.position))
-			Changes.addChange(Changes.PropertyChange.new(componentDragged,&"size",toRect.size))
+			if componentDragged == levelBoundsComponent:
+				Game.level.position = toRect.position
+				Game.level.size = toRect.size
+			else:
+				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position",toRect.position))
+				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"size",toRect.size))
 
 func _input(event:InputEvent) -> void:
 	if quickSet.component: quickSet.receiveInput(event); return
 	if event is InputEventKey and event.is_pressed():
 		if settingsOpen:
-			pass
+			if eventIs(event, &"editHome"): home()
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
 			if eventIs(event, &"gameAutoRun"): autoRun()
@@ -501,29 +511,14 @@ func _toggleSettingsMenu(toggled_on:bool) -> void:
 	else:
 		%settingsMenu.closed()
 		grab_focus()
-	updateDescription()
-
-func updateDescription() -> void:
-	%description.visible = (settingsOpen and settingsMenu.levelSettings.visible) or (Game.playState == Game.PLAY_STATE.PLAY and %levelDescription.text != "")
-	%levelDescription.text = Game.level.description
-	%levelShortNumber.text = Game.level.shortNumber
-	%levelDescription.editable = settingsOpen
-	%levelShortNumber.editable = settingsOpen
-
-func _levelDescriptionSet() -> void:
-	Game.level.description = %levelDescription.text
-	Game.anyChanges = true
 
 func _draw() -> void:
-	RenderingServer.canvas_item_clear(drawDescription)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawAutoRunGradient)
-	TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(728,27))
-	TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,%levelShortNumber.text,Color("#8c50c8"),Color("#140064"),20,Vector2(728,57))
 	var autoRunAlpha:float = abs(sin(autoRunTimer*PI))
 	if autoRunAlpha > 0:
 		TextDraw.outlinedGradient(Game.FMINIID,drawMain,drawAutoRunGradient,
-			"[E] Auto-Run is " + ("on" if Game.autoRun else "off"),
+			"[%s] Auto-Run is " % Explainer.hotkeyMap(&"gameAutoRun") + ("on" if Game.autoRun else "off"),
 			Color(Color("#e6ffe6") if Game.autoRun else Color("#dcffe6"),autoRunAlpha),
 			Color(Color("#e6c896") if Game.autoRun else Color("#64dc8c"),autoRunAlpha),
 			Color(Color.BLACK,autoRunAlpha),12,Vector2(4,20)

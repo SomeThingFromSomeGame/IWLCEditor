@@ -3,6 +3,7 @@ shader_type canvas_item;
 uniform vec4 GRID_COLOR:source_color;
 uniform vec3 OUTOFBOUNDS_COLOR:source_color;
 
+global uniform vec2 LEVEL_POS;
 global uniform vec2 LEVEL_SIZE;
 
 uniform vec2 screenPosition; // where the top left corner of the screen is, in worldspace
@@ -20,7 +21,7 @@ float lengthSquared(vec2 vector) {
 
 void fragment() {
 	vec2 XY = FRAGCOORD.xy*RCAMERA_ZOOM + screenPosition;
-	if (XY.x < 0.0 || XY.y < 0.0 || XY.x > LEVEL_SIZE.x || XY.y > LEVEL_SIZE.y) {
+	if (XY.x < LEVEL_POS.x || XY.y < LEVEL_POS.y || XY.x - LEVEL_POS.x > LEVEL_SIZE.x || XY.y - LEVEL_POS.y > LEVEL_SIZE.y) {
 		// draw level bounds
 		COLOR.rgb = lerpColor(COLOR.rgb, OUTOFBOUNDS_COLOR, 0.5);
 	}

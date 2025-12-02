@@ -9,6 +9,10 @@ var name:String = "Unnamed Level":
 		if active: Game.updateWindowName()
 var description:String = ""
 var author:String = ""
+var position:Vector2i = Vector2i(0,0):
+	set(value):
+		position = value
+		if active: Game.levelBounds.position = position
 var size:Vector2i = Vector2i(800,608):
 	set(value):
 		size = value

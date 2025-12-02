@@ -193,7 +193,7 @@ func _process(delta:float) -> void:
 	drawCurse.queue_redraw()
 
 func receiveKey(event:InputEventKey):
-	if event.echo or paused(): return
+	if paused(): return
 	if Editor.eventIs(event, &"editPausePlaytest") and Game.editor: Game.pauseTest()
 	elif Editor.eventIs(event, &"editStopPlaytest") and Game.editor: Game.stopTest()
 	elif Editor.eventIs(event, &"gameRestart"): Game.restart()
@@ -342,7 +342,7 @@ func _draw() -> void:
 		RenderingServer.canvas_item_add_texture_rect(drawWarp,Rect2(Vector2(-16-offset,-23),Vector2(32,32)),WARP_2,false,Color.from_hsv(crashAnimHue,crashAnimSat,crashAnimVal))
 		return
 	# drop shadow
-	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(-13,-20),Vector2(32,32)),%sprite.sprite_frames.get_frame_texture(%sprite.animation,%sprite.frame),false,Game.DROP_SHADOW_COLOR)
+	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(-13,-20),Vector2(-32 if %sprite.flip_h else 32,32)),%sprite.sprite_frames.get_frame_texture(%sprite.animation,%sprite.frame),false,Game.DROP_SHADOW_COLOR)
 	# auras
 	if auraRed: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_RED,false,AURA_DRAW_OPACITY)
 	if auraMaroon: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_MAROON,false,AURA_DRAW_OPACITY)

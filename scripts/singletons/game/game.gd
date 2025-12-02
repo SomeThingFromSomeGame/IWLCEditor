@@ -134,12 +134,20 @@ var components:Dictionary[int,GameComponent] = {}
 var levelBounds:Rect2i = Rect2i(0,0,800,608):
 	set(value):
 		levelBounds = value
+		RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
 		RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size)
+		var camera:Camera2D
+		if editor: camera = editor.playtestCamera
+		if playGame: camera = playGame.playCamera
+		if camera:
+			camera.limit_left = levelBounds.position.x
+			camera.limit_top = levelBounds.position.y
+			camera.limit_right = levelBounds.end.x
+			camera.limit_bottom = levelBounds.end.y
 		if editor:
-			editor.playtestCamera.limit_left = levelBounds.position.x
-			editor.playtestCamera.limit_top = levelBounds.position.y
-			editor.playtestCamera.limit_right = levelBounds.end.x
-			editor.playtestCamera.limit_bottom = levelBounds.end.y
+			editor.levelBoundsComponent.position = levelBounds.position
+			editor.levelBoundsComponent.size = levelBounds.size
+			if editor.settingsOpen: editor.settingsMenu.updateLevelSettingsPosition()
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
@@ -170,7 +178,6 @@ var playState:PLAY_STATE = PLAY_STATE.EDIT:
 			editor.topBar._updateButtons()
 			editor.editorCamera.enabled = playState != PLAY_STATE.PLAY
 			editor.playtestCamera.enabled = playState == PLAY_STATE.PLAY
-			editor.updateDescription()
 		fastAnimSpeed = 0
 		fastAnimTimer = 0
 		complexViewHue = 0
@@ -218,6 +225,7 @@ func _process(delta:float) -> void:
 		goldIndexChanged.emit()
 	RenderingServer.global_shader_parameter_set(&"NOISE_OFFSET", Vector2(randf_range(-1000, 1000), randf_range(-1000, 1000)))
 	if editor and player: editor.playtestCamera.position = player.position
+	if playGame and player: playGame.playCamera.position = player.position
 	# fast anims
 	if fastAnimTimer > 0:
 		fastAnimTimer -= delta
@@ -267,6 +275,8 @@ func playTest(spawn:PlayerSpawn) -> void:
 	for component in components.values():
 		if starting: component.start()
 		component.queue_redraw()
+	await get_tree().process_frame
+	editor.playtestCamera.reset_smoothing()
 
 func pauseTest() -> void:
 	playState = PLAY_STATE.PAUSED
@@ -310,7 +320,7 @@ func play() -> void:
 func playSaved(fromOpenWindow:OpenWindow=null) -> void:
 	editorWindowMode = get_window().mode
 	editorWindowSize = get_window().size
-	editor.remove_child(fromOpenWindow)
+	if fromOpenWindow: editor.remove_child(fromOpenWindow) # otherwise it gets killed by the scene change
 	get_tree().change_scene_to_file("res://scenes/playGame.tscn")
 	get_window().mode = Window.MODE_WINDOWED
 	if !OS.has_feature("web"): get_window().size = Vector2(800,608)

@@ -13,12 +13,12 @@ var textDraw:RID
 func _ready() -> void:
 	textDraw = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_z_index(textDraw,1)
-	RenderingServer.canvas_item_set_parent(textDraw,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(textDraw,%followWorld.get_canvas_item())
 	if !FileAccess.file_exists("user://config.ini"): closed()
 	if OS.has_feature("web"): %fileDialogWorkaroundCont.visible = false
 	_tabSelected(0)
 
-func _input(event:InputEvent):
+func _input(event:InputEvent) -> void:
 	if !editor.settingsOpen: return
 	if event is InputEventKey and event.is_pressed():
 		match event.keycode:
@@ -26,11 +26,28 @@ func _input(event:InputEvent):
 				editor._toggleSettingsMenu(false)
 				get_viewport().set_input_as_handled()
 
+func updateLevelSettingsPosition() -> void:
+	if Game.levelStart:
+		var levelBoundsInner:Rect2 = Game.levelBounds.grow_individual(-400,-304,-400,-304)
+		%followWorld.worldOffset = (Game.levelStart.position).clamp(levelBoundsInner.position, levelBoundsInner.end) - Vector2(400, 304)
+	else: %followWorld.worldOffset = Game.levelBounds.position + (Game.levelBounds.size - Vector2i(800,608))/2
+
+func receiveMouseInput(event:InputEvent) -> void:
+	var dragCornerSize:Vector2 = Vector2(8,8)/editor.cameraZoom
+	var diffSign:Vector2 = Editor.rectSign(Rect2(Vector2(Game.levelBounds.position)+dragCornerSize,Vector2(Game.levelBounds.size)-dragCornerSize*2), editor.mouseWorldPosition)
+	if !diffSign or !Game.levelBounds.has_point(editor.mouseWorldPosition): return
+	elif !diffSign.x: mouse_default_cursor_shape = Control.CURSOR_VSIZE
+	elif !diffSign.y: mouse_default_cursor_shape = Control.CURSOR_HSIZE
+	elif (diffSign.x > 0) == (diffSign.y > 0): mouse_default_cursor_shape = Control.CURSOR_FDIAGSIZE
+	else: mouse_default_cursor_shape = Control.CURSOR_BDIAGSIZE
+	if Editor.isLeftClick(event):
+		editor.startSizeDrag(editor.levelBoundsComponent, diffSign)
+
 func _tabSelected(tab:int) -> void:
 	%levelSettings.visible = tab == 0
 	%editorSettings.visible = tab == 1
 	%gameSettings.visible = tab == 2
-	editor.updateDescription()
+	mouse_filter = Control.MOUSE_FILTER_PASS if tab == 0 else Control.MOUSE_FILTER_STOP
 	queue_redraw()
 
 func _levelNumberSet(string:String) -> void:
@@ -51,9 +68,11 @@ func _levelAuthorSet(string:String) -> void:
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(textDraw)
 	if %levelSettings.visible:
-		TextDraw.outlinedCentered2(Game.FLEVELID,textDraw,%levelNumber.text,Color.WHITE,Color.BLACK,24,size/2 + Vector2(0,-77))
-		TextDraw.outlinedCentered2(Game.FLEVELNAME,textDraw,%levelName.text,Color.WHITE,Color.BLACK,36,size/2 + Vector2(0,-13))
-		TextDraw.outlinedCentered2(Game.FLEVELNAME,textDraw,%levelAuthor.text,Color.BLACK,Color.WHITE,36,size/2 + Vector2(0,83))
+		TextDraw.outlinedCentered2(Game.FLEVELID,textDraw,%levelNumber.text,Color.WHITE,Color.BLACK,24,Vector2(400,218))
+		TextDraw.outlinedCentered2(Game.FLEVELNAME,textDraw,%levelName.text,Color.WHITE,Color.BLACK,36,Vector2(400,282))
+		TextDraw.outlinedCentered2(Game.FLEVELNAME,textDraw,%levelAuthor.text,Color.BLACK,Color.WHITE,36,Vector2(400,378))
+		TextDraw.outlinedCentered(Game.FROOMNUM,textDraw,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(732,524))
+		TextDraw.outlinedCentered(Game.FROOMNUM,textDraw,%levelShortNumber.text,Color("#8c50c8"),Color("#140064"),20,Vector2(732,554))
 
 func _defocus() -> void:
 	if !%levelName.text:
@@ -61,10 +80,13 @@ func _defocus() -> void:
 		_levelNameSet(%levelName.text)
 
 func opened() -> void:
+	updateLevelSettingsPosition()
 	configFile.load("user://config.ini")
 	%levelNumber.text = Game.level.number
 	%levelName.text = Game.level.name
 	%levelAuthor.text = Game.level.author
+	%levelDescription.text = Game.level.description
+	%levelShortNumber.text = Game.level.shortNumber
 	%fileDialogWorkaround.button_pressed = configFile.get_value("editor", "fileDialogWorkaround", false)
 	%fullscreen.button_pressed = configFile.get_value("editor", "fullscreen", false)
 	for setting in get_tree().get_nodes_in_group("hotkeySetting"):
@@ -91,3 +113,7 @@ func _fileDialogWorkaroundSet(toggled_on:bool) -> void:
 
 func _fullscreenSet(toggled_on:bool) -> void:
 	get_window().mode = Window.MODE_FULLSCREEN if toggled_on else Window.MODE_WINDOWED
+
+func _levelDescriptionSet():
+	Game.level.description = %levelDescription.text
+	Game.anyChanges = true

@@ -94,7 +94,6 @@ func confirmed() -> void:
 
 func clear() -> void:
 	savePath = ""
-	Game.levelBounds = Rect2i(0,0,800,608)
 	if editor:
 		editor.focusDialog.defocus()
 		editor.objectHovered = null

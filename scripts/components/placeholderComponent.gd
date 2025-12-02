@@ -1,0 +1,2 @@
+extends GameComponent
+class_name PlaceholderComponent

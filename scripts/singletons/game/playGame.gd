@@ -10,6 +10,7 @@ const TEXT_BREAK_FLAGS:int = TextServer.LineBreakFlag.BREAK_MANDATORY|TextServer
 
 @onready var world:World = %world
 @onready var gameViewport:SubViewport = %gameViewport
+@onready var playCamera:Camera2D = %playCamera
 
 var configFile:ConfigFile = ConfigFile.new()
 
@@ -144,7 +145,7 @@ func _draw() -> void:
 	var autoRunAlpha:float = abs(sin(autoRunTimer*PI))
 	if autoRunAlpha > 0:
 		TextDraw.outlinedGradient(Game.FMINIID,drawMain,drawAutoRunGradient,
-			"[E] Auto-Run is " + ("on" if Game.autoRun else "off"),
+			"[%s] Auto-Run is " % Explainer.hotkeyMap(&"gameAutoRun") + ("on" if Game.autoRun else "off"),
 			Color(Color("#e6ffe6") if Game.autoRun else Color("#dcffe6"),autoRunAlpha),
 			Color(Color("#e6c896") if Game.autoRun else Color("#64dc8c"),autoRunAlpha),
 			Color(Color.BLACK,autoRunAlpha),12,Vector2(4,20)
