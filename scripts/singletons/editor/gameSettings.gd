@@ -44,6 +44,9 @@ func opened(configFile:ConfigFile) -> void:
 	%autoRun.button_pressed = configFile.get_value("game", "autoRun", true)
 	%fullJumps.button_pressed = configFile.get_value("game", "fullJumps", false)
 	%fastAnimations.button_pressed = configFile.get_value("game", "fastAnimations", false)
+	for setting in %controls.get_children():
+		if setting is not ControlsSetting: continue
+		setting.setEvent(configFile.get_value("editor", "hotkey_"+setting.action, setting.default))
 
 func closed(configFile:ConfigFile) -> void:
 	configFile.set_value("game", "volume", %volume.value)
@@ -59,6 +62,9 @@ func closed(configFile:ConfigFile) -> void:
 	configFile.set_value("game", "autoRun", Game.autoRun)
 	configFile.set_value("game", "fullJumps", %fullJumps.button_pressed)
 	configFile.set_value("game", "fastAnimations", %fastAnimations.button_pressed)
+	for setting in %controls.get_children():
+		if setting is not ControlsSetting: continue
+		configFile.set_value("editor", "hotkey_"+setting.action, setting.event)
 
 func _volumeSet(value:float) -> void:
 	AudioServer.set_bus_volume_linear(AudioManager.masterBus, lerpf(0,MAX_VOLUME,value))

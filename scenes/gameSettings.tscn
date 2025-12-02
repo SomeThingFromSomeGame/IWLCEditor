@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://cudl265jx2hk6"]
+[gd_scene load_steps=7 format=3 uid="uid://cudl265jx2hk6"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_tmlsq"]
 [ext_resource type="Script" uid="uid://dtw6afpsoarco" path="res://scripts/singletons/editor/gameSettings.gd" id="2_nrqkd"]
 [ext_resource type="Script" uid="uid://c70juj2p5s6yd" path="res://scripts/nodes/focusDialog/selector/colorSelector.gd" id="3_vtnhb"]
+[ext_resource type="Script" uid="uid://4muxkbry8eqk" path="res://scripts/nodes/settings/controlsSetting.gd" id="4_t6p7j"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_vtnhb"]
 
@@ -260,6 +261,114 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Fast Animations"
+
+[node name="l5" type="Label" parent="c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Controls"
+label_settings = SubResource("LabelSettings_vtnhb")
+vertical_alignment = 2
+
+[node name="controls" type="GridContainer" parent="c"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 3
+
+[node name="left" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Left"
+action = &"gameLeft"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="undo" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Undo"
+action = &"gameUndo"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="warp" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="right" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Right"
+action = &"gameRight"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="restart" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Restart"
+action = &"gameRestart"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="autoRun" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Run Switch"
+action = &"gameAutoRun"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="up" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="leave" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="run" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Run"
+action = &"gameRun"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="down" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="camera" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="walk" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Walk"
+action = &"gameWalk"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="jump" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Jump"
+action = &"gameJump"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="complexSwitch" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "I-View"
+action = &"gameComplexSwitch"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="select" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="action" type="Button" parent="c/controls"]
+layout_mode = 2
+script = ExtResource("4_t6p7j")
+label = "Action"
+action = &"gameAction"
+metadata/_custom_type_script = "uid://4muxkbry8eqk"
+
+[node name="pda" type="Control" parent="c/controls"]
+layout_mode = 2
+
+[node name="interact" type="Control" parent="c/controls"]
+layout_mode = 2
 
 [connection signal="value_changed" from="c/c/volume" to="." method="_volumeSet"]
 [connection signal="toggled" from="c/fullscreen" to="." method="_fullscreenSet"]

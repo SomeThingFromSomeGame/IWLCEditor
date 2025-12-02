@@ -387,8 +387,8 @@ func _input(event:InputEvent) -> void:
 			pass
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
+			if eventIs(event, &"gameAutoRun"): autoRun()
 			match event.keycode:
-				KEY_E: autoRun()
 				KEY_ESCAPE: _toggleSettingsMenu(true)
 				_: Game.player.receiveKey(event)
 		else:

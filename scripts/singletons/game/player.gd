@@ -126,9 +126,9 @@ func _physics_process(_delta:float) -> void:
 		return
 	
 	var xSpeed:float = 6
-	if Input.is_key_pressed(KEY_CTRL): xSpeed = 1
-	elif !is_on_floor() or (Input.is_key_pressed(KEY_SHIFT) == Game.autoRun): xSpeed = 3
-	var moveDirection:float = Input.get_axis(&"left", &"right")
+	if Input.is_action_pressed(&"gameWalk"): xSpeed = 1
+	elif !is_on_floor() or (Input.is_action_pressed(&"gameRun") == Game.autoRun): xSpeed = 3
+	var moveDirection:float = Input.get_axis(&"gameLeft", &"gameRight")
 	velocity.x = xSpeed*FPS*moveDirection
 
 	if pauseFrame:
@@ -150,7 +150,7 @@ func _physics_process(_delta:float) -> void:
 	if is_on_floor() and onAnything:
 		canDoubleJump = true
 
-	if Input.is_action_just_pressed(&"jump"):
+	if Input.is_action_just_pressed(&"gameJump"):
 		if onAnything or onOpeningDoor:
 			velocity.y = -JUMP_SPEED*FPS
 			AudioManager.play(preload("res://resources/sounds/player/jump.wav"))
@@ -161,7 +161,7 @@ func _physics_process(_delta:float) -> void:
 			velocity.y = -DOUBLE_JUMP_SPEED*FPS
 			canDoubleJump = false
 			AudioManager.play(preload("res://resources/sounds/player/doubleJump.wav"))
-	if Input.is_action_just_released(&"jump") and velocity.y < 0 and !Game.fullJumps: velocity.y *= 0.45
+	if Input.is_action_just_released(&"gameJump") and velocity.y < 0 and !Game.fullJumps: velocity.y *= 0.45
 	velocity.y += GRAVITY*FPS
 	velocity.y = clamp(velocity.y, -Y_MAXSPEED*FPS, Y_MAXSPEED*FPS)
 
@@ -194,12 +194,12 @@ func _process(delta:float) -> void:
 
 func receiveKey(event:InputEventKey):
 	if event.echo or paused(): return
-	if Editor.eventIs(event, &"gameRestart"): Game.restart()
+	if Editor.eventIs(event, &"editPausePlaytest") and Game.editor: Game.pauseTest()
+	elif Editor.eventIs(event, &"editStopPlaytest") and Game.editor: Game.stopTest()
+	elif Editor.eventIs(event, &"gameRestart"): Game.restart()
 	elif Editor.eventIs(event, &"gameUndo") and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
 	elif Editor.eventIs(event, &"gameAction"): cycleMaster()
 	elif Editor.eventIs(event, &"gameComplexSwitch"): complexSwitch()
-	elif Editor.eventIs(event, &"editPausePlaytest") and Game.editor: Game.pauseTest()
-	elif Editor.eventIs(event, &"editStopPlaytest") and Game.editor: Game.stopTest()
 	match event.keycode:
 		KEY_U: print(GameChanges.undoStack)
 
