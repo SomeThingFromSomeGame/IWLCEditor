@@ -223,7 +223,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 	if lockConfiguration == CONFIGURATION.NONE:
 		match lockType:
 			TYPE.NORMAL,TYPE.EXACT:
-				var string:String = M.str(abs(lockCount))
+				var string:String = M.str(M.abs(lockCount))
 				if string == "1": string = ""
 				if M.isNonzeroImag(lockCount) and lockType == TYPE.NORMAL: string += "i"
 				var lockOffsetX:float = 0
@@ -265,7 +265,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 				var ipow:int = 0
 				if M.isComplex(lockDenominator) or M.isComplex(lockCount) or M.nex(lockDenominator): numerator = M.str(lockCount)
 				else:
-					numerator = M.str(M.divide(lockCount, M.axisOrOne(lockDenominator)))
+					numerator = M.str(M.divide(lockCount, M.saxis(lockDenominator)))
 					ipow = M.toIpow(M.axis(lockDenominator))
 				if numerator == "1": numerator = ""
 				
@@ -448,7 +448,7 @@ static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 	var can:bool = true
 	var keyCount:PackedInt64Array = player.key[lock.colorAfterAurabreaker()]
 	match lock.type:
-		TYPE.NORMAL: can = M.nonNegative(M.minus(M.along(keyCount, lock.effectiveCount()), M.acrabs(lock.effectiveCount())))
+		TYPE.NORMAL: can = M.nonNegative(M.sub(M.along(keyCount, lock.effectiveCount()), M.acrabs(lock.effectiveCount())))
 		TYPE.BLANK: can = M.nex(keyCount)
 		TYPE.BLAST:
 			if M.nex(lock.effectiveDenominator()): can = false
@@ -475,8 +475,8 @@ static func getLockCost(lock:GameComponent, player:Player, ipow:PackedInt64Array
 	var cost:PackedInt64Array = M.ZERO
 	match lock.type:
 		TYPE.NORMAL, TYPE.EXACT: cost = lock.effectiveCount(ipow)
-		TYPE.BLAST: if M.ex(lock.effectiveDenominator(ipow)): cost = M.over(M.times(M.across(player.key[lock.colorAfterAurabreaker()], M.acrabs(lock.effectiveCount(ipow))), lock.effectiveCount(ipow)),lock.effectiveDenominator(ipow))
-		TYPE.ALL: if M.ex(lock.effectiveDenominator(ipow)): cost = M.over(M.times(player.key[lock.colorAfterAurabreaker()], lock.effectiveCount(ipow)),lock.effectiveDenominator(ipow))
+		TYPE.BLAST: if M.ex(lock.effectiveDenominator(ipow)): cost = M.divide(M.times(M.across(player.key[lock.colorAfterAurabreaker()], M.acrabs(lock.effectiveCount(ipow))), lock.effectiveCount(ipow)),lock.effectiveDenominator(ipow))
+		TYPE.ALL: if M.ex(lock.effectiveDenominator(ipow)): cost = M.divide(M.times(player.key[lock.colorAfterAurabreaker()], lock.effectiveCount(ipow)),lock.effectiveDenominator(ipow))
 	if lock.negated: return M.negate(cost)
 	return cost
 

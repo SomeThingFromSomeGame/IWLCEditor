@@ -27,8 +27,8 @@ func setValue(_value:PackedInt64Array, manual:bool=false) -> void:
 	else: %drawText.text = M.str(value)
 	if !manual: valueSet.emit(value)
 
-func increment() -> void: setValue(M.plus(value, M.ONE))
-func decrement() -> void: setValue(M.minus(value, M.ONE))
+func increment() -> void: setValue(M.add(value, M.ONE))
+func decrement() -> void: setValue(M.sub(value, M.ONE))
 
 func deNew():
 	newlyInteracted = false
@@ -61,7 +61,7 @@ func receiveKey(key:InputEventKey):
 				if Input.is_key_pressed(KEY_CTRL) or newlyInteracted: setValue(M.ZERO)
 				else:
 					var negative:bool = M.negative(value)
-					setValue(M.divint(value,M.N(10)))
+					setValue(M.divide(value,M.N(10)))
 					if M.nex(value): bufferedNegative = negative
 				deNew()
 			KEY_UP: increment(); deNew()
@@ -73,6 +73,7 @@ func receiveKey(key:InputEventKey):
 			if M.negative(value): bufferedNegative = true
 			setValue(M.ZERO,true)
 		deNew()
+		print(key)
 		if M.negative(value) != bufferedNegative: setValue(M.sub(M.times(value,M.N(10)), M.N(number)))
 		else: setValue(M.add(M.times(value,M.N(10)), M.N(number)))
 	return true

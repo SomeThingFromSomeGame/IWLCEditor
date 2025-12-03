@@ -491,7 +491,7 @@ func tryMasterOpen(player:Player) -> bool:
 
 	var openedForwards:bool = M.positive(M.sign(M.across(gameCopies, player.masterMode)))
 	GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(player.masterMode, M.sub(M.allAxes(), infCopies)))))
-	GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.MASTER, M.minus(player.key[Game.COLOR.MASTER], player.masterMode)))
+	GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.MASTER, M.sub(player.key[Game.COLOR.MASTER], player.masterMode)))
 	
 	if openedForwards:
 		AudioManager.play(preload("res://resources/sounds/door/master.wav"))
@@ -545,7 +545,7 @@ func tryDynamiteOpen(player:Player) -> bool:
 		openedForwards = M.hasPositive(M.along(player.key[Game.COLOR.DYNAMITE], gameCopies))
 		openedBackwards = M.hasNonPositive(M.along(player.key[Game.COLOR.DYNAMITE], gameCopies))
 
-		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.minus(gameCopies, M.across(player.key[Game.COLOR.DYNAMITE], M.minus(M.allAxes(),infCopies)))))
+		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(player.key[Game.COLOR.DYNAMITE], M.sub(M.allAxes(),infCopies)))))
 		GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.DYNAMITE, M.ZERO))
 
 	if openedForwards:

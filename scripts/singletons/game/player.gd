@@ -278,12 +278,12 @@ func checkKeys() -> void:
 
 	if !M.positive(M.reduce(M.sign(M.across(key[MASTER_CYCLE_COLORS[masterCycle]],masterMode)))) or MASTER_CYCLE_COLORS[masterCycle] in armamentImmunities: dropMaster()
 
-	auraRed = M.positive(key[Game.COLOR.RED]) and M.gte(M.minus(key[Game.COLOR.RED], key[Game.COLOR.MAROON]), M.N(1)) and Game.COLOR.RED not in armamentImmunities
-	auraGreen = M.positive(key[Game.COLOR.GREEN]) and M.gte(M.minus(key[Game.COLOR.GREEN], key[Game.COLOR.FOREST]), M.N(5)) and Game.COLOR.GREEN not in armamentImmunities
-	auraBlue = M.positive(key[Game.COLOR.BLUE]) and M.gte(M.minus(key[Game.COLOR.BLUE], key[Game.COLOR.NAVY]), M.N(3)) and Game.COLOR.BLUE not in armamentImmunities
-	auraMaroon = M.positive(key[Game.COLOR.MAROON]) and M.gte(M.minus(key[Game.COLOR.MAROON], key[Game.COLOR.RED]), M.N(1)) and Game.COLOR.MAROON not in armamentImmunities
-	auraForest = M.positive(key[Game.COLOR.FOREST]) and M.gte(M.minus(key[Game.COLOR.FOREST], key[Game.COLOR.GREEN]), M.N(5)) and Game.COLOR.FOREST not in armamentImmunities
-	auraNavy = M.positive(key[Game.COLOR.NAVY]) and M.gte(M.minus(key[Game.COLOR.NAVY], key[Game.COLOR.BLUE]), M.N(3)) and Game.COLOR.NAVY not in armamentImmunities
+	auraRed = M.positive(key[Game.COLOR.RED]) and M.gte(M.sub(key[Game.COLOR.RED], key[Game.COLOR.MAROON]), M.N(1)) and Game.COLOR.RED not in armamentImmunities
+	auraGreen = M.positive(key[Game.COLOR.GREEN]) and M.gte(M.sub(key[Game.COLOR.GREEN], key[Game.COLOR.FOREST]), M.N(5)) and Game.COLOR.GREEN not in armamentImmunities
+	auraBlue = M.positive(key[Game.COLOR.BLUE]) and M.gte(M.sub(key[Game.COLOR.BLUE], key[Game.COLOR.NAVY]), M.N(3)) and Game.COLOR.BLUE not in armamentImmunities
+	auraMaroon = M.positive(key[Game.COLOR.MAROON]) and M.gte(M.sub(key[Game.COLOR.MAROON], key[Game.COLOR.RED]), M.N(1)) and Game.COLOR.MAROON not in armamentImmunities
+	auraForest = M.positive(key[Game.COLOR.FOREST]) and M.gte(M.sub(key[Game.COLOR.FOREST], key[Game.COLOR.GREEN]), M.N(5)) and Game.COLOR.FOREST not in armamentImmunities
+	auraNavy = M.positive(key[Game.COLOR.NAVY]) and M.gte(M.sub(key[Game.COLOR.NAVY], key[Game.COLOR.BLUE]), M.N(3)) and Game.COLOR.NAVY not in armamentImmunities
 
 	explodey = M.ex(key[Game.COLOR.DYNAMITE]) and Game.COLOR.DYNAMITE not in armamentImmunities
 

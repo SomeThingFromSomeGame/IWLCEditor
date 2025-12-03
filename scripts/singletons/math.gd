@@ -54,14 +54,14 @@ func times(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
 func across(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
 	return [a[0]*b[0], a[1]*b[1]]
 
-func divint(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
+func divide(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
+	@warning_ignore("integer_division") return [(a[0]*b[0]+a[1]*b[1])/(b[0]*b[0]+b[1]*b[1]), (a[1]*b[0]-a[0]*b[1])/(b[0]*b[0]+b[1]*b[1])]
+
+func divoss(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
 	@warning_ignore("integer_division") return [a[0]/b[0], a[1]/b[1]]
 
-func divide(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
-	@warning_ignore("integer_division") return [(a[0]*b[0]+a[1]*b[1])/(a[1]*a[1]*b[1]*b[1]), (a[1]*b[0]-a[0]*b[1])/(a[1]*a[1]*b[1]*b[1])]
-
 func modulo(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
-	return [(a[0]*b[0]+a[1]*b[1])%(a[1]*a[1]*b[1]*b[1]), (a[1]*b[0]-a[0]*b[1])%(a[1]*a[1]*b[1]*b[1])]
+	return [(a[0]*b[0]+a[1]*b[1])%(b[0]*b[0]+b[1]*b[1]), (a[1]*b[0]-a[0]*b[1])%(b[0]*b[0]+b[1]*b[1])]
 
 func along(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array: return across(a, axis(b))
 
@@ -177,7 +177,7 @@ func hasNonNegative(n:PackedInt64Array) -> bool:
 
 # util
 
-func toIPow(n:PackedInt64Array) -> int:
+func toIpow(n:PackedInt64Array) -> int:
 	if eq(n, ONE): return 0
 	elif eq(n, I): return 1
 	elif eq(n, nONE): return 2
@@ -195,10 +195,10 @@ func strWithInf(n:PackedInt64Array,infAxes:PackedInt64Array) -> String:
 	var rComponent:String
 	var iComponent:String = ""
 	if infAxes[0]: rComponent = "-~" if n[0] < 0 else "~"
-	elif n[0]: rComponent = str(r)
+	elif n[0]: rComponent = str(n[0])
 	if n[1]:
 		if n[1] > 0 and n[0]: iComponent += "+"
 		if infAxes[1]: iComponent += "-~i" if n[1] < 0 else "~i"
-		else: iComponent += str(i) + "i"
+		else: iComponent += str(n[1]) + "i"
 	if !n[0] and !n[1]: return "0"
 	return rComponent + iComponent
