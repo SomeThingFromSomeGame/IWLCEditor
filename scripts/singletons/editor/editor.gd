@@ -393,6 +393,7 @@ func _input(event:InputEvent) -> void:
 	if quickSet.component: quickSet.receiveInput(event); return
 	if event is InputEventKey and event.is_pressed():
 		if settingsOpen:
+			if !settingsMenu.has_focus(): return
 			if eventIs(event, &"editHome"): home()
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
