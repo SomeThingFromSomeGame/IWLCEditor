@@ -82,7 +82,7 @@ func axis(n:PackedInt64Array) -> PackedInt64Array:
 
 # "not axis"; n:Axial, naxis(n) = 1/axis(n)
 func naxis(n:PackedInt64Array) -> PackedInt64Array:
-	return [-sign(n[0]), -sign(n[1])]
+	return [sign(n[0]), sign(n[1])]
 
 # "safe axis"; 1 if would be 0
 func saxis(n:PackedInt64Array) -> PackedInt64Array: return axis(n) if n != ZERO else ONE
