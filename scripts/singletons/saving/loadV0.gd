@@ -1,7 +1,7 @@
 extends Node
 class_name LoadV0
 
-static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, RemoteLock]
+static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, FloatingTile, RemoteLock]
 static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
 
 static var PROPERTIES:Dictionary[GDScript,Array] = {
@@ -34,6 +34,9 @@ static var PROPERTIES:Dictionary[GDScript,Array] = {
 	PlayerSpawn: [
 		&"id", &"position", &"size",
 	],
+	FloatingTile: [
+		&"id", &"position",
+	],
 	RemoteLock: [
 		&"id", &"position", &"size",
 		&"color", &"type", &"configuration", &"sizeType", &"count", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
@@ -48,6 +51,7 @@ static var ARRAYS:Dictionary[GDScript,Dictionary] = {
 	Goal: {},
 	KeyCounter: {},
 	PlayerSpawn: {},
+	FloatingTile: {},
 	RemoteLock: {&"doors":Door},
 }
 
