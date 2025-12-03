@@ -57,8 +57,8 @@ func divide(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
 func modulo(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
 	return [(a[0]*b[0]+a[1]*b[1])%(a[1]*a[1]*b[1]*b[1]), (a[1]*b[0]-a[0]*b[1])%(a[1]*a[1]*b[1]*b[1])]
 
-func along(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
-	return times(a, naxis(b))
+func along(a:PackedInt64Array, bAxial:PackedInt64Array) -> PackedInt64Array:
+	return times(a, naxis(bAxial))
 
 # reducers
 
@@ -80,11 +80,12 @@ func reduce(n:PackedInt64Array) -> PackedInt64Array:
 func axis(n:PackedInt64Array) -> PackedInt64Array:
 	return [sign(n[0]), sign(n[1])]
 
+# "not axis"; n:Axial, naxis(n) = 1/axis(n)
 func naxis(n:PackedInt64Array) -> PackedInt64Array:
 	return [-sign(n[0]), -sign(n[1])]
 
-func saxis(n:PackedInt64Array) -> PackedInt64Array:
-	return axis(n) if n != ZERO else ONE
+# "safe axis"; 1 if would be 0
+func saxis(n:PackedInt64Array) -> PackedInt64Array: return axis(n) if n != ZERO else ONE
 
 func acrabs(n:PackedInt64Array) -> PackedInt64Array:
 	return [abs(n[0]), abs(n[1])]
@@ -124,6 +125,9 @@ func isNonzeroReal(n:PackedInt64Array) -> bool:
 
 func isNonzeroImag(n:PackedInt64Array) -> bool:
 	return !n[0] and n[1]
+
+func isNonzeroAxial(n:PackedInt64Array) -> bool:
+	return bool(n[0]) != bool(n[1])
 
 func isComplex(n:PackedInt64Array) -> bool:
 	return n[0] and n[1]
