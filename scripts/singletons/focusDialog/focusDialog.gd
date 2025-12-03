@@ -38,6 +38,7 @@ func showCorrectDialog() -> void:
 	%keyCounterDialog.visible = focused is KeyCounter
 	%goalDialog.visible = focused is Goal
 	above = focused is KeyCounter # maybe add more later
+	%speechBubbler.visible = focused is not FloatingTile
 	%speechBubbler.rotation_degrees = 0 if above else 180
 
 func defocus() -> void:

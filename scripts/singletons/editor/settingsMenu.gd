@@ -27,10 +27,7 @@ func _input(event:InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 
 func updateLevelSettingsPosition() -> void:
-	if Game.levelStart:
-		var levelBoundsInner:Rect2 = Game.levelBounds.grow_individual(-400,-304,-400,-304)
-		%followWorld.worldOffset = (Game.levelStart.position).clamp(levelBoundsInner.position, levelBoundsInner.end) - Vector2(400, 304)
-	else: %followWorld.worldOffset = Game.levelBounds.position + (Game.levelBounds.size - Vector2i(800,608))/2
+	%followWorld.worldOffset = editor.levelStartCameraCenter()
 
 func receiveMouseInput(event:InputEvent) -> void:
 	var dragCornerSize:Vector2 = Vector2(8,8)/editor.cameraZoom
@@ -47,7 +44,6 @@ func _tabSelected(tab:int) -> void:
 	%levelSettings.visible = tab == 0
 	%editorSettings.visible = tab == 1
 	%gameSettings.visible = tab == 2
-	mouse_filter = Control.MOUSE_FILTER_PASS if tab == 0 else Control.MOUSE_FILTER_STOP
 	queue_redraw()
 
 func _levelNumberSet(string:String) -> void:

@@ -63,7 +63,7 @@ func receiveKey(key:InputEventKey):
 				theme_type_variation = &"NumberEditPanelContainerSelected"
 				if Input.is_key_pressed(KEY_CTRL) or newlyInteracted: setValue(M.ZERO)
 				else:
-					var axis:PackedInt64Array = M.axis(value)
+					var axis:PackedInt64Array = M.saxis(value)
 					setValue(M.divide(value, M.N(10)))
 					if M.nex(value): bufferedSign = axis
 				deNew()

@@ -112,7 +112,7 @@ func _process(delta:float) -> void:
 	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x
 	else: cameraZoom = editorCamera.zoom.x
 	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
-	%gameViewportCont.material.set_shader_parameter("tileSize",tileSize)
+	%gameViewportCont.material.set_shader_parameter("tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
 	componentHovered = null
 	if !componentDragged:
 		objectHovered = null
@@ -146,7 +146,7 @@ func _gui_input(event:InputEvent) -> void:
 			# move camera
 			if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
 				editorCamera.position -= event.relative / cameraZoom
-			if event is InputEventMouseButton and event.is_pressed():
+			if !(settingsOpen and !settingsMenu.levelSettings.visible) and event is InputEventMouseButton and event.is_pressed():
 				match event.button_index:
 					MOUSE_BUTTON_WHEEL_UP: zoomCamera(1.25)
 					MOUSE_BUTTON_WHEEL_DOWN: zoomCamera(0.8)
@@ -447,7 +447,7 @@ static func eventIs(event:InputEvent, action:StringName) -> bool: return event.i
 
 func home() -> void:
 	targetCameraZoom = 1
-	zoomPoint = Game.levelBounds.get_center()
+	zoomPoint = levelStartCameraCenter(%gameCont.size) + %gameCont.size/2
 	editorCamera.position = zoomPoint - gameCont.size / (cameraZoom*2)
 
 func zoomCamera(factor:float) -> void:
@@ -534,3 +534,9 @@ func autoRun() -> void:
 func takeScreenshot() -> void:
 	screenshot = %screenshotViewport.get_texture().get_image()
 	screenshot.resize(200,152)
+
+func levelStartCameraCenter(screenSize:Vector2=Vector2(800,608)) -> Vector2:
+	if Game.levelStart:
+		var levelBoundsInner:Rect2 = Game.levelBounds.grow_individual(-400,-304,-400,-304)
+		return Game.levelStart.position.clamp(levelBoundsInner.position, levelBoundsInner.end) - screenSize/2
+	return Vector2(Game.levelBounds.position) + (Vector2(Game.levelBounds.size) - screenSize)/2

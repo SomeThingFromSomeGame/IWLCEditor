@@ -2,15 +2,15 @@ extends CharacterBody2D
 class_name Player
 
 const HELD_SHINE:Texture2D = preload("res://assets/game/player/held/shine.png")
-func getMasterShineColor() -> Color: return Color("#b4b432") if M.positive(sign(masterMode)) else Color("#3232b4")
+func getMasterShineColor() -> Color: return Color("#b4b432") if M.positive(M.sign(masterMode)) else Color("#3232b4")
 
 const HELD_MASTER:Texture2D = preload("res://assets/game/player/held/master.png")
 const HELD_QUICKSILVER:Texture2D = preload("res://assets/game/player/held/quicksilver.png")
 const HELD_MASTER_NEGATIVE:Texture2D = preload("res://assets/game/player/held/masterNegative.png")
 const HELD_QUICKSILVER_NEGATIVE:Texture2D = preload("res://assets/game/player/held/quicksilverNegative.png")
 func getHeldKeySprite() -> Texture2D:
-	if masterCycle == 1: return HELD_MASTER if M.positive(sign(masterMode)) else HELD_MASTER_NEGATIVE
-	else: return HELD_QUICKSILVER if M.positive(sign(masterMode)) else HELD_QUICKSILVER_NEGATIVE
+	if masterCycle == 1: return HELD_MASTER if M.positive(M.sign(masterMode)) else HELD_MASTER_NEGATIVE
+	else: return HELD_QUICKSILVER if M.positive(M.sign(masterMode)) else HELD_QUICKSILVER_NEGATIVE
 
 const AURA_RED:Texture2D = preload("res://assets/game/player/aura/red.png")
 const AURA_GREEN:Texture2D = preload("res://assets/game/player/aura/green.png")
@@ -141,7 +141,9 @@ func _physics_process(_delta:float) -> void:
 		previousPosition = position
 		previousIsOnFloor = is_on_floor()
 
-	var onAnything:bool = Game.tiles in %floor.get_overlapping_bodies()
+	var onAnything:bool = false
+	for body in %floor.get_overlapping_bodies():
+		if body == Game.tiles or body.get_parent() is FloatingTile: onAnything = true; break
 	var onOpeningDoor:bool = false
 	for area in %floor.get_overlapping_areas():
 		if area.get_parent() is Door:
@@ -249,7 +251,7 @@ func cycleMaster() -> void:
 			else: AudioManager.play(preload("res://resources/sounds/player/masterNegativeEquip.wav"))
 			return
 	if masterCycle < 2 and Game.COLOR.QUICKSILVER not in armamentImmunities: # QUICKSILVER
-		var relevantCount:PackedInt64Array = M.across(key[Game.COLOR.MASTER], complexMode)
+		var relevantCount:PackedInt64Array = M.across(key[Game.COLOR.QUICKSILVER], complexMode)
 		if M.ex(relevantCount):
 			masterCycle = 2
 			masterMode = M.axis(relevantCount)

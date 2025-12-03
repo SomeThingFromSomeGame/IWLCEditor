@@ -118,7 +118,6 @@ func getTempActiveMods(includeDisclosatory:bool=true) -> Array[StringName]:
 		if mods[mod].tempActive and (includeDisclosatory or !mods[mod].disclosatory): array.append(mod)
 	return array
 
-
 func openModsWindow() -> void:
 	if editor.modsWindow:
 		editor.modsWindow.grab_focus()

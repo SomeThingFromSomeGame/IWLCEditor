@@ -5,7 +5,7 @@ class_name OtherObjects
 @onready var objectSearch:LineEdit = %objectSearch
 
 var selected:GDScript = PlayerSpawn
-var objects:Array[GDScript] = [Goal, KeyCounter, PlayerSpawn, RemoteLock]
+var objects:Array[GDScript] = [Goal, KeyCounter, PlayerSpawn, FloatingTile, RemoteLock]
 var firstResult:GDScript
 
 func _searchFocused() -> void:

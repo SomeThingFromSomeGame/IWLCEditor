@@ -32,7 +32,7 @@ func draw() -> void:
 
 func drawOutline(component:GameComponent,color:Color=Color.WHITE) -> void:
 	var pos:Vector2 = component.getDrawPosition()
-	if component.get_script() in [Door, Lock, KeyCounter, RemoteLock, PlaceholderComponent]:
+	if component.get_script() in [Door, Lock, KeyCounter, RemoteLock, PlaceholderComponent, FloatingTile]:
 		RenderingServer.canvas_item_add_polyline(drawNormal,[ # cant just rectangle with the drawshader since uv doesnt work with rectangles, and there isnt a rectangle outline either from what i can tell
 			pos,
 			pos+Vector2(component.size.x+1/editor.cameraZoom,0),

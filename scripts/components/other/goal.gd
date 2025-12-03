@@ -46,7 +46,7 @@ var starAngle:float = 0
 
 var won:bool = false
 
-func _init() -> void : size = Vector2(32,32)
+func _init() -> void: size = Vector2(32,32)
 
 func win() -> void:
 	won = true

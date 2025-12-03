@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://c325ojksppsor"]
+
+[ext_resource type="Script" uid="uid://bkp3fklu8mlnk" path="res://scripts/components/other/floatingTile.gd" id="1_f645u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_simke"]
+size = Vector2(32, 32)
+
+[node name="floatingTile" type="Node2D"]
+script = ExtResource("1_f645u")
+metadata/_custom_type_script = "uid://bkp3fklu8mlnk"
+
+[node name="collision" type="StaticBody2D" parent="."]
+
+[node name="shape" type="CollisionShape2D" parent="collision"]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_simke")

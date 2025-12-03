@@ -50,6 +50,7 @@ func updateText() -> void:
 				PlayerSpawn: string += "Player Spawn / "+control
 				Goal: string += "Goal / "+control
 				KeyCounter: string += "Key Counter / "+control
+				FloatingTile: string += "Floating Tile / " + control
 				RemoteLock: string += "Remote Lock / "+control
 		string += "[M]Move [Del]Delete"
 	elif editor.otherObjects.objectSearch.has_focus():
