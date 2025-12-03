@@ -295,8 +295,8 @@ func checkKeys() -> void:
 		for color in Game.COLORS:
 			if !curse[color] or key[color].r.eq(0) or color in armamentImmunities: continue
 			# tie
-			if key[color].r.abs().eq(highestSeen): curseMode = 0
-			elif key[color].r.abs().gt(highestSeen):
+			if key[color].across(1).abs().eq(highestSeen): curseMode = 0
+			elif key[color].across(1).abs().gt(highestSeen):
 				highestSeen = C.new(key[color].r.abs())
 				curseMode = key[color].r.sign()
 				curseColor = color as Game.COLOR

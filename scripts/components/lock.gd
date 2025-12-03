@@ -147,7 +147,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
-	Game.connect(&"goldIndexChanged",queue_redraw)
+	Game.connect(&"goldIndexChanged",func(): if color in Game.ANIMATED_COLORS or armament: queue_redraw())
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawScaled)
