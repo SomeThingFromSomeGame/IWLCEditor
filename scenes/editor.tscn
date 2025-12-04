@@ -441,6 +441,7 @@ icon = ExtResource("27_1abrv")
 metadata/explanation = SubResource("Resource_jke8t")
 
 [node name="screenshotViewportCont" type="SubViewportContainer" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 0
 offset_top = -608.0

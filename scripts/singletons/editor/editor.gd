@@ -131,6 +131,7 @@ func _process(delta:float) -> void:
 					componentHovered = element
 	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, %gameViewportCont.get_local_mouse_position(), %gameViewportCont.size)
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else 0
+	%screenshotCamera.position = levelStartCameraCenter()
 
 	if autoRunTimer < 2:
 		autoRunTimer += delta
@@ -547,8 +548,11 @@ func autoRun() -> void:
 	%settingsMenu.configFile.save("user://config.ini")
 
 func takeScreenshot() -> void:
+	%screenshotViewportCont.visible = true
+	RenderingServer.force_draw()
 	screenshot = %screenshotViewport.get_texture().get_image()
 	screenshot.resize(200,152)
+	%screenshotViewportCont.visible = false
 
 func levelStartCameraCenter(screenSize:Vector2=Vector2(800,608)) -> Vector2:
 	if Game.levelStart:
