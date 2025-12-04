@@ -237,7 +237,9 @@ func receiveKey(event:InputEventKey):
 				cameraZoomTarget = 1
 		else: cycleMaster()
 	elif Editor.eventIs(event, &"gameComplexSwitch") and !cameraMode: complexSwitch()
-	elif Editor.eventIs(event, &"gameCamera") and Game.levelBounds.size != Vector2i(800,608): toggleCamera()
+	elif Editor.eventIs(event, &"gameCamera"):
+		if Game.levelBounds.size != Vector2i(800,608): toggleCamera()
+		elif Game.playGame: Game.playGame.toggleDescription()
 	match event.keycode:
 		KEY_U: print(GameChanges.undoStack)
 

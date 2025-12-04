@@ -31,6 +31,9 @@ var pauseAnimPhase:int = -1
 var pauseAnimTimer:float = 0
 var autoRunTimer:float = 2
 
+var hideDescription:bool = false
+var descriptionOffset:float = 0
+
 func _ready() -> void:
 	drawDescription = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
@@ -110,6 +113,14 @@ func _process(delta:float) -> void:
 		queue_redraw()
 		if autoRunTimer >= 2: autoRunTimer = 2
 	if Game.player.cameraAnimVal > 0: queue_redraw()
+	if hideDescription and descriptionOffset < 132:
+		descriptionOffset += 480*delta
+		if descriptionOffset >= 132: descriptionOffset = 132
+		queue_redraw()
+	elif !hideDescription and descriptionOffset > 0:
+		descriptionOffset -= 480*delta
+		if descriptionOffset < 0: descriptionOffset = 0
+		queue_redraw()
 	if !paused: Game.playTime += delta
 	var objectHovered:GameObject
 	var mouseWorldPosition = %world.get_local_mouse_position()
@@ -121,6 +132,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawDescription)
 	RenderingServer.canvas_item_clear(drawMain)
 	RenderingServer.canvas_item_clear(drawAutoRunGradient)
+	RenderingServer.canvas_item_set_transform(drawDescription, Transform2D(0, Vector2(0,descriptionOffset)))
 	# description box
 	if Game.level.description:
 		RenderingServer.canvas_item_add_texture_rect(drawDescription,Rect2(Vector2(11,519),Vector2(784,80)),DESCRIPTION_BOX,false,Color(Color.BLACK,0.35))
@@ -186,7 +198,7 @@ func _input(event:InputEvent) -> void:
 			if !inAnimation():
 				if event.keycode == KEY_ESCAPE: pause()
 		if !paused and !inAnimation():
-			if event.keycode == KEY_E: autoRun()
+			if !Game.player.cameraMode and event.is_action_pressed(&"gameAutoRun"): autoRun()
 			Game.player.receiveKey(event)
 
 func startLevel() -> void:
@@ -280,3 +292,7 @@ func crash() -> void:
 	roomTransitionPhase = -1
 	roomTransitionTimer = 0
 	textOffsetAngle = 0
+
+func toggleDescription() -> void:
+	hideDescription = !hideDescription
+	AudioManager.play(preload("res://resources/sounds/sndDrop.wav"))
