@@ -698,13 +698,15 @@ func isAllColorAfterCurse(color:Game.COLOR) -> bool:
 func curseCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
 	if hasColor(Game.COLOR.PURE): return
-	if player.curseMode > 0 and !isAllColor(player.curseColor) and (!cursed or curseColor != player.curseColor):
+	var willCurse:bool = player.curseMode > 0 and (!cursed or curseColor != player.curseColor)
+	var willCurseRedundant:bool = willCurse and isAllColor(player.curseColor)
+	if willCurse and !willCurseRedundant:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",true))
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseColor",player.curseColor))
 		makeCurseParticles(curseColor, 1, 0.2, 0.5)
 		AudioManager.play(preload("res://resources/sounds/door/curse.wav"))
 		GameChanges.bufferSave()
-	elif player.curseMode < 0 and cursed and curseColor == player.curseColor:
+	elif cursed and (willCurseRedundant or (player.curseMode < 0 and curseColor == player.curseColor)):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",false))
 		if curseColor == Game.COLOR.GLITCH:
 			GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseGlitchMimic",Game.COLOR.GLITCH))
