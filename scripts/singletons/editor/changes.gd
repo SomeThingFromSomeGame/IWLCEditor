@@ -371,6 +371,11 @@ class GlobalObjectChange extends Change:
 
 		if singleton == Game and property == &"levelStart":
 			Game.editor.topBar._updateButtons()
+			var toRedraw:PlayerSpawn
+			if beforeId != -1: toRedraw = Game.objects.get(beforeId)
+			if toRedraw: toRedraw.queue_redraw()
+			if afterId != -1: toRedraw = Game.objects[afterId]
+			if toRedraw: toRedraw.queue_redraw()
 
 	func _to_string() -> String:
 		return "<GlobalObjectChange:"+str(singleton)+"."+str(property)+"->"+str(afterId)+">"
@@ -435,12 +440,24 @@ class ArrayElementChange extends Change:
 		array = _array
 		before = Changes.copy(component.get(array)[index])
 		after = Changes.copy(_after)
+		if before == after:
+			cancelled = true
+			return
 		if component.get_script() in Game.NON_OBJECT_COMPONENTS: dictionary = Game.components
 		else: dictionary = Game.objects
 		do()
 
-	func do() -> void: dictionary[id].get(array)[index] = Changes.copy(after); dictionary[id].queue_redraw()
-	func undo() -> void: dictionary[id].get(array)[index] = Changes.copy(before); dictionary[id].queue_redraw()
+	func do() -> void: changeValue(after)
+	func undo() -> void: changeValue(before)
+
+	func changeValue(toValue:Variant) -> void:
+		var component:GameComponent = dictionary[id]
+		dictionary[id].get(array)[index] = Changes.copy(toValue)
+		if Game.editor.focusDialog.focused == component:
+			Game.editor.focusDialog.focus(component)
+		elif Game.editor.focusDialog.componentFocused == component: Game.editor.focusDialog.focusComponent(component)
+		if Game.editor.findProblems: Game.editor.findProblems.findProblems(component)
+		dictionary[id].queue_redraw()
 
 	func _to_string() -> String:
 		return "<ArrayElementChange:"+str(id)+"."+str(array)+"."+str(index)+"->"+str(after)+">"

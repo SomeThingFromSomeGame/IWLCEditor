@@ -33,6 +33,8 @@ func changedMods() -> void:
 		add_child(spacer)
 		move_child(spacer,0)
 
+	if selected not in colors: buttons[defaultValue].button_pressed = true
+
 class ColorSelectorButton extends SelectorButton:
 	var drawMain:RID
 

@@ -6,10 +6,10 @@ class_name FocusDialog
 
 @onready var keyDialog:KeyDialog = %keyDialog
 @onready var doorDialog:DoorDialog = %doorDialog
-@onready var playerSpawnDialog:PlayerSpawnDialog = %playerSpawnDialog
+@onready var playerDialog:PlayerDialog = %playerDialog
 @onready var keyCounterDialog:KeyCounterDialog = %keyCounterDialog
 @onready var goalDialog:GoalDialog = %goalDialog
-@onready var playerDialog:PlayerDialog = %playerDialog
+
 
 var focused:GameObject # the object that is currently focused
 var componentFocused:GameComponent # you can focus both a door and a lock at the same time so
@@ -28,18 +28,16 @@ func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	if new: deinteract()
 	if focused is KeyBulk: keyDialog.focus(focused, new)
 	elif focused is Door or focused is RemoteLock: doorDialog.focus(focused, new, dontRedirect)
-	elif focused is PlayerSpawn: playerSpawnDialog.focus(focused, new)
+	elif focused is PlayerSpawn or focused is PlayerPlaceholderObject: playerDialog.focus(focused, new)
 	elif focused is KeyCounter: keyCounterDialog.focus(focused, new, dontRedirect)
 	elif focused is Goal: goalDialog.focus(focused, new)
-	elif focused is PlayerPlaceholderObject: playerDialog.focus(focused, new)
 
 func showCorrectDialog() -> void:
 	%keyDialog.visible = focused is KeyBulk
 	%doorDialog.visible = focused is Door or focused is RemoteLock
-	%playerSpawnDialog.visible = focused is PlayerSpawn
+	%playerDialog.visible = focused is PlayerSpawn or focused is PlayerPlaceholderObject
 	%keyCounterDialog.visible = focused is KeyCounter
 	%goalDialog.visible = focused is Goal
-	%playerDialog.visible = focused is PlayerPlaceholderObject
 	above = focused is KeyCounter # maybe add more later
 	%speechBubbler.visible = focused is not FloatingTile
 	%speechBubbler.rotation_degrees = 0 if above else 180
@@ -185,7 +183,7 @@ func getWidth() -> float:
 	match focused.get_script():
 		KeyBulk: return keyDialog.get_child(0).size.x
 		Door: return doorDialog.get_child(0).size.x
-		Player: return playerSpawnDialog.get_child(0).size.x
+		PlayerSpawn, PlayerPlaceholderObject: return playerDialog.get_child(0).size.x
 		KeyCounter: return keyCounterDialog.get_child(0).size.x
 		Goal: return goalDialog.get_child(0).size.x
 		_: return 0

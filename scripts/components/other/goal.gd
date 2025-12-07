@@ -30,7 +30,7 @@ const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"type"
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {}
 
 const TYPES:int = 3
 enum TYPE {NORMAL, STAR, OMEGA}

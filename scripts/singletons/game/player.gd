@@ -83,6 +83,13 @@ var cameraMode:bool = false
 var cameraAnimVal:float = 0
 var cameraZoomTarget:float = 1
 
+func _init() -> void:
+	for color in Game.COLORS:
+		# if color == Game.COLOR.STONE:
+		key.append(M.ZERO)
+		star.append(false)
+		curse.append(color == Game.COLOR.BROWN)
+
 func _ready() -> void:
 	drawDropShadow = RenderingServer.canvas_item_create()
 	drawWarp = RenderingServer.canvas_item_create()
@@ -110,12 +117,6 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawComplexModeText, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawComplexSwitch, get_canvas_item())
 	add_child(drawCurse)
-
-	for color in Game.COLORS:
-		# if color == Game.COLOR.STONE:
-		key.append(M.ZERO)
-		star.append(false)
-		curse.append(color == Game.COLOR.BROWN)
 	
 	previousPosition = position
 	previousIsOnFloor = is_on_floor()

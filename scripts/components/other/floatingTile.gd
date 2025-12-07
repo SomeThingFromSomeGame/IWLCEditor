@@ -14,7 +14,7 @@ const CREATE_PARAMETERS:Array[StringName] = [
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size"
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {}
 
 var drawDropShadow:RID
 var drawMain:RID

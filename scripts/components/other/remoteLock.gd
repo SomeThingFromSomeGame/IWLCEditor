@@ -18,8 +18,8 @@ const PROPERTIES:Array[StringName] = [
 	&"color", &"type", &"configuration", &"sizeType", &"count", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
 	&"frozen", &"crumbled", &"painted"
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {
-	&"doors":Door
+static var ARRAYS:Dictionary[StringName,Variant] = {
+	&"doors":RemoteLock
 }
 
 var color:Game.COLOR = Game.COLOR.WHITE

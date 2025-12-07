@@ -50,7 +50,7 @@ static var ARRAYS:Dictionary[GDScript,Dictionary] = {
 	Door: {&"remoteLocks":RemoteLock},
 	Goal: {},
 	KeyCounter: {},
-	PlayerSpawn: {},
+	PlayerSpawn: {&"key":TYPE_PACKED_INT64_ARRAY,&"star":TYPE_BOOL,&"curse":TYPE_BOOL},
 	FloatingTile: {},
 	RemoteLock: {&"doors":Door},
 }
@@ -132,16 +132,16 @@ static func loadFile(file:FileAccess) -> void:
 		var component:GameComponent = Game.components[componentId]
 		for array in ARRAYS[component.get_script()]:
 			var value:Array = componentBufferedArrays[componentId][array]
-			var arrayType:GDScript = ARRAYS[component.get_script()][array]
-			if arrayType in COMPONENTS: value = Saving.IDArraytoComponents(arrayType,value)
+			var arrayType:Variant = ARRAYS[component.get_script()][array]
+			if arrayType in Game.COMPONENTS: value = Saving.IDArraytoComponents(arrayType,value)
 			component.get(array).assign(value)
 
 	for objectId in objectBufferedArrays.keys():
 		var object:GameObject = Game.objects[objectId]
 		for array in ARRAYS[object.get_script()]:
 			var value:Array = objectBufferedArrays[objectId][array]
-			var arrayType:GDScript = ARRAYS[object.get_script()][array]
-			if arrayType in COMPONENTS: value = Saving.IDArraytoComponents(arrayType,value)
+			var arrayType:Variant = ARRAYS[object.get_script()][array]
+			if arrayType in Game.COMPONENTS: value = Saving.IDArraytoComponents(arrayType,value)
 			object.get(array).assign(value)
 
 	#if levelStart != -1:

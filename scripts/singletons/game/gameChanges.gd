@@ -102,7 +102,6 @@ class CurseChange extends ColorChange:
 	# a change to the starred state
 	static func array() -> StringName: return &"curse"
 
-
 class PropertyChange extends Change:
 	var id:int
 	var property:StringName
@@ -125,8 +124,9 @@ class PropertyChange extends Change:
 	func changeValue(value:Variant) -> void:
 		var component:GameComponent
 		match type:
-			Lock: component = Game.components[id]
-			_: component = Game.objects[id]
+			Lock: component = Game.components.get(id)
+			_: component = Game.objects.get(id)
+		if !component: return
 		component.set(property, value)
 		component.propertyGameChangedDo(property)
 		component.queue_redraw()

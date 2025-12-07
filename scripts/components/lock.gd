@@ -108,7 +108,7 @@ const PROPERTIES:Array[StringName] = [
 	&"parentId", &"color", &"type", &"sizeType", &"count", &"configuration", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
 	&"index", &"displayIndex" # implcit
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {}
 
 var parent:Door
 var parentId:int

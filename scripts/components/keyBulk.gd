@@ -33,7 +33,7 @@ const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 	&"color", &"type", &"count", &"infinite", &"un"
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {}
 
 var color:Game.COLOR = Game.COLOR.WHITE
 var type:TYPE = TYPE.NORMAL

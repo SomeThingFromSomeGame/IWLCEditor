@@ -19,10 +19,34 @@ const CREATE_PARAMETERS:Array[StringName] = [
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {
+	&"key":TYPE_PACKED_INT64_ARRAY,
+	&"star":TYPE_BOOL,
+	&"curse":TYPE_BOOL
+}
+
+var key:Array[PackedInt64Array] = []
+var star:Array[bool]
+var curse:Array[bool]
 
 var drawMain:RID
-func _init() -> void : size = Vector2(32,32)
+
+func _init() -> void:
+	size = Vector2(32,32)
+	for color in Game.COLORS:
+		# if color == Game.COLOR.STONE:
+		key.append(M.ZERO)
+		star.append(false)
+		curse.append(color == Game.COLOR.BROWN)
+
+func resetColors() -> void:
+	for color in Game.COLORS:
+		resetColor(color)
+
+func resetColor(color:Game.COLOR) -> void:
+	Changes.addChange(Changes.ArrayElementChange.new(self,&"key",color,M.ZERO))
+	Changes.addChange(Changes.ArrayElementChange.new(self,&"star",color,false))
+	Changes.addChange(Changes.ArrayElementChange.new(self,&"curse",color,false))
 
 var forceDrawStart:bool = false
 

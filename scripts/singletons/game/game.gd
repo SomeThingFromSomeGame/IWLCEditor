@@ -1,6 +1,6 @@
 extends Node
 
-static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, FloatingTile, RemoteLock]
+static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, FloatingTile, RemoteLock, PlaceholderObject, PlayerPlaceholderObject]
 static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
 # for outline draw; if not in this then provide an outlineTex() function
 static var RECTANGLE_COMPONENTS:Array[GDScript] = [Door, Lock, KeyCounter, RemoteLock, PlaceholderObject, FloatingTile]
@@ -263,7 +263,11 @@ func playTest(spawn:PlayerSpawn) -> void:
 		starting = true
 		player = preload("res://scenes/player.tscn").instantiate()
 		world.add_child(player)
-		player.position = spawn.position + Vector2(16, 23)
+		player.position = spawn.position + Vector2(17, 23)
+		if spawn != levelStart:
+			player.key.assign(spawn.key.map(func(number): return number.duplicate()))
+			player.star.assign(spawn.star)
+			player.curse.assign(spawn.curse)
 	playState = PLAY_STATE.PLAY
 	latestSpawn = spawn
 

@@ -52,7 +52,7 @@ const PROPERTIES:Array[StringName] = [
 	&"colorSpend", &"copies", &"infCopies", &"type",
 	&"frozen", &"crumbled", &"painted"
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {
+static var ARRAYS:Dictionary[StringName,Variant] = {
 	&"remoteLocks":RemoteLock
 }
 
@@ -818,7 +818,7 @@ class RelockDebris extends Debris:
 	var angle:float = randf_range(0,TAU)
 	var speed:float = 1.5
 	var startPosition:Vector2
-	var part:int = 0
+	var part:int = 0 # part of the anim
 	var timer:int = 0
 	var whiteAmt:float = 0
 

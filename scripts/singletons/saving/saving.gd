@@ -179,6 +179,7 @@ func save(path:String="") -> void:
 	file.store_64(Game.objectIdIter)
 	file.store_64(len(Game.objects))
 	for object in Game.objects.values():
+		if object is PlaceholderObject: continue
 		file.store_16(Game.COMPONENTS.find(object.get_script()))
 		for property in object.PROPERTIES:
 			file.store_var(object.get(property), true)

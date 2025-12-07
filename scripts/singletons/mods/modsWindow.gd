@@ -49,6 +49,15 @@ func _saveChanges():
 	for mod in modsAdded: addMod(mod)
 	for mod in modsRemoved: removeMod(mod)
 	if !Mods.objectAvailable(editor.otherObjects.selected): editor.otherObjects.objectSelected(PlayerSpawn, true)
+	
+	var availableColors:Array[Game.COLOR] = Mods.colors()
+	for playerSpawn in Game.objects.values().filter(func(object): return object is PlayerSpawn):
+		if playerSpawn == Game.levelStart: continue
+		if &"C5" in modsRemoved: Changes.addChange(Changes.ArrayElementChange.new(playerSpawn,&"curse",Game.COLOR.BROWN,true))
+		for color in Game.COLORS:
+			if color in availableColors: continue
+			playerSpawn.resetColor(color)
+	
 	Changes.bufferSave()
 	editor.grab_focus()
 	get_tree().call_group("modUI", "changedMods")

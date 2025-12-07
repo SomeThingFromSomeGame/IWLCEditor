@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3 uid="uid://8bth374yqwpe"]
+[gd_scene load_steps=56 format=3 uid="uid://8bth374yqwpe"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_eqegh"]
 [ext_resource type="Script" uid="uid://dm8t82nhqkdlc" path="res://scripts/singletons/focusDialog/focusDialog.gd" id="2_k8bto"]
@@ -34,7 +34,6 @@
 [ext_resource type="Script" uid="uid://ckcofkmbukj5o" path="res://scripts/nodes/focusDialog/selector/keyCounterWidthSelector.gd" id="25_7tfe2"]
 [ext_resource type="Texture2D" uid="uid://c1sixdrnoyq7f" path="res://assets/ui/focusDialog/numberEdit/infinite.png" id="25_hb0ue"]
 [ext_resource type="Script" uid="uid://bg8oswa2bhdsv" path="res://scripts/nodes/focusDialog/goalTypeSelector.gd" id="26_1rcup"]
-[ext_resource type="Script" uid="uid://ofo6shxaymkl" path="res://scripts/singletons/focusDialog/playerSpawnDialog.gd" id="28_4qfwo"]
 [ext_resource type="Texture2D" uid="uid://cln0osp8um3ti" path="res://assets/ui/focusDialog/numberEdit/partialBlast.png" id="29_di8ev"]
 [ext_resource type="Script" uid="uid://dihumic7k5rec" path="res://scripts/singletons/focusDialog/keyCounterDialog.gd" id="30_bfxh1"]
 [ext_resource type="Script" uid="uid://2iqmgcrc5wpq" path="res://scripts/nodes/focusDialog/doorsHandler.gd" id="31_xwnfa"]
@@ -482,36 +481,46 @@ script = ExtResource("31_xwnfa")
 buttonGroup = SubResource("ButtonGroup_xwnfa")
 metadata/_custom_type_script = "uid://2iqmgcrc5wpq"
 
-[node name="playerSpawnDialog" type="Control" parent="."]
+[node name="playerDialog" type="Control" parent="." groups=["modUI"]]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 0
-script = ExtResource("28_4qfwo")
+script = ExtResource("40_p7jkh")
 
-[node name="c" type="PanelContainer" parent="playerSpawnDialog"]
+[node name="c" type="PanelContainer" parent="playerDialog"]
+custom_minimum_size = Vector2(174, 0)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -14.0
-offset_right = 14.0
-offset_bottom = 28.0
+offset_left = -96.5
+offset_right = 96.5
+offset_bottom = 33.0
 grow_horizontal = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="playerSpawnDialog/c"]
+[node name="c" type="MarginContainer" parent="playerDialog/c"]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="playerSpawnDialog/c/c"]
+[node name="c" type="VBoxContainer" parent="playerDialog/c/c"]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="playTest" type="Button" parent="playerSpawnDialog/c/c/c"]
+[node name="playerSpawnSettings" type="VBoxContainer" parent="playerDialog/c/c/c"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="c" type="HBoxContainer" parent="playerDialog/c/c/c/playerSpawnSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="playTest" type="Button" parent="playerDialog/c/c/c/playerSpawnSettings/c"]
 layout_mode = 2
 size_flags_vertical = 4
 icon = ExtResource("24_7tfe2")
 
-[node name="levelStart" type="Button" parent="playerSpawnDialog/c/c/c"]
+[node name="levelStart" type="Button" parent="playerDialog/c/c/c/playerSpawnSettings/c"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
@@ -519,13 +528,47 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_h1xy2")
 text = "Level Start"
 
-[node name="savestate" type="Button" parent="playerSpawnDialog/c/c/c"]
+[node name="savestate" type="Button" parent="playerDialog/c/c/c/playerSpawnSettings/c"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_h1xy2")
 text = "Test State"
+
+[node name="playerSettings" type="VBoxContainer" parent="playerDialog/c/c/c"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="playerColorSelector" type="GridContainer" parent="playerDialog/c/c/c/playerSettings" groups=["modUI"]]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_wmate")
+metadata/_custom_type_script = "uid://c70juj2p5s6yd"
+
+[node name="playerKeyCountEdit" parent="playerDialog/c/c/c/playerSettings" instance=ExtResource("5_qjvko")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/c/c/playerSettings"]
+layout_mode = 2
+alignment = 1
+
+[node name="playerStar" type="Button" parent="playerDialog/c/c/c/playerSettings/colorSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+toggle_mode = true
+icon = ExtResource("8_mscoq")
+
+[node name="playerCurse" type="Button" parent="playerDialog/c/c/c/playerSettings/colorSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+toggle_mode = true
+icon = ExtResource("41_ft2jg")
 
 [node name="keyCounterDialog" type="Control" parent="."]
 unique_name_in_owner = true
@@ -609,59 +652,6 @@ layout_mode = 2
 script = ExtResource("26_1rcup")
 metadata/_custom_type_script = "uid://bg8oswa2bhdsv"
 
-[node name="playerDialog" type="Control" parent="."]
-unique_name_in_owner = true
-anchors_preset = 0
-script = ExtResource("40_p7jkh")
-
-[node name="c" type="PanelContainer" parent="playerDialog"]
-custom_minimum_size = Vector2(174, 0)
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
-grow_horizontal = 2
-theme_type_variation = &"DialogPanelContainer"
-
-[node name="c" type="MarginContainer" parent="playerDialog/c"]
-layout_mode = 2
-
-[node name="c" type="VBoxContainer" parent="playerDialog/c/c"]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="playerColorSelector" type="GridContainer" parent="playerDialog/c/c/c" groups=["modUI"]]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-script = ExtResource("3_wmate")
-metadata/_custom_type_script = "uid://c70juj2p5s6yd"
-
-[node name="playerKeyCountEdit" parent="playerDialog/c/c/c" instance=ExtResource("5_qjvko")]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/c/c"]
-layout_mode = 2
-alignment = 1
-
-[node name="playerStar" type="Button" parent="playerDialog/c/c/c/colorSettings"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-toggle_mode = true
-icon = ExtResource("8_mscoq")
-
-[node name="playerCurse" type="Button" parent="playerDialog/c/c/c/colorSettings"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 4
-toggle_mode = true
-icon = ExtResource("41_ft2jg")
-
 [node name="speechBubbler" type="Node2D" parent="."]
 unique_name_in_owner = true
 
@@ -701,13 +691,13 @@ default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 [connection signal="toggled" from="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings/blastLockSign" to="doorDialog" method="_blastLockSignSet"]
 [connection signal="toggled" from="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings/blastLockAxis" to="doorDialog" method="_blastLockAxisSet"]
 [connection signal="valueSet" from="doorDialog/c/lock/c/c/blastLockSettings/c/partialDenominator/partialBlastDenominatorEdit" to="doorDialog" method="partialBlastDenominatorSet"]
-[connection signal="pressed" from="playerSpawnDialog/c/c/c/playTest" to="playerSpawnDialog" method="_playTest"]
-[connection signal="pressed" from="playerSpawnDialog/c/c/c/levelStart" to="playerSpawnDialog" method="_setLevelStart"]
-[connection signal="pressed" from="playerSpawnDialog/c/c/c/savestate" to="playerSpawnDialog" method="_setSavestate"]
+[connection signal="pressed" from="playerDialog/c/c/c/playerSpawnSettings/c/playTest" to="playerDialog" method="_playTest"]
+[connection signal="pressed" from="playerDialog/c/c/c/playerSpawnSettings/c/levelStart" to="playerDialog" method="_setLevelStart"]
+[connection signal="pressed" from="playerDialog/c/c/c/playerSpawnSettings/c/savestate" to="playerDialog" method="_setSavestate"]
+[connection signal="select" from="playerDialog/c/c/c/playerSettings/playerColorSelector" to="playerDialog" method="_playerColorSelected"]
+[connection signal="valueSet" from="playerDialog/c/c/c/playerSettings/playerKeyCountEdit" to="playerDialog" method="_playerKeyCountSet"]
+[connection signal="toggled" from="playerDialog/c/c/c/playerSettings/colorSettings/playerStar" to="playerDialog" method="_playerStarSet"]
+[connection signal="toggled" from="playerDialog/c/c/c/playerSettings/colorSettings/playerCurse" to="playerDialog" method="_playerCurseSet"]
 [connection signal="select" from="keyCounterDialog/c/c/c/keyCounterWidthSelector" to="keyCounterDialog" method="_keyCounterWidthSelected"]
 [connection signal="select" from="keyCounterDialog/c/c/c/keyCounterColorSelector" to="keyCounterDialog" method="_keyCounterColorSelected"]
 [connection signal="select" from="goalDialog/c/c/c/goalTypeSelector" to="goalDialog" method="_goalTypeSelected"]
-[connection signal="select" from="playerDialog/c/c/c/playerColorSelector" to="playerDialog" method="_playerColorSelected"]
-[connection signal="valueSet" from="playerDialog/c/c/c/playerKeyCountEdit" to="playerDialog" method="_playerKeyCountSet"]
-[connection signal="toggled" from="playerDialog/c/c/c/colorSettings/playerStar" to="playerDialog" method="_playerStarSet"]
-[connection signal="toggled" from="playerDialog/c/c/c/colorSettings/playerCurse" to="playerDialog" method="_playerCurseSet"]

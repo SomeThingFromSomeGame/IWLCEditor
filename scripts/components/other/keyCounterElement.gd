@@ -11,7 +11,7 @@ const PROPERTIES:Array[StringName] = [
 	&"parentId", &"color",
 	&"index" # implciit
 ]
-static var ARRAYS:Dictionary[StringName,GDScript] = {}
+static var ARRAYS:Dictionary[StringName,Variant] = {}
 
 const TEXT_COLOR:Color = Color("#2c221c")
 
