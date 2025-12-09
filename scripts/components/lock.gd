@@ -171,7 +171,7 @@ func _draw() -> void:
 		getFrameDarkColor(isNegative(), negated),
 		isNegative(),
 		parent.animState != Door.ANIM_STATE.RELOCK or parent.animPart > 2,
-		Game.playState != Game.PLAY_STATE.EDIT and M.nex(M.across(parent.ipow(),Game.player.complexMode))
+		Game.playState == Game.PLAY_STATE.PLAY and parent.drawComplex
 	)
 
 static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID,

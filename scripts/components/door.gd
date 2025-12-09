@@ -142,7 +142,7 @@ func _draw() -> void:
 		size,colorAfterCurse(),colorAfterGlitch(),type,
 		gateAlpha,
 		len(locks) > 0 and (locks[0].isNegative() if type == TYPE.SIMPLE else M.negative(M.sign(ipow()))),
-		drawComplex or (Game.playState == Game.PLAY_STATE.EDIT and M.nex(copies)),
+		(Game.playState == Game.PLAY_STATE.PLAY and drawComplex) or (Game.playState == Game.PLAY_STATE.EDIT and M.nex(copies)),
 		animState != ANIM_STATE.RELOCK or animPart > 2
 	)
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
@@ -156,11 +156,10 @@ func _draw() -> void:
 	if animState == ANIM_STATE.ADD_COPY: RenderingServer.canvas_item_add_rect(drawNegative,rect,Color(Color.WHITE,animAlpha))
 	elif animState == ANIM_STATE.RELOCK: RenderingServer.canvas_item_add_rect(drawCopies,rect,Color(Color.WHITE,animAlpha)) # just to be on top of everything else
 	# copies
-	if Game.playState == Game.PLAY_STATE.EDIT:
-		if M.neq(copies, M.ONE) or M.ex(infCopies): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+M.strWithInf(copies,infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
-	else:
+	if Game.playState == Game.PLAY_STATE.PLAY:
 		if M.neq(gameCopies, M.ONE) or M.ex(infCopies): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+M.strWithInf(gameCopies,infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
-
+	else:
+		if M.neq(copies, M.ONE) or M.ex(infCopies): TextDraw.outlinedCentered(Game.FKEYX,drawCopies,"×"+M.strWithInf(copies,infCopies),COPIES_COLOR,COPIES_OUTLINE_COLOR,20,Vector2(size.x/2,-8))
 
 static func drawDoor(doorDrawScaled:RID,doorDrawAuraBreaker:RID,doorDrawGlitch:RID,doorDrawMain:RID,
 	doorSize:Vector2,
@@ -737,9 +736,9 @@ func colorAfterAurabreaker() -> Game.COLOR:
 func ipow() -> PackedInt64Array: # for complex view
 	if Game.playState == Game.PLAY_STATE.EDIT: return M.ONE
 	# if extant, return current
-	if M.ex(M.across(gameCopies, Game.player.complexMode)): return M.axis(M.across(gameCopies, Game.player.complexMode))
+	if M.ex(M.across(gameCopies, Game.player.complexMode)): return M.saxis(M.across(gameCopies, Game.player.complexMode))
 	# return the other axis
-	return M.axis(M.across(gameCopies, M.axibs(M.rotate(Game.player.complexMode))))
+	return M.saxis(M.across(gameCopies, M.axibs(M.rotate(Game.player.complexMode))))
 
 func complexCheck() -> void:
 	drawComplex = Game.playState != Game.PLAY_STATE.EDIT and M.nex(M.across(ipow(), Game.player.complexMode))
