@@ -371,7 +371,7 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 				if !bounds.intersects(goingTo):
 					if !allowOutOfBounds:
 						dragOffset += snappedAway(Vector2.ZERO.max(innerBounds.position - goingTo.end) - Vector2.ZERO.max(goingTo.position - innerBounds.end), Vector2(tileSize))
-					elif componentDragged is Lock and Mods.active(&"C1"): lockBufferConvert = true
+					elif componentDragged is Lock and Mods.active(&"C1") and !Mods.active(&"DisconnectedLock"): lockBufferConvert = true
 				previousDragPosition += Vector2i(dragOffset)
 				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position", componentDragged.position + dragOffset))
 		DRAG_MODE.SIZE_DIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ:

@@ -9,6 +9,7 @@ var color:Game.COLOR
 func focus(focused:GameObject, new:bool, _dontRedirect:bool) -> void:
 	%playerSpawnSettings.visible = focused is PlayerSpawn
 	%playerStateSettings.visible = focused is PlayerPlaceholderObject or Game.levelStart != focused
+	%playerStateSettings2.visible = %playerStateSettings.visible
 	%playerSettings.visible = focused is PlayerPlaceholderObject
 	if new: setSelectedColor(Game.COLOR.WHITE)
 	else: _playerColorSelected(color)
