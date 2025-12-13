@@ -32,7 +32,7 @@ static var PROPERTIES:Dictionary[GDScript,Array] = {
 		&"id", &"position", &"size",
 	],
 	PlayerSpawn: [
-		&"id", &"position", &"size", &"undoStack"
+		&"id", &"position", &"size", &"undoStack", &"saveBuffered"
 	],
 	FloatingTile: [
 		&"id", &"position", &"size",
