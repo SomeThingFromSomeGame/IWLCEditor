@@ -5,7 +5,9 @@ enum PURPOSE {SINGLE, REAL, IMAGINARY, AXIAL}
 
 @onready var editor:Editor = get_node("/root/editor")
 
-signal valueSet(value:M)
+signal valueSet(value:PackedInt64Array)
+
+var context:Node
 
 var newlyInteracted:bool = false
 
@@ -15,9 +17,11 @@ var purpose:PURPOSE = PURPOSE.SINGLE
 
 func _ready() -> void:
 	Explainer.addControl(self,ControlExplanation.new("/ Number Edit("+Explainer.ARROWS_UD+"±1 [%s]×-1 [%s]×i)", [&"numberNegate", &"numberTimesI"]))
+	await editor.ready
+	context = editor.focusDialog
 
 func _gui_input(event:InputEvent) -> void:
-	if Editor.isLeftClick(event): editor.focusDialog.interact(self)
+	if Editor.isLeftClick(event): context.interact(self)
 
 func setValue(_value:PackedInt64Array, manual:bool=false) -> void:
 	value = _value
@@ -43,9 +47,9 @@ func receiveKey(key:InputEventKey):
 		setValue(M.negate(value))
 	else:
 		match key.keycode:
-			KEY_TAB: editor.focusDialog.tabbed(self)
+			KEY_TAB: context.tabbed(self)
 			KEY_EQUAL: if purpose != PURPOSE.SINGLE and Input.is_key_pressed(KEY_SHIFT):
-				editor.focusDialog.interact((get_parent().imaginaryEdit if purpose == PURPOSE.REAL else get_parent().realEdit))
+				context.interact((get_parent().imaginaryEdit if purpose == PURPOSE.REAL else get_parent().realEdit))
 			KEY_0, KEY_KP_0: number = 0
 			KEY_1, KEY_KP_1: number = 1
 			KEY_2, KEY_KP_2: number = 2

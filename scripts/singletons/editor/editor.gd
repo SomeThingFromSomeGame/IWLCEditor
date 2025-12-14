@@ -12,6 +12,7 @@ class_name Editor
 @onready var topBar:TopBar = %topBar
 @onready var settingsMenu:SettingsMenu = %settingsMenu
 var modsWindow:ModsWindow
+var exportWindow:ExportWindow
 var findProblems:FindProblems
 
 @onready var saveAsDialog:FileDialog = %saveAsDialog
@@ -49,7 +50,7 @@ var componentDragged:GameComponent
 var dragMode:DRAG_MODE
 var dragPivotRect:Rect2 # the pivot for size dragging
 var dragHandlePosition:Vector2
-var previousDragPosition:Vector2i
+var previousDragPosition:Vector2
 var dragHandle:Vector2 # direction of the handle (initially), so that size_vert and size_horiz behave as they do
 var levelBoundsObject:GameObject = PlaceholderObject.new() # spoof
 
@@ -150,7 +151,7 @@ func _process(delta:float) -> void:
 
 	%multiselectCamera.position = editorCamera.position
 	%multiselectCamera.zoom = editorCamera.zoom
-	%placePreviewWorld.visible = Game.playState != Game.PLAY_STATE.PLAY
+	%placePreviewWorld.visible = Game.playState != Game.PLAY_STATE.PLAY and !settingsOpen
 	placePreviewWorld.tiles.position = floor(mouseWorldPosition/32)*32
 	placePreviewWorld.tilesDropShadow.position = floor(mouseWorldPosition/32)*32 + Vector2(3,3)
 	placePreviewWorld.objectsParent.position = mouseTilePosition
@@ -347,14 +348,19 @@ func startSizeDrag(component:GameComponent, handle:Vector2=Vector2(1,1)) -> void
 	elif handle.x: dragMode = DRAG_MODE.SIZE_HORIZ; minSize.y = componentDragged.size.y
 	elif handle.y: dragMode = DRAG_MODE.SIZE_VERT; minSize.x = componentDragged.size.x
 	
-	var parentPosition:Vector2i = component.parent.position if component.get_script() in Game.NON_OBJECT_COMPONENTS else Vector2i.ZERO
+	var snappedMousePosition:Vector2 = mouseWorldPosition.snapped(tileSize)
+
+	var parentPosition:Vector2 = component.parent.position if component.get_script() in Game.NON_OBJECT_COMPONENTS else Vector2i.ZERO
 	dragPivotRect = Rect2(component.position + (component.size - minSize) * Vector2.ZERO.max(-handle), minSize)
-	dragHandlePosition = mouseTilePosition - parentPosition
-	previousDragPosition = mouseTilePosition
+	dragHandlePosition = snappedMousePosition - parentPosition
+	previousDragPosition = snappedMousePosition
 	dragHandle = handle
 
 func dragComponent() -> void: # returns whether or not an object is being dragged, for laziness
-	var dragOffset:Vector2 = mouseTilePosition - previousDragPosition
+	var snappedMousePosition:Vector2 = mouseWorldPosition.snapped(tileSize)
+	var dragOffset:Vector2
+	if dragMode == DRAG_MODE.POSITION: dragOffset = Vector2(mouseTilePosition) - previousDragPosition
+	else: dragOffset = snappedMousePosition - previousDragPosition
 	lockBufferConvert = false # whether or not to buffer a conversion to remotelock
 	var bounds:Rect2
 	var allowOutOfBounds:bool = Mods.active(&"OutOfBounds")
@@ -377,15 +383,15 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 					if !allowOutOfBounds:
 						dragOffset += snappedAway(Vector2.ZERO.max(innerBounds.position - goingTo.end) - Vector2.ZERO.max(goingTo.position - innerBounds.end), Vector2(tileSize))
 					elif componentDragged is Lock and Mods.active(&"C1") and !Mods.active(&"DisconnectedLock"): lockBufferConvert = true
-				previousDragPosition += Vector2i(dragOffset)
+				previousDragPosition += dragOffset
 				Changes.addChange(Changes.PropertyChange.new(componentDragged,&"position", componentDragged.position + dragOffset))
 		DRAG_MODE.SIZE_DIAG, DRAG_MODE.SIZE_VERT, DRAG_MODE.SIZE_HORIZ:
 			dragHandlePosition += dragOffset
 			var toPosition:Vector2 = dragPivotRect.position
 			# dragging up/left
 			toPosition += snappedTrunc(dragHandlePosition - dragPivotRect.position, Vector2(tileSize)) * Vector2.ZERO.max(sign(dragPivotRect.position - dragHandlePosition))
-			# dragging down/right (we add another tileSize because itd otherwise be at the top left corner)
-			toPosition += (dragPivotRect.size + snappedTrunc(dragHandlePosition - dragPivotRect.end, Vector2(tileSize)) + Vector2(tileSize)) * Vector2.ZERO.max(sign(dragHandlePosition - dragPivotRect.position))
+			# dragging down/right
+			toPosition += (dragPivotRect.size + snappedTrunc(dragHandlePosition - dragPivotRect.end, Vector2(tileSize))) * Vector2.ZERO.max(sign(dragHandlePosition - dragPivotRect.position))
 
 			# keep in bounds
 			var effectiveDragPivotRect:Rect2 = dragPivotRect
@@ -403,7 +409,7 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 				toPosition.y = 0
 				toPosition += effectiveDragPivotRect.position
 				if effectiveDragPivotRect.grow(-1).has_point(toPosition):
-					previousDragPosition += Vector2i(dragOffset)
+					previousDragPosition += dragOffset
 					return
 
 			var toRect:Rect2 = effectiveDragPivotRect.expand(toPosition)
@@ -413,7 +419,7 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 					var lockGoingTo:Rect2 = Rect2(lock.position-toRect.position+componentDragged.position, lock.size) # keep relative position even if the door moves
 					lockGoingTo.position += snappedAway(Vector2.ZERO.max(doorInnerBounds.position - lockGoingTo.end) - Vector2.ZERO.max(lockGoingTo.position - doorInnerBounds.end), Vector2(tileSize)) # keep in bounds
 					Changes.addChange(Changes.PropertyChange.new(lock,&"position",lockGoingTo.position))
-			previousDragPosition += Vector2i(dragOffset)
+			previousDragPosition += dragOffset
 			if componentDragged == levelBoundsObject:
 				Changes.addChange(Changes.LevelResizeChange.new(toRect))
 			else:

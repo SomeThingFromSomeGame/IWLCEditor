@@ -221,6 +221,8 @@ func start() -> void:
 	for component in Game.components.values():
 		component.start()
 		component.queue_redraw()
+	Game.camera.position = Game.player.position
+	Game.camera.reset_smoothing()
 
 func restart() -> void:
 	Game.won = false

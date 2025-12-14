@@ -20,7 +20,7 @@ func optionPressed(id:int) -> void:
 		1: Saving.open()
 		2: Saving.confirmAction = Saving.ACTION.NONE; Saving.save()
 		3: Saving.confirmAction = Saving.ACTION.NONE; Saving.saveAs()
-		4: pass # export
+		4: Saving.openExportWindow()
 		5: OS.shell_open(ProjectSettings.globalize_path("user://puzzles"))
 		# CONFIG
 		7: Mods.openModsWindow()

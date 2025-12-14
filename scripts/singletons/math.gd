@@ -25,15 +25,19 @@ var nI:PackedInt64Array:
 
 # initialisers
 
+# New number
 func N(n:int) -> PackedInt64Array:
 	return [n, 0]
 
+# New Imaginary number
 func Ni(n:int) -> PackedInt64Array:
 	return [0, n]
 
+# New Complex number
 func Nc(a:int,b:int) -> PackedInt64Array:
 	return [a, b]
 
+# New Complex number from Numbers
 func Ncn(a:PackedInt64Array,b:PackedInt64Array) -> PackedInt64Array:
 	return [a[0], b[0]]
 

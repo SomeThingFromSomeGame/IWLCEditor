@@ -24,4 +24,5 @@ func activate() -> void:
 	active = true
 	Game.level = self
 	Game.updateWindowName()
+	Game.levelBounds.position = position
 	Game.levelBounds.size = size

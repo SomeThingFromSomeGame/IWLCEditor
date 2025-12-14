@@ -37,7 +37,9 @@ func updateText() -> void:
 	var string:String = ""
 	var control:String = str(controlExplanation) + " " if controlExplanation else ""
 	if !editor: return
-	if editor.focusDialog.focused:
+	if editor.exportWindow:
+		string += "In Export Menu " + control
+	elif editor.focusDialog.focused:
 		if editor.focusDialog.componentFocused:
 				match editor.focusDialog.componentFocused.get_script():
 					Lock: string += "Lock / [%s]Duplicate " % hotkeyMap(&"focusLockDuplicate") + control

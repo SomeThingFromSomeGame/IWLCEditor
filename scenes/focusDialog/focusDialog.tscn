@@ -710,7 +710,6 @@ anchors_preset = 0
 script = ExtResource("33_di8ev")
 
 [node name="c" type="PanelContainer" parent="goalDialog"]
-visible = false
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

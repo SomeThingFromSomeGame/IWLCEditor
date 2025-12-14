@@ -34,7 +34,9 @@ func _ready() -> void:
 		JavaScriptBridge.eval("window.callbacks = {loadJs: null};")
 
 func editorReady() -> void:
-	if !OS.has_feature('web'): DirAccess.make_dir_absolute("user://puzzles")
+	if !OS.has_feature('web'):
+		DirAccess.make_dir_absolute("user://puzzles")
+		DirAccess.make_dir_absolute("user://exports")
 	editor.saveAsDialog.add_filter("*.cedit", "IWLCEditor Puzzle File")
 	editor.openDialog.add_filter("*.cedit", "IWLCEditor Puzzle File")
 	editor.unsavedChangesPopup.get_ok_button().theme_type_variation = &"RadioButtonText"
@@ -250,3 +252,11 @@ func errorPopup(message:String,title:="Load Error") -> void:
 	editor.loadErrorPopup.position = get_window().position+(get_window().size-editor.loadErrorPopup.size)/2
 	editor.loadErrorPopup.visible = true
 	editor.loadErrorPopup.grab_focus()
+
+func openExportWindow() -> void:
+	if editor.exportWindow:
+		editor.exportWindow.grab_focus()
+	else:
+		var window:Window = preload("res://scenes/exportWindow.tscn").instantiate()
+		editor.add_child(window)
+		window.position = get_window().position+(get_window().size-window.size)/2

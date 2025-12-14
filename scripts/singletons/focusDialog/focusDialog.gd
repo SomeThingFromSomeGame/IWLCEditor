@@ -27,7 +27,7 @@ func focus(object:GameObject, dontRedirect:bool=false) -> void:
 	Game.objectsParent.move_child(focused, -1)
 	showCorrectDialog()
 	if new: deinteract()
-	activeDialog.focus(focused, new, dontRedirect)
+	if activeDialog: activeDialog.focus(focused, new, dontRedirect)
 
 func showCorrectDialog() -> void:
 	above = false
@@ -35,6 +35,7 @@ func showCorrectDialog() -> void:
 		if dialog is not Control: continue
 		dialog.visible = false
 	%speechBubbler.visible = true
+	activeDialog = null
 	match focused.get_script():
 		KeyBulk: activeDialog = keyDialog
 		Door, RemoteLock: activeDialog = doorDialog
@@ -42,7 +43,7 @@ func showCorrectDialog() -> void:
 		KeyCounter: activeDialog = keyCounterDialog; above = true
 		Goal: activeDialog = goalDialog
 		_: %speechBubbler.visible = false
-	activeDialog.visible = true
+	if activeDialog: activeDialog.visible = true
 
 func defocus() -> void:
 	if !focused: return
@@ -155,7 +156,7 @@ func tabbed(numberEdit:PanelContainer) -> void:
 				else: interactLockFirstEdit(componentFocused.index+1)
 
 func receiveKey(event:InputEvent) -> bool:
-	if activeDialog.receiveKey(event): return true
+	if activeDialog and activeDialog.receiveKey(event): return true
 	else:
 		if Editor.eventIs(event, &"editDelete"):
 			Changes.addChange(Changes.DeleteComponentChange.new(focused))
@@ -168,7 +169,7 @@ const OBJECT_MARGIN:float = 8 # between the dialog and the object; where the spe
 const SPEECH_BUBBLER_MARGIN:float = 10 # between speech bubbler and edge of dialog
 
 func _process(_delta:float) -> void:
-	if focused:
+	if focused and activeDialog:
 		visible = true
 		# position the dialog every frame (could be optimised but i dont care)
 		var flip:bool = false

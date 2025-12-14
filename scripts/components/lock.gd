@@ -3,8 +3,10 @@ class_name Lock
 
 const TYPES:int = 5
 enum TYPE {NORMAL, BLANK, BLAST, ALL, EXACT}
+const TYPE_NAMES:Array[String] = ["Normal", "Blank", "Blast", "All", "Exact"]
 const SIZE_TYPES:int = 7
 enum SIZE_TYPE {AnyS, AnyH, AnyV, AnyM, AnyL, AnyXL, ANY}
+const SIZE_TYPE_NAMES:Array[String] = ["AnyS", "AnyH", "AnyV", "AnyM", "AnyL", "AnyXL", "Any"]
 const SIZES:Array[Vector2] = [Vector2(18,18), Vector2(50,18), Vector2(18,50), Vector2(38,38), Vector2(50,50), Vector2(82,82)]
 enum CONFIGURATION {spr1A, spr2H, spr2V, spr3H, spr3V, spr4A, spr4B, spr5A, spr5B, spr6A, spr6B, spr8A, spr12A, spr24A, spr7A, spr9A, spr9B, spr10A, spr11A, spr13A, spr24B, NONE}
 const CONFIGURATION_NAMES:Array[String] = ["1A", "2H", "2V", "3H", "3V", "4A", "4B", "5A", "5B", "6A", "6B", "8A", "12A", "24A", "7A", "9A", "9B", "10A", "11A", "13A", "24B"]
