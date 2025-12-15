@@ -6,12 +6,15 @@ enum EXPORT_TYPES {ROOM_GMX}
 @onready var editor:Editor = get_node("/root/editor")
 var path:String = ""
 var type:EXPORT_TYPES = EXPORT_TYPES.ROOM_GMX
+var fileExtension:String
 var exporter:GDScript
 
 var interacted:PanelContainer
 
 func _ready() -> void:
 	editor.exportWindow = self
+	if OS.has_feature('web'):
+		%exportPathSetting.visible = false
 	_setType(type)
 	%roomIDEdit.context = self
 	%idIterStartEdit.context = self
@@ -21,7 +24,6 @@ func _ready() -> void:
 func _setType(index:int) -> void:
 	type = index as EXPORT_TYPES
 	%pathDialog.clear_filters()
-	var fileExtension:String
 	var fileTypeDesc:String
 	match type:
 		EXPORT_TYPES.ROOM_GMX:
@@ -32,7 +34,7 @@ func _setType(index:int) -> void:
 	%pathDialog.add_filter("*"+fileExtension, fileTypeDesc)
 	%pathDialog.current_dir = "exports"
 	%pathDialog.current_file = "exports/"+Game.level.name+fileExtension
-	_setPath("")
+	_setPath(("user://temp."+fileExtension) if OS.has_feature('web') else "")
 
 func _close() -> void: queue_free()
 
@@ -50,6 +52,7 @@ func _export():
 	var file:FileAccess = FileAccess.open(path,FileAccess.ModeFlags.WRITE)
 	exporter.exportFile(file)
 	file.close()
+	if OS.has_feature('web'): JavaScriptBridge.download_buffer(FileAccess.get_file_as_bytes(path),Game.level.name+fileExtension)
 	_close()
 
 func _input(event:InputEvent) -> void:

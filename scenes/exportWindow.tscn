@@ -30,24 +30,25 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="c" type="HBoxContainer" parent="c/c/c"]
+[node name="exportPathSetting" type="HBoxContainer" parent="c/c/c"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="l" type="Label" parent="c/c/c/c"]
+[node name="l" type="Label" parent="c/c/c/exportPathSetting"]
 layout_mode = 2
 text = "Export Path:"
 
-[node name="c" type="PanelContainer" parent="c/c/c/c"]
+[node name="c" type="PanelContainer" parent="c/c/c/exportPathSetting"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"NumberEditPanelContainer"
 
-[node name="c" type="Control" parent="c/c/c/c/c"]
+[node name="c" type="Control" parent="c/c/c/exportPathSetting/c"]
 clip_contents = true
 layout_mode = 2
 
-[node name="path" type="Label" parent="c/c/c/c/c/c"]
+[node name="path" type="Label" parent="c/c/c/exportPathSetting/c/c"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -62,7 +63,7 @@ grow_horizontal = 0
 grow_vertical = 2
 horizontal_alignment = 2
 
-[node name="changePath" type="Button" parent="c/c/c/c"]
+[node name="changePath" type="Button" parent="c/c/c/exportPathSetting"]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 icon = ExtResource("3_t1gom")
@@ -157,7 +158,7 @@ access = 1
 use_native_dialog = true
 
 [connection signal="close_requested" from="." to="." method="_close"]
-[connection signal="pressed" from="c/c/c/c/changePath" to="." method="_changePath"]
+[connection signal="pressed" from="c/c/c/exportPathSetting/changePath" to="." method="_changePath"]
 [connection signal="item_selected" from="c/c/c/c2/exportType" to="." method="_setType"]
 [connection signal="valueSet" from="c/c/c/roomGMX/c/roomIDEdit" to="." method="_roomIDSet"]
 [connection signal="valueSet" from="c/c/c/roomGMX/c2/idIterStartEdit" to="." method="_idIterStartSet"]
