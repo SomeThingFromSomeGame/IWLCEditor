@@ -75,7 +75,7 @@ func lockCost(lock:GameComponent) -> String:
 			string += "All" if lock.type == Lock.TYPE.BLAST else "ALL"
 			if lock.type == Lock.TYPE.BLAST and divideThrough: string += (" -" if M.negative(M.sign(lock.denominator)) else " +") + ("i" if M.isNonzeroImag(lock.denominator) else "")
 			if lock.isPartial:
-				if divideThrough: string += "/" + M.str(M.divide(lock.denominator, M.saix(lock.denominator)))
+				if divideThrough: string += "/" + M.str(M.divide(lock.denominator, M.saxis(lock.denominator)))
 				else: string += " / " + M.str(lock.denominator)
 			string += "]"
 		Lock.TYPE.EXACT:
