@@ -132,7 +132,7 @@ func ilt(a:PackedInt64Array, b:PackedInt64Array) -> bool:
 
 func ilte(a:PackedInt64Array, b:PackedInt64Array) -> bool: return !igt(a, b)
 
-func divides(a:PackedInt64Array, b:PackedInt64Array) -> bool: return nex(divide(a,b))
+func divides(a:PackedInt64Array, b:PackedInt64Array) -> bool: return nex(modulo(a,b))
 
 # deciders
 
