@@ -134,6 +134,7 @@ func clear() -> void:
 	Mods.activeModpack = Mods.modpacks[&"Refactored"]
 	Mods.activeVersion = Mods.activeModpack.versions[0]
 	for mod in Mods.mods.values(): mod.active = false
+	get_tree().call_group("modUI", "changedMods")
 	Game.level.activate()
 	if editor: editor.home()
 
