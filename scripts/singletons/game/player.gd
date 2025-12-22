@@ -24,6 +24,7 @@ const AURA_FOREST:Texture2D = preload("res://assets/game/player/aura/forest.png"
 const AURA_NAVY:Texture2D = preload("res://assets/game/player/aura/navy.png")
 const AURA_DRAW_OPACITY:Color = Color(Color.WHITE,0.5)
 const AURA_RECT:Rect2 = Rect2(Vector2(-32,-32),Vector2(64,64))
+const DARK_AURA_RECT:Rect2 = Rect2(Vector2(-41,-36),Vector2(82,67))
 
 const FPS:float = 60 # godot velocity works in /s so we account for gamemaker's fps, which is 60
 
@@ -399,9 +400,9 @@ func _draw() -> void:
 	if auraRed: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_RED,false,AURA_DRAW_OPACITY)
 	if auraMaroon: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_MAROON,false,AURA_DRAW_OPACITY)
 	if auraGreen: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_GREEN,false,AURA_DRAW_OPACITY)
-	if auraForest: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_FOREST,false,AURA_DRAW_OPACITY)
-	if auraBlue: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_BLUE,false,AURA_DRAW_OPACITY)
-	if auraNavy: RenderingServer.canvas_item_add_texture_rect(drawAura,AURA_RECT,AURA_NAVY,false,AURA_DRAW_OPACITY)
+	if auraForest: RenderingServer.canvas_item_add_texture_rect(drawAura,DARK_AURA_RECT,AURA_FOREST,false,AURA_DRAW_OPACITY)
+	if auraBlue: RenderingServer.canvas_item_add_texture_rect(drawAura,DARK_AURA_RECT,AURA_BLUE,false,AURA_DRAW_OPACITY)
+	if auraNavy: RenderingServer.canvas_item_add_texture_rect(drawAura,DARK_AURA_RECT,AURA_NAVY,false,AURA_DRAW_OPACITY)
 	# held
 	if masterCycle != 0:
 		var masterShineScale:float = 0.8 + 0.2*sin(masterShineAngle)

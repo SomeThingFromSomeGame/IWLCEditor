@@ -17,6 +17,7 @@ class_name Level
 	set(value):
 		size = value
 		if active: Game.levelBounds.size = size
+@export var revision:int = 1
 
 var active:bool = false
 

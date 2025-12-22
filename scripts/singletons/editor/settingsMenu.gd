@@ -72,6 +72,10 @@ func _levelShortNumberSet(string:String) -> void:
 	Game.anyChanges = true
 	queue_redraw()
 
+func _levelRevisionSet(value:float) -> void:
+	Game.level.revision = int(value)
+	Game.anyChanges = true
+
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(textDraw)
 	if %levelSettings.visible:
@@ -93,6 +97,7 @@ func opened() -> void:
 	%levelAuthor.text = Game.level.author
 	%levelDescription.text = Game.level.description
 	%levelShortNumber.text = Game.level.shortNumber
+	%levelRevision.value = Game.level.revision
 	configFile.load("user://config.ini")
 	%fileDialogWorkaround.button_pressed = configFile.get_value("editor", "fileDialogWorkaround", false)
 	%fullscreen.button_pressed = configFile.get_value("editor", "fullscreen", false)

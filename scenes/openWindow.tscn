@@ -66,14 +66,23 @@ text = "(No description)"
 label_settings = SubResource("LabelSettings_r7d2n")
 autowrap_mode = 3
 
-[node name="author" type="Label" parent="c/c/c/c"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 16)
+[node name="c2" type="HBoxContainer" parent="c/c/c/c"]
 layout_mode = 2
+
+[node name="revision" type="Label" parent="c/c/c/c/c2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Rev. 1"
+label_settings = SubResource("LabelSettings_r7d2n")
+
+[node name="author" type="Label" parent="c/c/c/c/c2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 text = "Unknown Author"
 label_settings = SubResource("LabelSettings_r7d2n")
 horizontal_alignment = 2
-autowrap_mode = 3
 
 [node name="image" type="TextureRect" parent="c/c/c"]
 unique_name_in_owner = true
@@ -97,7 +106,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/normal_font = ExtResource("6_r7d2n")
 theme_override_font_sizes/normal_font_size = 11
-text = "(no mods)"
 
 [node name="c3" type="HBoxContainer" parent="c/c"]
 layout_mode = 2
