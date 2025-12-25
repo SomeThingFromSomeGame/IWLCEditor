@@ -462,12 +462,13 @@ static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 		TYPE.NORMAL: can = !M.hasNegative(M.sub(M.along(keyCount, lockCount), M.acrabs(lockCount)))
 		TYPE.BLANK: can = M.nex(keyCount)
 		TYPE.BLAST:
-			if !M.simplies(lockDenominator, keyCount): can = false
+			if M.nex(lockDenominator): can = false
+			elif !M.simplies(lockDenominator, keyCount): can = false
 			elif lock.isPartial:
 				if !M.divisibleBy(M.alongbs(keyCount, lockDenominator), lockDenominator): can = false
 				elif M.neq(M.sign(M.divide(M.alongbs(keyCount, lockDenominator), lockDenominator)), M.ONE): can = false
 		TYPE.ALL:
-			if M.nex(lock.lockDenominator): can = false
+			if M.nex(lockDenominator): can = false
 			elif M.nex(keyCount): can = false
 			elif lock.isPartial:
 				if !M.divisibleBy(keyCount, lockDenominator): can = false

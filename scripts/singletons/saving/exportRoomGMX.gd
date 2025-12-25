@@ -39,7 +39,7 @@ static func exportFile(_file:FileAccess) -> void:
 	startTagInline("code")
 	file.store_line("global.roomID = %s;" % roomID)
 	file.store_line('global.msg = "%s";' % sanitizeSoft(Game.level.description))
-	file.store_string('global.rm = "%s";' % sanitizeSoft(Game.level.shortNumber))
+	file.store_string('global.rm = "%s";' % sanitizeSoft(Game.level.shortNumber.to_upper()))
 	endTagInline("code")
 	storeTag("enableViews", convertBool(true))
 	storeTag("clearViewBackground", convertBool(true))

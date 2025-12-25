@@ -42,7 +42,7 @@ func focus(focused:GameObject, new:bool, dontRedirect:bool) -> void: # Door or R
 	elif focused is RemoteLock:
 		%door.visible = false
 		%remoteLock.visible = true
-		%doorAuraSettings.visible = true
+		%doorAuraSettings.visible = !focused.armament
 		%lockConfigurationSelector.visible = false
 		%doorsHandler.setup(focused)
 		focusComponent(focused, new)
@@ -143,6 +143,7 @@ func receiveKey(event:InputEvent) -> bool:
 
 func changedMods() -> void:
 	%lockSettingsSep.visible = Mods.active(&"C1") or Mods.active(&"C5")
+	%remoteLockConvert.visible = Mods.active(&"C1") and main.componentFocused is Lock
 	%lockNegated.visible = Mods.active(&"C1")
 	%lockArmament.visible = Mods.active(&"C5")
 	%realInfiniteCopy.visible = Mods.active(&"InfCopies")

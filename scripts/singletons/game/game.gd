@@ -239,11 +239,6 @@ func _process(delta:float) -> void:
 	complexViewHue += delta*0.1764705882 # 0.75/255 per frame, 60fps
 	if complexViewHue >= 1: complexViewHue -= 1
 	if playGame and !hideTimer: updateWindowName()
-	if bufferedGateCheck:
-		bufferedGateCheck = false
-		if player:
-			for object in objects.values():
-				if object is Door and object.type == Door.TYPE.GATE: object.gateCheck(player)
 
 func bufferGateCheck() -> void: bufferedGateCheck = true
 

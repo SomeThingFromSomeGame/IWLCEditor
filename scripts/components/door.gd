@@ -466,11 +466,12 @@ func tryOpen(player:Player) -> void:
 	if type == TYPE.GATE: return
 	if animState != ANIM_STATE.IDLE: return
 	if gameFrozen or gameCrumbled or gamePainted:
+		var gateArmamentImmunities:Array[Game.COLOR] = player.getArmamentImmunities()
 		if hasColor(Game.COLOR.PURE): return
 		if int(gameFrozen) + int(gameCrumbled) + int(gamePainted) > 1: return
-		if gameFrozen and M.nex(player.key[Game.COLOR.ICE]): return
-		if gameCrumbled and M.nex(player.key[Game.COLOR.MUD]): return
-		if gamePainted and M.nex(player.key[Game.COLOR.GRAFFITI]): return
+		if gameFrozen and (M.nex(player.key[Game.COLOR.ICE]) or Game.COLOR.ICE in gateArmamentImmunities): return
+		if gameCrumbled and (M.nex(player.key[Game.COLOR.MUD]) or Game.COLOR.MUD in gateArmamentImmunities): return
+		if gamePainted and (M.nex(player.key[Game.COLOR.GRAFFITI]) or Game.COLOR.GRAFFITI in gateArmamentImmunities): return
 	else:
 		if player.explodey and tryDynamiteOpen(player): return
 		if player.masterCycle == 1 and tryMasterOpen(player): return
@@ -661,6 +662,7 @@ func gateCheck(player:Player, starting:bool=false) -> void:
 		else: GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gateOpen",true))
 
 func auraCheck(player:Player) -> void:
+	if type == TYPE.GATE: return
 	var deAuraed:bool = false
 	if player.auraRed and gameFrozen and !hasColor(Game.COLOR.MAROON):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameFrozen",false))
@@ -704,7 +706,7 @@ func isAllColorAfterCurse(color:Game.COLOR) -> bool:
 func curseCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
 	if hasColor(Game.COLOR.PURE): return
-	var willCurse:bool = player.curseMode > 0 and (!cursed or curseColor != player.curseColor)
+	var willCurse:bool = player.curseMode > 0 and (!cursed or (curseColor != player.curseColor and curseColor != Game.COLOR.PURE))
 	var willCurseRedundant:bool = willCurse and isAllColor(player.curseColor)
 	if willCurse and !willCurseRedundant:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",true))
@@ -716,8 +718,12 @@ func curseCheck(player:Player) -> void:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",false))
 		if curseColor == Game.COLOR.GLITCH:
 			GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseGlitchMimic",Game.COLOR.GLITCH))
-		makeCurseParticles(Game.COLOR.BROWN, -1, 0.2, 0.5)
-		AudioManager.play(preload("res://resources/sounds/door/decurse.wav"))
+		if willCurseRedundant:
+			makeCurseParticles(player.curseColor, 1, 0.2, 0.5)
+			AudioManager.play(preload("res://resources/sounds/door/curse.wav"))
+		else:
+			makeCurseParticles(Game.COLOR.BROWN, -1, 0.2, 0.5)
+			AudioManager.play(preload("res://resources/sounds/door/decurse.wav"))
 		GameChanges.bufferSave()
 
 func makeCurseParticles(color:Game.COLOR, mode:int, scaleMin:float=1,scaleMax:float=1) -> void:

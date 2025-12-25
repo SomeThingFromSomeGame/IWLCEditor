@@ -134,7 +134,11 @@ func getDrawPosition() -> Vector2: return position - getOffset()
 func propertyChangedInit(property:StringName) -> void:
 	if property == &"size": _setSizeType()
 	if property in [&"count", &"sizeType", &"type"]: _setAutoConfiguration()
-	
+	if property == &"armament" and armament:
+		if frozen: Changes.addChange(Changes.PropertyChange.new(self,&"frozen",false))
+		if crumbled: Changes.addChange(Changes.PropertyChange.new(self,&"crumbled",false))
+		if painted: Changes.addChange(Changes.PropertyChange.new(self,&"painted",false))
+
 	Lock.lockPropertyChangedInit(self, property)
 
 func propertyChangedDo(property:StringName) -> void:
@@ -222,11 +226,12 @@ func stop() -> void:
 
 func check(player:Player) -> void:
 	if gameFrozen or gameCrumbled or gamePainted:
+		var gateArmamentImmunities:Array[Game.COLOR] = player.getArmamentImmunities()
 		if colorAfterGlitch() == Game.COLOR.PURE: return
 		if int(gameFrozen) + int(gameCrumbled) + int(gamePainted) > 1: return
-		if gameFrozen and M.nex(player.key[Game.COLOR.ICE]): return
-		if gameCrumbled and M.nex(player.key[Game.COLOR.MUD]): return
-		if gamePainted and M.nex(player.key[Game.COLOR.GRAFFITI]): return
+		if gameFrozen and (M.nex(player.key[Game.COLOR.ICE]) or Game.COLOR.ICE in gateArmamentImmunities): return
+		if gameCrumbled and (M.nex(player.key[Game.COLOR.MUD]) or Game.COLOR.MUD in gateArmamentImmunities): return
+		if gamePainted and (M.nex(player.key[Game.COLOR.GRAFFITI]) or Game.COLOR.GRAFFITI in gateArmamentImmunities): return
 	var satisfiedBefore:bool = satisfied
 	var costBefore:PackedInt64Array = cost
 	GameChanges.addChange(GameChanges.PropertyChange.new(self,&"satisfied",canOpen(player)))
@@ -321,6 +326,7 @@ func auraCheck(player:Player) -> void:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gamePainted",false))
 		makeDebris(Door.Debris, Game.COLOR.ORANGE)
 		deAuraed = true
+	if armament: return
 	var auraed:bool = false
 	if player.auraMaroon and !gameFrozen and colorAfterGlitch() != Game.COLOR.RED and colorAfterCurse() != Game.COLOR.ICE:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameFrozen",true))

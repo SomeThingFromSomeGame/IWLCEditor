@@ -64,8 +64,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_y4ge2")
 
 [node name="worldViewportCont" type="SubViewportContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
 unique_name_in_owner = true
-offset_left = 1.0
-offset_right = 801.0
+offset_right = 800.0
 offset_bottom = 608.0
 
 [node name="worldViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont"]

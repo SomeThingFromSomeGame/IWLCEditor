@@ -75,6 +75,6 @@ func updateText() -> void:
 		string += " "+MMB+ARROWS+"Move/zoom camera [%s]Home camera [%s]Pipette" % [hotkeyMap(&"editHome"), hotkeyMap(&"editPipette")]
 	editor.explainText.text = string
 
-func hotkeyMap(hotkey:StringName) -> String:
+func hotkeyMap(hotkey:StringName, default:String="Unset") -> String:
 	var events:Array[InputEvent] = InputMap.action_get_events(hotkey)
-	return events[0].as_text_physical_keycode().replace("Escape", "Esc") if events else "Unset"
+	return events[0].as_text_physical_keycode().replace("Escape", "Esc") if events else default

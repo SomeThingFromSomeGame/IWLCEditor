@@ -128,6 +128,8 @@ func _ready() -> void:
 	previousPosition = position
 	previousIsOnFloor = is_on_floor()
 
+	Game.bufferedGateCheck = false
+
 func paused() -> bool:
 	return Game.playState != Game.PLAY_STATE.PLAY or (Game.playGame and (Game.playGame.inAnimation() or Game.playGame.paused)) or Game.won or Game.crashState
 
@@ -172,6 +174,10 @@ func _physics_process(_delta:float) -> void:
 		cantSave = false
 		for area in %near.get_overlapping_areas(): near(area)
 		for area in %interact.get_overlapping_areas(): interacted(area)
+		if Game.bufferedGateCheck:
+			Game.bufferedGateCheck = false
+			for object in Game.objects.values():
+				if object is Door and object.type == Door.TYPE.GATE: object.gateCheck(self)
 		GameChanges.process()
 		previousPosition = position
 		previousIsOnFloor = is_on_floor()

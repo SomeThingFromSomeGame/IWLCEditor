@@ -20,7 +20,8 @@ func _draw() -> void:
 
 func getCurrentHotkey() -> String:
 	if button_pressed:
-		if pressedHotkey: return Explainer.hotkeyMap(pressedHotkey)
+		if pressedHotkey:
+			return Explainer.hotkeyMap(pressedHotkey, "")
 		else: return ""
-	if defaultHotkey: return Explainer.hotkeyMap(defaultHotkey)
+	if defaultHotkey: return Explainer.hotkeyMap(defaultHotkey, "")
 	else: return ""
