@@ -108,6 +108,7 @@ func opened() -> void:
 	%colorQuicksetSetting.setMatches(configFile.get_value("editor", "quicksetColorMatches", ColorQuicksetSetting.DEFAULT_MATCHES.duplicate()))
 	%lockSizeQuicksetSetting.setMatches(configFile.get_value("editor", "quicksetLockSizeMatches", LockSizeQuicksetSetting.DEFAULT_MATCHES.duplicate()))
 	%gameSettings.opened(configFile)
+	update()
 
 func closed() -> void:
 	configFile.set_value("editor", "fileDialogWorkaround", %fileDialogWorkaround.button_pressed)
@@ -118,6 +119,15 @@ func closed() -> void:
 	configFile.set_value("editor", "quicksetLockSizeMatches", LockSizeQuicksetSetting.matches)
 	%gameSettings.closed(configFile)
 	configFile.save("user://config.ini")
+	update()
+	
+func update() -> void:
+	if InputMap.action_get_events(&"editSave"): editor.fileMenu.menu.set_item_accelerator(2, InputMap.action_get_events(&"editSave")[0].get_physical_keycode_with_modifiers())
+	else: editor.fileMenu.menu.set_item_accelerator(2, KEY_NONE)
+	if InputMap.action_get_events(&"editSaveAs"): editor.fileMenu.menu.set_item_accelerator(3, InputMap.action_get_events(&"editSaveAs")[0].get_physical_keycode_with_modifiers())
+	else: editor.fileMenu.menu.set_item_accelerator(3, KEY_NONE)
+	if InputMap.action_get_events(&"editExport"): editor.fileMenu.menu.set_item_accelerator(4, InputMap.action_get_events(&"editExport")[0].get_physical_keycode_with_modifiers())
+	else: editor.fileMenu.menu.set_item_accelerator(4, KEY_NONE)
 
 func _fileDialogWorkaroundSet(toggled_on:bool) -> void:
 	editor.saveAsDialog.use_native_dialog = !toggled_on

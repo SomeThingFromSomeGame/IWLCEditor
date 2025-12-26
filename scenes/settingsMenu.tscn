@@ -85,7 +85,7 @@ script = ExtResource("2_onm7i")
 layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="c"]
-z_index = 1
+z_index = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_egwj7")

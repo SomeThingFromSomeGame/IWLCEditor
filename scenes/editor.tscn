@@ -130,7 +130,7 @@ grow_vertical = 2
 theme = ExtResource("1_j8y2p")
 
 [node name="c" type="PanelContainer" parent="c"]
-z_index = 3
+z_index = 4
 layout_mode = 2
 
 [node name="topBar" type="MarginContainer" parent="c/c"]
@@ -454,7 +454,7 @@ offset_right = 85.0
 offset_bottom = 49.0
 
 [node name="c3" type="PanelContainer" parent="c"]
-z_index = 2
+z_index = 3
 layout_mode = 2
 
 [node name="c2" type="HBoxContainer" parent="c/c3"]

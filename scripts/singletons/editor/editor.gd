@@ -28,6 +28,8 @@ var findProblems:FindProblems
 @onready var multiselectParent:Node2D = %multiselectParent
 @onready var placePreviewWorld:World = %placePreviewWorld
 
+@onready var fileMenu:FileMenu = %fileMenu
+
 var previewComponents:Array[GameComponent] = []
 
 enum MODE {SELECT, TILE, KEY, DOOR, OTHER, PASTE}
@@ -85,8 +87,8 @@ func _ready() -> void:
 	settingsMenu.opened()
 	Saving.editorReady()
 	if OS.has_feature('web'):
-		%fileMenu.menu.remove_item(5)
-		%fileMenu.menu.remove_item(3)
+		fileMenu.menu.remove_item(5)
+		fileMenu.menu.remove_item(3)
 	%screenshotViewport.world_2d = %gameViewport.world_2d
 	Game.camera = playtestCamera
 	get_window().files_dropped.connect(func(files): Saving.loadFile(files[0]))
@@ -492,7 +494,7 @@ static func eventIs(event:InputEvent, action:StringName, allowEcho:bool=false) -
 
 func home() -> void:
 	targetCameraZoom = 1
-	zoomPoint = levelStartCameraCenter(%gameCont.size - Vector2(20,20)) - Vector2(10,10) + %gameCont.size/2
+	zoomPoint = levelStartCameraCenter() + Vector2(400,304)
 	editorCamera.position = zoomPoint - gameCont.size / (cameraZoom*2)
 
 func zoomCamera(factor:float) -> void:
