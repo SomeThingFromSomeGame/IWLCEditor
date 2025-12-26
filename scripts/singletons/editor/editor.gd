@@ -11,6 +11,7 @@ class_name Editor
 @onready var otherObjects:OtherObjects = %otherObjects
 @onready var topBar:TopBar = %topBar
 @onready var settingsMenu:SettingsMenu = %settingsMenu
+@onready var outline:Outline = %outline
 var modsWindow:ModsWindow
 var exportWindow:ExportWindow
 var findProblems:FindProblems
@@ -68,6 +69,7 @@ var drawAutoRunGradient:RID
 var autoRunTimer:float = 2
 
 var screenshot:Image
+var drawThumbnail:RID
 
 var playerObject:GameObject = PlayerPlaceholderObject.new()
 
@@ -78,9 +80,11 @@ func _ready() -> void:
 	Explainer.editor = self
 	drawMain = RenderingServer.canvas_item_create()
 	drawAutoRunGradient = RenderingServer.canvas_item_create()
+	drawThumbnail = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawAutoRunGradient, Game.TEXT_GRADIENT_MATERIAL)
 	RenderingServer.canvas_item_set_parent(drawMain, %gameCont.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %gameCont.get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawThumbnail, %thumbnail.get_canvas_item())
 	Game.setWorld(%world)
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
 	settingsMenu.gameSettings.editor = self
@@ -89,11 +93,12 @@ func _ready() -> void:
 	if OS.has_feature('web'):
 		fileMenu.menu.remove_item(5)
 		fileMenu.menu.remove_item(3)
-	%screenshotViewport.world_2d = %gameViewport.world_2d
+	%screenshotInnerViewport.world_2d = %gameViewport.world_2d
 	Game.camera = playtestCamera
 	get_window().files_dropped.connect(func(files): Saving.loadFile(files[0]))
 	playerObject.size = Vector2(12,21)
 	playerObject.id = -1
+	%screenshotViewportCont.visible = false
 
 func _process(delta:float) -> void:
 	queue_redraw()
@@ -144,7 +149,7 @@ func _process(delta:float) -> void:
 						componentHovered = element
 	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, %gameViewportCont.get_local_mouse_position(), %gameViewportCont.size)
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else -3
-	%screenshotCamera.position = levelStartCameraCenter()
+	%screenshotInnerCamera.position = levelStartCameraCenter()
 
 	if autoRunTimer < 2:
 		autoRunTimer += delta
@@ -488,7 +493,7 @@ func _input(event:InputEvent) -> void:
 			match event.keycode:
 				KEY_TAB: grab_focus()
 				KEY_F2: takeScreenshot()
-				KEY_F3: print(Game.tiles.get_used_cells())
+				KEY_F3: takeThumbnailScreenshot()
 
 static func eventIs(event:InputEvent, action:StringName, allowEcho:bool=false) -> bool: return event.is_action_pressed(action, allowEcho, true)
 
@@ -594,7 +599,7 @@ func _draw() -> void:
 			topLeft, Vector2(bottomRight.x, topLeft.y), bottomRight, Vector2(topLeft.x, bottomRight.y), topLeft-Vector2(0,1)
 		], [Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK])
 		TextDraw.outlined(Game.FPRESENTS, drawMain, "[%s] to zoom" % Explainer.hotkeyMap(&"gameAction"),Color(Color.WHITE,Game.player.cameraAnimVal),Color(Color.BLACK,Game.player.cameraAnimVal),14,Vector2(11,gameCont.size.y-16))
-		TextDraw.outlined(Game.FPRESENTS, drawMain, "[%s] to exit" % Explainer.hotkeyMap(&"gameCamera"),Color(Color.WHITE,Game.player.cameraAnimVal),Color(Color.BLACK,Game.player.cameraAnimVal),14,gameCont.size+Vector2(-108,-16),true)
+		TextDraw.outlined(Game.FPRESENTS, drawMain, "[%s] to exit" % Explainer.hotkeyMap(&"gameCamera"),Color(Color.WHITE,Game.player.cameraAnimVal),Color(Color.BLACK,Game.player.cameraAnimVal),14,gameCont.size+Vector2(-108,-16))
 
 func autoRun() -> void:
 	Game.autoRun = !Game.autoRun
@@ -605,10 +610,35 @@ func autoRun() -> void:
 
 func takeScreenshot() -> void:
 	%screenshotViewportCont.visible = true
+	%thumbnailTop.visible = false
+	%thumbnailBottom.visible = false
+	%screenshotViewport.size = Vector2(800,608)
+	%screenshotInnerViewport.size = Vector2(800,608)
 	RenderingServer.force_draw()
 	screenshot = %screenshotViewport.get_texture().get_image()
 	screenshot.resize(200,152)
 	%screenshotViewportCont.visible = false
+
+func takeThumbnailScreenshot() -> void:
+	%screenshotViewportCont.visible = true
+	%thumbnailTop.visible = true
+	%thumbnailBottom.visible = true
+	%screenshotInnerViewport.size = Vector2(Game.levelBounds.size)
+	%screenshotViewport.size = Vector2(Game.levelBounds.size) + Vector2(0,89)
+	%screenshotInnerCamera.position = Game.levelBounds.position
+	RenderingServer.canvas_item_clear(drawThumbnail)
+	TextDraw.outlined(Game.FLEVELNAME,drawThumbnail,Game.level.name,Color.WHITE,Color.BLACK,36,Vector2(12,26))
+	TextDraw.outlined(Game.FLEVELNAME,drawThumbnail,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(Game.levelBounds.size.x-12,26),true)
+	var nameWidth:float = Game.FLEVELNAME.get_string_size(Game.level.name,HORIZONTAL_ALIGNMENT_LEFT,-1,36).x
+	Game.ROBOTO_MONO.draw_string(drawThumbnail,Vector2(30+nameWidth,41),"(Rev. %s)" % Game.level.revision,HORIZONTAL_ALIGNMENT_LEFT,-1,20)
+	if Mods.activeModpack: %thumbnailModpack.texture = Mods.activeModpack.iconSmall
+	else: %thumbnailModpack.visible = false
+	%thumbnailMods.text = OpenWindow.textifyMods(Mods.getActiveMods(), Mods.activeModpack, Mods.activeVersion)
+	await get_tree().process_frame
+	RenderingServer.force_draw()
+	var thumbnail:Image = %screenshotViewport.get_texture().get_image()
+	%screenshotViewportCont.visible = false
+	thumbnail.save_png("user://puzzles/_thumbnail.png")
 
 func levelStartCameraCenter(screenSize:Vector2=Vector2(800,608)) -> Vector2:
 	if Game.levelStart:

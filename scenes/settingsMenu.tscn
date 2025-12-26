@@ -270,20 +270,39 @@ offset_bottom = 8.0
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 
-[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2"]
+[node name="c" type="VBoxContainer" parent="c/levelSettings/c/followWorld/c2"]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c/c"]
 layout_mode = 2
 text = "Revision"
 
-[node name="levelRevision" type="SpinBox" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="levelRevision" type="SpinBox" parent="c/levelSettings/c/followWorld/c2/c/c"]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 allow_greater = true
+
+[node name="c2" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Button" type="Button" parent="c/levelSettings/c/followWorld/c2/c/c2"]
+layout_mode = 2
+theme_type_variation = &"RadioButtonText"
+text = "Generate Thumbnail"
+
+[node name="clarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c2"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Goes to [puzzles]/_thumbnail.png"
+texture = ExtResource("5_iswfj")
 
 [node name="editorSettings" type="MarginContainer" parent="c"]
 unique_name_in_owner = true
@@ -854,6 +873,7 @@ toneButtonGroup = SubResource("ButtonGroup_tyaol")
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/c/c/levelAuthor" to="." method="_levelAuthorSet"]
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/description/c/c/c/levelDescription" to="." method="_levelDescriptionSet"]
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/description/c/c2/levelShortNumber" to="." method="_levelShortNumberSet"]
-[connection signal="value_changed" from="c/levelSettings/c/followWorld/c2/c/levelRevision" to="." method="_levelRevisionSet"]
+[connection signal="value_changed" from="c/levelSettings/c/followWorld/c2/c/c/levelRevision" to="." method="_levelRevisionSet"]
+[connection signal="pressed" from="c/levelSettings/c/followWorld/c2/c/c2/Button" to="." method="_generateThumbnail"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fileDialogWorkaroundCont/fileDialogWorkaround" to="." method="_fileDialogWorkaroundSet"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fullscreen" to="." method="_fullscreenSet"]

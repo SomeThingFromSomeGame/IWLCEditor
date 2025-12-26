@@ -120,7 +120,7 @@ func closed() -> void:
 	%gameSettings.closed(configFile)
 	configFile.save("user://config.ini")
 	update()
-	
+
 func update() -> void:
 	if InputMap.action_get_events(&"editSave"): editor.fileMenu.menu.set_item_accelerator(2, InputMap.action_get_events(&"editSave")[0].get_physical_keycode_with_modifiers())
 	else: editor.fileMenu.menu.set_item_accelerator(2, KEY_NONE)
@@ -135,3 +135,8 @@ func _fileDialogWorkaroundSet(toggled_on:bool) -> void:
 
 func _fullscreenSet(toggled_on:bool) -> void:
 	get_window().mode = Window.MODE_FULLSCREEN if toggled_on else Window.MODE_WINDOWED
+
+func _generateThumbnail() -> void:
+	editor.outline.visible = false
+	await editor.takeThumbnailScreenshot()
+	editor.outline.visible = true

@@ -23,16 +23,21 @@ func _ready() -> void:
 	%image.texture = ImageTexture.create_from_image(screenshot)
 	if modpack: %modpack.texture = modpack.iconSmall
 	else: %modpack.visible = false
-	if mods: %mods.text = ", ".join(mods.filter(func(mod): return Mods.mods[mod].disclosatory).map(func(mod): return Mods.mods[mod].name))
-	if modpack:
-		var modpackMods:String = ", ".join(version.mods.map(func(mod): return Mods.mods[mod].name)) + ")"
-		if %mods.text: %mods.text += ", "
-		%mods.text += modpack.name + " (" + version.name + (": " + modpackMods if modpackMods != ")" else ")")
+	%mods.text = textifyMods(mods,modpack,version)
 	if levelStart == -1:
 		%play.disabled = true
 		%play.text = "Play (disabled; no level start)"
 	await get_tree().process_frame
 	grab_focus()
+
+static func textifyMods(activeMods:Array[StringName], activeModpack:Mods.Modpack, activeVersion:Mods.Version) -> String:
+	var string:String = ""
+	if activeMods: string = ", ".join(activeMods.filter(func(mod): return Mods.mods[mod].disclosatory).map(func(mod): return Mods.mods[mod].name))
+	if activeModpack:
+		var modpackMods:String = ", ".join(activeVersion.mods.map(func(mod): return Mods.mods[mod].name)) + ")"
+		if string: string += ", "
+		string += activeModpack.name + " (" + activeVersion.name + (": " + modpackMods if modpackMods != ")" else ")")
+	return string
 
 func _close() -> void:
 	file.close()
