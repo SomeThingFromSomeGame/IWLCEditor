@@ -101,6 +101,8 @@ func opened() -> void:
 	%levelShortNumber.text = Game.level.shortNumber
 	%levelRevision.value = Game.level.revision
 	configFile.load("user://config.ini")
+	%thumbnailHideDescription.button_pressed = configFile.get_value("editor", "thumbnailHideDescription", false)
+	%thumbnailEntireLevel.button_pressed = configFile.get_value("editor", "thumbnailEntireLevel", true)
 	%fileDialogWorkaround.button_pressed = configFile.get_value("editor", "fileDialogWorkaround", false)
 	%fullscreen.button_pressed = configFile.get_value("editor", "fullscreen", false)
 	for setting in get_tree().get_nodes_in_group("hotkeySetting"):
@@ -113,6 +115,8 @@ func opened() -> void:
 	update()
 
 func closed() -> void:
+	configFile.set_value("editor", "thumbnailHideDescription", %thumbnailHideDescription.button_pressed)
+	configFile.set_value("editor", "thumbnailEntireLevel", %thumbnailEntireLevel.button_pressed)
 	configFile.set_value("editor", "fileDialogWorkaround", %fileDialogWorkaround.button_pressed)
 	configFile.set_value("editor", "fullscreen", %fullscreen.button_pressed)
 	for setting in get_tree().get_nodes_in_group("hotkeySetting"):
@@ -146,3 +150,9 @@ func _generateThumbnail() -> void:
 	editor.outline.visible = false
 	await editor.takeThumbnailScreenshot()
 	editor.outline.visible = true
+
+func _thumbnailHideDescriptionSet(toggled_on:bool) -> void:
+	editor.thumbnailHideDescription = toggled_on
+
+func _thumbnailEntireLevelSet(toggled_on:bool) -> void:
+	editor.thumbnailEntireLevel = toggled_on

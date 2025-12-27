@@ -160,7 +160,7 @@ func save(path:String="") -> void:
 	file.store_pascal_string(ProjectSettings.get_setting("application/config/version"))
 	# LEVEL METADATA
 	file.store_var(Game.level,true)
-	editor.takeScreenshot()
+	await editor.takeScreenshot()
 	file.store_var(editor.screenshot,true)
 	file.store_var(Mods.getActiveMods())
 	var modpackId = Mods.modpacks.find_key(Mods.activeModpack)

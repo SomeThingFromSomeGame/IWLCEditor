@@ -70,6 +70,8 @@ var autoRunTimer:float = 2
 
 var screenshot:Image
 var drawThumbnail:RID
+var thumbnailHideDescription:bool = false
+var thumbnailEntireLevel:bool = true
 
 var playerObject:GameObject = PlayerPlaceholderObject.new()
 
@@ -82,6 +84,7 @@ func _ready() -> void:
 	drawAutoRunGradient = RenderingServer.canvas_item_create()
 	drawThumbnail = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_material(drawAutoRunGradient, Game.TEXT_GRADIENT_MATERIAL)
+	RenderingServer.canvas_item_set_z_index(drawThumbnail,1)
 	RenderingServer.canvas_item_set_parent(drawMain, %gameCont.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAutoRunGradient, %gameCont.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawThumbnail, %thumbnail.get_canvas_item())
@@ -149,7 +152,6 @@ func _process(delta:float) -> void:
 						componentHovered = element
 	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, %gameViewportCont.get_local_mouse_position(), %gameViewportCont.size)
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else -3
-	%screenshotInnerCamera.position = levelStartCameraCenter()
 
 	if autoRunTimer < 2:
 		autoRunTimer += delta
@@ -614,6 +616,8 @@ func takeScreenshot() -> void:
 	%thumbnailBottom.visible = false
 	%screenshotViewport.size = Vector2(800,608)
 	%screenshotInnerViewport.size = Vector2(800,608)
+	%screenshotInnerCamera.position = levelStartCameraCenter()
+	await get_tree().process_frame
 	RenderingServer.force_draw()
 	screenshot = %screenshotViewport.get_texture().get_image()
 	screenshot.resize(200,152)
@@ -623,17 +627,19 @@ func takeThumbnailScreenshot() -> void:
 	%screenshotViewportCont.visible = true
 	%thumbnailTop.visible = true
 	%thumbnailBottom.visible = true
-	%screenshotInnerViewport.size = Vector2(Game.levelBounds.size)
-	%screenshotViewport.size = Vector2(Game.levelBounds.size) + Vector2(0,89)
-	%screenshotInnerCamera.position = Game.levelBounds.position
+	%screenshotInnerViewport.size = Vector2(Game.levelBounds.size) if thumbnailEntireLevel else Vector2(800,608)
+	%screenshotViewport.size = %screenshotInnerViewport.size + Vector2i(0,89)
 	RenderingServer.canvas_item_clear(drawThumbnail)
 	TextDraw.outlined(Game.FLEVELNAME,drawThumbnail,Game.level.name,Color.WHITE,Color.BLACK,36,Vector2(12,26))
-	TextDraw.outlined(Game.FLEVELNAME,drawThumbnail,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(Game.levelBounds.size.x-12,26),true)
+	TextDraw.outlined(Game.FLEVELNAME,drawThumbnail,Game.level.author,Color.BLACK,Color.WHITE,36,Vector2(%screenshotInnerViewport.size.x-12,26),true)
 	var nameWidth:float = Game.FLEVELNAME.get_string_size(Game.level.name,HORIZONTAL_ALIGNMENT_LEFT,-1,36).x
 	Game.ROBOTO_MONO.draw_string(drawThumbnail,Vector2(30+nameWidth,41),"(Rev. %s)" % Game.level.revision,HORIZONTAL_ALIGNMENT_LEFT,-1,20)
-	if Mods.activeModpack: %thumbnailModpack.texture = Mods.activeModpack.iconSmall
-	else: %thumbnailModpack.visible = false
+	if Mods.activeModpack:%thumbnailModpack.texture = Mods.activeModpack.iconSmall
+	%thumbnailModpack.visible = !!Mods.activeModpack
 	%thumbnailMods.text = OpenWindow.textifyMods(Mods.getActiveMods(), Mods.activeModpack, Mods.activeVersion)
+	%screenshotInnerCamera.position = Vector2(Game.levelBounds.position) if thumbnailEntireLevel else levelStartCameraCenter()
+	if !thumbnailHideDescription and Game.level.description: PlayGame.drawLevelDescription(drawThumbnail,Vector2(0,64))
+	await get_tree().process_frame
 	await get_tree().process_frame
 	RenderingServer.force_draw()
 	var thumbnail:Image = %screenshotViewport.get_texture().get_image()

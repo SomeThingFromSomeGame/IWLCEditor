@@ -33,10 +33,11 @@ func _ready() -> void:
 static func textifyMods(activeMods:Array[StringName], activeModpack:Mods.Modpack, activeVersion:Mods.Version) -> String:
 	var string:String = ""
 	if activeMods: string = ", ".join(activeMods.filter(func(mod): return Mods.mods[mod].disclosatory).map(func(mod): return Mods.mods[mod].name))
+	if string: string += ", "
 	if activeModpack:
 		var modpackMods:String = ", ".join(activeVersion.mods.map(func(mod): return Mods.mods[mod].name)) + ")"
-		if string: string += ", "
 		string += activeModpack.name + " (" + activeVersion.name + (": " + modpackMods if modpackMods != ")" else ")")
+	else: string += ", ". join(activeMods.filter(func(mod): return !Mods.mods[mod].disclosatory).map(func(mod): return Mods.mods[mod].name))
 	return string
 
 func _close() -> void:

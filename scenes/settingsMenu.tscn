@@ -289,6 +289,33 @@ min_value = 1.0
 value = 1.0
 allow_greater = true
 
+[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "Thumbnail"
+label_settings = SubResource("LabelSettings_tyaol")
+vertical_alignment = 2
+
+[node name="thumbnailHideDescription" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Hide Description"
+
+[node name="c3" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+layout_mode = 2
+
+[node name="thumbnailEntireLevel" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c/c3"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Entire Level"
+
+[node name="clarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c3"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "If this is turned off then the thumbnail will only capture a 800x608 centered around the level start, similar to the load preview."
+texture = ExtResource("5_iswfj")
+
 [node name="c2" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
 layout_mode = 2
 theme_override_constants/separation = 2
@@ -875,6 +902,8 @@ toneButtonGroup = SubResource("ButtonGroup_tyaol")
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/description/c/c/c/levelDescription" to="." method="_levelDescriptionSet"]
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/description/c/c2/levelShortNumber" to="." method="_levelShortNumberSet"]
 [connection signal="value_changed" from="c/levelSettings/c/followWorld/c2/c/c/levelRevision" to="." method="_levelRevisionSet"]
+[connection signal="toggled" from="c/levelSettings/c/followWorld/c2/c/thumbnailHideDescription" to="." method="_thumbnailHideDescriptionSet"]
+[connection signal="toggled" from="c/levelSettings/c/followWorld/c2/c/c3/thumbnailEntireLevel" to="." method="_thumbnailEntireLevelSet"]
 [connection signal="pressed" from="c/levelSettings/c/followWorld/c2/c/c2/generateThumbnail" to="." method="_generateThumbnail"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fileDialogWorkaroundCont/fileDialogWorkaround" to="." method="_fileDialogWorkaroundSet"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fullscreen" to="." method="_fullscreenSet"]

@@ -135,11 +135,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_set_transform(drawDescription, Transform2D(0, Vector2(0,descriptionOffset)))
 	# description box
 	if Game.level.description:
-		RenderingServer.canvas_item_add_texture_rect(drawDescription,Rect2(Vector2(11,519),Vector2(784,80)),DESCRIPTION_BOX,false,Color(Color.BLACK,0.35))
-		RenderingServer.canvas_item_add_texture_rect(drawDescription,Rect2(Vector2(8,516),Vector2(784,80)),DESCRIPTION_BOX)
-		Game.FTALK.draw_multiline_string(drawDescription,Vector2(16,540),Game.level.description,HORIZONTAL_ALIGNMENT_LEFT,666,12,4,Color("#200020"),TEXT_BREAK_FLAGS)
-		TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,Vector2(732,539))
-		TextDraw.outlinedCentered(Game.FROOMNUM,drawDescription,Game.level.shortNumber,Color("#8c50c8"),Color("#140064"),20,Vector2(733,569))
+		drawLevelDescription(drawDescription)
 	# room transition
 	if roomTransitionPhase > -1:
 		var textOffset = Vector2(0,500*sin(deg_to_rad(textOffsetAngle))-500)
@@ -177,6 +173,14 @@ func _draw() -> void:
 		], [Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK,Color.BLACK])
 		TextDraw.outlined(Game.FPRESENTS, drawMain, "[%s] to zoom" % Explainer.hotkeyMap(&"gameAction"),Color(Color.WHITE,Game.player.cameraAnimVal),Color(Color.BLACK,Game.player.cameraAnimVal),14,Vector2(11,592))
 		TextDraw.outlined(Game.FPRESENTS, drawMain, "[%s] to exit" % Explainer.hotkeyMap(&"gameCamera"),Color(Color.WHITE,Game.player.cameraAnimVal),Color(Color.BLACK,Game.player.cameraAnimVal),14,Vector2(692,592))
+
+static func drawLevelDescription(drawer:RID, pos:Vector2=Vector2.ZERO) -> void:
+	if Game.levelBounds.size != Vector2i(800,608): return
+	RenderingServer.canvas_item_add_texture_rect(drawer,Rect2(pos+Vector2(11,519),Vector2(784,80)),DESCRIPTION_BOX,false,Color(Color.BLACK,0.35))
+	RenderingServer.canvas_item_add_texture_rect(drawer,Rect2(pos+Vector2(8,516),Vector2(784,80)),DESCRIPTION_BOX)
+	Game.FTALK.draw_multiline_string(drawer,pos+Vector2(16,540),Game.level.description,HORIZONTAL_ALIGNMENT_LEFT,666,12,4,Color("#200020"),TEXT_BREAK_FLAGS)
+	TextDraw.outlinedCentered(Game.FROOMNUM,drawer,"PUZZLE",Color("#d6cfc9"),Color("#3e2d1c"),20,pos+Vector2(732,539))
+	TextDraw.outlinedCentered(Game.FROOMNUM,drawer,Game.level.shortNumber,Color("#8c50c8"),Color("#140064"),20,pos+Vector2(733,569))
 
 func _input(event:InputEvent) -> void:
 	if event is InputEventKey and event.is_pressed():

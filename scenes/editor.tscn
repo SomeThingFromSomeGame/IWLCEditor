@@ -514,6 +514,11 @@ toggle_mode = true
 icon = ExtResource("27_1abrv")
 metadata/explanation = SubResource("Resource_jke8t")
 
+[node name="focusDialog" parent="." instance=ExtResource("12_74j0u")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+
 [node name="screenshotViewportCont" type="SubViewportContainer" parent="."]
 unique_name_in_owner = true
 z_index = -999
@@ -592,11 +597,6 @@ layout_mode = 2
 layout_mode = 2
 text = "IWLCEditor"
 label_settings = SubResource("LabelSettings_ndxgo")
-
-[node name="focusDialog" parent="." instance=ExtResource("12_74j0u")]
-unique_name_in_owner = true
-visible = false
-layout_mode = 0
 
 [node name="saveAsDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
