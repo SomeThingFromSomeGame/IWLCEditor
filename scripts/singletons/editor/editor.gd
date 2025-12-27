@@ -617,6 +617,7 @@ func takeScreenshot() -> void:
 	%screenshotViewport.size = Vector2(800,608)
 	%screenshotInnerViewport.size = Vector2(800,608)
 	%screenshotInnerCamera.position = levelStartCameraCenter()
+	RenderingServer.canvas_item_clear(drawThumbnail)
 	await get_tree().process_frame
 	RenderingServer.force_draw()
 	screenshot = %screenshotViewport.get_texture().get_image()
