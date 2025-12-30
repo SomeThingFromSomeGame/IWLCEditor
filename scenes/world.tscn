@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://2hd65vn44me7"]
+[gd_scene load_steps=6 format=3 uid="uid://2hd65vn44me7"]
 
 [ext_resource type="Texture2D" uid="uid://dsany13ywiwir" path="res://assets/game/tiles.png" id="1_2q6dc"]
 [ext_resource type="Script" uid="uid://dki6lcfsouybo" path="res://scripts/singletons/game/world.gd" id="1_k0juu"]
+[ext_resource type="PackedScene" uid="uid://bbyr24j5mlqy5" path="res://scenes/pencilmark.tscn" id="3_4wyf3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rwgxs"]
 texture = ExtResource("1_2q6dc")
@@ -42,3 +43,39 @@ unique_name_in_owner = true
 [node name="particlesParent" type="Node2D" parent="."]
 unique_name_in_owner = true
 z_index = 3
+
+[node name="MarkParent" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Pencilmark" parent="MarkParent" instance=ExtResource("3_4wyf3")]
+layout_mode = 1
+offset_left = 386.0
+offset_top = 192.0
+offset_right = 386.0
+offset_bottom = 192.0
+type = 2
+message = "pencilmark testing"
+color_id = 1
+
+[node name="Pencilmark2" parent="MarkParent" instance=ExtResource("3_4wyf3")]
+layout_mode = 1
+offset_left = 251.0
+offset_top = 355.0
+offset_right = 251.0
+offset_bottom = 355.0
+color_id = 2
+
+[node name="Pencilmark3" parent="MarkParent" instance=ExtResource("3_4wyf3")]
+layout_mode = 1
+offset_left = 495.0
+offset_top = 367.0
+offset_right = 495.0
+offset_bottom = 367.0
+type = 1
+number = -55
+color_id = 4

@@ -1,0 +1,233 @@
+[gd_scene load_steps=6 format=3 uid="uid://bbyr24j5mlqy5"]
+
+[ext_resource type="Script" uid="uid://ecrj0k0awvw4" path="res://scenes/pencilmark.gd" id="1_dthab"]
+[ext_resource type="Texture2D" uid="uid://b5gc37xq34exx" path="res://assets/game/keyCounter/star.png" id="1_fk7as"]
+[ext_resource type="Texture2D" uid="uid://dilor38fa0s3m" path="res://assets/ui/pencilmarks/symbol/symbol0.png" id="2_dthab"]
+[ext_resource type="Texture2D" uid="uid://bxx5oa4notln8" path="res://assets/ui/pencilmarks/origin/origin0.png" id="3_gaoie"]
+[ext_resource type="FontFile" uid="uid://bm02nnbt7kc0i" path="res://resources/fonts/fMiniId.fnt" id="4_a6hyu"]
+
+[node name="Pencilmark" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -820.0
+offset_bottom = -697.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dthab")
+
+[node name="SymbolMark" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Star" type="Sprite2D" parent="SymbolMark"]
+self_modulate = Color(1, 1, 1, 0.7490196)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_fk7as")
+
+[node name="Symbol" type="Sprite2D" parent="SymbolMark"]
+texture = ExtResource("2_dthab")
+
+[node name="Symbol2" type="Sprite2D" parent="SymbolMark/Symbol"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+position = Vector2(1, 0)
+texture = ExtResource("2_dthab")
+
+[node name="Symbol3" type="Sprite2D" parent="SymbolMark/Symbol"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+position = Vector2(-1, 0)
+texture = ExtResource("2_dthab")
+
+[node name="Symbol4" type="Sprite2D" parent="SymbolMark/Symbol"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+position = Vector2(0, 1)
+texture = ExtResource("2_dthab")
+
+[node name="Symbol5" type="Sprite2D" parent="SymbolMark/Symbol"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+position = Vector2(0, -1)
+texture = ExtResource("2_dthab")
+
+[node name="NumberMark" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Star" type="Sprite2D" parent="NumberMark"]
+self_modulate = Color(1, 1, 1, 0.7490196)
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_fk7as")
+
+[node name="Origin" type="Sprite2D" parent="NumberMark"]
+self_modulate = Color(18.892157, 18.892157, 18.892157, 1)
+texture = ExtResource("3_gaoie")
+
+[node name="Label" type="Label" parent="NumberMark"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -10.666667
+offset_right = 18.0
+offset_bottom = 10.666667
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="NumberMark/Label"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="NumberMark/Label"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="NumberMark/Label"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="NumberMark/Label"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "555"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextMark" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -18.0
+offset_top = -10.666667
+offset_right = 18.0
+offset_bottom = 10.666687
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "testing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Origin" type="Sprite2D" parent="TextMark"]
+self_modulate = Color(18.892157, 18.892157, 18.892157, 1)
+show_behind_parent = true
+position = Vector2(35, 10.666667)
+texture = ExtResource("3_gaoie")
+
+[node name="Label2" type="Label" parent="TextMark"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "testing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="Label" parent="TextMark"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "testing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="Label" parent="TextMark"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "testing"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="Label" parent="TextMark"]
+self_modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.0
+offset_bottom = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_a6hyu")
+text = "testing"
+horizontal_alignment = 1
+vertical_alignment = 1
