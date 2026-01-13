@@ -17,6 +17,8 @@ func _ready() -> void:
 	if OS.has_feature("web"):
 		%fileDialogWorkaroundCont.visible = false
 		%thumbnailClarifier.visible = false
+		%editSaveAs.visible = false
+
 	_tabSelected(0)
 
 func _input(event:InputEvent) -> void:

@@ -8,6 +8,7 @@ func _ready() -> void:
 	menu.id_pressed.connect(optionPressed)
 
 func optionPressed(id:int) -> void:
+	print(button_pressed)
 	match id:
 		# FILE
 		0: Saving.confirmAction = Saving.ACTION.NONE; Saving.new()

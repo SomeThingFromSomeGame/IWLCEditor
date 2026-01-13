@@ -472,14 +472,11 @@ func _input(event:InputEvent) -> void:
 			elif eventIs(event, &"editObjectSearch"): otherObjects.objectSearch.grab_focus()
 			elif eventIs(event, &"editPipette"): pipette()
 			elif eventIs(event, &"editOpenSettings"): _toggleSettingsMenu(true)
-			elif eventIs(event, &"editNew"): Saving.confirmAction = Saving.ACTION.NONE; Saving.new()
-			elif eventIs(event, &"editOpen"): Saving.open()
-			elif eventIs(event, &"editSave"): Saving.confirmAction = Saving.ACTION.NONE; Saving.save()
-			elif eventIs(event, &"editSaveAs"):
-				Saving.confirmAction = Saving.ACTION.NONE
-				if OS.has_feature('web'): Saving.save()
-				else: Saving.saveAs()
-			elif eventIs(event, &"editExport"): pass
+			elif eventIs(event, &"editNew"): fileMenu.optionPressed(0)
+			elif eventIs(event, &"editOpen"): fileMenu.optionPressed(1)
+			elif eventIs(event, &"editSave"): fileMenu.optionPressed(2)
+			elif eventIs(event, &"editSaveAs") and !OS.has_feature('web'): fileMenu.optionPressed(3)
+			elif eventIs(event, &"editExport"): fileMenu.optionPressed(4)
 			elif eventIs(event, &"editHome"): home()
 			elif eventIs(event, &"editCopy"): multiselect.copySelection()
 			elif eventIs(event, &"editCut"): multiselect.copySelection(); multiselect.delete()
