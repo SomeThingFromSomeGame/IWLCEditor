@@ -187,10 +187,10 @@ func _physics_process(_delta:float) -> void:
 		if body == Game.tiles or body.get_parent() is FloatingTile: onAnything = true; break
 	var onOpeningDoor:bool = false
 	for area in %floor.get_overlapping_areas():
-		var door:Door = area.get_parent()
-		if door is Door:
-			if door.type == Door.TYPE.GATE and door.gateOpen: continue
-			if door.type == Door.TYPE.COMBO or !door.justOpened: onAnything = true
+		var object = area.get_parent()
+		if object is Door:
+			if object.type == Door.TYPE.GATE and object.gateOpen: continue
+			if object.type == Door.TYPE.COMBO or !object.justOpened: onAnything = true
 			else: onOpeningDoor = true
 	if is_on_floor() and onAnything:
 		canDoubleJump = true
