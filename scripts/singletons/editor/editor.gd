@@ -91,11 +91,11 @@ func _ready() -> void:
 	Game.setWorld(%world)
 	%settingsText.text = "IWLCEditor v" + ProjectSettings.get_setting("application/config/version")
 	settingsMenu.gameSettings.editor = self
-	settingsMenu.opened()
 	Saving.editorReady()
 	if OS.has_feature('web'):
 		fileMenu.menu.remove_item(5)
 		fileMenu.menu.remove_item(3)
+	settingsMenu.opened()
 	%screenshotInnerViewport.world_2d = %gameViewport.world_2d
 	Game.camera = playtestCamera
 	get_window().files_dropped.connect(func(files): Saving.loadFile(files[0]))

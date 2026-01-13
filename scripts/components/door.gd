@@ -663,6 +663,7 @@ func gateCheck(player:Player, starting:bool=false) -> void:
 
 func auraCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
+	if animState != ANIM_STATE.IDLE: return
 	var deAuraed:bool = false
 	if player.auraRed and gameFrozen and !hasColor(Game.COLOR.MAROON):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameFrozen",false))
@@ -705,6 +706,7 @@ func isAllColorAfterCurse(color:Game.COLOR) -> bool:
 
 func curseCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
+	if animState != ANIM_STATE.IDLE: return
 	if hasColor(Game.COLOR.PURE): return
 	var willCurse:bool = player.curseMode > 0 and (!cursed or (curseColor != player.curseColor and curseColor != Game.COLOR.PURE))
 	var willCurseRedundant:bool = willCurse and isAllColor(player.curseColor)
