@@ -95,6 +95,7 @@ func _ready() -> void:
 	if OS.has_feature('web'):
 		fileMenu.menu.remove_item(5)
 		fileMenu.menu.remove_item(3)
+	if !FileAccess.file_exists("user://config.ini"): settingsMenu.closed()
 	settingsMenu.opened()
 	%screenshotInnerViewport.world_2d = %gameViewport.world_2d
 	Game.camera = playtestCamera

@@ -14,7 +14,6 @@ func _ready() -> void:
 	textDraw = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_z_index(textDraw,1)
 	RenderingServer.canvas_item_set_parent(textDraw,%followWorld.get_canvas_item())
-	if !FileAccess.file_exists("user://config.ini"): closed()
 	if OS.has_feature("web"):
 		%fileDialogWorkaroundCont.visible = false
 		%thumbnailClarifier.visible = false
