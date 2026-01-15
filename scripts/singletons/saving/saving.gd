@@ -150,14 +150,14 @@ func save(path:String="") -> void:
 				return
 		else: return saveAs()
 	else: savePath = path
-	var prevAnyChanges = Game.anyChanges
 	Game.anyChanges = false
 
-	var file:FileAccess = FileAccess.open(path,FileAccess.ModeFlags.WRITE)
+	print("opening " + path)
+	var file:FileAccess = FileAccess.open(path,FileAccess.ModeFlags.WRITE_READ)
 	if !file:
-		print(FileAccess.get_open_error())
-		Game.anyChanges = prevAnyChanges
-		return
+		print("error opening, " + str(FileAccess.get_open_error()))
+		print("trying to save to some default")
+		file = FileAccess.open("user://temp.cedit",FileAccess.ModeFlags.WRITE_READ)
 
 	# HEADER
 	file.store_pascal_string("IWLCEditorLevel")
