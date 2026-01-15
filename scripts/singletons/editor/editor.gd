@@ -448,7 +448,7 @@ func _input(event:InputEvent) -> void:
 			if eventIs(event, &"editHome"): home()
 		elif Game.playState == Game.PLAY_STATE.PLAY:
 			# IN PLAY
-			if eventIs(event, &"gameAutoRun"): autoRun()
+			if eventIs(event, &"gameAutoRun", false): autoRun()
 			match event.keycode:
 				KEY_ESCAPE: _toggleSettingsMenu(true)
 				_: Game.player.receiveKey(event)
@@ -495,7 +495,7 @@ func _input(event:InputEvent) -> void:
 				KEY_F2: takeScreenshot()
 				KEY_F3: takeThumbnailScreenshot()
 
-static func eventIs(event:InputEvent, action:StringName, allowEcho:bool=false) -> bool: return event.is_action_pressed(action, allowEcho, true)
+static func eventIs(event:InputEvent, action:StringName, exactMatch:bool=true) -> bool: return event.is_action_pressed(action, false, exactMatch)
 
 func home() -> void:
 	targetCameraZoom = 1

@@ -242,9 +242,9 @@ func receiveKey(event:InputEventKey):
 	if Editor.eventIs(event, &"editPausePlaytest") and Game.editor: Game.pauseTest()
 	elif Editor.eventIs(event, &"editStopPlaytest") and Game.editor: Game.stopTest()
 	elif Editor.eventIs(event, &"editSavestate") and Game.editor: Game.savestate()
-	elif Editor.eventIs(event, &"gameRestart"): Game.restart()
-	elif Editor.eventIs(event, &"gameUndo") and !cameraMode and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
-	elif Editor.eventIs(event, &"gameAction"):
+	elif Editor.eventIs(event, &"gameRestart", false): Game.restart()
+	elif Editor.eventIs(event, &"gameUndo", false) and !cameraMode and GameChanges.undo(): AudioManager.play(preload("res://resources/sounds/player/undo.wav"), 1, 0.6)
+	elif Editor.eventIs(event, &"gameAction", false):
 		if cameraMode:
 			if Game.levelBounds.size == Vector2i(800, 608): return
 			if cameraZoomTarget == 1:
@@ -257,8 +257,8 @@ func receiveKey(event:InputEventKey):
 				AudioManager.play(preload("res://resources/sounds/player/camera.wav"),1,0.75)
 				cameraZoomTarget = 1
 		else: cycleMaster()
-	elif Editor.eventIs(event, &"gameComplexSwitch") and !cameraMode: complexSwitch()
-	elif Editor.eventIs(event, &"gameCamera"):
+	elif Editor.eventIs(event, &"gameComplexSwitch", false) and !cameraMode: complexSwitch()
+	elif Editor.eventIs(event, &"gameCamera", false):
 		if Game.levelBounds.size != Vector2i(800,608): toggleCamera()
 		elif Game.playGame: Game.playGame.toggleDescription()
 	match event.keycode:
