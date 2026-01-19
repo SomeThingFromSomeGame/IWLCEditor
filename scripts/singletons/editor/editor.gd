@@ -106,9 +106,9 @@ func _ready() -> void:
 
 func _process(delta:float) -> void:
 	queue_redraw()
-	var scaleFactor:float = (targetCameraZoom/editorCamera.zoom.x)**0.2
+	var scaleFactor:float = (targetCameraZoom/editorCamera.zoom.x/Game.uiScale)**0.2
 	if abs(scaleFactor - 1) < 0.0001:
-		editorCamera.zoom = Vector2(targetCameraZoom,targetCameraZoom)
+		editorCamera.zoom = Vector2(targetCameraZoom,targetCameraZoom)/Game.uiScale
 		if targetCameraZoom == 1: editorCamera.position = round(editorCamera.position)
 	else:
 		editorCamera.zoom *= scaleFactor
@@ -132,7 +132,7 @@ func _process(delta:float) -> void:
 	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
 	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
 	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x
-	else: cameraZoom = editorCamera.zoom.x
+	else: cameraZoom = editorCamera.zoom.x * Game.uiScale
 	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
 	%gameViewportCont.material.set_shader_parameter("tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
 	componentHovered = null
@@ -181,7 +181,7 @@ func _gui_input(event:InputEvent) -> void:
 		else:
 			# move camera
 			if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
-				editorCamera.position -= event.relative / cameraZoom
+				editorCamera.position -= event.relative / cameraZoom * Game.uiScale
 			if !(settingsOpen and !settingsMenu.levelSettings.visible) and event is InputEventMouseButton and event.is_pressed():
 				match event.button_index:
 					MOUSE_BUTTON_WHEEL_UP: zoomCamera(1.25)

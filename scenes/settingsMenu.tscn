@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://uojm0pynavni"]
+[gd_scene load_steps=23 format=3 uid="uid://uojm0pynavni"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_c8k7n"]
 [ext_resource type="Script" uid="uid://cp1r75v1n7qs1" path="res://scripts/singletons/editor/settingsMenu.gd" id="2_onm7i"]
@@ -41,6 +41,10 @@ thickness = 2
 [sub_resource type="LabelSettings" id="LabelSettings_tyaol"]
 font_size = 10
 font_color = Color(0.79482806, 0.794828, 0.794828, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3e3b5"]
+font_size = 12
+font_color = Color(0.7490196, 0.7490196, 0.7490196, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dkncv"]
 content_margin_left = 2.0
@@ -92,6 +96,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_egwj7")
 
 [node name="levelSettings" type="MarginContainer" parent="c"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 10
@@ -334,7 +339,6 @@ texture = ExtResource("5_iswfj")
 
 [node name="editorSettings" type="MarginContainer" parent="c"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -372,6 +376,36 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Enable Fullscreen (in editor)"
+
+[node name="c2" type="HBoxContainer" parent="c/editorSettings/c2/c"]
+layout_mode = 2
+
+[node name="l" type="Label" parent="c/editorSettings/c2/c/c2"]
+layout_mode = 2
+text = "UI scale "
+label_settings = SubResource("LabelSettings_3e3b5")
+
+[node name="uiScale" type="HSlider" parent="c/editorSettings/c2/c/c2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+min_value = -2.0
+max_value = 2.0
+step = 0.25
+tick_count = 5
+ticks_on_borders = true
+
+[node name="uiScaleLabel" type="Label" parent="c/editorSettings/c2/c/c2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = " (1.00x)"
+label_settings = SubResource("LabelSettings_3e3b5")
+
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c2"]
+layout_mode = 2
+size_flags_vertical = 0
+tooltip_text = "Currently, increasing this lowers the resolution of the game. Sorry about that."
+texture = ExtResource("5_iswfj")
 
 [node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c"]
 layout_mode = 2
@@ -892,6 +926,7 @@ action = &"focusPlayerSavestate"
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+size_flags_vertical = 3
 toneButtonGroup = SubResource("ButtonGroup_tyaol")
 
 [connection signal="focus_exited" from="c/levelSettings/c/followWorld/c/c/levelNumber" to="." method="_defocus"]
@@ -908,3 +943,5 @@ toneButtonGroup = SubResource("ButtonGroup_tyaol")
 [connection signal="pressed" from="c/levelSettings/c/followWorld/c2/c/c2/generateThumbnail" to="." method="_generateThumbnail"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fileDialogWorkaroundCont/fileDialogWorkaround" to="." method="_fileDialogWorkaroundSet"]
 [connection signal="toggled" from="c/editorSettings/c2/c/fullscreen" to="." method="_fullscreenSet"]
+[connection signal="drag_ended" from="c/editorSettings/c2/c/c2/uiScale" to="." method="_uiScaleSet" unbinds=1]
+[connection signal="value_changed" from="c/editorSettings/c2/c/c2/uiScale" to="." method="_uiScaleChanged"]

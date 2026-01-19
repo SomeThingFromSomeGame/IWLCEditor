@@ -138,22 +138,29 @@ theme = ExtResource("1_j8y2p")
 z_index = 4
 layout_mode = 2
 
-[node name="topBar" type="MarginContainer" parent="c/c"]
+[node name="c" type="ScrollContainer" parent="c/c"]
+clip_contents = false
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+vertical_scroll_mode = 0
+
+[node name="topBar" type="MarginContainer" parent="c/c/c"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
+size_flags_horizontal = 3
 script = ExtResource("3_3vi5u")
 
-[node name="c" type="HBoxContainer" parent="c/c/topBar"]
+[node name="c" type="HBoxContainer" parent="c/c/c/topBar"]
 layout_mode = 2
 
-[node name="modes" type="HBoxContainer" parent="c/c/topBar/c"]
+[node name="modes" type="HBoxContainer" parent="c/c/c/topBar/c"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("4_4jiep")
 
-[node name="fileMenu" type="MenuButton" parent="c/c/topBar/c/modes" node_paths=PackedStringArray("shortcut_context")]
+[node name="fileMenu" type="MenuButton" parent="c/c/c/topBar/c/modes" node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 layout_mode = 2
 shortcut_context = NodePath(".")
@@ -180,11 +187,11 @@ popup/item_8/text = "Play Current"
 popup/item_8/id = 8
 script = ExtResource("6_7msgv")
 
-[node name="spacer" type="Control" parent="c/c/topBar/c/modes"]
+[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes"]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="select" type="Button" parent="c/c/topBar/c/modes"]
+[node name="select" type="Button" parent="c/c/c/topBar/c/modes"]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_74j0u")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_sdh1e")
@@ -197,7 +204,7 @@ script = ExtResource("5_3vi5u")
 defaultHotkey = &"editModeSelect"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="tile" type="Button" parent="c/c/topBar/c/modes"]
+[node name="tile" type="Button" parent="c/c/c/topBar/c/modes"]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -207,7 +214,7 @@ defaultHotkey = &"editModeTile"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="key" type="Button" parent="c/c/topBar/c/modes"]
+[node name="key" type="Button" parent="c/c/c/topBar/c/modes"]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -217,7 +224,7 @@ defaultHotkey = &"editModeKey"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="door" type="Button" parent="c/c/topBar/c/modes"]
+[node name="door" type="Button" parent="c/c/c/topBar/c/modes"]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -227,22 +234,22 @@ defaultHotkey = &"editModeDoor"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="otherObjects" type="HBoxContainer" parent="c/c/topBar/c/modes"]
+[node name="otherObjects" type="HBoxContainer" parent="c/c/c/topBar/c/modes"]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("9_k1sck")
 
-[node name="spacer" type="Control" parent="c/c/topBar/c/modes/otherObjects"]
+[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes/otherObjects"]
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/c/topBar/c/modes/otherObjects"]
+[node name="c" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects"]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/c/topBar/c/modes/otherObjects/c"]
+[node name="c" type="HBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c"]
 layout_mode = 2
 
-[node name="other" type="Button" parent="c/c/topBar/c/modes/otherObjects/c/c"]
+[node name="other" type="Button" parent="c/c/c/topBar/c/modes/otherObjects/c/c"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
@@ -254,7 +261,7 @@ defaultHotkey = &"editModeOther"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="objectSearch" type="LineEdit" parent="c/c/topBar/c/modes/otherObjects/c/c" groups=["explained"]]
+[node name="objectSearch" type="LineEdit" parent="c/c/c/topBar/c/modes/otherObjects/c/c" groups=["explained"]]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
@@ -263,21 +270,21 @@ right_icon = ExtResource("10_8g6du")
 caret_blink = true
 metadata/explanation = SubResource("Resource_lo5f0")
 
-[node name="c2" type="Control" parent="c/c/topBar/c/modes/otherObjects/c"]
+[node name="c2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects/c"]
 layout_mode = 2
 
-[node name="results" type="VBoxContainer" parent="c/c/topBar/c/modes/otherObjects/c/c2"]
+[node name="results" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c/c2"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 
-[node name="spacer2" type="Control" parent="c/c/topBar/c/modes/otherObjects"]
+[node name="spacer2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects"]
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="paste" type="Button" parent="c/c/topBar/c/modes"]
+[node name="paste" type="Button" parent="c/c/c/topBar/c/modes"]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -289,23 +296,24 @@ defaultHotkey = &"editPaste"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="settingTabs" type="TabBar" parent="c/c/topBar/c"]
+[node name="settingTabs" type="TabBar" parent="c/c/c/topBar/c"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 current_tab = 0
+clip_tabs = false
 tab_count = 3
 tab_0/title = "Level"
 tab_1/title = "Editor"
 tab_2/title = "Game"
 
-[node name="playControls" type="HBoxContainer" parent="c/c/topBar/c"]
+[node name="playControls" type="HBoxContainer" parent="c/c/c/topBar/c"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="savestate" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
+[node name="savestate" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -315,7 +323,7 @@ defaultHotkey = &"editSavestate"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_mxdmd")
 
-[node name="play" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
+[node name="play" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -325,7 +333,7 @@ defaultHotkey = &"editStartPlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_1abrv")
 
-[node name="pause" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
+[node name="pause" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -335,7 +343,7 @@ defaultHotkey = &"editPausePlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_bn54a")
 
-[node name="stop" type="Button" parent="c/c/topBar/c/playControls" groups=["explained"]]
+[node name="stop" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -468,6 +476,7 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="c2" type="MarginContainer" parent="c/c3/c2"]
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -640,19 +649,19 @@ size = Vector2i(200, 90)
 unresizable = true
 theme = ExtResource("1_j8y2p")
 
-[connection signal="pressed" from="c/c/topBar/c/modes/select" to="c/c/topBar/c/modes" method="_setMode" binds= [0]]
-[connection signal="pressed" from="c/c/topBar/c/modes/tile" to="c/c/topBar/c/modes" method="_setMode" binds= [1]]
-[connection signal="pressed" from="c/c/topBar/c/modes/key" to="c/c/topBar/c/modes" method="_setMode" binds= [2]]
-[connection signal="pressed" from="c/c/topBar/c/modes/door" to="c/c/topBar/c/modes" method="_setMode" binds= [3]]
-[connection signal="pressed" from="c/c/topBar/c/modes/otherObjects/c/c/other" to="c/c/topBar/c/modes" method="_setMode" binds= [4]]
-[connection signal="focus_entered" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_searchFocused"]
-[connection signal="focus_exited" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_searchDefocused"]
-[connection signal="text_changed" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_updateSearch" unbinds=1]
-[connection signal="text_submitted" from="c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/topBar/c/modes/otherObjects" method="_searchSubmitted" unbinds=1]
-[connection signal="pressed" from="c/c/topBar/c/modes/paste" to="c/c/topBar/c/modes" method="_setMode" binds= [5]]
-[connection signal="tab_changed" from="c/c/topBar/c/settingTabs" to="c/gameCont/c/settingsMenu" method="_tabSelected"]
-[connection signal="pressed" from="c/c/topBar/c/playControls/savestate" to="c/c/topBar" method="_savestate"]
-[connection signal="pressed" from="c/c/topBar/c/playControls/play" to="c/c/topBar" method="_play"]
-[connection signal="pressed" from="c/c/topBar/c/playControls/pause" to="c/c/topBar" method="_pause"]
-[connection signal="pressed" from="c/c/topBar/c/playControls/stop" to="c/c/topBar" method="_stop"]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/select" to="c/c/c/topBar/c/modes" method="_setMode" binds= [0]]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/tile" to="c/c/c/topBar/c/modes" method="_setMode" binds= [1]]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/key" to="c/c/c/topBar/c/modes" method="_setMode" binds= [2]]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/door" to="c/c/c/topBar/c/modes" method="_setMode" binds= [3]]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/otherObjects/c/c/other" to="c/c/c/topBar/c/modes" method="_setMode" binds= [4]]
+[connection signal="focus_entered" from="c/c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/c/topBar/c/modes/otherObjects" method="_searchFocused"]
+[connection signal="focus_exited" from="c/c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/c/topBar/c/modes/otherObjects" method="_searchDefocused"]
+[connection signal="text_changed" from="c/c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/c/topBar/c/modes/otherObjects" method="_updateSearch" unbinds=1]
+[connection signal="text_submitted" from="c/c/c/topBar/c/modes/otherObjects/c/c/objectSearch" to="c/c/c/topBar/c/modes/otherObjects" method="_searchSubmitted" unbinds=1]
+[connection signal="pressed" from="c/c/c/topBar/c/modes/paste" to="c/c/c/topBar/c/modes" method="_setMode" binds= [5]]
+[connection signal="tab_changed" from="c/c/c/topBar/c/settingTabs" to="c/gameCont/c/settingsMenu" method="_tabSelected"]
+[connection signal="pressed" from="c/c/c/topBar/c/playControls/savestate" to="c/c/c/topBar" method="_savestate"]
+[connection signal="pressed" from="c/c/c/topBar/c/playControls/play" to="c/c/c/topBar" method="_play"]
+[connection signal="pressed" from="c/c/c/topBar/c/playControls/pause" to="c/c/c/topBar" method="_pause"]
+[connection signal="pressed" from="c/c/c/topBar/c/playControls/stop" to="c/c/c/topBar" method="_stop"]
 [connection signal="toggled" from="c/c3/c2/toggleSettingsMenu" to="." method="_toggleSettingsMenu"]

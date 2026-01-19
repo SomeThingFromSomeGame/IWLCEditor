@@ -136,8 +136,7 @@ var components:Dictionary[int,GameComponent] = {}
 var levelBounds:Rect2i = Rect2i(0,0,800,608):
 	set(value):
 		levelBounds = value
-		RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
-		RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size)
+		updateLevelBoundShaderParameters()
 		if camera:
 			camera.limit_left = levelBounds.position.x
 			camera.limit_top = levelBounds.position.y
@@ -147,6 +146,11 @@ var levelBounds:Rect2i = Rect2i(0,0,800,608):
 			editor.levelBoundsObject.position = levelBounds.position
 			editor.levelBoundsObject.size = levelBounds.size
 			if editor.settingsOpen: editor.settingsMenu.updateLevelSettingsPosition()
+
+func updateLevelBoundShaderParameters():
+	RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
+	if editor and playState == PLAY_STATE.PLAY: RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size * uiScale)
+	else: RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
@@ -182,6 +186,7 @@ var playState:PLAY_STATE = PLAY_STATE.EDIT:
 		fastAnimSpeed = 0
 		fastAnimTimer = 0
 		complexViewHue = 0
+		updateLevelBoundShaderParameters()
 
 var camera:Camera2D
 
@@ -192,6 +197,13 @@ var complexViewHue:float = 0
 
 var editorWindowSize:Vector2
 var editorWindowMode:Window.Mode
+var logUiScale:float = 0
+var uiScale:float = 1:
+	set(value):
+		uiScale = value
+		if editor:
+			get_window().content_scale_factor = uiScale
+		Game.updateLevelBoundShaderParameters()
 
 var simpleLocks:bool = false:
 	set(value):
@@ -348,12 +360,13 @@ func play() -> void:
 	playTime = 0
 
 func playSaved(fromOpenWindow:OpenWindow=null) -> void:
+	get_window().content_scale_factor = 1
 	editorWindowMode = get_window().mode
 	editorWindowSize = get_window().size
 	if fromOpenWindow: editor.remove_child(fromOpenWindow) # otherwise it gets killed by the scene change
 	get_tree().change_scene_to_file("res://scenes/playGame.tscn")
 	get_window().mode = Window.MODE_WINDOWED
-	if !OS.has_feature("web"): get_window().size = Vector2(800,608)
+	if !OS.has_feature("web"): get_window().size = Vector2(800,608) * uiScale
 	objects.clear()
 	components.clear()
 	await get_tree().scene_changed
@@ -365,6 +378,7 @@ func playSaved(fromOpenWindow:OpenWindow=null) -> void:
 	playGame.startLevel()
 
 func edit() -> void:
+	get_window().content_scale_factor = uiScale
 	won = false
 	crashState = CRASH_STATE.NONE
 	playState = PLAY_STATE.EDIT
