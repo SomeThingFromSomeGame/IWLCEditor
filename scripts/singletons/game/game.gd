@@ -136,7 +136,8 @@ var components:Dictionary[int,GameComponent] = {}
 var levelBounds:Rect2i = Rect2i(0,0,800,608):
 	set(value):
 		levelBounds = value
-		updateLevelBoundShaderParameters()
+		RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
+		RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size)
 		if camera:
 			camera.limit_left = levelBounds.position.x
 			camera.limit_top = levelBounds.position.y
@@ -146,11 +147,6 @@ var levelBounds:Rect2i = Rect2i(0,0,800,608):
 			editor.levelBoundsObject.position = levelBounds.position
 			editor.levelBoundsObject.size = levelBounds.size
 			if editor.settingsOpen: editor.settingsMenu.updateLevelSettingsPosition()
-
-func updateLevelBoundShaderParameters():
-	RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
-	if editor and playState == PLAY_STATE.PLAY: RenderingServer.global_shader_parameter_set(&"LEVEL_SIZE", levelBounds.size * uiScale)
-	else: RenderingServer.global_shader_parameter_set(&"LEVEL_POS", levelBounds.position)
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
 const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
@@ -186,7 +182,6 @@ var playState:PLAY_STATE = PLAY_STATE.EDIT:
 		fastAnimSpeed = 0
 		fastAnimTimer = 0
 		complexViewHue = 0
-		updateLevelBoundShaderParameters()
 
 var camera:Camera2D
 
@@ -203,7 +198,6 @@ var uiScale:float = 1:
 		uiScale = value
 		if editor:
 			get_window().content_scale_factor = uiScale
-		Game.updateLevelBoundShaderParameters()
 
 var simpleLocks:bool = false:
 	set(value):
