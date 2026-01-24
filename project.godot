@@ -432,6 +432,7 @@ heldKeepMode={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+limits/global_shader_variables/buffer_size=32768
 
 [shader_globals]
 
@@ -446,4 +447,8 @@ LEVEL_SIZE={
 LEVEL_POS={
 "type": "vec2",
 "value": Vector2(0, 0)
+}
+SCREEN_SIZE={
+"type": "vec2",
+"value": Vector2(800, 608)
 }

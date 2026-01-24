@@ -131,6 +131,7 @@ func _process(delta:float) -> void:
 	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
 	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
 	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
+	%gameViewportCont.material.set_shader_parameter("viewportPosition",screenspaceToWorldspace(gameCont.position))
 	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x * Game.uiScale
 	else: cameraZoom = editorCamera.zoom.x * Game.uiScale
 	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
@@ -653,3 +654,6 @@ func levelStartCameraCenter(screenSize:Vector2=Vector2(800,608)) -> Vector2:
 		@warning_ignore("narrowing_conversion") var levelBoundsInner:Rect2 = Game.levelBounds.grow_individual(-0.5*screenSize.x,-0.5*screenSize.y,-0.5*screenSize.x,-0.5*screenSize.y)
 		return Game.levelStart.position.clamp(levelBoundsInner.position, levelBoundsInner.end) - screenSize/2
 	return Vector2(Game.levelBounds.position) + (Vector2(Game.levelBounds.size) - screenSize)/2
+
+func _gameViewportResized():
+	RenderingServer.global_shader_parameter_set(&"SCREEN_SIZE", %gameViewportCont.size)

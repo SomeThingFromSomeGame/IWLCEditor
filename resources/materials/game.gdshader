@@ -1,12 +1,14 @@
 shader_type canvas_item;
 
-uniform vec4 GRID_COLOR:source_color;
-uniform vec3 OUTOFBOUNDS_COLOR:source_color;
+const vec4 GRID_COLOR = vec4(0.54901963, 0.54901963, 0.54901963, 0.54509807);
+const vec3 OUTOFBOUNDS_COLOR = vec3(0.20990813, 0.20990813, 0.2099081);
 
 global uniform vec2 LEVEL_POS;
 global uniform vec2 LEVEL_SIZE;
+global uniform vec2 SCREEN_SIZE;
 
 uniform vec2 screenPosition; // where the top left corner of the screen is, in worldspace
+uniform vec2 viewportPosition; // where the top left corner of the game viewport is, in world space
 uniform vec2 mousePosition = vec2(0,0); // where the mouse is, in worldspace
 global uniform float RCAMERA_ZOOM = 1; // reciprocal of camera zoom
 uniform vec2 tileSize = vec2(32,32);
@@ -20,6 +22,8 @@ float lengthSquared(vec2 vector) {
 }
 
 void fragment() {
+	vec2 worldScreenSize = SCREEN_SIZE*RCAMERA_ZOOM;
+	COLOR.rgb = texture(TEXTURE, (floor(UV*worldScreenSize + fract(viewportPosition)) - fract(viewportPosition) + vec2(0.5,0.5))/worldScreenSize).rgb;
 	vec2 XY = FRAGCOORD.xy*RCAMERA_ZOOM + screenPosition - LEVEL_POS;
 	if (XY.x < 0.0 || XY.y < 0.0 || XY.x > LEVEL_SIZE.x || XY.y > LEVEL_SIZE.y) {
 		// draw level bounds

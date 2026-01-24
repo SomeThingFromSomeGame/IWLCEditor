@@ -181,9 +181,6 @@ static func drawDoor(doorDrawScaled:RID,doorDrawAuraBreaker:RID,doorDrawGlitch:R
 		if drawFill:
 			if doorBaseColor in Game.TEXTURED_COLORS:
 				var tileTexture:bool = doorBaseColor in Game.TILED_TEXTURED_COLORS
-				if !tileTexture:
-					RenderingServer.canvas_item_set_material(doorDrawScaled,Game.PIXELATED_MATERIAL.get_rid())
-					RenderingServer.canvas_item_set_instance_shader_parameter(doorDrawScaled, &"size", doorSize)
 				RenderingServer.canvas_item_add_texture_rect(doorDrawScaled,rect,Game.COLOR_TEXTURES.current([doorBaseColor]),tileTexture)
 			elif doorBaseColor == Game.COLOR.GLITCH:
 				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[Game.COLOR.GLITCH])
