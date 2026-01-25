@@ -26,8 +26,10 @@ var findProblems:FindProblems
 
 @onready var gameViewport:SubViewport = %gameViewport
 @onready var explainText:RichTextLabel = %explainText
-@onready var outlineParent:Node2D = %outlineParent
 @onready var placePreviewWorld:World = %placePreviewWorld
+
+@onready var outlineViewport1:OutlineViewport = %outlineViewport1 # width: 1, r: multiselect
+@onready var outlineViewport2:OutlineViewport = %outlineViewport2 # width: 2, r: component, g: object
 
 @onready var fileMenu:FileMenu = %fileMenu
 
@@ -160,8 +162,6 @@ func _process(delta:float) -> void:
 		queue_redraw()
 		if autoRunTimer >= 2: autoRunTimer = 2
 
-	%outlineCamera.position = editorCamera.position
-	%outlineCamera.zoom = editorCamera.zoom
 	%placePreviewWorld.visible = Game.playState != Game.PLAY_STATE.PLAY and !settingsOpen
 	placePreviewWorld.tiles.position = floor(mouseWorldPosition/32)*32
 	placePreviewWorld.tilesDropShadow.position = floor(mouseWorldPosition/32)*32 + Vector2(3,3)

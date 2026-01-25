@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://r7q8sdncd4jo"]
+
+[ext_resource type="Script" uid="uid://cpemf1vafuxiu" path="res://scripts/nodes/outlineViewport.gd" id="1_2e7pv"]
+[ext_resource type="Shader" uid="uid://b7ek3evjsfuc5" path="res://resources/materials/outline.gdshader" id="1_65mc8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_y30jp"]
+shader = ExtResource("1_65mc8")
+shader_parameter/width = 1.0
+shader_parameter/rChannel = Color(0, 0, 0, 1)
+shader_parameter/gChannel = Color(0, 0, 0, 1)
+shader_parameter/bChannel = Color(0, 0, 0, 1)
+
+[node name="outlineViewport" type="SubViewportContainer"]
+material = SubResource("ShaderMaterial_y30jp")
+offset_right = 512.0
+offset_bottom = 512.0
+mouse_filter = 2
+stretch = true
+script = ExtResource("1_2e7pv")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+disable_3d = true
+transparent_bg = true
+handle_input_locally = false
+gui_disable_input = true
+render_target_update_mode = 4
+
+[node name="parent" type="Node2D" parent="SubViewport"]
+unique_name_in_owner = true
+
+[node name="camera" type="Camera2D" parent="SubViewport/parent"]
+unique_name_in_owner = true
+anchor_mode = 0

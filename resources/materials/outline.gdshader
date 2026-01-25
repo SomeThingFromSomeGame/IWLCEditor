@@ -1,51 +1,30 @@
 shader_type canvas_item;
-const vec3 multiselectOutline = vec3(1,0,0);
-const vec3 componentHoverOutline = vec3(0,1,0);
-const vec3 objectHoverOutline = vec3(1,1,0);
-const vec3 componentSelectOutline = vec3(0,0,1);
-const vec3 objectSelectOutline = vec3(1,0,1);
-uniform vec4 testcolor : source_color;
+uniform float width = 1;
+uniform vec4 rChannel : source_color;
+uniform vec4 gChannel : source_color;
+uniform vec4 bChannel : source_color;
 
-bool isOutlineOf(vec3 color, sampler2D tex, vec2 uv, vec2 pixelSize) {
-	for (float x = -1.0; x <= 1.0; x++) {
-		for (float y = -1.0; y <= 1.0; y++) {
-			if (texture(tex, uv+pixelSize*vec2(x,y)).rgb == color) return true;
-		}
-	}
-	return false;
-}
-
-bool isOutline2Of(vec3 color, sampler2D tex, vec2 uv, vec2 pixelSize) {
-	for (float x = -2.0; x <= 2.0; x++) {
-		for (float y = -2.0; y <= 2.0; y++) {
-			if (texture(tex, uv+pixelSize*vec2(x,y)).rgb == color) return true;
-		}
-	}
-	return false;
-}
-
-bool approxEqual(vec3 a, vec3 b) {
-	return a == b;
-	//vec3 result = abs(a - b);
-	//return result.r < 0.0035294118 && result.g < 0.0035294118 && result.b < 0.0035294118; // 0.5 / 255
-	// this doesnt work for some reason. if you can figure it out, great, but to be honest we probably wont have more than 7 outline types
+// https://en.wikipedia.org/wiki/Alpha_compositing
+vec4 over(vec4 atop, vec4 base) {
+	float t = 1.0 - atop.a;
+	vec4 result;
+	result.a = atop.a + base.a * t;
+	result.rgb = (atop.rgb*atop.a + base.rgb*base.a * t) / result.a;
+	return result;
 }
 
 void fragment() {
-	COLOR.a = 0.0;
-	if (!approxEqual(COLOR.rgb, multiselectOutline)) {
-		if (isOutlineOf(multiselectOutline, TEXTURE, UV, SCREEN_PIXEL_SIZE)) COLOR = vec4(1,1,1,1);
-		else if (!approxEqual(COLOR.rgb, componentHoverOutline)) {
-			if (isOutline2Of(componentHoverOutline, TEXTURE, UV, SCREEN_PIXEL_SIZE)) COLOR = vec4(0,0.63529414,1,0.533000053333336);
-			else if (!approxEqual(COLOR.rgb, objectHoverOutline)) {
-				if (isOutline2Of(objectHoverOutline, TEXTURE, UV, SCREEN_PIXEL_SIZE)) COLOR = vec4(1,1,1,0.533000053333336);
-				else if (!approxEqual(COLOR.rgb, componentSelectOutline)) {
-					if (isOutline2Of(componentSelectOutline, TEXTURE, UV, SCREEN_PIXEL_SIZE)) COLOR = vec4(0,0.63529414,1,1);
-					else if (!approxEqual(COLOR.rgb, objectSelectOutline)) {
-						if (isOutline2Of(objectSelectOutline, TEXTURE, UV, SCREEN_PIXEL_SIZE)) COLOR = vec4(1,1,1,1);
-					}
-				}
-			}
+	// for the three color channels, find the maximum value within the kernel.
+	vec3 accumulator = COLOR.rgb;
+	for (float x = -width; x <= width; x++) {
+		for (float y = -width; y <= width; y++) {
+			accumulator = max(accumulator, texture(TEXTURE, UV+SCREEN_PIXEL_SIZE*vec2(x,y)).rgb);
 		}
 	}
+	// for the three color channels, if the accumulated value is no greator than that of the pixel itself, then we ignore it
+	accumulator *= sign(accumulator - COLOR.rgb);
+	// display the channels, with their respective colors
+	COLOR = over(vec4(rChannel.rgb, rChannel.a*accumulator.r),
+		over(vec4(gChannel.rgb, gChannel.a*accumulator.g),
+		vec4(bChannel.rgb, bChannel.a*accumulator.b)));
 }

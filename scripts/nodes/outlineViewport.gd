@@ -1,0 +1,20 @@
+extends SubViewportContainer
+class_name OutlineViewport
+
+# displays three "outline channels"
+# draw red green or blue shapes on this, and outlines of them will be displayed with the width of the shader parameter
+# each color channel creates an outline of the corresponding color given by the shader parameters
+# r covers g covers b
+# remember to make the shadermaterial unique
+
+@onready var editor:Editor = get_node("/root/editor")
+
+func createChild() -> RID:
+	var canvasItem:RID = RenderingServer.canvas_item_create()
+	RenderingServer.canvas_item_set_parent(canvasItem, %parent.get_canvas_item())
+	RenderingServer.canvas_item_set_material(canvasItem, Game.ADDITIVE_MATERIAL)
+	return canvasItem
+
+func _process(_delta) -> void:
+	%camera.position = editor.editorCamera.position
+	%camera.zoom = editor.editorCamera.zoom

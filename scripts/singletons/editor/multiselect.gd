@@ -20,10 +20,9 @@ var selectRect:Rect2
 
 func _ready() -> void:
 	drawTiles = RenderingServer.canvas_item_create()
-	drawOutline = RenderingServer.canvas_item_create()
 	await editor.ready
+	drawOutline = editor.outlineViewport1.createChild()
 	RenderingServer.canvas_item_set_parent(drawTiles, Game.world.get_canvas_item())
-	RenderingServer.canvas_item_set_parent(drawOutline, editor.outlineParent.get_canvas_item())
 	RenderingServer.canvas_item_set_z_index(drawTiles, -1)
 
 func startSelect() -> void:
@@ -105,9 +104,12 @@ func draw() -> void: # cant be _draw since panel already has a _draw or somethin
 	RenderingServer.canvas_item_clear(drawTiles)
 	RenderingServer.canvas_item_clear(drawOutline)
 	for select in selected:
+		# because tiles are removed when you drag them
+		if select is TileSelect: RenderingServer.canvas_item_add_texture_rect(drawTiles,Rect2(select.getDrawPosition(),select.getDrawSize()),TileSelect.TEXTURE)
+		
 		if select is ObjectSelect and select.object.get_script() not in Game.RECTANGLE_COMPONENTS:
-			RenderingServer.canvas_item_add_texture_rect(drawOutline,Rect2(select.getDrawPosition(),select.getDrawSize()),select.object.outlineTex(),false,Outline.MULTISELECT_OUTLINE)
-		else: RenderingServer.canvas_item_add_rect(drawOutline,Rect2(select.getDrawPosition(),select.getDrawSize()),Outline.MULTISELECT_OUTLINE)
+			RenderingServer.canvas_item_add_texture_rect(drawOutline,Rect2(select.getDrawPosition(),select.getDrawSize()),select.object.outlineTex(),false,Color.RED)
+		else: RenderingServer.canvas_item_add_rect(drawOutline,Rect2(select.getDrawPosition(),select.getDrawSize()),Color.RED)
 
 func copySelection() -> void:
 	if len(selected) == 0:
