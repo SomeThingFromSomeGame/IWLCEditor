@@ -1,8 +1,6 @@
 extends Node2D
 class_name Outline
 
-const OUTLINE_MATERIAL:ShaderMaterial = preload("res://resources/materials/outlineDrawMaterial.tres")
-
 @onready var editor:Editor = get_node("/root/editor")
 
 var drawNormal:RID
@@ -10,8 +8,7 @@ var drawNormal:RID
 # see outlineViewport.gd for how this works
 
 func _ready() -> void:
-	await editor.ready
-	drawNormal = editor.outlineViewport2.createChild()
+	drawNormal = %outlineViewport2.createChild()
 
 func draw() -> void:
 	RenderingServer.canvas_item_clear(drawNormal)

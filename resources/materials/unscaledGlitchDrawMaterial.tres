@@ -1,6 +1,0 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://q4eqfeef4hc2"]
-
-[ext_resource type="Shader" uid="uid://mfc0nnu5bsy7" path="res://resources/materials/unscaledGlitchDraw.gdshader" id="1_xj1rv"]
-
-[resource]
-shader = ExtResource("1_xj1rv")

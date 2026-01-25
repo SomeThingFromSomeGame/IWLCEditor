@@ -14,7 +14,7 @@ vec3 hsv2rgb(vec3 c) {
 void fragment() {
 	vec4 base = COLOR;
 	float time = mod(TIME*0.024, 72.0);
-	vec2 uv = floor(UV/TEXTURE_PIXEL_SIZE)*TEXTURE_PIXEL_SIZE;
+	vec2 uv = UV;
 	float hue = rand(uv+vec2(time,0));
 	float sat = rand(uv+vec2(0,time));
 	COLOR = vec4(hsv2rgb(vec3(hue,sat*base.r,base.g)),base.a);

@@ -204,8 +204,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 			var tileTexture:bool = lockBaseColor in Game.TILED_TEXTURED_COLORS
 			RenderingServer.canvas_item_add_texture_rect(lockDrawScaled,rect,Game.COLOR_TEXTURES.current([lockBaseColor]),tileTexture)
 		elif lockBaseColor == Game.COLOR.GLITCH:
-			RenderingServer.canvas_item_set_material(lockDrawGlitch,Game.SCALED_GLITCH_MATERIAL.get_rid())
-			RenderingServer.canvas_item_set_instance_shader_parameter(lockDrawGlitch, &"size", lockSize-Vector2(2,2))
+			RenderingServer.canvas_item_set_material(lockDrawGlitch,Game.GLITCH_MATERIAL.get_rid())
 			RenderingServer.canvas_item_add_rect(lockDrawGlitch,Rect2(rect.position+Vector2.ONE,rect.size-Vector2(2,2)),Game.mainTone[lockBaseColor])
 			if lockGlitchColor != Game.COLOR.GLITCH:
 				if lockSizeType == SIZE_TYPE.ANY:

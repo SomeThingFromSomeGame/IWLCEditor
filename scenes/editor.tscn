@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://djnt51xv7wn52"]
+[gd_scene load_steps=49 format=3 uid="uid://djnt51xv7wn52"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_j8y2p"]
 [ext_resource type="Script" uid="uid://2wjcj6frwpjo" path="res://scripts/singletons/editor/editor.gd" id="2_o435n"]
@@ -27,7 +27,6 @@
 [ext_resource type="Texture2D" uid="uid://dnjchcne7ikhq" path="res://assets/ui/playControls/stop.png" id="16_m12ww"]
 [ext_resource type="Script" uid="uid://cgjhnhjwymb8g" path="res://scripts/resources/controlExplanation.gd" id="17_bn54a"]
 [ext_resource type="Texture2D" uid="uid://bdtmt4y2pnoo0" path="res://assets/ui/playControls/savestate.png" id="17_lo5f0"]
-[ext_resource type="Material" uid="uid://bc5stfiew5ji4" path="res://resources/materials/outlineDrawMaterial.tres" id="22_jke8t"]
 [ext_resource type="Script" uid="uid://c7ptucaohcnil" path="res://scripts/singletons/editor/outline.gd" id="23_lo5f0"]
 [ext_resource type="PackedScene" uid="uid://uojm0pynavni" path="res://scenes/settingsMenu.tscn" id="25_6lm8n"]
 [ext_resource type="PackedScene" uid="uid://ccqphk3fjcl1e" path="res://scenes/mouseover.tscn" id="26_lo5f0"]
@@ -412,12 +411,6 @@ limit_bottom = 608
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="outline" type="Node2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
-unique_name_in_owner = true
-z_index = 8
-material = ExtResource("22_jke8t")
-script = ExtResource("23_lo5f0")
-
 [node name="multiselect" parent="c/gameCont/gameViewportCont" instance=ExtResource("12_q8l03")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -432,6 +425,12 @@ layout_mode = 2
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_ndxgo")
 layout_mode = 2
+
+[node name="outline" type="Node2D" parent="c/gameCont/outlineViewport2"]
+unique_name_in_owner = true
+z_index = 8
+position = Vector2(0, -44)
+script = ExtResource("23_lo5f0")
 
 [node name="placePreviewViewportCont" type="SubViewportContainer" parent="c/gameCont"]
 modulate = Color(1, 1, 1, 0.5019608)

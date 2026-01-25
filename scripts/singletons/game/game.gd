@@ -149,9 +149,7 @@ var levelBounds:Rect2i = Rect2i(0,0,800,608):
 			if editor.settingsOpen: editor.settingsMenu.updateLevelSettingsPosition()
 
 const NO_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/noMaterial.tres")
-const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres") # uses texture pixel size
-const UNSCALED_GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/unscaledGlitchDrawMaterial.tres") # per pixel
-const SCALED_GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/scaledGlitchDrawMaterial.tres") # uses size input
+const GLITCH_MATERIAL:ShaderMaterial = preload("res://resources/materials/glitchDrawMaterial.tres")
 const ADDITIVE_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/additiveMaterial.tres")
 const SUBTRACTIVE_MATERIAL:CanvasItemMaterial = preload("res://resources/materials/subtractiveMaterial.tres")
 const NEGATIVE_MATERIAL:ShaderMaterial = preload("res://resources/materials/negativeMaterial.tres")

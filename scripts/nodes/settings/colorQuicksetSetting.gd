@@ -45,7 +45,7 @@ class ColorQuickSettingButton extends QuicksetSettingButton:
 	func _ready() -> void:
 		drawMain = RenderingServer.canvas_item_create()
 		if value == Game.COLOR.GLITCH:
-			RenderingServer.canvas_item_set_material(drawMain,Game.UNSCALED_GLITCH_MATERIAL.get_rid())
+			RenderingServer.canvas_item_set_material(drawMain,Game.GLITCH_MATERIAL.get_rid())
 		RenderingServer.canvas_item_set_z_index(drawMain,1)
 		RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 		await get_tree().process_frame
