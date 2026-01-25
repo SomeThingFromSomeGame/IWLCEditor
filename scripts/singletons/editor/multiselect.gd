@@ -207,6 +207,7 @@ class ObjectSelect extends Select:
 	func endDrag() -> void:
 		object.position = startingPosition
 		Changes.addChange(Changes.PropertyChange.new(object,&"position",pos()))
+		startingPosition = object.position
 	
 	func delete() -> void: Changes.addChange(Changes.DeleteComponentChange.new(object))
 
