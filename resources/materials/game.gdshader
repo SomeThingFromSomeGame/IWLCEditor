@@ -8,7 +8,7 @@ global uniform vec2 LEVEL_SIZE;
 global uniform vec2 SCREEN_SIZE;
 
 uniform vec2 screenPosition; // where the top left corner of the screen is, in worldspace
-uniform vec2 viewportPosition; // where the top left corner of the game viewport is, in world space
+global uniform vec2 VIEWPORT_POS; // where the top left corner of the game viewport is, in world space
 uniform vec2 mousePosition = vec2(0,0); // where the mouse is, in worldspace
 global uniform float RCAMERA_ZOOM = 1; // reciprocal of camera zoom
 uniform vec2 tileSize = vec2(32,32);
@@ -22,13 +22,16 @@ float lengthSquared(vec2 vector) {
 }
 
 void fragment() {
+	// pixelate
 	vec2 worldScreenSize = SCREEN_SIZE*RCAMERA_ZOOM;
-	COLOR.rgb = texture(TEXTURE, (floor(UV*worldScreenSize + fract(viewportPosition)) - fract(viewportPosition) + vec2(0.5,0.5))/worldScreenSize).rgb;
+	COLOR.rgb = texture(TEXTURE, (floor(UV*worldScreenSize + fract(VIEWPORT_POS)) - fract(VIEWPORT_POS) + vec2(0.5,0.5))/worldScreenSize).rgb;
+
 	vec2 XY = FRAGCOORD.xy*RCAMERA_ZOOM + screenPosition - LEVEL_POS;
 	if (XY.x < 0.0 || XY.y < 0.0 || XY.x > LEVEL_SIZE.x || XY.y > LEVEL_SIZE.y) {
 		// draw level bounds
 		COLOR.rgb = lerpColor(COLOR.rgb, OUTOFBOUNDS_COLOR, 0.5);
 	}
+	// draw grid
 	float gridAlpha = 0.0;
 	if ((tileSize.x <= 8.0 && mod(XY.x,8.0) < RCAMERA_ZOOM) || (tileSize.y <= 8.0 && mod(XY.y,8.0) < RCAMERA_ZOOM)) gridAlpha = 0.3;
 	if ((tileSize.x <= 16.0 && mod(XY.x,16.0) < RCAMERA_ZOOM) || (tileSize.y <= 16.0 && mod(XY.y,16.0) < RCAMERA_ZOOM)) gridAlpha = 0.35;

@@ -1,7 +1,6 @@
 extends PanelContainer
 class_name Mouseover
 
-const KEY_TYPES = ["", "Exact ", "Star ", "Unstar ", "(rotor placeholder)", "Curse ", "Uncurse "]
 const LOCK_TYPES = ["", "Blank ", "Blast ", "All ", "Exact "]
 
 func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void:
@@ -12,11 +11,14 @@ func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void
 	var string:String = ""
 	match object.get_script():
 		KeyBulk:
-			if object.type == KeyBulk.TYPE.ROTOR:
-				if M.eq(object.count, M.nONE): string += "Signflip "
-				elif M.eq(object.count, M.I): string += "Rotor (i) "
-				elif M.eq(object.count, M.nI): string += "Rotor (-i) "
-			else: string += KEY_TYPES[object.type]
+			match object.type:
+				KeyBulk.TYPE.EXACT: string += "Exact "
+				KeyBulk.TYPE.STAR: string += "Unstar " if object.un else "Star "
+				KeyBulk.TYPE.ROTOR:
+					if M.eq(object.count, M.nONE): string += "Signflip "
+					elif M.eq(object.count, M.I): string += "Rotor (i) "
+					elif M.eq(object.count, M.nI): string += "Rotor (-i) "
+				KeyBulk.TYPE.CURSE: string += "Uncurse " if object.un else "Curse "
 			string += Game.COLOR_NAMES[object.color] + " Key"
 			if object.type in [KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT]:
 				string += "\nAmount: " + M.str(object.count)

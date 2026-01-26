@@ -130,14 +130,14 @@ func _process(delta:float) -> void:
 
 	mouseWorldPosition = screenspaceToWorldspace(get_global_mouse_position())
 	mouseTilePosition = Vector2i(floor(mouseWorldPosition / Vector2(tileSize))) * tileSize
-	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter("mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
-	else: %gameViewportCont.material.set_shader_parameter("mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
-	%gameViewportCont.material.set_shader_parameter("screenPosition",screenspaceToWorldspace(Vector2.ZERO))
-	%gameViewportCont.material.set_shader_parameter("viewportPosition",screenspaceToWorldspace(gameCont.position))
+	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter(&"mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
+	else: %gameViewportCont.material.set_shader_parameter(&"mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
+	%gameViewportCont.material.set_shader_parameter(&"screenPosition",screenspaceToWorldspace(Vector2.ZERO))
+	RenderingServer.global_shader_parameter_set(&"VIEWPORT_POS",screenspaceToWorldspace(gameCont.position))
 	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x * Game.uiScale
 	else: cameraZoom = editorCamera.zoom.x * Game.uiScale
 	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
-	%gameViewportCont.material.set_shader_parameter("tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
+	%gameViewportCont.material.set_shader_parameter(&"tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
 	componentHovered = null
 	if !componentDragged:
 		objectHovered = null
