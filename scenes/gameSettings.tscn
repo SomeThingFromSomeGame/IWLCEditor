@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cudl265jx2hk6"]
+[gd_scene format=3 uid="uid://cudl265jx2hk6"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_tmlsq"]
 [ext_resource type="Script" uid="uid://dtw6afpsoarco" path="res://scripts/singletons/editor/gameSettings.gd" id="2_nrqkd"]
@@ -11,7 +11,7 @@
 font_size = 10
 font_color = Color(0.79482806, 0.794828, 0.794828, 1)
 
-[node name="gameSettings" type="MarginContainer"]
+[node name="gameSettings" type="MarginContainer" unique_id=2039076092]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -21,26 +21,26 @@ theme = ExtResource("1_tmlsq")
 script = ExtResource("2_nrqkd")
 toneButtonGroup = SubResource("ButtonGroup_vtnhb")
 
-[node name="c" type="ScrollContainer" parent="."]
+[node name="c" type="ScrollContainer" parent="." unique_id=1922199580]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c"]
+[node name="c" type="VBoxContainer" parent="c" unique_id=264792097]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="l" type="Label" parent="c/c"]
+[node name="l" type="Label" parent="c/c" unique_id=1544419393]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Audio"
 label_settings = SubResource("LabelSettings_vtnhb")
 vertical_alignment = 2
 
-[node name="c" type="HBoxContainer" parent="c/c"]
+[node name="c" type="HBoxContainer" parent="c/c" unique_id=82905468]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="volume" type="HSlider" parent="c/c/c"]
+[node name="volume" type="HSlider" parent="c/c/c" unique_id=1872243340]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
@@ -48,91 +48,91 @@ max_value = 1.0
 step = 0.0
 value = 0.5
 
-[node name="c" type="Label" parent="c/c/c"]
+[node name="c" type="Label" parent="c/c/c" unique_id=1688168102]
 layout_mode = 2
 text = "Volume"
 
-[node name="l2" type="Label" parent="c/c"]
+[node name="l2" type="Label" parent="c/c" unique_id=519197248]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Visual"
 label_settings = SubResource("LabelSettings_vtnhb")
 vertical_alignment = 2
 
-[node name="fullscreen" type="CheckBox" parent="c/c"]
+[node name="fullscreen" type="CheckBox" parent="c/c" unique_id=209199875]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Enable Fullscreen (in game)"
 
-[node name="smoothingMode" type="CheckBox" parent="c/c"]
+[node name="smoothingMode" type="CheckBox" parent="c/c" unique_id=1400355382]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Smoothing Mode"
 
-[node name="CheckBox3" type="CheckBox" parent="c/c"]
+[node name="CheckBox3" type="CheckBox" parent="c/c" unique_id=1953553437]
 visible = false
 layout_mode = 2
 text = "Low FX"
 
-[node name="simpleLocks" type="CheckBox" parent="c/c"]
+[node name="simpleLocks" type="CheckBox" parent="c/c" unique_id=24282724]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Simple Locks"
 
-[node name="l3" type="Label" parent="c/c"]
+[node name="l3" type="Label" parent="c/c" unique_id=1182816198]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Colorblind"
 label_settings = SubResource("LabelSettings_vtnhb")
 vertical_alignment = 2
 
-[node name="c2" type="MarginContainer" parent="c/c"]
+[node name="c2" type="MarginContainer" parent="c/c" unique_id=704478808]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 theme_override_constants/margin_top = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="c" type="VBoxContainer" parent="c/c/c2"]
+[node name="c" type="VBoxContainer" parent="c/c/c2" unique_id=314385280]
 layout_mode = 2
 
-[node name="c3" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="c3" type="HBoxContainer" parent="c/c/c2/c" unique_id=74861919]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="colorSelector" type="GridContainer" parent="c/c/c2/c/c3"]
+[node name="colorSelector" type="GridContainer" parent="c/c/c2/c/c3" unique_id=1953398053]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("3_vtnhb")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="keyPreview" type="Control" parent="c/c/c2/c/c3"]
+[node name="keyPreview" type="Control" parent="c/c/c2/c/c3" unique_id=901182890]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="c" type="Control" parent="c/c/c2/c/c3"]
+[node name="c" type="Control" parent="c/c/c2/c/c3" unique_id=1186645958]
 layout_mode = 2
 
-[node name="doorPreview" type="Control" parent="c/c/c2/c/c3"]
+[node name="doorPreview" type="Control" parent="c/c/c2/c/c3" unique_id=775135027]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="c4" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="c4" type="HBoxContainer" parent="c/c/c2/c" unique_id=894135057]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="colorEditLabel" type="Label" parent="c/c/c2/c/c4"]
+[node name="colorEditLabel" type="Label" parent="c/c/c2/c/c4" unique_id=1433355073]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Editing 'White'"
 
-[node name="high" type="Button" parent="c/c/c2/c/c4"]
+[node name="high" type="Button" parent="c/c/c2/c/c4" unique_id=1471486315]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 toggle_mode = true
@@ -140,90 +140,90 @@ button_pressed = true
 button_group = SubResource("ButtonGroup_vtnhb")
 text = "High"
 
-[node name="main" type="Button" parent="c/c/c2/c/c4"]
+[node name="main" type="Button" parent="c/c/c2/c/c4" unique_id=682690383]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_vtnhb")
 text = "Main"
 
-[node name="dark" type="Button" parent="c/c/c2/c/c4"]
+[node name="dark" type="Button" parent="c/c/c2/c/c4" unique_id=377662280]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 toggle_mode = true
 button_group = SubResource("ButtonGroup_vtnhb")
 text = "Dark"
 
-[node name="red" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="red" type="HBoxContainer" parent="c/c/c2/c" unique_id=917060630]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="redLabel" type="Label" parent="c/c/c2/c/red"]
+[node name="redLabel" type="Label" parent="c/c/c2/c/red" unique_id=601215596]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 text = "999"
 
-[node name="redSlider" type="HSlider" parent="c/c/c2/c/red"]
+[node name="redSlider" type="HSlider" parent="c/c/c2/c/red" unique_id=75197550]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 max_value = 255.0
 
-[node name="l" type="Label" parent="c/c/c2/c/red"]
+[node name="l" type="Label" parent="c/c/c2/c/red" unique_id=1104442583]
 layout_mode = 2
 text = "R"
 
-[node name="green" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="green" type="HBoxContainer" parent="c/c/c2/c" unique_id=1121014293]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="greenLabel" type="Label" parent="c/c/c2/c/green"]
+[node name="greenLabel" type="Label" parent="c/c/c2/c/green" unique_id=412940136]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 text = "999"
 
-[node name="greenSlider" type="HSlider" parent="c/c/c2/c/green"]
+[node name="greenSlider" type="HSlider" parent="c/c/c2/c/green" unique_id=1474177225]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 max_value = 255.0
 
-[node name="l" type="Label" parent="c/c/c2/c/green"]
+[node name="l" type="Label" parent="c/c/c2/c/green" unique_id=178836225]
 layout_mode = 2
 text = "G"
 
-[node name="blue" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="blue" type="HBoxContainer" parent="c/c/c2/c" unique_id=492605278]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="blueLabel" type="Label" parent="c/c/c2/c/blue"]
+[node name="blueLabel" type="Label" parent="c/c/c2/c/blue" unique_id=1680713532]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(22, 0)
 layout_mode = 2
 text = "999"
 
-[node name="blueSlider" type="HSlider" parent="c/c/c2/c/blue"]
+[node name="blueSlider" type="HSlider" parent="c/c/c2/c/blue" unique_id=74466025]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
 max_value = 255.0
 
-[node name="l" type="Label" parent="c/c/c2/c/blue"]
+[node name="l" type="Label" parent="c/c/c2/c/blue" unique_id=454373719]
 layout_mode = 2
 text = "B"
 
-[node name="c5" type="HBoxContainer" parent="c/c/c2/c"]
+[node name="c5" type="HBoxContainer" parent="c/c/c2/c" unique_id=1000891354]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="setTonesToMain" type="Button" parent="c/c/c2/c/c5"]
+[node name="setTonesToMain" type="Button" parent="c/c/c2/c/c5" unique_id=2023627808]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = "Set Tones to Main"
 
-[node name="presets" type="MenuButton" parent="c/c/c2/c/c5"]
+[node name="presets" type="MenuButton" parent="c/c/c2/c/c5" unique_id=2109531915]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SettingsMenuButton"
@@ -235,156 +235,156 @@ popup/item_0/id = 0
 popup/item_1/text = "Bright"
 popup/item_1/id = 1
 
-[node name="l4" type="Label" parent="c/c"]
+[node name="l4" type="Label" parent="c/c" unique_id=559427664]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Accessibility"
 label_settings = SubResource("LabelSettings_vtnhb")
 vertical_alignment = 2
 
-[node name="hideTimer" type="CheckBox" parent="c/c"]
+[node name="hideTimer" type="CheckBox" parent="c/c" unique_id=1248016664]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Hide Timer"
 
-[node name="autoRun" type="CheckBox" parent="c/c"]
+[node name="autoRun" type="CheckBox" parent="c/c" unique_id=2043157481]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 button_pressed = true
 text = "Auto-Run"
 
-[node name="fullJumps" type="CheckBox" parent="c/c"]
+[node name="fullJumps" type="CheckBox" parent="c/c" unique_id=6084078]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Full Jumps"
 
-[node name="fastAnimations" type="CheckBox" parent="c/c"]
+[node name="fastAnimations" type="CheckBox" parent="c/c" unique_id=372229606]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Fast Animations"
 
-[node name="l5" type="Label" parent="c/c"]
+[node name="l5" type="Label" parent="c/c" unique_id=693445993]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Controls"
 label_settings = SubResource("LabelSettings_vtnhb")
 vertical_alignment = 2
 
-[node name="controls" type="GridContainer" parent="c/c"]
+[node name="controls" type="GridContainer" parent="c/c" unique_id=593658772]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 3
 
-[node name="left" type="Button" parent="c/c/controls"]
+[node name="left" type="Button" parent="c/c/controls" unique_id=17951809]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Left"
 action = &"gameLeft"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="undo" type="Button" parent="c/c/controls"]
+[node name="undo" type="Button" parent="c/c/controls" unique_id=1788365340]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Undo"
 action = &"gameUndo"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="warp" type="Control" parent="c/c/controls"]
+[node name="warp" type="Control" parent="c/c/controls" unique_id=774727868]
 layout_mode = 2
 
-[node name="right" type="Button" parent="c/c/controls"]
+[node name="right" type="Button" parent="c/c/controls" unique_id=1742520245]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Right"
 action = &"gameRight"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="restart" type="Button" parent="c/c/controls"]
+[node name="restart" type="Button" parent="c/c/controls" unique_id=231966931]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Restart"
 action = &"gameRestart"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="autoRun" type="Button" parent="c/c/controls"]
+[node name="autoRun" type="Button" parent="c/c/controls" unique_id=181635079]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Run Switch"
 action = &"gameAutoRun"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="up" type="Button" parent="c/c/controls"]
+[node name="up" type="Button" parent="c/c/controls" unique_id=430793234]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Up"
 action = &"gameUp"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="leave" type="Control" parent="c/c/controls"]
+[node name="leave" type="Control" parent="c/c/controls" unique_id=377867115]
 layout_mode = 2
 
-[node name="run" type="Button" parent="c/c/controls"]
+[node name="run" type="Button" parent="c/c/controls" unique_id=128147988]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Run"
 action = &"gameRun"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="gameDown" type="Button" parent="c/c/controls"]
+[node name="gameDown" type="Button" parent="c/c/controls" unique_id=1452075810]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Down"
 action = &"gameDown"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="camera" type="Button" parent="c/c/controls"]
+[node name="camera" type="Button" parent="c/c/controls" unique_id=1015006689]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Camera"
 action = &"gameCamera"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="walk" type="Button" parent="c/c/controls"]
+[node name="walk" type="Button" parent="c/c/controls" unique_id=148827482]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Walk"
 action = &"gameWalk"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="jump" type="Button" parent="c/c/controls"]
+[node name="jump" type="Button" parent="c/c/controls" unique_id=1084783929]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Jump"
 action = &"gameJump"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="complexSwitch" type="Button" parent="c/c/controls"]
+[node name="complexSwitch" type="Button" parent="c/c/controls" unique_id=230118269]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "I-View"
 action = &"gameComplexSwitch"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="select" type="Control" parent="c/c/controls"]
+[node name="select" type="Control" parent="c/c/controls" unique_id=1138674999]
 layout_mode = 2
 
-[node name="action" type="Button" parent="c/c/controls"]
+[node name="action" type="Button" parent="c/c/controls" unique_id=56627606]
 layout_mode = 2
 script = ExtResource("4_t6p7j")
 label = "Action"
 action = &"gameAction"
 metadata/_custom_type_script = "uid://4muxkbry8eqk"
 
-[node name="pda" type="Control" parent="c/c/controls"]
+[node name="pda" type="Control" parent="c/c/controls" unique_id=952423790]
 layout_mode = 2
 
-[node name="interact" type="Control" parent="c/c/controls"]
+[node name="interact" type="Control" parent="c/c/controls" unique_id=1758816483]
 layout_mode = 2
 
 [connection signal="value_changed" from="c/c/c/volume" to="." method="_volumeSet"]

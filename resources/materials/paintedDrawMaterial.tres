@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c2xfmn5f7o3l8"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://c2xfmn5f7o3l8"]
 
 [ext_resource type="Shader" uid="uid://d2qwmr1ougdxv" path="res://resources/materials/paintedDraw.gdshader" id="1_6jx75"]
 

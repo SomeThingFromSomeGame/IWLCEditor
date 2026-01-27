@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://hkrgvpay27fr"]
+[gd_scene format=3 uid="uid://hkrgvpay27fr"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_3r4ol"]
 [ext_resource type="Script" uid="uid://b16jdtb55wnxx" path="res://scripts/nodes/mods/modTreeSubTree.gd" id="2_4np6p"]
@@ -7,14 +7,14 @@
 _source = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\"><path fill=\"none\" stroke=\"#b2b2b2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-opacity=\".45\" stroke-width=\"2\" d=\"m5 7 3 3 3-3\"/></svg>
 "
 
-[node name="modTreeSubTree" type="VBoxContainer"]
+[node name="modTreeSubTree" type="VBoxContainer" unique_id=1298405105]
 offset_right = 245.0
 offset_bottom = 40.0
 size_flags_horizontal = 3
 theme = ExtResource("1_3r4ol")
 script = ExtResource("2_4np6p")
 
-[node name="button" type="Button" parent="."]
+[node name="button" type="Button" parent="." unique_id=1234012037]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
@@ -25,7 +25,7 @@ text = "Benign"
 icon = SubResource("DPITexture_4np6p")
 alignment = 0
 
-[node name="c" type="MarginContainer" parent="."]
+[node name="c" type="MarginContainer" parent="." unique_id=494685073]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/margin_left = 16
@@ -33,11 +33,11 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="cont" type="VBoxContainer" parent="c"]
+[node name="cont" type="VBoxContainer" parent="c" unique_id=1247820037]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="sep" type="HSeparator" parent="."]
+[node name="sep" type="HSeparator" parent="." unique_id=364329049]
 layout_mode = 2
 theme_type_variation = &"HSeparatorThin"
 

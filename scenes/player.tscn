@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://6yguarjtefnc"]
+[gd_scene format=3 uid="uid://6yguarjtefnc"]
 
 [ext_resource type="Script" uid="uid://bdaplq37fmdoo" path="res://scripts/singletons/game/player.gd" id="1_jej6c"]
 [ext_resource type="Texture2D" uid="uid://bau8k25wjq37" path="res://assets/game/player/lily/fall0.png" id="2_f1ej7"]
@@ -89,50 +89,50 @@ size = Vector2(12, 67)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f1ej7"]
 size = Vector2(12, 1)
 
-[node name="player" type="CharacterBody2D"]
+[node name="player" type="CharacterBody2D" unique_id=369799050]
 collision_layer = 0
 script = ExtResource("1_jej6c")
 
-[node name="collision" type="CollisionShape2D" parent="."]
+[node name="collision" type="CollisionShape2D" parent="." unique_id=1790108720]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_ujl30")
 
-[node name="sprite" type="AnimatedSprite2D" parent="."]
+[node name="sprite" type="AnimatedSprite2D" parent="." unique_id=130483616]
 unique_name_in_owner = true
 z_index = 5
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_31cv2")
 animation = &"idle"
 
-[node name="interact" type="Area2D" parent="."]
+[node name="interact" type="Area2D" parent="." unique_id=792025430]
 unique_name_in_owner = true
 collision_layer = 0
 
-[node name="collision" type="CollisionShape2D" parent="interact"]
+[node name="collision" type="CollisionShape2D" parent="interact" unique_id=910412672]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_jej6c")
 
-[node name="near" type="Area2D" parent="."]
+[node name="near" type="Area2D" parent="." unique_id=1925971311]
 unique_name_in_owner = true
 collision_layer = 0
 
-[node name="collision" type="CollisionShape2D" parent="near"]
+[node name="collision" type="CollisionShape2D" parent="near" unique_id=292113780]
 position = Vector2(-6, -0.5)
 shape = SubResource("CapsuleShape2D_jej6c")
 
-[node name="collision2" type="CollisionShape2D" parent="near"]
+[node name="collision2" type="CollisionShape2D" parent="near" unique_id=1428699243]
 position = Vector2(6, -0.5)
 shape = SubResource("CapsuleShape2D_jej6c")
 
-[node name="collision3" type="CollisionShape2D" parent="near"]
+[node name="collision3" type="CollisionShape2D" parent="near" unique_id=1464488851]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_oprun")
 
-[node name="floor" type="Area2D" parent="."]
+[node name="floor" type="Area2D" parent="." unique_id=549030064]
 unique_name_in_owner = true
 collision_layer = 0
 
-[node name="collision" type="CollisionShape2D" parent="floor"]
+[node name="collision" type="CollisionShape2D" parent="floor" unique_id=211367368]
 position = Vector2(0, 9.5)
 shape = SubResource("RectangleShape2D_f1ej7")
 

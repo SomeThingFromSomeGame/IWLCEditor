@@ -1,8 +1,11 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bknd0n765hjfq"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bknd0n765hjfq"]
 
 [ext_resource type="Shader" uid="uid://b7ek3evjsfuc5" path="res://resources/materials/outline.gdshader" id="1_gahss"]
 
 [resource]
 resource_local_to_scene = true
 shader = ExtResource("1_gahss")
-shader_parameter/testcolor = Color(0.7373294, 0.7373294, 0.735357, 0.53300005)
+shader_parameter/width = 1.0
+shader_parameter/rChannel = Color(0, 0, 0, 1)
+shader_parameter/gChannel = Color(0, 0, 0, 1)
+shader_parameter/bChannel = Color(0, 0, 0, 1)

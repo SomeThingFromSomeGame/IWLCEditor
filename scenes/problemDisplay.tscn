@@ -1,53 +1,53 @@
-[gd_scene load_steps=4 format=3 uid="uid://dpgu0a7dn4r7r"]
+[gd_scene format=3 uid="uid://dpgu0a7dn4r7r"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_pmnjt"]
 [ext_resource type="Texture2D" uid="uid://uinajrcprpk6" path="res://assets/ui/mods/show.png" id="2_7gd02"]
 [ext_resource type="Script" uid="uid://cjy5irir8dcvb" path="res://scripts/nodes/mods/problemDisplay.gd" id="2_n6fsw"]
 
-[node name="problemDisplay" type="VBoxContainer"]
+[node name="problemDisplay" type="VBoxContainer" unique_id=1358788625]
 offset_right = 40.0
 offset_bottom = 40.0
 focus_mode = 1
 theme = ExtResource("1_pmnjt")
 script = ExtResource("2_n6fsw")
 
-[node name="nameLabel" type="Label" parent="."]
+[node name="nameLabel" type="Label" parent="." unique_id=2116578646]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Nonstandard Lock Size"
 
-[node name="c" type="HBoxContainer" parent="."]
+[node name="c" type="HBoxContainer" parent="." unique_id=1053213135]
 custom_minimum_size = Vector2(0, 22)
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="countLabel" type="Label" parent="c"]
+[node name="countLabel" type="Label" parent="c" unique_id=470277899]
 unique_name_in_owner = true
 layout_mode = 2
 text = "149 counts"
 
-[node name="show" type="Button" parent="c"]
+[node name="show" type="Button" parent="c" unique_id=2037694696]
 unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("2_7gd02")
 
-[node name="shower" type="HBoxContainer" parent="c"]
+[node name="shower" type="HBoxContainer" parent="c" unique_id=1417423417]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="left" type="Button" parent="c/shower"]
+[node name="left" type="Button" parent="c/shower" unique_id=1996437747]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = "<"
 
-[node name="showIndex" type="Label" parent="c/shower"]
+[node name="showIndex" type="Label" parent="c/shower" unique_id=1795559349]
 unique_name_in_owner = true
 layout_mode = 2
 text = "1/149"
 
-[node name="right" type="Button" parent="c/shower"]
+[node name="right" type="Button" parent="c/shower" unique_id=1297547509]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = ">"

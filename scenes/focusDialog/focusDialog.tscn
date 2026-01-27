@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://8bth374yqwpe"]
+[gd_scene format=3 uid="uid://8bth374yqwpe"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_eqegh"]
 [ext_resource type="Script" uid="uid://dm8t82nhqkdlc" path="res://scripts/singletons/focusDialog/focusDialog.gd" id="2_k8bto"]
@@ -150,20 +150,20 @@ metadata/_custom_type_script = "uid://cgjhnhjwymb8g"
 [sub_resource type="ButtonGroup" id="ButtonGroup_7tfe2"]
 allow_unpress = true
 
-[node name="focusDialog" type="Control"]
+[node name="focusDialog" type="Control" unique_id=504607072]
 layout_mode = 3
 anchors_preset = 0
 theme = ExtResource("1_eqegh")
 theme_type_variation = &"DialogPanelContainer"
 script = ExtResource("2_k8bto")
 
-[node name="keyDialog" type="Control" parent="."]
+[node name="keyDialog" type="Control" parent="." unique_id=538684455]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
 script = ExtResource("3_b5h7e")
 
-[node name="c" type="PanelContainer" parent="keyDialog"]
+[node name="c" type="PanelContainer" parent="keyDialog" unique_id=1933145102]
 custom_minimum_size = Vector2(174, 0)
 layout_mode = 1
 anchors_preset = 5
@@ -175,14 +175,14 @@ offset_bottom = 36.0
 grow_horizontal = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="keyDialog/c"]
+[node name="c" type="MarginContainer" parent="keyDialog/c" unique_id=820110612]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="keyDialog/c/c"]
+[node name="c" type="VBoxContainer" parent="keyDialog/c/c" unique_id=312215880]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="keyColorSelector" type="GridContainer" parent="keyDialog/c/c/c" groups=["modUI"]]
+[node name="keyColorSelector" type="GridContainer" parent="keyDialog/c/c/c" unique_id=740040409 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -190,22 +190,22 @@ theme = ExtResource("1_eqegh")
 script = ExtResource("3_wmate")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="c" type="HBoxContainer" parent="keyDialog/c/c/c"]
+[node name="c" type="HBoxContainer" parent="keyDialog/c/c/c" unique_id=457898854]
 layout_mode = 2
 alignment = 1
 
-[node name="keyTypeSelector" type="GridContainer" parent="keyDialog/c/c/c/c" groups=["modUI"]]
+[node name="keyTypeSelector" type="GridContainer" parent="keyDialog/c/c/c/c" unique_id=162565847 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("4_cb7cu")
 metadata/_custom_type_script = "uid://dgllodap6540"
 
-[node name="sep" type="VSeparator" parent="keyDialog/c/c/c/c"]
+[node name="sep" type="VSeparator" parent="keyDialog/c/c/c/c" unique_id=732163152]
 layout_mode = 2
 theme_type_variation = &"VSeperatorHigh"
 
-[node name="keyInfiniteToggle" type="Button" parent="keyDialog/c/c/c/c" groups=["explained"]]
+[node name="keyInfiniteToggle" type="Button" parent="keyDialog/c/c/c/c" unique_id=1742292094 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -213,17 +213,17 @@ toggle_mode = true
 icon = ExtResource("6_4u2vc")
 metadata/explanation = SubResource("Resource_hdjws")
 
-[node name="keyCountEdit" parent="keyDialog/c/c/c" instance=ExtResource("5_qjvko")]
+[node name="keyCountEdit" parent="keyDialog/c/c/c" unique_id=2107257614 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="keyRotorSelector" type="GridContainer" parent="keyDialog/c/c/c"]
+[node name="keyRotorSelector" type="GridContainer" parent="keyDialog/c/c/c" unique_id=40169752]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("7_q8u4b")
 
-[node name="keyUn" type="Button" parent="keyDialog/c/c/c"]
+[node name="keyUn" type="Button" parent="keyDialog/c/c/c" unique_id=265341602]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -231,13 +231,13 @@ toggle_mode = true
 button_pressed = true
 icon = ExtResource("8_mscoq")
 
-[node name="doorDialog" type="Control" parent="." groups=["modUI"]]
+[node name="doorDialog" type="Control" parent="." unique_id=1206125138 groups=["modUI"]]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
 script = ExtResource("11_drywk")
 
-[node name="c" type="VBoxContainer" parent="doorDialog"]
+[node name="c" type="VBoxContainer" parent="doorDialog" unique_id=1850472094]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -248,46 +248,46 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_constants/separation = 4
 
-[node name="door" type="PanelContainer" parent="doorDialog/c"]
+[node name="door" type="PanelContainer" parent="doorDialog/c" unique_id=1657575624]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(182, 0)
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="doorDialog/c/door"]
+[node name="c" type="MarginContainer" parent="doorDialog/c/door" unique_id=685399445]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="doorDialog/c/door/c"]
+[node name="c" type="HBoxContainer" parent="doorDialog/c/door/c" unique_id=1464086261]
 layout_mode = 2
 
-[node name="doorTypes" type="HBoxContainer" parent="doorDialog/c/door/c/c"]
+[node name="doorTypes" type="HBoxContainer" parent="doorDialog/c/door/c/c" unique_id=1085486274]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="simple" type="Button" parent="doorDialog/c/door/c/c/doorTypes"]
+[node name="simple" type="Button" parent="doorDialog/c/door/c/c/doorTypes" unique_id=882073070]
 layout_mode = 2
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_oii3e")
 icon = ExtResource("10_oii3e")
 
-[node name="combo" type="Button" parent="doorDialog/c/door/c/c/doorTypes"]
+[node name="combo" type="Button" parent="doorDialog/c/door/c/c/doorTypes" unique_id=1579164306]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_oii3e")
 icon = ExtResource("11_jwt4y")
 
-[node name="gate" type="Button" parent="doorDialog/c/door/c/c/doorTypes"]
+[node name="gate" type="Button" parent="doorDialog/c/door/c/c/doorTypes" unique_id=1266627681]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_oii3e")
 icon = ExtResource("12_qi8n2")
 
-[node name="sep" type="VSeparator" parent="doorDialog/c/door/c/c/doorTypes"]
+[node name="sep" type="VSeparator" parent="doorDialog/c/door/c/c/doorTypes" unique_id=1068233592]
 layout_mode = 2
 
-[node name="spend" type="Button" parent="doorDialog/c/door/c/c/doorTypes"]
+[node name="spend" type="Button" parent="doorDialog/c/door/c/c/doorTypes" unique_id=94492553]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
@@ -295,14 +295,14 @@ button_group = SubResource("ButtonGroup_e2stj")
 icon = ExtResource("13_jwt4y")
 script = ExtResource("14_e2stj")
 
-[node name="scroll" type="ScrollContainer" parent="doorDialog/c/door/c/c"]
+[node name="scroll" type="ScrollContainer" parent="doorDialog/c/door/c/c" unique_id=1101083884]
 custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
 
-[node name="lockHandler" type="HFlowContainer" parent="doorDialog/c/door/c/c/scroll"]
+[node name="lockHandler" type="HFlowContainer" parent="doorDialog/c/door/c/c/scroll" unique_id=1264105223]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
@@ -311,7 +311,7 @@ last_wrap_alignment = 1
 script = ExtResource("14_31m74")
 buttonGroup = SubResource("ButtonGroup_e2stj")
 
-[node name="colorLink" type="Button" parent="doorDialog/c/door/c/c/scroll/lockHandler" groups=["explained"]]
+[node name="colorLink" type="Button" parent="doorDialog/c/door/c/c/scroll/lockHandler" unique_id=1578365227 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -320,75 +320,75 @@ button_pressed = true
 icon = ExtResource("17_5vlab")
 metadata/explanation = SubResource("Resource_jx0iq")
 
-[node name="lock" type="PanelContainer" parent="doorDialog/c"]
+[node name="lock" type="PanelContainer" parent="doorDialog/c" unique_id=1945491626]
 custom_minimum_size = Vector2(174, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="doorDialog/c/lock"]
+[node name="c" type="MarginContainer" parent="doorDialog/c/lock" unique_id=807639655]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="doorDialog/c/lock/c"]
+[node name="c" type="VBoxContainer" parent="doorDialog/c/lock/c" unique_id=108508937]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="lockConfigurationSelector" type="HBoxContainer" parent="doorDialog/c/lock/c/c"]
+[node name="lockConfigurationSelector" type="HBoxContainer" parent="doorDialog/c/lock/c/c" unique_id=1466233714]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 script = ExtResource("17_cu8b0")
 metadata/_custom_type_script = "uid://c71qe58ht0isn"
 
-[node name="doorColorSelector" type="GridContainer" parent="doorDialog/c/lock/c/c" groups=["modUI"]]
+[node name="doorColorSelector" type="GridContainer" parent="doorDialog/c/lock/c/c" unique_id=612300549 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("3_wmate")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="lockSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c"]
+[node name="lockSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c" unique_id=453563631]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="lockTypeSelector" type="GridContainer" parent="doorDialog/c/lock/c/c/lockSettings" groups=["modUI"]]
+[node name="lockTypeSelector" type="GridContainer" parent="doorDialog/c/lock/c/c/lockSettings" unique_id=898968259 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("15_vfuuy")
 metadata/_custom_type_script = "uid://cxlnmn0e36ba"
 
-[node name="lockSettingsSep" type="VSeparator" parent="doorDialog/c/lock/c/c/lockSettings"]
+[node name="lockSettingsSep" type="VSeparator" parent="doorDialog/c/lock/c/c/lockSettings" unique_id=427259883]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"VSeperatorHigh"
 
-[node name="lockNegated" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" groups=["explained"]]
+[node name="lockNegated" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" unique_id=1971445719 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("21_bfxh1")
 metadata/explanation = SubResource("Resource_q8u4b")
 
-[node name="lockArmament" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" groups=["explained"]]
+[node name="lockArmament" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" unique_id=408229517 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("22_4u2vc")
 metadata/explanation = SubResource("Resource_mscoq")
 
-[node name="remoteLockConvert" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" groups=["explained"]]
+[node name="remoteLockConvert" type="Button" parent="doorDialog/c/lock/c/c/lockSettings" unique_id=1304098552 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("23_ft2jg")
 metadata/explanation = SubResource("Resource_ljt45")
 
-[node name="doorAuraSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c"]
+[node name="doorAuraSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c" unique_id=16192028]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="frozen" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" groups=["explained"]]
+[node name="frozen" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" unique_id=1221504007 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -396,7 +396,7 @@ toggle_mode = true
 icon = ExtResource("19_vn3na")
 metadata/explanation = SubResource("Resource_p7jkh")
 
-[node name="crumbled" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" groups=["explained"]]
+[node name="crumbled" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" unique_id=961008234 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -404,7 +404,7 @@ toggle_mode = true
 icon = ExtResource("20_vn3na")
 metadata/explanation = SubResource("Resource_ft2jg")
 
-[node name="painted" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" groups=["explained"]]
+[node name="painted" type="Button" parent="doorDialog/c/lock/c/c/doorAuraSettings" unique_id=1835139374 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -412,71 +412,71 @@ toggle_mode = true
 icon = ExtResource("21_drywk")
 metadata/explanation = SubResource("Resource_16i1m")
 
-[node name="doorCopySettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c"]
+[node name="doorCopySettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c" unique_id=690871626]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="realInfiniteCopy" type="Button" parent="doorDialog/c/lock/c/c/doorCopySettings"]
+[node name="realInfiniteCopy" type="Button" parent="doorDialog/c/lock/c/c/doorCopySettings" unique_id=826471876]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("25_hb0ue")
 
-[node name="doorCopiesEdit" parent="doorDialog/c/lock/c/c/doorCopySettings" instance=ExtResource("5_qjvko")]
+[node name="doorCopiesEdit" parent="doorDialog/c/lock/c/c/doorCopySettings" unique_id=1127114799 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="imaginaryInfiniteCopy" type="Button" parent="doorDialog/c/lock/c/c/doorCopySettings"]
+[node name="imaginaryInfiniteCopy" type="Button" parent="doorDialog/c/lock/c/c/doorCopySettings" unique_id=709491226]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("25_hb0ue")
 
-[node name="doorAxialNumberEdit" parent="doorDialog/c/lock/c/c" instance=ExtResource("20_gx4cd")]
+[node name="doorAxialNumberEdit" parent="doorDialog/c/lock/c/c" unique_id=643775389 instance=ExtResource("20_gx4cd")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(151, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("21_k4n5y")
 
-[node name="blastLockSettings" type="VBoxContainer" parent="doorDialog/c/lock/c/c"]
+[node name="blastLockSettings" type="VBoxContainer" parent="doorDialog/c/lock/c/c" unique_id=2055272722]
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 
-[node name="partialBlastSettings" type="VBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings"]
+[node name="partialBlastSettings" type="VBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings" unique_id=1131635201]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="partialBlastNumeratorEdit" parent="doorDialog/c/lock/c/c/blastLockSettings/partialBlastSettings" instance=ExtResource("5_qjvko")]
+[node name="partialBlastNumeratorEdit" parent="doorDialog/c/lock/c/c/blastLockSettings/partialBlastSettings" unique_id=720183521 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="partialBlastSep" type="HSeparator" parent="doorDialog/c/lock/c/c/blastLockSettings/partialBlastSettings"]
+[node name="partialBlastSep" type="HSeparator" parent="doorDialog/c/lock/c/c/blastLockSettings/partialBlastSettings" unique_id=1939953753]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 6
 theme_override_styles/separator = SubResource("StyleBoxLine_di8ev")
 
-[node name="c" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings"]
+[node name="c" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings" unique_id=760688557]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="isPartial" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c"]
+[node name="isPartial" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c" unique_id=1530165757]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("29_di8ev")
 
-[node name="discreteBlastSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings/c"]
+[node name="discreteBlastSettings" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings/c" unique_id=1456643502]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="blastLockSign" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" groups=["explained"]]
+[node name="blastLockSign" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" unique_id=906409161 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -484,7 +484,7 @@ toggle_mode = true
 icon = ExtResource("22_hh12n")
 metadata/explanation = SubResource("Resource_s5h3h")
 
-[node name="blastLockAxis" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" groups=["explained"]]
+[node name="blastLockAxis" type="Button" parent="doorDialog/c/lock/c/c/blastLockSettings/c/discreteBlastSettings" unique_id=344995792 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"SelectorButton"
@@ -492,29 +492,29 @@ toggle_mode = true
 icon = ExtResource("23_h1xy2")
 metadata/explanation = SubResource("Resource_rmnx8")
 
-[node name="partialDenominator" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings/c"]
+[node name="partialDenominator" type="HBoxContainer" parent="doorDialog/c/lock/c/c/blastLockSettings/c" unique_id=1469452128]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="partialBlastDenominatorEdit" parent="doorDialog/c/lock/c/c/blastLockSettings/c/partialDenominator" instance=ExtResource("5_qjvko")]
+[node name="partialBlastDenominatorEdit" parent="doorDialog/c/lock/c/c/blastLockSettings/c/partialDenominator" unique_id=15618427 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="remoteLock" type="PanelContainer" parent="doorDialog/c"]
+[node name="remoteLock" type="PanelContainer" parent="doorDialog/c" unique_id=381581047]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="doorDialog/c/remoteLock"]
+[node name="c" type="MarginContainer" parent="doorDialog/c/remoteLock" unique_id=587777913]
 layout_mode = 2
 
-[node name="scroll" type="ScrollContainer" parent="doorDialog/c/remoteLock/c"]
+[node name="scroll" type="ScrollContainer" parent="doorDialog/c/remoteLock/c" unique_id=1798076683]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
-[node name="doorsHandler" type="HFlowContainer" parent="doorDialog/c/remoteLock/c/scroll"]
+[node name="doorsHandler" type="HFlowContainer" parent="doorDialog/c/remoteLock/c/scroll" unique_id=32576251]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -522,13 +522,13 @@ script = ExtResource("31_xwnfa")
 buttonGroup = SubResource("ButtonGroup_xwnfa")
 metadata/_custom_type_script = "uid://2iqmgcrc5wpq"
 
-[node name="playerDialog" type="Control" parent="." groups=["modUI"]]
+[node name="playerDialog" type="Control" parent="." unique_id=1028920322 groups=["modUI"]]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
 script = ExtResource("40_p7jkh")
 
-[node name="c" type="VBoxContainer" parent="playerDialog"]
+[node name="c" type="VBoxContainer" parent="playerDialog" unique_id=1238799024]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -539,35 +539,35 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_override_constants/separation = 4
 
-[node name="c" type="PanelContainer" parent="playerDialog/c"]
+[node name="c" type="PanelContainer" parent="playerDialog/c" unique_id=467634627]
 custom_minimum_size = Vector2(174, 0)
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="playerDialog/c/c"]
+[node name="c" type="MarginContainer" parent="playerDialog/c/c" unique_id=1808720828]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="playerDialog/c/c/c"]
+[node name="c" type="VBoxContainer" parent="playerDialog/c/c/c" unique_id=280102584]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="playerSpawnSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c"]
+[node name="playerSpawnSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c" unique_id=1417747881]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="c" type="HBoxContainer" parent="playerDialog/c/c/c/c/playerSpawnSettings"]
+[node name="c" type="HBoxContainer" parent="playerDialog/c/c/c/c/playerSpawnSettings" unique_id=363086311]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="playTest" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c" groups=["explained"]]
+[node name="playTest" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c" unique_id=1577978487 groups=["explained"]]
 layout_mode = 2
 size_flags_vertical = 4
 icon = ExtResource("24_7tfe2")
 metadata/explanation = SubResource("Resource_rrq8c")
 
-[node name="levelStart" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c"]
+[node name="levelStart" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c" unique_id=189377556]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
@@ -575,7 +575,7 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_h1xy2")
 text = "Level Start"
 
-[node name="savestate" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c"]
+[node name="savestate" type="Button" parent="playerDialog/c/c/c/c/playerSpawnSettings/c" unique_id=951357561]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
@@ -583,12 +583,12 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_h1xy2")
 text = "Savestate"
 
-[node name="playerSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c"]
+[node name="playerSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c" unique_id=292002503]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="leaveSavestate" type="Button" parent="playerDialog/c/c/c/c/playerSettings" groups=["explained"]]
+[node name="leaveSavestate" type="Button" parent="playerDialog/c/c/c/c/playerSettings" unique_id=905176357 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -596,45 +596,45 @@ theme_type_variation = &"RadioButtonText"
 text = "Leave savestate"
 metadata/explanation = SubResource("Resource_2wjug")
 
-[node name="playerStateSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c"]
+[node name="playerStateSettings" type="VBoxContainer" parent="playerDialog/c/c/c/c" unique_id=10430987]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="playerUndostack" type="Label" parent="playerDialog/c/c/c/c/playerStateSettings"]
+[node name="playerUndostack" type="Label" parent="playerDialog/c/c/c/c/playerStateSettings" unique_id=2133804781]
 unique_name_in_owner = true
 layout_mode = 2
 text = "2 positions in undo stack"
 label_settings = SubResource("LabelSettings_p7jkh")
 horizontal_alignment = 1
 
-[node name="playerColorSelector" type="GridContainer" parent="playerDialog/c/c/c/c/playerStateSettings" groups=["modUI"]]
+[node name="playerColorSelector" type="GridContainer" parent="playerDialog/c/c/c/c/playerStateSettings" unique_id=190976619 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("3_wmate")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="playerStateSettings2" type="PanelContainer" parent="playerDialog/c"]
+[node name="playerStateSettings2" type="PanelContainer" parent="playerDialog/c" unique_id=4846107]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="playerDialog/c/playerStateSettings2"]
+[node name="c" type="MarginContainer" parent="playerDialog/c/playerStateSettings2" unique_id=2136528159]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="playerDialog/c/playerStateSettings2/c"]
+[node name="c" type="VBoxContainer" parent="playerDialog/c/playerStateSettings2/c" unique_id=890339268]
 layout_mode = 2
 
-[node name="playerKeyCountEdit" parent="playerDialog/c/playerStateSettings2/c/c" instance=ExtResource("5_qjvko")]
+[node name="playerKeyCountEdit" parent="playerDialog/c/playerStateSettings2/c/c" unique_id=1084238138 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/playerStateSettings2/c/c"]
+[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/playerStateSettings2/c/c" unique_id=750588887]
 layout_mode = 2
 alignment = 1
 
-[node name="playerStar" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" groups=["explained"]]
+[node name="playerStar" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" unique_id=178393802 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -642,7 +642,7 @@ toggle_mode = true
 icon = ExtResource("8_mscoq")
 metadata/explanation = SubResource("Resource_vapyv")
 
-[node name="playerCurse" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" groups=["explained"]]
+[node name="playerCurse" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" unique_id=76095913 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -650,13 +650,13 @@ toggle_mode = true
 icon = ExtResource("41_ft2jg")
 metadata/explanation = SubResource("Resource_lm5cw")
 
-[node name="keyCounterDialog" type="Control" parent="."]
+[node name="keyCounterDialog" type="Control" parent="." unique_id=295158797]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
 script = ExtResource("30_bfxh1")
 
-[node name="c" type="PanelContainer" parent="keyCounterDialog"]
+[node name="c" type="PanelContainer" parent="keyCounterDialog" unique_id=583986146]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -670,25 +670,25 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="keyCounterDialog/c"]
+[node name="c" type="MarginContainer" parent="keyCounterDialog/c" unique_id=967377483]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="keyCounterDialog/c/c"]
+[node name="c" type="VBoxContainer" parent="keyCounterDialog/c/c" unique_id=36732370]
 layout_mode = 2
 
-[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c"]
+[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=2056077053]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("25_7tfe2")
 
-[node name="scroll" type="ScrollContainer" parent="keyCounterDialog/c/c/c"]
+[node name="scroll" type="ScrollContainer" parent="keyCounterDialog/c/c/c" unique_id=520671896]
 custom_minimum_size = Vector2(164, 16)
 layout_mode = 2
 mouse_filter = 0
 mouse_force_pass_scroll_events = false
 
-[node name="keyCounterHandler" type="HFlowContainer" parent="keyCounterDialog/c/c/c/scroll"]
+[node name="keyCounterHandler" type="HFlowContainer" parent="keyCounterDialog/c/c/c/scroll" unique_id=1886833265]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(160, 0)
 layout_mode = 2
@@ -696,20 +696,20 @@ script = ExtResource("25_1rcup")
 buttonGroup = SubResource("ButtonGroup_7tfe2")
 metadata/_custom_type_script = "uid://lbaubg2qq1s1"
 
-[node name="keyCounterColorSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" groups=["modUI"]]
+[node name="keyCounterColorSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=1469942818 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 script = ExtResource("3_wmate")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="goalDialog" type="Control" parent="."]
+[node name="goalDialog" type="Control" parent="." unique_id=1207556588]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
 script = ExtResource("33_di8ev")
 
-[node name="c" type="PanelContainer" parent="goalDialog"]
+[node name="c" type="PanelContainer" parent="goalDialog" unique_id=509152303]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -720,26 +720,26 @@ offset_bottom = 40.0
 grow_horizontal = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="goalDialog/c"]
+[node name="c" type="MarginContainer" parent="goalDialog/c" unique_id=142938472]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="goalDialog/c/c"]
+[node name="c" type="VBoxContainer" parent="goalDialog/c/c" unique_id=1983543705]
 layout_mode = 2
 
-[node name="goalTypeSelector" type="GridContainer" parent="goalDialog/c/c/c"]
+[node name="goalTypeSelector" type="GridContainer" parent="goalDialog/c/c/c" unique_id=1778497396]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("26_1rcup")
 metadata/_custom_type_script = "uid://bg8oswa2bhdsv"
 
-[node name="speechBubbler" type="Node2D" parent="."]
+[node name="speechBubbler" type="Node2D" parent="." unique_id=1211445522]
 unique_name_in_owner = true
 
-[node name="Polygon2D" type="Polygon2D" parent="speechBubbler"]
+[node name="Polygon2D" type="Polygon2D" parent="speechBubbler" unique_id=2113235186]
 color = Color(0.25490198, 0.25490198, 0.25490198, 1)
 polygon = PackedVector2Array(0, 5, 8, -3, -8, -3)
 
-[node name="Line2D" type="Line2D" parent="speechBubbler"]
+[node name="Line2D" type="Line2D" parent="speechBubbler" unique_id=1533049232]
 points = PackedVector2Array(-8, -1, -6, -1, 0, 5, 6, -1, 8, -1)
 width = 2.0
 default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://br4e21jc0gv8o"]
+[gd_scene format=3 uid="uid://br4e21jc0gv8o"]
 
 [ext_resource type="Script" uid="uid://bkauup2it2tfp" path="res://scripts/singletons/game/playGame.gd" id="1_abwwd"]
 [ext_resource type="PackedScene" uid="uid://2hd65vn44me7" path="res://scenes/world.tscn" id="2_abwwd"]
@@ -22,9 +22,9 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wfiui"]
 bg_color = Color(0.15727392, 0.15727398, 0.15727389, 1)
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_m88lo"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_y4ge2"]
 
-[node name="playGame" type="PanelContainer"]
+[node name="playGame" type="PanelContainer" unique_id=974390549]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -33,19 +33,19 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_abwwd")
 script = ExtResource("1_abwwd")
 
-[node name="aspectRatioContainer" type="Container" parent="."]
+[node name="aspectRatioContainer" type="Container" parent="." unique_id=216354553]
 layout_mode = 2
 script = ExtResource("2_rt4fk")
 metadata/_custom_type_script = "uid://q0u3f7fb1u41"
 
-[node name="gameViewportCont" type="SubViewportContainer" parent="aspectRatioContainer"]
+[node name="gameViewportCont" type="SubViewportContainer" parent="aspectRatioContainer" unique_id=1163296198]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_n2d1d")
 custom_minimum_size = Vector2(1, 1)
 layout_mode = 2
 stretch = true
 
-[node name="gameViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont"]
+[node name="gameViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont" unique_id=1433594085]
 unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
@@ -54,7 +54,7 @@ size_2d_override = Vector2i(800, 608)
 size_2d_override_stretch = true
 render_target_update_mode = 4
 
-[node name="Panel" type="Panel" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+[node name="Panel" type="Panel" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=1316509062]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -62,21 +62,21 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_y4ge2")
 
-[node name="worldViewportCont" type="SubViewportContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+[node name="worldViewportCont" type="SubViewportContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=897771345]
 unique_name_in_owner = true
 offset_right = 800.0
 offset_bottom = 608.0
 
-[node name="worldViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont"]
+[node name="worldViewport" type="SubViewport" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont" unique_id=1938474643]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(800, 608)
 render_target_update_mode = 4
 
-[node name="world" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport" instance=ExtResource("2_abwwd")]
+[node name="world" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport" unique_id=1669920642 instance=ExtResource("2_abwwd")]
 unique_name_in_owner = true
 
-[node name="playCamera" type="Camera2D" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport/world"]
+[node name="playCamera" type="Camera2D" parent="aspectRatioContainer/gameViewportCont/gameViewport/worldViewportCont/worldViewport/world" unique_id=486925955]
 unique_name_in_owner = true
 limit_left = 0
 limit_top = 0
@@ -85,13 +85,13 @@ limit_bottom = 608
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="mouseover" parent="aspectRatioContainer/gameViewportCont/gameViewport" instance=ExtResource("5_y4ge2")]
+[node name="mouseover" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=2030446618 instance=ExtResource("5_y4ge2")]
 unique_name_in_owner = true
 
-[node name="drawParent" type="Node2D" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+[node name="drawParent" type="Node2D" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=1168904747]
 unique_name_in_owner = true
 
-[node name="pauseMenu" type="Panel" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+[node name="pauseMenu" type="Panel" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=1066233586]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 15
@@ -102,12 +102,12 @@ grow_vertical = 2
 theme = ExtResource("5_n2d1d")
 theme_override_styles/panel = SubResource("StyleBoxFlat_wfiui")
 
-[node name="gameSettings" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu" instance=ExtResource("6_m88lo")]
+[node name="gameSettings" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu" unique_id=1574010737 instance=ExtResource("6_m88lo")]
 unique_name_in_owner = true
 layout_mode = 1
-toneButtonGroup = SubResource("ButtonGroup_m88lo")
+toneButtonGroup = SubResource("ButtonGroup_y4ge2")
 
-[node name="main" type="MarginContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu"]
+[node name="main" type="MarginContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu" unique_id=1384260393]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 6
@@ -122,34 +122,34 @@ grow_horizontal = 0
 grow_vertical = 2
 theme_override_constants/margin_right = 49
 
-[node name="c" type="VBoxContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main"]
+[node name="c" type="VBoxContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main" unique_id=1683743068]
 custom_minimum_size = Vector2(301, 0)
 layout_mode = 2
 theme_override_constants/separation = 15
 alignment = 1
 
-[node name="resume" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+[node name="resume" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c" unique_id=2109884854]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Resume"
 
-[node name="edit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+[node name="edit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c" unique_id=1158251695]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Edit Level"
 
-[node name="quit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+[node name="quit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c" unique_id=1020062966]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Quit Game (Instantly)"
 
-[node name="erasePencilmarks" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c"]
+[node name="erasePencilmarks" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu/main/c" unique_id=1423398898]
 visible = false
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
@@ -157,12 +157,12 @@ theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Erase Pencilmarks"
 
-[node name="mouseBlocker" type="Control" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu"]
+[node name="mouseBlocker" type="Control" parent="aspectRatioContainer/gameViewportCont/gameViewport/pauseMenu" unique_id=390708940]
 unique_name_in_owner = true
 anchors_preset = 0
 mouse_filter = 2
 
-[node name="winMenu" type="Control" parent="aspectRatioContainer/gameViewportCont/gameViewport"]
+[node name="winMenu" type="Control" parent="aspectRatioContainer/gameViewportCont/gameViewport" unique_id=2120672347]
 unique_name_in_owner = true
 visible = false
 layout_mode = 3
@@ -178,7 +178,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme = ExtResource("5_n2d1d")
 
-[node name="c" type="HBoxContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu"]
+[node name="c" type="HBoxContainer" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu" unique_id=370977512]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -187,21 +187,21 @@ grow_horizontal = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="restart" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c"]
+[node name="restart" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c" unique_id=1901374287]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Restart (R)"
 
-[node name="edit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c"]
+[node name="edit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c" unique_id=606174565]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 theme_override_font_sizes/font_size = 16
 text = "Edit Level"
 
-[node name="quit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c"]
+[node name="quit" type="Button" parent="aspectRatioContainer/gameViewportCont/gameViewport/winMenu/c" unique_id=289226071]
 custom_minimum_size = Vector2(0, 33)
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://8vb6fw2swqpa"]
+[gd_scene format=3 uid="uid://8vb6fw2swqpa"]
 
 [ext_resource type="Script" uid="uid://ilxjbdbs4jx0" path="res://scripts/components/door.gd" id="1_yar34"]
 
@@ -10,31 +10,31 @@ size = Vector2(30, 30)
 resource_local_to_scene = true
 size = Vector2(32, 32)
 
-[node name="door" type="Node2D"]
+[node name="door" type="Node2D" unique_id=310990468]
 script = ExtResource("1_yar34")
 
-[node name="collision" type="StaticBody2D" parent="."]
+[node name="collision" type="StaticBody2D" parent="." unique_id=808526111]
 unique_name_in_owner = true
 
-[node name="shape" type="CollisionShape2D" parent="collision"]
+[node name="shape" type="CollisionShape2D" parent="collision" unique_id=1859440183]
 unique_name_in_owner = true
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_uw3m6")
 
-[node name="interact" type="Area2D" parent="."]
+[node name="interact" type="Area2D" parent="." unique_id=903736502]
 unique_name_in_owner = true
 monitoring = false
 
-[node name="interactShape" type="CollisionShape2D" parent="interact"]
+[node name="interactShape" type="CollisionShape2D" parent="interact" unique_id=1010240494]
 unique_name_in_owner = true
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_yar34")
 
-[node name="locksParent" type="Node2D" parent="."]
+[node name="locksParent" type="Node2D" parent="." unique_id=1820910496]
 unique_name_in_owner = true
 
-[node name="auraParent" type="Node2D" parent="."]
+[node name="auraParent" type="Node2D" parent="." unique_id=1676051418]
 unique_name_in_owner = true
 
-[node name="armamentLocksParent" type="Node2D" parent="."]
+[node name="armamentLocksParent" type="Node2D" parent="." unique_id=124065836]
 unique_name_in_owner = true

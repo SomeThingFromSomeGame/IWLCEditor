@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://2k6e7llpqcla"]
+[gd_scene format=3 uid="uid://2k6e7llpqcla"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_e7w15"]
 [ext_resource type="FontFile" uid="uid://c1cbi8by5johg" path="res://resources/fonts/fTalk.fnt" id="2_exci4"]
@@ -16,9 +16,10 @@ font_size = 12
 font = ExtResource("3_huca0")
 font_size = 10
 
-[node name="openWindow" type="Window"]
+[node name="openWindow" type="Window" unique_id=353908092]
 oversampling_override = 1.0
 title = "Opening Level"
+position = Vector2i(0, 36)
 size = Vector2i(600, 200)
 transient = true
 exclusive = true
@@ -26,25 +27,25 @@ unresizable = true
 theme = ExtResource("1_e7w15")
 script = ExtResource("2_r7d2n")
 
-[node name="c" type="PanelContainer" parent="."]
+[node name="c" type="PanelContainer" parent="." unique_id=723685706]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="c" type="VBoxContainer" parent="c"]
+[node name="c" type="VBoxContainer" parent="c" unique_id=918866117]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/c"]
+[node name="c" type="HBoxContainer" parent="c/c" unique_id=1828759857]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/c/c"]
+[node name="c" type="VBoxContainer" parent="c/c/c" unique_id=477367200]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 4
 
-[node name="name" type="Label" parent="c/c/c/c"]
+[node name="name" type="Label" parent="c/c/c/c" unique_id=92738358]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
@@ -52,11 +53,11 @@ text = "Name of the level"
 label_settings = SubResource("LabelSettings_2h8rs")
 autowrap_mode = 3
 
-[node name="c" type="MarginContainer" parent="c/c/c/c"]
+[node name="c" type="MarginContainer" parent="c/c/c/c" unique_id=1544824624]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="desc" type="Label" parent="c/c/c/c/c"]
+[node name="desc" type="Label" parent="c/c/c/c/c" unique_id=428689467]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
@@ -65,17 +66,17 @@ text = "(No description)"
 label_settings = SubResource("LabelSettings_r7d2n")
 autowrap_mode = 3
 
-[node name="c2" type="HBoxContainer" parent="c/c/c/c"]
+[node name="c2" type="HBoxContainer" parent="c/c/c/c" unique_id=1986029918]
 layout_mode = 2
 
-[node name="revision" type="Label" parent="c/c/c/c/c2"]
+[node name="revision" type="Label" parent="c/c/c/c/c2" unique_id=1198600106]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Rev. 1"
 label_settings = SubResource("LabelSettings_r7d2n")
 
-[node name="author" type="Label" parent="c/c/c/c/c2"]
+[node name="author" type="Label" parent="c/c/c/c/c2" unique_id=481878053]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -83,41 +84,41 @@ text = "Unknown Author"
 label_settings = SubResource("LabelSettings_r7d2n")
 horizontal_alignment = 2
 
-[node name="image" type="TextureRect" parent="c/c/c"]
+[node name="image" type="TextureRect" parent="c/c/c" unique_id=1862519770]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 152)
 layout_mode = 2
 texture = ExtResource("2_syp5u")
 
-[node name="c2" type="HBoxContainer" parent="c/c"]
+[node name="c2" type="HBoxContainer" parent="c/c" unique_id=242560647]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="modpack" type="TextureRect" parent="c/c/c2"]
+[node name="modpack" type="TextureRect" parent="c/c/c2" unique_id=131157187]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("6_bnkpf")
 
-[node name="mods" type="RichTextLabel" parent="c/c/c2"]
+[node name="mods" type="RichTextLabel" parent="c/c/c2" unique_id=1314992152]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/normal_font = ExtResource("6_r7d2n")
 theme_override_font_sizes/normal_font_size = 11
 
-[node name="c3" type="HBoxContainer" parent="c/c"]
+[node name="c3" type="HBoxContainer" parent="c/c" unique_id=1416360071]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="play" type="Button" parent="c/c/c3"]
+[node name="play" type="Button" parent="c/c/c3" unique_id=417036647]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"RadioButtonText"
 text = "Play"
 
-[node name="edit" type="Button" parent="c/c/c3"]
+[node name="edit" type="Button" parent="c/c/c3" unique_id=1783738602]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"RadioButtonText"

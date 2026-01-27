@@ -1,19 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcr4ds1anmwjq"]
+[gd_scene format=3 uid="uid://bcr4ds1anmwjq"]
 
 [ext_resource type="Script" uid="uid://boiwo8vk6byve" path="res://scripts/components/keyBulk.gd" id="1_v3lj7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_47wsx"]
 size = Vector2(32, 32)
 
-[node name="keyBulk" type="Node2D"]
+[node name="keyBulk" type="Node2D" unique_id=292751317]
 script = ExtResource("1_v3lj7")
 
-[node name="interact" type="Area2D" parent="."]
+[node name="interact" type="Area2D" parent="." unique_id=1964204178]
 unique_name_in_owner = true
 z_index = 1
 monitoring = false
 
-[node name="shape" type="CollisionShape2D" parent="interact"]
+[node name="shape" type="CollisionShape2D" parent="interact" unique_id=290376406]
 unique_name_in_owner = true
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_47wsx")

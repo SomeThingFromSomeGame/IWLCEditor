@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cu8dqerqlrkm1"]
+[gd_scene format=3 uid="uid://cu8dqerqlrkm1"]
 
 [ext_resource type="Script" uid="uid://c7qwga7yb7ull" path="res://scripts/nodes/settings/hotkeySetting.gd" id="1_yo22g"]
 [ext_resource type="Texture2D" uid="uid://d3qyof2c7im6m" path="res://assets/ui/settings/addHotkey.png" id="3_qjjgt"]
@@ -7,7 +7,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8d666"]
 bg_color = Color(1, 1, 1, 0.07058824)
 
-[node name="hotkeySetting" type="MarginContainer" groups=["hotkeySetting", "modUI"]]
+[node name="hotkeySetting" type="MarginContainer" unique_id=427433704 groups=["hotkeySetting", "modUI"]]
 custom_minimum_size = Vector2(0, 30)
 offset_right = 273.0
 offset_bottom = 34.0
@@ -18,28 +18,28 @@ theme_override_constants/margin_bottom = 0
 script = ExtResource("1_yo22g")
 label = "label"
 
-[node name="hover" type="Panel" parent="."]
+[node name="hover" type="Panel" parent="." unique_id=1120603887]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8d666")
 
-[node name="c" type="HBoxContainer" parent="."]
+[node name="c" type="HBoxContainer" parent="." unique_id=1709165243]
 layout_mode = 2
 
-[node name="label" type="Label" parent="c"]
+[node name="label" type="Label" parent="c" unique_id=249159518]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7490196, 0.7490196, 0.7490196, 1)
 text = "label"
 
-[node name="c" type="Control" parent="c"]
+[node name="c" type="Control" parent="c" unique_id=729766528]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
 
-[node name="buttons" type="HBoxContainer" parent="c/c"]
+[node name="buttons" type="HBoxContainer" parent="c/c" unique_id=1157936919]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 11
@@ -53,12 +53,12 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 4
 alignment = 2
 
-[node name="add" type="Button" parent="c/c/buttons"]
+[node name="add" type="Button" parent="c/c/buttons" unique_id=946342384]
 layout_mode = 2
 mouse_filter = 1
 icon = ExtResource("3_qjjgt")
 
-[node name="reset" type="Button" parent="c"]
+[node name="reset" type="Button" parent="c" unique_id=1883422070]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 1

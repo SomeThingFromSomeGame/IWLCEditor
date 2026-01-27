@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bpi1rnq7fg5ap"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://bpi1rnq7fg5ap"]
 
 [ext_resource type="Shader" uid="uid://37nf083maklx" path="res://resources/materials/glitchDraw.gdshader" id="1_5bkcr"]
 

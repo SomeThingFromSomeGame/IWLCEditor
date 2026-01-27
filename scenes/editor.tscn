@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://djnt51xv7wn52"]
+[gd_scene format=3 uid="uid://djnt51xv7wn52"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_j8y2p"]
 [ext_resource type="Script" uid="uid://2wjcj6frwpjo" path="res://scripts/singletons/editor/editor.gd" id="2_o435n"]
@@ -132,7 +132,7 @@ metadata/_custom_type_script = "uid://lwocqakgt4qr"
 font = ExtResource("12_2w0at")
 font_size = 12
 
-[node name="editor" type="Control"]
+[node name="editor" type="Control" unique_id=656273145]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -142,7 +142,7 @@ grow_vertical = 2
 focus_mode = 1
 script = ExtResource("2_o435n")
 
-[node name="c" type="VBoxContainer" parent="."]
+[node name="c" type="VBoxContainer" parent="." unique_id=1159028685]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -151,33 +151,33 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_j8y2p")
 
-[node name="c" type="PanelContainer" parent="c"]
+[node name="c" type="PanelContainer" parent="c" unique_id=1243367046]
 z_index = 4
 layout_mode = 2
 
-[node name="c" type="ScrollContainer" parent="c/c"]
+[node name="c" type="ScrollContainer" parent="c/c" unique_id=1301087166]
 clip_contents = false
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="topBar" type="MarginContainer" parent="c/c/c"]
+[node name="topBar" type="MarginContainer" parent="c/c/c" unique_id=1467889332]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("3_3vi5u")
 
-[node name="c" type="HBoxContainer" parent="c/c/c/topBar"]
+[node name="c" type="HBoxContainer" parent="c/c/c/topBar" unique_id=1495268317]
 layout_mode = 2
 
-[node name="modes" type="HBoxContainer" parent="c/c/c/topBar/c"]
+[node name="modes" type="HBoxContainer" parent="c/c/c/topBar/c" unique_id=1246660106]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 script = ExtResource("4_4jiep")
 
-[node name="fileMenu" type="MenuButton" parent="c/c/c/topBar/c/modes" node_paths=PackedStringArray("shortcut_context")]
+[node name="fileMenu" type="MenuButton" parent="c/c/c/topBar/c/modes" unique_id=974745893 node_paths=PackedStringArray("shortcut_context")]
 unique_name_in_owner = true
 layout_mode = 2
 shortcut_context = NodePath(".")
@@ -204,11 +204,11 @@ popup/item_8/text = "Play Current"
 popup/item_8/id = 8
 script = ExtResource("6_7msgv")
 
-[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes"]
+[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes" unique_id=651664193]
 custom_minimum_size = Vector2(16, 0)
 layout_mode = 2
 
-[node name="select" type="Button" parent="c/c/c/topBar/c/modes"]
+[node name="select" type="Button" parent="c/c/c/topBar/c/modes" unique_id=1040172252]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_74j0u")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_sdh1e")
@@ -221,7 +221,7 @@ script = ExtResource("5_3vi5u")
 defaultHotkey = &"editModeSelect"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="tile" type="Button" parent="c/c/c/topBar/c/modes"]
+[node name="tile" type="Button" parent="c/c/c/topBar/c/modes" unique_id=259110560]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -231,7 +231,7 @@ defaultHotkey = &"editModeTile"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="key" type="Button" parent="c/c/c/topBar/c/modes"]
+[node name="key" type="Button" parent="c/c/c/topBar/c/modes" unique_id=178010759]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -241,7 +241,7 @@ defaultHotkey = &"editModeKey"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="door" type="Button" parent="c/c/c/topBar/c/modes"]
+[node name="door" type="Button" parent="c/c/c/topBar/c/modes" unique_id=733621631]
 layout_mode = 2
 toggle_mode = true
 button_group = SubResource("ButtonGroup_wm3ai")
@@ -251,22 +251,22 @@ defaultHotkey = &"editModeDoor"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="otherObjects" type="HBoxContainer" parent="c/c/c/topBar/c/modes"]
+[node name="otherObjects" type="HBoxContainer" parent="c/c/c/topBar/c/modes" unique_id=2033916709]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("9_k1sck")
 
-[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes/otherObjects"]
+[node name="spacer" type="Control" parent="c/c/c/topBar/c/modes/otherObjects" unique_id=2082041988]
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects"]
+[node name="c" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects" unique_id=1918404647]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c"]
+[node name="c" type="HBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c" unique_id=290127145]
 layout_mode = 2
 
-[node name="other" type="Button" parent="c/c/c/topBar/c/modes/otherObjects/c/c"]
+[node name="other" type="Button" parent="c/c/c/topBar/c/modes/otherObjects/c/c" unique_id=1950434432]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(36, 0)
 layout_mode = 2
@@ -278,30 +278,30 @@ defaultHotkey = &"editModeOther"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="objectSearch" type="LineEdit" parent="c/c/c/topBar/c/modes/otherObjects/c/c" groups=["explained"]]
+[node name="objectSearch" type="LineEdit" parent="c/c/c/topBar/c/modes/otherObjects/c/c" unique_id=1704964870 groups=["explained"]]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 placeholder_text = "Search objects"
-right_icon = ExtResource("10_8g6du")
 caret_blink = true
+right_icon = ExtResource("10_8g6du")
 metadata/explanation = SubResource("Resource_lo5f0")
 
-[node name="c2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects/c"]
+[node name="c2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects/c" unique_id=1103501859]
 layout_mode = 2
 
-[node name="results" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c/c2"]
+[node name="results" type="VBoxContainer" parent="c/c/c/topBar/c/modes/otherObjects/c/c2" unique_id=20611037]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
 
-[node name="spacer2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects"]
+[node name="spacer2" type="Control" parent="c/c/c/topBar/c/modes/otherObjects" unique_id=186343368]
 custom_minimum_size = Vector2(8, 0)
 layout_mode = 2
 
-[node name="paste" type="Button" parent="c/c/c/topBar/c/modes"]
+[node name="paste" type="Button" parent="c/c/c/topBar/c/modes" unique_id=845118188]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -313,7 +313,7 @@ defaultHotkey = &"editPaste"
 pressedHotkey = &"heldKeepMode"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 
-[node name="settingTabs" type="TabBar" parent="c/c/c/topBar/c"]
+[node name="settingTabs" type="TabBar" parent="c/c/c/topBar/c" unique_id=1704706072]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -325,12 +325,12 @@ tab_0/title = "Level"
 tab_1/title = "Editor"
 tab_2/title = "Game"
 
-[node name="playControls" type="HBoxContainer" parent="c/c/c/topBar/c"]
+[node name="playControls" type="HBoxContainer" parent="c/c/c/topBar/c" unique_id=1554422682]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="savestate" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
+[node name="savestate" type="Button" parent="c/c/c/topBar/c/playControls" unique_id=743053793 groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -340,7 +340,7 @@ defaultHotkey = &"editSavestate"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_mxdmd")
 
-[node name="play" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
+[node name="play" type="Button" parent="c/c/c/topBar/c/playControls" unique_id=543079225 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 disabled = true
@@ -350,7 +350,7 @@ defaultHotkey = &"editStartPlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_1abrv")
 
-[node name="pause" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
+[node name="pause" type="Button" parent="c/c/c/topBar/c/playControls" unique_id=1161351105 groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -360,7 +360,7 @@ defaultHotkey = &"editPausePlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_bn54a")
 
-[node name="stop" type="Button" parent="c/c/c/topBar/c/playControls" groups=["explained"]]
+[node name="stop" type="Button" parent="c/c/c/topBar/c/playControls" unique_id=53970842 groups=["explained"]]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -370,7 +370,7 @@ defaultHotkey = &"editStopPlaytest"
 metadata/_custom_type_script = "uid://buv3n70m06kje"
 metadata/explanation = SubResource("Resource_6lm8n")
 
-[node name="gameCont" type="MarginContainer" parent="c"]
+[node name="gameCont" type="MarginContainer" parent="c" unique_id=1780186179]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -380,7 +380,7 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="gameViewportCont" type="SubViewportContainer" parent="c/gameCont"]
+[node name="gameViewportCont" type="SubViewportContainer" parent="c/gameCont" unique_id=2126106507]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3vi5u")
 layout_mode = 2
@@ -388,23 +388,23 @@ size_flags_vertical = 3
 mouse_filter = 2
 stretch = true
 
-[node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportCont"]
+[node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportCont" unique_id=1963693598]
 unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(820, 628)
 render_target_update_mode = 4
 
-[node name="world" parent="c/gameCont/gameViewportCont/gameViewport" instance=ExtResource("8_5tdu1")]
+[node name="world" parent="c/gameCont/gameViewportCont/gameViewport" unique_id=515989943 instance=ExtResource("8_5tdu1")]
 unique_name_in_owner = true
 
-[node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
+[node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world" unique_id=550330986]
 unique_name_in_owner = true
 position = Vector2(-10, -10)
 anchor_mode = 0
 limit_enabled = false
 
-[node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world"]
+[node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world" unique_id=597463386]
 unique_name_in_owner = true
 offset = Vector2(0, -0.1)
 enabled = false
@@ -415,80 +415,80 @@ limit_bottom = 608
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="multiselect" parent="c/gameCont/gameViewportCont" instance=ExtResource("12_q8l03")]
+[node name="multiselect" parent="c/gameCont/gameViewportCont" unique_id=1464548026 instance=ExtResource("12_q8l03")]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("13_0u1f5")
 
-[node name="outlineViewport1" parent="c/gameCont" instance=ExtResource("28_e62bx")]
+[node name="outlineViewport1" parent="c/gameCont" unique_id=1242978594 instance=ExtResource("28_e62bx")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_pgu5w")
 layout_mode = 2
 
-[node name="outlineViewport2" parent="c/gameCont" instance=ExtResource("28_e62bx")]
+[node name="outlineViewport2" parent="c/gameCont" unique_id=2071303993 instance=ExtResource("28_e62bx")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_ndxgo")
 layout_mode = 2
 
-[node name="outline" type="Node2D" parent="c/gameCont/outlineViewport2"]
+[node name="outline" type="Node2D" parent="c/gameCont/outlineViewport2" unique_id=1982434259]
 unique_name_in_owner = true
 z_index = 8
 position = Vector2(0, -44)
 script = ExtResource("23_lo5f0")
 
-[node name="placePreviewViewportCont" type="SubViewportContainer" parent="c/gameCont"]
+[node name="placePreviewViewportCont" type="SubViewportContainer" parent="c/gameCont" unique_id=89594649]
 modulate = Color(1, 1, 1, 0.5019608)
 material = SubResource("ShaderMaterial_e62bx")
 layout_mode = 2
 mouse_filter = 2
 stretch = true
 
-[node name="placePreviewViewport" type="SubViewport" parent="c/gameCont/placePreviewViewportCont"]
+[node name="placePreviewViewport" type="SubViewport" parent="c/gameCont/placePreviewViewportCont" unique_id=299564087]
 transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(820, 628)
 render_target_update_mode = 4
 
-[node name="placePreviewWorld" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport" instance=ExtResource("8_5tdu1")]
+[node name="placePreviewWorld" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport" unique_id=1869290844 instance=ExtResource("8_5tdu1")]
 unique_name_in_owner = true
 
-[node name="previewObjectsParent" type="Node2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld"]
+[node name="previewObjectsParent" type="Node2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld" unique_id=1256377345]
 unique_name_in_owner = true
 
-[node name="placePreviewCamera" type="Camera2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld"]
+[node name="placePreviewCamera" type="Camera2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld" unique_id=534036334]
 unique_name_in_owner = true
 anchor_mode = 0
 
-[node name="c" type="Control" parent="c/gameCont"]
+[node name="c" type="Control" parent="c/gameCont" unique_id=759970334]
 layout_mode = 2
 mouse_filter = 2
 
-[node name="settingsMenu" parent="c/gameCont/c" instance=ExtResource("25_6lm8n")]
+[node name="settingsMenu" parent="c/gameCont/c" unique_id=226510221 instance=ExtResource("25_6lm8n")]
 unique_name_in_owner = true
 visible = false
 z_index = 2
 layout_mode = 1
 
-[node name="mouseover" parent="c/gameCont/c" instance=ExtResource("26_lo5f0")]
+[node name="mouseover" parent="c/gameCont/c" unique_id=1890289430 instance=ExtResource("26_lo5f0")]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 85.0
 offset_bottom = 49.0
 
-[node name="c3" type="PanelContainer" parent="c"]
+[node name="c3" type="PanelContainer" parent="c" unique_id=374923697]
 z_index = 3
 layout_mode = 2
 
-[node name="c2" type="HBoxContainer" parent="c/c3"]
+[node name="c2" type="HBoxContainer" parent="c/c3" unique_id=263254150]
 layout_mode = 2
 
-[node name="c2" type="MarginContainer" parent="c/c3/c2"]
+[node name="c2" type="MarginContainer" parent="c/c3/c2" unique_id=1686107609]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="quickSet" type="RichTextLabel" parent="c/c3/c2/c2"]
+[node name="quickSet" type="RichTextLabel" parent="c/c3/c2/c2" unique_id=1047817629]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 17)
@@ -501,7 +501,7 @@ scroll_active = false
 autowrap_mode = 0
 script = ExtResource("14_sdh1e")
 
-[node name="explainText" type="RichTextLabel" parent="c/c3/c2/c2"]
+[node name="explainText" type="RichTextLabel" parent="c/c3/c2/c2" unique_id=957444453]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 17)
 layout_mode = 2
@@ -512,7 +512,7 @@ bbcode_enabled = true
 scroll_active = false
 autowrap_mode = 0
 
-[node name="settingsText" type="RichTextLabel" parent="c/c3/c2/c2"]
+[node name="settingsText" type="RichTextLabel" parent="c/c3/c2/c2" unique_id=92265013]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 17)
@@ -525,24 +525,24 @@ text = "IWLCEditor"
 scroll_active = false
 autowrap_mode = 0
 
-[node name="toggleSettingsMenu" type="Button" parent="c/c3/c2" groups=["explained"]]
+[node name="toggleSettingsMenu" type="Button" parent="c/c3/c2" unique_id=1560231123 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 toggle_mode = true
 icon = ExtResource("27_1abrv")
 metadata/explanation = SubResource("Resource_jke8t")
 
-[node name="focusDialog" parent="." instance=ExtResource("12_74j0u")]
+[node name="focusDialog" parent="." unique_id=1487513924 instance=ExtResource("12_74j0u")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 0
 
-[node name="resizeHandles" parent="." instance=ExtResource("35_e62bx")]
+[node name="resizeHandles" parent="." unique_id=329910677 instance=ExtResource("35_e62bx")]
 unique_name_in_owner = true
 z_index = 2
 layout_mode = 1
 
-[node name="screenshotViewportCont" type="SubViewportContainer" parent="."]
+[node name="screenshotViewportCont" type="SubViewportContainer" parent="." unique_id=1283903303]
 unique_name_in_owner = true
 z_index = -999
 layout_mode = 0
@@ -550,60 +550,60 @@ offset_top = 1000.0
 offset_right = 800.0
 offset_bottom = 1705.0
 
-[node name="screenshotViewport" type="SubViewport" parent="screenshotViewportCont"]
+[node name="screenshotViewport" type="SubViewport" parent="screenshotViewportCont" unique_id=1096388141]
 unique_name_in_owner = true
 handle_input_locally = false
 size = Vector2i(800, 697)
 render_target_update_mode = 4
 
-[node name="screenshotCamera" type="Camera2D" parent="screenshotViewportCont/screenshotViewport"]
+[node name="screenshotCamera" type="Camera2D" parent="screenshotViewportCont/screenshotViewport" unique_id=292061019]
 unique_name_in_owner = true
 anchor_mode = 0
 
-[node name="thumbnail" type="VBoxContainer" parent="screenshotViewportCont/screenshotViewport"]
+[node name="thumbnail" type="VBoxContainer" parent="screenshotViewportCont/screenshotViewport" unique_id=716130990]
 unique_name_in_owner = true
 offset_right = 40.0
 offset_bottom = 40.0
 theme = ExtResource("1_j8y2p")
 
-[node name="thumbnailTop" type="PanelContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail"]
+[node name="thumbnailTop" type="PanelContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail" unique_id=472221183]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 
-[node name="screenshotInnerViewportCont" type="SubViewportContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail"]
+[node name="screenshotInnerViewportCont" type="SubViewportContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail" unique_id=877988715]
 layout_mode = 2
 
-[node name="screenshotInnerViewport" type="SubViewport" parent="screenshotViewportCont/screenshotViewport/thumbnail/screenshotInnerViewportCont"]
+[node name="screenshotInnerViewport" type="SubViewport" parent="screenshotViewportCont/screenshotViewport/thumbnail/screenshotInnerViewportCont" unique_id=423232473]
 unique_name_in_owner = true
 handle_input_locally = false
 size = Vector2i(800, 608)
 render_target_update_mode = 4
 
-[node name="screenshotInnerCamera" type="Camera2D" parent="screenshotViewportCont/screenshotViewport/thumbnail/screenshotInnerViewportCont/screenshotInnerViewport"]
+[node name="screenshotInnerCamera" type="Camera2D" parent="screenshotViewportCont/screenshotViewport/thumbnail/screenshotInnerViewportCont/screenshotInnerViewport" unique_id=146203762]
 unique_name_in_owner = true
 anchor_mode = 0
 
-[node name="thumbnailBottom" type="PanelContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail"]
+[node name="thumbnailBottom" type="PanelContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail" unique_id=1230376922]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
-[node name="c" type="MarginContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom"]
+[node name="c" type="MarginContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom" unique_id=2107531191]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c"]
+[node name="c" type="HBoxContainer" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c" unique_id=1586369368]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="thumbnailModpack" type="TextureRect" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c"]
+[node name="thumbnailModpack" type="TextureRect" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c" unique_id=1106232127]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("33_mxdmd")
 expand_mode = 2
 stretch_mode = 3
 
-[node name="thumbnailMods" type="Label" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c"]
+[node name="thumbnailMods" type="Label" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c" unique_id=2131044854]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -612,16 +612,16 @@ label_settings = SubResource("LabelSettings_ndxgo")
 clip_text = true
 text_overrun_behavior = 3
 
-[node name="c" type="Control" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c"]
+[node name="c" type="Control" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c" unique_id=523898954]
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 
-[node name="l" type="Label" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c"]
+[node name="l" type="Label" parent="screenshotViewportCont/screenshotViewport/thumbnail/thumbnailBottom/c/c" unique_id=1074785112]
 layout_mode = 2
 text = "IWLCEditor"
 label_settings = SubResource("LabelSettings_ndxgo")
 
-[node name="saveAsDialog" type="FileDialog" parent="."]
+[node name="saveAsDialog" type="FileDialog" parent="." unique_id=295861744]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Save As"
@@ -631,7 +631,7 @@ display_mode = 1
 access = 1
 use_native_dialog = true
 
-[node name="openDialog" type="FileDialog" parent="."]
+[node name="openDialog" type="FileDialog" parent="." unique_id=620320384]
 unique_name_in_owner = true
 title = "Open"
 initial_position = 2
@@ -641,7 +641,7 @@ display_mode = 1
 access = 1
 use_native_dialog = true
 
-[node name="unsavedChangesPopup" type="ConfirmationDialog" parent="."]
+[node name="unsavedChangesPopup" type="ConfirmationDialog" parent="." unique_id=1352436592]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Unsaved Changes"
@@ -653,7 +653,7 @@ ok_button_text = "Yes"
 dialog_text = "You have unsaved changes.
 Load new level anyway?"
 
-[node name="loadErrorPopup" type="AcceptDialog" parent="."]
+[node name="loadErrorPopup" type="AcceptDialog" parent="." unique_id=192572852]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Load Error"

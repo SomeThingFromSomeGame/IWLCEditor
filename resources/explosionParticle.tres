@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://df2piebmytior"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://df2piebmytior"]
 
 [ext_resource type="Texture2D" uid="uid://42tjwpbsf87j" path="res://assets/game/explosionParticle/negative/0.png" id="1_llbg3"]
 [ext_resource type="Texture2D" uid="uid://v3sy0kdgp74c" path="res://assets/game/explosionParticle/negative/1.png" id="2_irob2"]

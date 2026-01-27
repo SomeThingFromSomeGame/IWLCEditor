@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bk857xt1q6mhe"]
+[gd_scene format=3 uid="uid://bk857xt1q6mhe"]
 
 [ext_resource type="Script" uid="uid://clmtd8tgbgxiy" path="res://scripts/components/other/remoteLock.gd" id="1_kxkn4"]
 
@@ -6,15 +6,15 @@
 resource_local_to_scene = true
 size = Vector2(18, 18)
 
-[node name="remoteLock" type="Node2D"]
+[node name="remoteLock" type="Node2D" unique_id=1361206256]
 z_index = 1
 script = ExtResource("1_kxkn4")
 
-[node name="interact" type="Area2D" parent="."]
+[node name="interact" type="Area2D" parent="." unique_id=2112452232]
 unique_name_in_owner = true
 monitoring = false
 
-[node name="shape" type="CollisionShape2D" parent="interact"]
+[node name="shape" type="CollisionShape2D" parent="interact" unique_id=883914858]
 unique_name_in_owner = true
 position = Vector2(16, 16)
 shape = SubResource("RectangleShape2D_kxkn4")

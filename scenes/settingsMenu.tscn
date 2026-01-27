@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://uojm0pynavni"]
+[gd_scene format=3 uid="uid://uojm0pynavni"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_c8k7n"]
 [ext_resource type="Script" uid="uid://cp1r75v1n7qs1" path="res://scripts/singletons/editor/settingsMenu.gd" id="2_onm7i"]
@@ -70,9 +70,9 @@ MarginContainer/constants/margin_right = 0
 MarginContainer/constants/margin_top = 0
 VBoxContainer/constants/separation = 2
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_tyaol"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_3e3b5"]
 
-[node name="settingsMenu" type="PanelContainer"]
+[node name="settingsMenu" type="PanelContainer" unique_id=1534647259]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -85,16 +85,16 @@ theme = ExtResource("1_c8k7n")
 theme_override_styles/panel = SubResource("StyleBoxFlat_a5etv")
 script = ExtResource("2_onm7i")
 
-[node name="c" type="VBoxContainer" parent="."]
+[node name="c" type="VBoxContainer" parent="." unique_id=2023479286]
 layout_mode = 2
 
-[node name="HSeparator" type="HSeparator" parent="c"]
+[node name="HSeparator" type="HSeparator" parent="c" unique_id=204010922]
 z_index = 2
 layout_mode = 2
 theme_override_constants/separation = 2
 theme_override_styles/separator = SubResource("StyleBoxLine_egwj7")
 
-[node name="levelSettings" type="MarginContainer" parent="c"]
+[node name="levelSettings" type="MarginContainer" parent="c" unique_id=1819875583]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -104,11 +104,11 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="c" type="Control" parent="c/levelSettings"]
+[node name="c" type="Control" parent="c/levelSettings" unique_id=376531002]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="followWorld" type="Control" parent="c/levelSettings/c"]
+[node name="followWorld" type="Control" parent="c/levelSettings/c" unique_id=1415093564]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 0
@@ -118,7 +118,7 @@ mouse_filter = 2
 script = ExtResource("3_psrcj")
 offset = Vector2(10, 10)
 
-[node name="c" type="MarginContainer" parent="c/levelSettings/c/followWorld"]
+[node name="c" type="MarginContainer" parent="c/levelSettings/c/followWorld" unique_id=293413685]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -134,16 +134,16 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="c" type="VBoxContainer" parent="c/levelSettings/c/followWorld/c"]
+[node name="c" type="VBoxContainer" parent="c/levelSettings/c/followWorld/c" unique_id=699786495]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 
-[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c/c" unique_id=696671658]
 layout_mode = 2
 text = "Level Number"
 horizontal_alignment = 1
 
-[node name="levelNumber" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="levelNumber" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c" unique_id=334955009]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
@@ -156,14 +156,14 @@ alignment = 1
 expand_to_text_length = true
 caret_blink = true
 
-[node name="l2" type="Label" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="l2" type="Label" parent="c/levelSettings/c/followWorld/c/c" unique_id=2039284454]
 custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 text = "Level Name"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="levelName" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="levelName" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c" unique_id=267397089]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -175,14 +175,14 @@ alignment = 1
 expand_to_text_length = true
 caret_blink = true
 
-[node name="l3" type="Label" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="l3" type="Label" parent="c/levelSettings/c/followWorld/c/c" unique_id=4534621]
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 text = "Author"
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="levelAuthor" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c"]
+[node name="levelAuthor" type="LineEdit" parent="c/levelSettings/c/followWorld/c/c" unique_id=40076093]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -194,7 +194,7 @@ alignment = 1
 expand_to_text_length = true
 caret_blink = true
 
-[node name="description" type="MarginContainer" parent="c/levelSettings/c/followWorld"]
+[node name="description" type="MarginContainer" parent="c/levelSettings/c/followWorld" unique_id=427994219]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 7
@@ -211,16 +211,16 @@ size_flags_horizontal = 4
 size_flags_vertical = 8
 theme_override_constants/margin_bottom = 27
 
-[node name="descriptionImage" type="TextureRect" parent="c/levelSettings/c/followWorld/description"]
+[node name="descriptionImage" type="TextureRect" parent="c/levelSettings/c/followWorld/description" unique_id=1067577673]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8
 texture = ExtResource("6_3e3b5")
 
-[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/description"]
+[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/description" unique_id=1367594974]
 layout_mode = 2
 
-[node name="c" type="MarginContainer" parent="c/levelSettings/c/followWorld/description/c"]
+[node name="c" type="MarginContainer" parent="c/levelSettings/c/followWorld/description/c" unique_id=989094862]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -228,11 +228,11 @@ mouse_filter = 0
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 
-[node name="c" type="Control" parent="c/levelSettings/c/followWorld/description/c/c"]
+[node name="c" type="Control" parent="c/levelSettings/c/followWorld/description/c/c" unique_id=714435437]
 clip_contents = true
 layout_mode = 2
 
-[node name="levelDescription" type="TextEdit" parent="c/levelSettings/c/followWorld/description/c/c/c"]
+[node name="levelDescription" type="TextEdit" parent="c/levelSettings/c/followWorld/description/c/c/c" unique_id=106925449]
 unique_name_in_owner = true
 layout_mode = 0
 offset_right = 667.0
@@ -242,14 +242,14 @@ wrap_mode = 1
 scroll_fit_content_height = true
 caret_blink = true
 
-[node name="c2" type="MarginContainer" parent="c/levelSettings/c/followWorld/description/c"]
+[node name="c2" type="MarginContainer" parent="c/levelSettings/c/followWorld/description/c" unique_id=2027609818]
 custom_minimum_size = Vector2(114, 0)
 layout_mode = 2
 theme_override_constants/margin_left = 0
 theme_override_constants/margin_top = 34
 theme_override_constants/margin_right = 6
 
-[node name="levelShortNumber" type="LineEdit" parent="c/levelSettings/c/followWorld/description/c/c2"]
+[node name="levelShortNumber" type="LineEdit" parent="c/levelSettings/c/followWorld/description/c/c2" unique_id=1839411243]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -268,124 +268,124 @@ text = "T1-1"
 alignment = 1
 caret_blink = true
 
-[node name="c2" type="MarginContainer" parent="c/levelSettings/c/followWorld"]
+[node name="c2" type="MarginContainer" parent="c/levelSettings/c/followWorld" unique_id=1167694967]
 layout_mode = 1
 offset_right = 8.0
 offset_bottom = 8.0
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 
-[node name="c" type="VBoxContainer" parent="c/levelSettings/c/followWorld/c2"]
+[node name="c" type="VBoxContainer" parent="c/levelSettings/c/followWorld/c2" unique_id=2088966269]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="c" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c" unique_id=1722685046]
 layout_mode = 2
 theme_override_constants/separation = 4
 
-[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c/c"]
+[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c/c" unique_id=1112940767]
 layout_mode = 2
 text = "Revision"
 
-[node name="levelRevision" type="SpinBox" parent="c/levelSettings/c/followWorld/c2/c/c"]
+[node name="levelRevision" type="SpinBox" parent="c/levelSettings/c/followWorld/c2/c/c" unique_id=1890012547]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 value = 1.0
 allow_greater = true
 
-[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="l" type="Label" parent="c/levelSettings/c/followWorld/c2/c" unique_id=2101246616]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Thumbnail"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="thumbnailHideDescription" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="thumbnailHideDescription" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c" unique_id=627665519]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Hide Description"
 
-[node name="c3" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="c3" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c" unique_id=979455027]
 layout_mode = 2
 
-[node name="thumbnailEntireLevel" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c/c3"]
+[node name="thumbnailEntireLevel" type="CheckBox" parent="c/levelSettings/c/followWorld/c2/c/c3" unique_id=165283512]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
 text = "Entire Level"
 
-[node name="clarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c3"]
+[node name="clarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c3" unique_id=2049295385]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "If this is turned off then the thumbnail will only capture a 800x608 centered around the level start, similar to the load preview."
 texture = ExtResource("5_iswfj")
 
-[node name="c2" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c"]
+[node name="c2" type="HBoxContainer" parent="c/levelSettings/c/followWorld/c2/c" unique_id=1420224109]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="generateThumbnail" type="Button" parent="c/levelSettings/c/followWorld/c2/c/c2"]
+[node name="generateThumbnail" type="Button" parent="c/levelSettings/c/followWorld/c2/c/c2" unique_id=1080441817]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = "Generate Thumbnail"
 
-[node name="thumbnailClarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c2"]
+[node name="thumbnailClarifier" type="TextureRect" parent="c/levelSettings/c/followWorld/c2/c/c2" unique_id=1229003876]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Goes to [puzzles]/_thumbnail.png"
 texture = ExtResource("5_iswfj")
 
-[node name="editorSettings" type="MarginContainer" parent="c"]
+[node name="editorSettings" type="MarginContainer" parent="c" unique_id=1912824648]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="c2" type="ScrollContainer" parent="c/editorSettings"]
+[node name="c2" type="ScrollContainer" parent="c/editorSettings" unique_id=951074222]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2" unique_id=1305918308]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c" unique_id=353577135]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Miscellaneous"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="fileDialogWorkaroundCont" type="HBoxContainer" parent="c/editorSettings/c2/c"]
+[node name="fileDialogWorkaroundCont" type="HBoxContainer" parent="c/editorSettings/c2/c" unique_id=358987862]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="fileDialogWorkaround" type="CheckBox" parent="c/editorSettings/c2/c/fileDialogWorkaroundCont"]
+[node name="fileDialogWorkaround" type="CheckBox" parent="c/editorSettings/c2/c/fileDialogWorkaroundCont" unique_id=202141337]
 unique_name_in_owner = true
 layout_mode = 2
 text = "File Dialog Workaround"
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/fileDialogWorkaroundCont"]
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/fileDialogWorkaroundCont" unique_id=1871584540]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Uses godot's built-in file dialog instead of the OS native one. If file dialogs aren't opening correctly (eg. Save As does nothing), turn this on."
 texture = ExtResource("5_iswfj")
 
-[node name="fullscreen" type="CheckBox" parent="c/editorSettings/c2/c"]
+[node name="fullscreen" type="CheckBox" parent="c/editorSettings/c2/c" unique_id=223816599]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Enable Fullscreen (in editor)"
 
-[node name="c2" type="HBoxContainer" parent="c/editorSettings/c2/c"]
+[node name="c2" type="HBoxContainer" parent="c/editorSettings/c2/c" unique_id=329284172]
 layout_mode = 2
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/c2"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/c2" unique_id=2031163933]
 layout_mode = 2
 text = "UI scale "
 label_settings = SubResource("LabelSettings_3e3b5")
 
-[node name="uiScale" type="HSlider" parent="c/editorSettings/c2/c/c2"]
+[node name="uiScale" type="HSlider" parent="c/editorSettings/c2/c/c2" unique_id=759683286]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -395,545 +395,545 @@ step = 0.25
 tick_count = 5
 ticks_on_borders = true
 
-[node name="uiScaleLabel" type="Label" parent="c/editorSettings/c2/c/c2"]
+[node name="uiScaleLabel" type="Label" parent="c/editorSettings/c2/c/c2" unique_id=347857045]
 unique_name_in_owner = true
 layout_mode = 2
 text = " (1.00x)"
 label_settings = SubResource("LabelSettings_3e3b5")
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c2"]
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c2" unique_id=598608214]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Currently, increasing this lowers the resolution of the game. Sorry about that."
 texture = ExtResource("5_iswfj")
 
-[node name="edgeResizing" type="CheckButton" parent="c/editorSettings/c2/c"]
+[node name="edgeResizing" type="CheckButton" parent="c/editorSettings/c2/c" unique_id=1487025343]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Resizing Controls (Handles/Edge)"
 
-[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c"]
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c" unique_id=1238720865]
 layout_mode = 2
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/c"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/c" unique_id=1413734328]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "Hotkeys"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c"]
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c" unique_id=2140542683]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Contextual hotkeys (marked by context and indent) are only active within the described context and take priority over others."
 texture = ExtResource("5_iswfj")
 
-[node name="hotkeys" type="VBoxContainer" parent="c/editorSettings/c2/c"]
+[node name="hotkeys" type="VBoxContainer" parent="c/editorSettings/c2/c" unique_id=1637801536]
 layout_mode = 2
 theme = SubResource("Theme_dkncv")
 
-[node name="heldTileSize16" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="heldTileSize16" parent="c/editorSettings/c2/c/hotkeys" unique_id=1485057698 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Half Tile Snap"
 action = &"heldTileSize16"
 held = true
 
-[node name="heldTileSize4" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="heldTileSize4" parent="c/editorSettings/c2/c/hotkeys" unique_id=134921055 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Eighth Tile Snap"
 action = &"heldTileSize4"
 held = true
 
-[node name="heldKeepMode" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="heldKeepMode" parent="c/editorSettings/c2/c/hotkeys" unique_id=1335503937 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Keep Mode"
 action = &"heldKeepMode"
 held = true
 
-[node name="editStartPlaytest" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editStartPlaytest" parent="c/editorSettings/c2/c/hotkeys" unique_id=1968153112 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Start Playtest"
 action = &"editStartPlaytest"
 
-[node name="editStartPlaytestFromState" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editStartPlaytestFromState" parent="c/editorSettings/c2/c/hotkeys" unique_id=1162054717 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Start Playtest From Latest Spawn"
 action = &"editStartPlaytestFromState"
 
-[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys"]
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys" unique_id=183370337]
 layout_mode = 2
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/c" unique_id=69558017]
 layout_mode = 2
 text = "Playtesting"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/c"]
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/c" unique_id=968620402]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Game controls also apply, though these hotkeys take priority."
 texture = ExtResource("5_iswfj")
 
-[node name="playtesting" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys"]
+[node name="playtesting" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys" unique_id=1815521424]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/playtesting"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/playtesting" unique_id=23154108]
 layout_mode = 2
 
-[node name="editPausePlaytest" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" instance=ExtResource("6_dkncv")]
+[node name="editPausePlaytest" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" unique_id=815458750 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Pause Playtest"
 action = &"editPausePlaytest"
 
-[node name="editStopPlaytest" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" instance=ExtResource("6_dkncv")]
+[node name="editStopPlaytest" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" unique_id=785193492 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Stop Playtest"
 action = &"editStopPlaytest"
 
-[node name="editSavestate" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" instance=ExtResource("6_dkncv")]
+[node name="editSavestate" parent="c/editorSettings/c2/c/hotkeys/playtesting/c" unique_id=1516837483 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Leave Savestate"
 action = &"editSavestate"
 
-[node name="editModeSelect" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editModeSelect" parent="c/editorSettings/c2/c/hotkeys" unique_id=532885260 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Select Mode"
 action = &"editModeSelect"
 
-[node name="editModeTile" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editModeTile" parent="c/editorSettings/c2/c/hotkeys" unique_id=386116007 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Tile Mode"
 action = &"editModeTile"
 
-[node name="editModeKey" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editModeKey" parent="c/editorSettings/c2/c/hotkeys" unique_id=1461443659 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Key Mode"
 action = &"editModeKey"
 
-[node name="editModeDoor" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editModeDoor" parent="c/editorSettings/c2/c/hotkeys" unique_id=107983251 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Door Mode"
 action = &"editModeDoor"
 
-[node name="editModeOther" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editModeOther" parent="c/editorSettings/c2/c/hotkeys" unique_id=1656470496 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Other Objects Mode"
 action = &"editModeOther"
 
-[node name="editObjectSearch" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editObjectSearch" parent="c/editorSettings/c2/c/hotkeys" unique_id=714828553 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Search Other Objects"
 action = &"editObjectSearch"
 
-[node name="editPipette" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editPipette" parent="c/editorSettings/c2/c/hotkeys" unique_id=1746584925 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Pipette"
 action = &"editPipette"
 
-[node name="editOpenSettings" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editOpenSettings" parent="c/editorSettings/c2/c/hotkeys" unique_id=1773810965 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Open Settings"
 action = &"editOpenSettings"
 
-[node name="editNew" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editNew" parent="c/editorSettings/c2/c/hotkeys" unique_id=2039636068 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "New Puzzle"
 action = &"editNew"
 
-[node name="editOpen" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editOpen" parent="c/editorSettings/c2/c/hotkeys" unique_id=1956664750 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Open Puzzle"
 action = &"editOpen"
 
-[node name="editSave" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editSave" parent="c/editorSettings/c2/c/hotkeys" unique_id=1146501870 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Save Puzzle"
 action = &"editSave"
 
-[node name="editSaveAs" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editSaveAs" parent="c/editorSettings/c2/c/hotkeys" unique_id=605120680 instance=ExtResource("6_dkncv")]
 unique_name_in_owner = true
 layout_mode = 2
 label = "Save Puzzle As"
 action = &"editSaveAs"
 
-[node name="editExport" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editExport" parent="c/editorSettings/c2/c/hotkeys" unique_id=370408202 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Export Puzzle"
 action = &"editExport"
 
-[node name="editHome" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editHome" parent="c/editorSettings/c2/c/hotkeys" unique_id=982816727 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Reset Camera"
 action = &"editHome"
 
-[node name="editCopy" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCopy" parent="c/editorSettings/c2/c/hotkeys" unique_id=1206779946 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Copy Component(s)"
 action = &"editCopy"
 
-[node name="editCut" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCut" parent="c/editorSettings/c2/c/hotkeys" unique_id=889988248 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Cut Component(s)"
 action = &"editCut"
 
-[node name="editPaste" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editPaste" parent="c/editorSettings/c2/c/hotkeys" unique_id=982782863 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Paste Component(s)"
 action = &"editPaste"
 
-[node name="editUndo" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editUndo" parent="c/editorSettings/c2/c/hotkeys" unique_id=164405574 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Undo"
 action = &"editUndo"
 
-[node name="editRedo" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editRedo" parent="c/editorSettings/c2/c/hotkeys" unique_id=907721405 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Redo"
 action = &"editRedo"
 
-[node name="editCameraUp" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCameraUp" parent="c/editorSettings/c2/c/hotkeys" unique_id=1004361579 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Move Camera Up"
 action = &"editCameraUp"
 
-[node name="editCameraLeft" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCameraLeft" parent="c/editorSettings/c2/c/hotkeys" unique_id=267156796 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Move Camera Left"
 action = &"editCameraLeft"
 
-[node name="editCameraDown" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCameraDown" parent="c/editorSettings/c2/c/hotkeys" unique_id=1556559121 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Move Camera Down"
 action = &"editCameraDown"
 
-[node name="editCameraRight" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editCameraRight" parent="c/editorSettings/c2/c/hotkeys" unique_id=1080043683 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Move Camera Right"
 action = &"editCameraRight"
 
-[node name="editDrag" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editDrag" parent="c/editorSettings/c2/c/hotkeys" unique_id=1535884449 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Drag Selected Component(s)"
 action = &"editDrag"
 
-[node name="editDelete" parent="c/editorSettings/c2/c/hotkeys" instance=ExtResource("6_dkncv")]
+[node name="editDelete" parent="c/editorSettings/c2/c/hotkeys" unique_id=340335711 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Delete Selected Component(s)"
 action = &"editDelete"
 
-[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys"]
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys" unique_id=1618093676]
 layout_mode = 2
 text = "Component Focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="componentFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys"]
+[node name="componentFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys" unique_id=1842846324]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused" unique_id=47701279]
 layout_mode = 2
 
-[node name="quicksetColor" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" instance=ExtResource("6_dkncv")]
+[node name="quicksetColor" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=1674004282 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Quickset Color"
 action = &"quicksetColor"
 
-[node name="c6" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="c6" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=876621198]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6"]
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6" unique_id=1762851214]
 layout_mode = 2
 
-[node name="colorQuicksetSetting" type="GridContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6/c" groups=["modUI"]]
+[node name="colorQuicksetSetting" type="GridContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6/c" unique_id=2119356001 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("7_07bsi")
 metadata/_custom_type_script = "uid://b43xpe67iop1m"
 
-[node name="c" type="Control" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6/c"]
+[node name="c" type="Control" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c6/c" unique_id=1351782086]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="l4" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="l4" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=1262902697]
 layout_mode = 2
 text = "Number Input Selected"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="numberInputSelected" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="numberInputSelected" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=86470835]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected" unique_id=1863597333]
 layout_mode = 2
 
-[node name="numberNegate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected/c" instance=ExtResource("6_dkncv")]
+[node name="numberNegate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected/c" unique_id=1401685254 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Multiply By -1"
 action = &"numberNegate"
 
-[node name="numberTimesI" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected/c" instance=ExtResource("6_dkncv")]
+[node name="numberTimesI" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/numberInputSelected/c" unique_id=1319778125 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Multiply By i"
 action = &"numberTimesI"
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=1496993694]
 layout_mode = 2
 text = "Key Focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="keyFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="keyFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=326315981]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused" unique_id=1815872776]
 layout_mode = 2
 
-[node name="focusKeyNormal" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyNormal" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=272704504 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Normal Type"
 action = &"focusKeyNormal"
 
-[node name="focusKeyExact" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyExact" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=530491954 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Exact Type"
 action = &"focusKeyExact"
 
-[node name="focusKeyStar" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyStar" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=937324707 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Star Type"
 action = &"focusKeyStar"
 
-[node name="focusKeyRotor" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyRotor" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=1485024162 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Advance Rotor Type"
 action = &"focusKeyRotor"
 
-[node name="focusKeyCurse" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyCurse" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=1568535978 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Curse Type"
 action = &"focusKeyCurse"
 prerequisite = &"C5"
 
-[node name="focusKeyInfinite" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyInfinite" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyFocused/c" unique_id=116495567 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Infinite"
 action = &"focusKeyInfinite"
 
-[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=372084689]
 layout_mode = 2
 text = "Door Focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="doorFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="doorFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=1847892137]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused" unique_id=1757975113]
 layout_mode = 2
 
-[node name="focusDoorAddLock" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusDoorAddLock" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=1916341183 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Add Lock"
 action = &"focusDoorAddLock"
 
-[node name="focusDoorColorLink" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusDoorColorLink" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=1577821188 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Color Link"
 action = &"focusDoorColorLink"
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=1649941222]
 layout_mode = 2
 text = "Editing Door Properties"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="editingDoorProperties" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c"]
+[node name="editingDoorProperties" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=712284263]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties" unique_id=602979089]
 layout_mode = 2
 
-[node name="focusDoorFrozen" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusDoorFrozen" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" unique_id=1932390480 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Frozen"
 action = &"focusDoorFrozen"
 
-[node name="focusDoorCrumbled" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusDoorCrumbled" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" unique_id=483256718 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Crumbled"
 action = &"focusDoorCrumbled"
 
-[node name="focusDoorPainted" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusDoorPainted" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingDoorProperties/c" unique_id=1148879997 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Painted"
 action = &"focusDoorPainted"
 
-[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c"]
+[node name="l2" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=1103998184]
 layout_mode = 2
 text = "Editing Lock Properties"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="editingLockProperties" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c"]
+[node name="editingLockProperties" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c" unique_id=1845459119]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties" unique_id=639741107]
 layout_mode = 2
 
-[node name="focusLockDuplicate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockDuplicate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=1990901040 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Duplicate Lock"
 action = &"focusLockDuplicate"
 
-[node name="focusLockNormal" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockNormal" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=1071315771 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Normal Type"
 action = &"focusLockNormal"
 
-[node name="focusLockBlank" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockBlank" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=412457438 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Blank Type"
 action = &"focusLockBlank"
 
-[node name="focusLockBlast" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockBlast" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=352455174 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Blast Type"
 action = &"focusLockBlast"
 
-[node name="focusLockAll" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockAll" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=1803709525 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set All Type"
 action = &"focusLockAll"
 
-[node name="focusLockExact" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockExact" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=83846677 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Set Exact Type"
 action = &"focusLockExact"
 prerequisite = &"C3"
 
-[node name="focusLockNegated" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockNegated" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=1810499545 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Negated"
 action = &"focusLockNegated"
 prerequisite = &"C1"
 
-[node name="focusLockArmament" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockArmament" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=2064461687 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Armament"
 action = &"focusLockArmament"
 prerequisite = &"C5"
 
-[node name="focusLockConvertRemote" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="focusLockConvertRemote" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=591455256 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Convert To Remote Lock"
 action = &"focusLockConvertRemote"
 prerequisite = &"C1"
 
-[node name="quicksetLockSize" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" instance=ExtResource("6_dkncv")]
+[node name="quicksetLockSize" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=267433418 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Quickset Lock Size"
 action = &"quicksetLockSize"
 
-[node name="c" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c"]
+[node name="c" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c" unique_id=1905855675]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c"]
+[node name="c" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c" unique_id=644119845]
 layout_mode = 2
 
-[node name="lockSizeQuicksetSetting" type="GridContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c/c"]
+[node name="lockSizeQuicksetSetting" type="GridContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c/c" unique_id=1849882770]
 unique_name_in_owner = true
 layout_mode = 2
 script = ExtResource("8_huukw")
 metadata/_custom_type_script = "uid://upqgnu1wo3et"
 
-[node name="c" type="Control" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c/c"]
+[node name="c" type="Control" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/doorFocused/c/editingLockProperties/c/c/c" unique_id=1287692598]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="l3" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="l3" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=454951583]
 layout_mode = 2
 text = "Key Counter Focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="keyCounterFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="keyCounterFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=777709684]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyCounterFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyCounterFocused" unique_id=1752173423]
 layout_mode = 2
 
-[node name="focusKeyCounterAddElement" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyCounterFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusKeyCounterAddElement" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/keyCounterFocused/c" unique_id=563174197 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Add Element"
 action = &"focusKeyCounterAddElement"
 
-[node name="c4" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="c4" type="HBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=497839922]
 layout_mode = 2
 
-[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c4"]
+[node name="l" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c4" unique_id=571325674]
 layout_mode = 2
 text = "Remote Lock Focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c4"]
+[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/c4" unique_id=1737617238]
 layout_mode = 2
 size_flags_vertical = 0
 tooltip_text = "Relevant hotkeys from \"Editing Door Properties\" and \"Editing Lock Properties\" also apply and take priority."
 texture = ExtResource("5_iswfj")
 
-[node name="remoteLockFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="remoteLockFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=581252308]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/remoteLockFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/remoteLockFocused" unique_id=912741936]
 layout_mode = 2
 
-[node name="focusRemoteLockAddConnection" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/remoteLockFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusRemoteLockAddConnection" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/remoteLockFocused/c" unique_id=1060135673 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Add Connection"
 action = &"focusRemoteLockAddConnection"
 
-[node name="l5" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="l5" type="Label" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=1574871636]
 layout_mode = 2
 text = "Player/Savestate focused"
 label_settings = SubResource("LabelSettings_tyaol")
 vertical_alignment = 2
 
-[node name="playerFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c"]
+[node name="playerFocused" type="MarginContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c" unique_id=2104167910]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused"]
+[node name="c" type="VBoxContainer" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused" unique_id=973826935]
 layout_mode = 2
 
-[node name="focusPlayerStart" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusPlayerStart" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" unique_id=1047678653 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Start Playtest From Focused Spawn"
 action = &"focusPlayerStart"
 
-[node name="focusPlayerStar" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusPlayerStar" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" unique_id=1060274272 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Star"
 action = &"focusPlayerStar"
 
-[node name="focusPlayerCurse" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusPlayerCurse" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" unique_id=1906607976 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Toggle Curse"
 action = &"focusPlayerCurse"
 prerequisite = &"C5"
 
-[node name="focusPlayerSavestate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" instance=ExtResource("6_dkncv")]
+[node name="focusPlayerSavestate" parent="c/editorSettings/c2/c/hotkeys/componentFocused/c/playerFocused/c" unique_id=752465013 instance=ExtResource("6_dkncv")]
 layout_mode = 2
 label = "Leave Savestate"
 action = &"focusPlayerSavestate"
 
-[node name="gameSettings" parent="c" instance=ExtResource("6_tyaol")]
+[node name="gameSettings" parent="c" unique_id=631771401 instance=ExtResource("6_tyaol")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
-toneButtonGroup = SubResource("ButtonGroup_tyaol")
+toneButtonGroup = SubResource("ButtonGroup_3e3b5")
 
 [connection signal="focus_exited" from="c/levelSettings/c/followWorld/c/c/levelNumber" to="." method="_defocus"]
 [connection signal="text_changed" from="c/levelSettings/c/followWorld/c/c/levelNumber" to="." method="_levelNumberSet"]

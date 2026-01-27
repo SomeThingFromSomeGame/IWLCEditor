@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cy3r5ixcra171"]
+[gd_scene format=3 uid="uid://cy3r5ixcra171"]
 
 [ext_resource type="Script" uid="uid://bkvb1du41rufh" path="res://scripts/singletons/mods/modsWindow.gd" id="1_3smad"]
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_gbm3x"]
@@ -17,7 +17,7 @@ font_size = 12
 font = ExtResource("5_pjwfn")
 font_size = 10
 
-[node name="modsWindow" type="Window"]
+[node name="modsWindow" type="Window" unique_id=308826487]
 oversampling_override = 1.0
 title = "Select Mods"
 initial_position = 2
@@ -26,7 +26,7 @@ transient = true
 theme = ExtResource("1_gbm3x")
 script = ExtResource("1_3smad")
 
-[node name="selectMods" type="PanelContainer" parent="."]
+[node name="selectMods" type="PanelContainer" parent="." unique_id=98303778]
 unique_name_in_owner = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,76 +36,76 @@ grow_vertical = 2
 focus_mode = 1
 script = ExtResource("3_wdxyk")
 
-[node name="c" type="HBoxContainer" parent="selectMods"]
+[node name="c" type="HBoxContainer" parent="selectMods" unique_id=1327065845]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="selectMods/c"]
+[node name="c" type="VBoxContainer" parent="selectMods/c" unique_id=2025740089]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.9
 
-[node name="c" type="HBoxContainer" parent="selectMods/c/c"]
+[node name="c" type="HBoxContainer" parent="selectMods/c/c" unique_id=896963113]
 layout_mode = 2
 
-[node name="l" type="Label" parent="selectMods/c/c/c"]
+[node name="l" type="Label" parent="selectMods/c/c/c" unique_id=1786883642]
 layout_mode = 2
 text = "Modpack: "
 
-[node name="modpacks" type="OptionButton" parent="selectMods/c/c/c"]
+[node name="modpacks" type="OptionButton" parent="selectMods/c/c/c" unique_id=735270048]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="versionsLabel" type="Label" parent="selectMods/c/c/c"]
+[node name="versionsLabel" type="Label" parent="selectMods/c/c/c" unique_id=1035017725]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Version:"
 
-[node name="versions" type="OptionButton" parent="selectMods/c/c/c"]
+[node name="versions" type="OptionButton" parent="selectMods/c/c/c" unique_id=3034323]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="sep" type="HSeparator" parent="selectMods/c/c"]
+[node name="sep" type="HSeparator" parent="selectMods/c/c" unique_id=1112668008]
 layout_mode = 2
 
-[node name="c2" type="ScrollContainer" parent="selectMods/c/c"]
+[node name="c2" type="ScrollContainer" parent="selectMods/c/c" unique_id=1144637349]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="mods" type="VBoxContainer" parent="selectMods/c/c/c2"]
+[node name="mods" type="VBoxContainer" parent="selectMods/c/c/c2" unique_id=1500611796]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="sep" type="VSeparator" parent="selectMods/c"]
+[node name="sep" type="VSeparator" parent="selectMods/c" unique_id=1956547695]
 layout_mode = 2
 
-[node name="c2" type="MarginContainer" parent="selectMods/c"]
+[node name="c2" type="MarginContainer" parent="selectMods/c" unique_id=456039456]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 
-[node name="c2" type="VBoxContainer" parent="selectMods/c/c2"]
+[node name="c2" type="VBoxContainer" parent="selectMods/c/c2" unique_id=1064203482]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="scroll" type="ScrollContainer" parent="selectMods/c/c2/c2"]
+[node name="scroll" type="ScrollContainer" parent="selectMods/c/c2/c2" unique_id=1374167781]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="c" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll"]
+[node name="c" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll" unique_id=798328971]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="info" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c"]
+[node name="info" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c" unique_id=1801535077]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="infoName" type="Label" parent="selectMods/c/c2/c2/scroll/c/info"]
+[node name="infoName" type="Label" parent="selectMods/c/c2/c2/scroll/c/info" unique_id=1864200731]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
@@ -115,25 +115,25 @@ horizontal_alignment = 1
 vertical_alignment = 2
 autowrap_mode = 3
 
-[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info"]
+[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info" unique_id=538350890]
 layout_mode = 2
 theme_type_variation = &"HSeparatorFancy"
 
-[node name="modpackInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c/info"]
+[node name="modpackInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c/info" unique_id=1458695748]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="infoIcon" type="TextureRect" parent="selectMods/c/c2/c2/scroll/c/info/modpackInfo"]
+[node name="infoIcon" type="TextureRect" parent="selectMods/c/c2/c2/scroll/c/info/modpackInfo" unique_id=807265840]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 texture = ExtResource("3_ug10a")
 
-[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info/modpackInfo"]
+[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info/modpackInfo" unique_id=53920042]
 layout_mode = 2
 theme_type_variation = &"HSeparatorFancy"
 
-[node name="infoDescription" type="Label" parent="selectMods/c/c2/c2/scroll/c/info"]
+[node name="infoDescription" type="Label" parent="selectMods/c/c2/c2/scroll/c/info" unique_id=365466652]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -141,15 +141,15 @@ text = "Info paragraph"
 label_settings = SubResource("LabelSettings_ug10a")
 autowrap_mode = 2
 
-[node name="versionInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c/info"]
+[node name="versionInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c/info" unique_id=1352879690]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo"]
+[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo" unique_id=1933123576]
 layout_mode = 2
 theme_type_variation = &"HSeparatorFancy"
 
-[node name="version" type="RichTextLabel" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo"]
+[node name="version" type="RichTextLabel" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo" unique_id=856708418]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("5_iduno")
@@ -159,7 +159,7 @@ text = "Version: "
 fit_content = true
 horizontal_alignment = 1
 
-[node name="versionDescription" type="Label" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo"]
+[node name="versionDescription" type="Label" parent="selectMods/c/c2/c2/scroll/c/info/versionInfo" unique_id=443762208]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -167,13 +167,13 @@ text = "Version paragraph"
 label_settings = SubResource("LabelSettings_ug10a")
 autowrap_mode = 2
 
-[node name="noModpackInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c"]
+[node name="noModpackInfo" type="VBoxContainer" parent="selectMods/c/c2/c2/scroll/c" unique_id=348763950]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="l" type="Label" parent="selectMods/c/c2/c2/scroll/c/noModpackInfo"]
+[node name="l" type="Label" parent="selectMods/c/c2/c2/scroll/c/noModpackInfo" unique_id=620688986]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "
@@ -183,25 +183,25 @@ label_settings = SubResource("LabelSettings_ug10a")
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="buttons" type="VBoxContainer" parent="selectMods/c/c2/c2"]
+[node name="buttons" type="VBoxContainer" parent="selectMods/c/c2/c2" unique_id=793866538]
 layout_mode = 2
 
-[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/buttons"]
+[node name="sep" type="HSeparator" parent="selectMods/c/c2/c2/buttons" unique_id=2130892593]
 layout_mode = 2
 theme_type_variation = &"HSeparatorFancy"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="selectMods/c/c2/c2/buttons"]
+[node name="HBoxContainer" type="HBoxContainer" parent="selectMods/c/c2/c2/buttons" unique_id=456211174]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="cancelButton" type="Button" parent="selectMods/c/c2/c2/buttons/HBoxContainer"]
+[node name="cancelButton" type="Button" parent="selectMods/c/c2/c2/buttons/HBoxContainer" unique_id=538260323]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = "Close"
 
-[node name="nextButton" type="Button" parent="selectMods/c/c2/c2/buttons/HBoxContainer"]
+[node name="nextButton" type="Button" parent="selectMods/c/c2/c2/buttons/HBoxContainer" unique_id=2023298261]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
@@ -209,7 +209,7 @@ theme_type_variation = &"RadioButtonText"
 text = "Next
 "
 
-[node name="findProblems" type="PanelContainer" parent="."]
+[node name="findProblems" type="PanelContainer" parent="." unique_id=710830694]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 15
@@ -219,69 +219,69 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("8_yb2h5")
 
-[node name="c" type="HBoxContainer" parent="findProblems"]
+[node name="c" type="HBoxContainer" parent="findProblems" unique_id=1125262061]
 layout_mode = 2
 
-[node name="c" type="HBoxContainer" parent="findProblems/c"]
+[node name="c" type="HBoxContainer" parent="findProblems/c" unique_id=1003740345]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.9
 
-[node name="c" type="VBoxContainer" parent="findProblems/c/c"]
+[node name="c" type="VBoxContainer" parent="findProblems/c/c" unique_id=1188460683]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="modsAddedLabel" type="Label" parent="findProblems/c/c/c"]
+[node name="modsAddedLabel" type="Label" parent="findProblems/c/c/c" unique_id=2057199889]
 layout_mode = 2
 text = "Mods Added"
 horizontal_alignment = 1
 
-[node name="sep" type="HSeparator" parent="findProblems/c/c/c"]
+[node name="sep" type="HSeparator" parent="findProblems/c/c/c" unique_id=1267527869]
 layout_mode = 2
 
-[node name="modsAdded" type="VBoxContainer" parent="findProblems/c/c/c"]
+[node name="modsAdded" type="VBoxContainer" parent="findProblems/c/c/c" unique_id=2091972464]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="sep" type="VSeparator" parent="findProblems/c/c"]
+[node name="sep" type="VSeparator" parent="findProblems/c/c" unique_id=1156270631]
 layout_mode = 2
 
-[node name="c2" type="VBoxContainer" parent="findProblems/c/c"]
+[node name="c2" type="VBoxContainer" parent="findProblems/c/c" unique_id=2074877766]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="modsRemovedLabel" type="Label" parent="findProblems/c/c/c2"]
+[node name="modsRemovedLabel" type="Label" parent="findProblems/c/c/c2" unique_id=57664093]
 layout_mode = 2
 text = "Mods Removed"
 horizontal_alignment = 1
 
-[node name="sep" type="HSeparator" parent="findProblems/c/c/c2"]
+[node name="sep" type="HSeparator" parent="findProblems/c/c/c2" unique_id=1682927640]
 layout_mode = 2
 
-[node name="modsRemoved" type="VBoxContainer" parent="findProblems/c/c/c2"]
+[node name="modsRemoved" type="VBoxContainer" parent="findProblems/c/c/c2" unique_id=829854323]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="sep" type="VSeparator" parent="findProblems/c"]
+[node name="sep" type="VSeparator" parent="findProblems/c" unique_id=354090211]
 layout_mode = 2
 
-[node name="c2" type="MarginContainer" parent="findProblems/c"]
+[node name="c2" type="MarginContainer" parent="findProblems/c" unique_id=666552799]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_right = 8
 
-[node name="c" type="ScrollContainer" parent="findProblems/c/c2"]
+[node name="c" type="ScrollContainer" parent="findProblems/c/c2" unique_id=510308704]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="findProblems/c/c2/c"]
+[node name="c" type="VBoxContainer" parent="findProblems/c/c2/c" unique_id=443248774]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="modName" type="Label" parent="findProblems/c/c2/c/c"]
+[node name="modName" type="Label" parent="findProblems/c/c2/c/c" unique_id=62837784]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Title of the thing"
@@ -289,11 +289,11 @@ label_settings = SubResource("LabelSettings_iduno")
 horizontal_alignment = 1
 vertical_alignment = 2
 
-[node name="HSeparator" type="HSeparator" parent="findProblems/c/c2/c/c"]
+[node name="HSeparator" type="HSeparator" parent="findProblems/c/c2/c/c" unique_id=1610257289]
 layout_mode = 2
 theme_type_variation = &"HSeparatorFancy"
 
-[node name="problemsLabel" type="Label" parent="findProblems/c/c2/c/c"]
+[node name="problemsLabel" type="Label" parent="findProblems/c/c2/c/c" unique_id=854916010]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
@@ -303,22 +303,22 @@ label_settings = SubResource("LabelSettings_ug10a")
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="problems" type="VBoxContainer" parent="findProblems/c/c2/c/c"]
+[node name="problems" type="VBoxContainer" parent="findProblems/c/c2/c/c" unique_id=1425647865]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="buttons" type="HBoxContainer" parent="findProblems/c/c2/c/c"]
+[node name="buttons" type="HBoxContainer" parent="findProblems/c/c2/c/c" unique_id=2111557209]
 layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="problemsCancel" type="Button" parent="findProblems/c/c2/c/c/buttons"]
+[node name="problemsCancel" type="Button" parent="findProblems/c/c2/c/c/buttons" unique_id=1678835838]
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"
 text = "Back"
 
-[node name="saveChanges" type="Button" parent="findProblems/c/c2/c/c/buttons"]
+[node name="saveChanges" type="Button" parent="findProblems/c/c2/c/c/buttons" unique_id=811343660]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"RadioButtonText"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://ccqphk3fjcl1e"]
+[gd_scene format=3 uid="uid://ccqphk3fjcl1e"]
 
 [ext_resource type="Script" uid="uid://2wf20cwqyit2" path="res://scripts/singletons/game/mouseover.gd" id="1_gl1n8"]
 [ext_resource type="FontFile" uid="uid://chu3ujnqyd5tv" path="res://resources/fonts/fMouseover.fnt" id="1_gp1tu"]
@@ -29,24 +29,24 @@ stacked_shadow_0/color = Color(0.7529412, 0.7529412, 0.7529412, 1)
 stacked_shadow_1/offset = Vector2(1, 0)
 stacked_shadow_1/color = Color(0.7529412, 0.7529412, 0.7529412, 1)
 
-[node name="mouseover" type="PanelContainer"]
+[node name="mouseover" type="PanelContainer" unique_id=1903987343]
 offset_right = 16.0
 offset_bottom = 19.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gl1n8")
 script = ExtResource("1_gl1n8")
 
-[node name="c" type="PanelContainer" parent="."]
+[node name="c" type="PanelContainer" parent="." unique_id=2082105846]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_p4mr1")
 
-[node name="c" type="MarginContainer" parent="c"]
+[node name="c" type="MarginContainer" parent="c" unique_id=2091554008]
 layout_mode = 2
 theme_override_constants/margin_left = 6
 theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="text" type="Label" parent="c/c"]
+[node name="text" type="Label" parent="c/c" unique_id=1609442809]
 unique_name_in_owner = true
 layout_mode = 2
 text = "White Key

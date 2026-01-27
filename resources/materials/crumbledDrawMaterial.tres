@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://djuyq16e0y7yw"]
+[gd_resource type="ShaderMaterial" format=3 uid="uid://djuyq16e0y7yw"]
 
 [ext_resource type="Shader" uid="uid://c67v068nbo374" path="res://resources/materials/crumbledDraw.gdshader" id="1_wk5gy"]
 

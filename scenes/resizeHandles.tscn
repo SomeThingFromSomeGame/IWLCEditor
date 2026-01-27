@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dhp8ohn6mj5pr"]
+[gd_scene format=3 uid="uid://dhp8ohn6mj5pr"]
 
 [ext_resource type="Theme" uid="uid://bvfthh0vm4fbp" path="res://resources/uiTheme.tres" id="1_cwkyx"]
 [ext_resource type="Script" uid="uid://bct6vpo7hiunf" path="res://scripts/singletons/editor/resizeHandles.gd" id="2_5ovgh"]
@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://b0atdpykfc87f" path="res://assets/ui/resizeHandles/bDiag.png" id="4_htsoa"]
 [ext_resource type="Texture2D" uid="uid://dwf3e6wo72q1f" path="res://assets/ui/resizeHandles/horiz.png" id="5_oip4u"]
 
-[node name="resizeHandles" type="Control"]
+[node name="resizeHandles" type="Control" unique_id=903255164]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ mouse_filter = 2
 theme = ExtResource("1_cwkyx")
 script = ExtResource("2_5ovgh")
 
-[node name="topleft" type="Button" parent="."]
+[node name="topleft" type="Button" parent="." unique_id=1011603549]
 layout_mode = 1
 offset_left = -11.0
 offset_top = -11.0
@@ -28,7 +28,7 @@ mouse_default_cursor_shape = 12
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("2_vqn4x")
 
-[node name="top" type="Button" parent="."]
+[node name="top" type="Button" parent="." unique_id=1015386134]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -41,7 +41,7 @@ mouse_default_cursor_shape = 9
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("3_5ovgh")
 
-[node name="topright" type="Button" parent="."]
+[node name="topright" type="Button" parent="." unique_id=739380454]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -53,7 +53,7 @@ mouse_default_cursor_shape = 11
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("4_htsoa")
 
-[node name="left" type="Button" parent="."]
+[node name="left" type="Button" parent="." unique_id=737913326]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -66,7 +66,7 @@ mouse_default_cursor_shape = 10
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("5_oip4u")
 
-[node name="right" type="Button" parent="."]
+[node name="right" type="Button" parent="." unique_id=956873528]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -82,7 +82,7 @@ mouse_default_cursor_shape = 10
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("5_oip4u")
 
-[node name="bottomleft" type="Button" parent="."]
+[node name="bottomleft" type="Button" parent="." unique_id=1967175099]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
@@ -94,7 +94,7 @@ mouse_default_cursor_shape = 11
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("4_htsoa")
 
-[node name="bottom" type="Button" parent="."]
+[node name="bottom" type="Button" parent="." unique_id=74615148]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -110,7 +110,7 @@ mouse_default_cursor_shape = 9
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("3_5ovgh")
 
-[node name="bottomright" type="Button" parent="."]
+[node name="bottomright" type="Button" parent="." unique_id=1207280633]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
