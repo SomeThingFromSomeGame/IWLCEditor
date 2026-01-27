@@ -12,12 +12,14 @@ func _process(_delta) -> void:
 		target = null
 		if editor.sizeDragging(): target = editor.componentDragged
 		if !target: target = editor.focusDialog.componentFocused
-		if !target or (target is Lock and target.parent.type == Door.TYPE.SIMPLE): target = editor.focusDialog.focused
+		if !target or (target is Lock and target.parent.type == Door.TYPE.SIMPLE) or (target is KeyCounterElement): target = editor.focusDialog.focused
 		if target and target.get_script() not in Game.RESIZABLE_COMPONENTS: target = null
 	visible = !!target
 	if target:
 		position = editor.worldspaceToScreenspace(target.getDrawPosition())
 		size = target.getDrawSize() * editor.cameraZoom / Game.uiScale
+		%diagonals.visible = target is not KeyCounter
+		%vertical.visible = target is not KeyCounter
 
 func _topleft() -> void: 		editor.grab_focus(); editor.startSizeDrag(target, Vector2(-1,-1))
 func _top() -> void: 			editor.grab_focus(); editor.startSizeDrag(target, Vector2(0,-1))

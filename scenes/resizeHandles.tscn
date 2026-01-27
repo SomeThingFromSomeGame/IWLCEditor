@@ -20,7 +20,17 @@ mouse_filter = 2
 theme = ExtResource("1_cwkyx")
 script = ExtResource("2_5ovgh")
 
-[node name="topleft" type="Button" parent="." unique_id=1011603549]
+[node name="diagonals" type="Control" parent="." unique_id=1822592848]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="topleft" type="Button" parent="diagonals" unique_id=1011603549]
 layout_mode = 1
 offset_left = -11.0
 offset_top = -11.0
@@ -28,7 +38,56 @@ mouse_default_cursor_shape = 12
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("2_vqn4x")
 
-[node name="top" type="Button" parent="." unique_id=1015386134]
+[node name="topright" type="Button" parent="diagonals" unique_id=739380454]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = -11.0
+offset_right = 11.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 11
+theme_type_variation = &"ResizeHandleButton"
+icon = ExtResource("4_htsoa")
+
+[node name="bottomleft" type="Button" parent="diagonals" unique_id=1967175099]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -11.0
+offset_bottom = 11.0
+grow_vertical = 0
+mouse_default_cursor_shape = 11
+theme_type_variation = &"ResizeHandleButton"
+icon = ExtResource("4_htsoa")
+
+[node name="bottomright" type="Button" parent="diagonals" unique_id=1207280633]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 11.0
+offset_bottom = 11.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_default_cursor_shape = 12
+theme_type_variation = &"ResizeHandleButton"
+icon = ExtResource("2_vqn4x")
+
+[node name="vertical" type="Control" parent="." unique_id=823402863]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="top" type="Button" parent="vertical" unique_id=1015386134]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -41,60 +100,7 @@ mouse_default_cursor_shape = 9
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("3_5ovgh")
 
-[node name="topright" type="Button" parent="." unique_id=739380454]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_top = -11.0
-offset_right = 11.0
-grow_horizontal = 0
-mouse_default_cursor_shape = 11
-theme_type_variation = &"ResizeHandleButton"
-icon = ExtResource("4_htsoa")
-
-[node name="left" type="Button" parent="." unique_id=737913326]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -11.0
-offset_top = -5.5
-offset_bottom = 5.5
-grow_vertical = 2
-mouse_default_cursor_shape = 10
-theme_type_variation = &"ResizeHandleButton"
-icon = ExtResource("5_oip4u")
-
-[node name="right" type="Button" parent="." unique_id=956873528]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -5.5
-offset_right = 11.0
-offset_bottom = 5.5
-grow_horizontal = 0
-grow_vertical = 2
-mouse_default_cursor_shape = 10
-theme_type_variation = &"ResizeHandleButton"
-icon = ExtResource("5_oip4u")
-
-[node name="bottomleft" type="Button" parent="." unique_id=1967175099]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = -11.0
-offset_bottom = 11.0
-grow_vertical = 0
-mouse_default_cursor_shape = 11
-theme_type_variation = &"ResizeHandleButton"
-icon = ExtResource("4_htsoa")
-
-[node name="bottom" type="Button" parent="." unique_id=74615148]
+[node name="bottom" type="Button" parent="vertical" unique_id=74615148]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -110,34 +116,58 @@ mouse_default_cursor_shape = 9
 theme_type_variation = &"ResizeHandleButton"
 icon = ExtResource("3_5ovgh")
 
-[node name="bottomright" type="Button" parent="." unique_id=1207280633]
+[node name="horizontal" type="Control" parent="." unique_id=165122838]
+unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 11.0
-offset_bottom = 11.0
-grow_horizontal = 0
-grow_vertical = 0
-mouse_default_cursor_shape = 12
-theme_type_variation = &"ResizeHandleButton"
-icon = ExtResource("2_vqn4x")
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
-[connection signal="button_down" from="topleft" to="." method="_topleft"]
-[connection signal="button_up" from="topleft" to="." method="_finished"]
-[connection signal="button_down" from="top" to="." method="_top"]
-[connection signal="button_up" from="top" to="." method="_finished"]
-[connection signal="button_down" from="topright" to="." method="_topright"]
-[connection signal="button_up" from="topright" to="." method="_finished"]
-[connection signal="button_down" from="left" to="." method="_left"]
-[connection signal="button_up" from="left" to="." method="_finished"]
-[connection signal="button_down" from="right" to="." method="_right"]
-[connection signal="button_up" from="right" to="." method="_finished"]
-[connection signal="button_down" from="bottomleft" to="." method="_bottomleft"]
-[connection signal="button_up" from="bottomleft" to="." method="_finished"]
-[connection signal="button_down" from="bottom" to="." method="_bottom"]
-[connection signal="button_up" from="bottom" to="." method="_finished"]
-[connection signal="button_down" from="bottomright" to="." method="_bottomright"]
-[connection signal="button_up" from="bottomright" to="." method="_finished"]
+[node name="left" type="Button" parent="horizontal" unique_id=737913326]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -11.0
+offset_top = -5.5
+offset_bottom = 5.5
+grow_vertical = 2
+mouse_default_cursor_shape = 10
+theme_type_variation = &"ResizeHandleButton"
+icon = ExtResource("5_oip4u")
+
+[node name="right" type="Button" parent="horizontal" unique_id=956873528]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -5.5
+offset_right = 11.0
+offset_bottom = 5.5
+grow_horizontal = 0
+grow_vertical = 2
+mouse_default_cursor_shape = 10
+theme_type_variation = &"ResizeHandleButton"
+icon = ExtResource("5_oip4u")
+
+[connection signal="button_down" from="diagonals/topleft" to="." method="_topleft"]
+[connection signal="button_up" from="diagonals/topleft" to="." method="_finished"]
+[connection signal="button_down" from="diagonals/topright" to="." method="_topright"]
+[connection signal="button_up" from="diagonals/topright" to="." method="_finished"]
+[connection signal="button_down" from="diagonals/bottomleft" to="." method="_bottomleft"]
+[connection signal="button_up" from="diagonals/bottomleft" to="." method="_finished"]
+[connection signal="button_down" from="diagonals/bottomright" to="." method="_bottomright"]
+[connection signal="button_up" from="diagonals/bottomright" to="." method="_finished"]
+[connection signal="button_down" from="vertical/top" to="." method="_top"]
+[connection signal="button_up" from="vertical/top" to="." method="_finished"]
+[connection signal="button_down" from="vertical/bottom" to="." method="_bottom"]
+[connection signal="button_up" from="vertical/bottom" to="." method="_finished"]
+[connection signal="button_down" from="horizontal/left" to="." method="_left"]
+[connection signal="button_up" from="horizontal/left" to="." method="_finished"]
+[connection signal="button_down" from="horizontal/right" to="." method="_right"]
+[connection signal="button_up" from="horizontal/right" to="." method="_finished"]
