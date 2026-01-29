@@ -13,11 +13,14 @@ func focus(focused:KeyBulk, _new:bool, _dontRedirect:bool) -> void:
 	%keyCountEdit.visible = focused.type in [KeyBulk.TYPE.NORMAL,KeyBulk.TYPE.EXACT]
 	%keyCountEdit.setValue(focused.count, true)
 	%keyInfiniteToggle.button_pressed = focused.infinite
+	%keyPartialInfinite.visible = Mods.active(&"PartialInfKeys") and (focused.infinite or main.interacted == %keyPartialInfiniteEdit)
+	%keyPartialInfiniteEdit.setValue(M.N(focused.infinite), true)
 	%keyRotorSelector.visible = focused.type == KeyBulk.TYPE.ROTOR
 	%keyUn.visible = focused.type in [KeyBulk.TYPE.STAR, KeyBulk.TYPE.CURSE]
 	%keyUn.button_pressed = !focused.un
 	setKeyUnIcon()
 	if focused.type == KeyBulk.TYPE.ROTOR: %keyRotorSelector.setValue(focused.count)
+	if main.interacted and !main.interacted.is_visible_in_tree(): main.deinteract()
 	if %keyCountEdit.visible:
 		if !main.interacted: main.interact(%keyCountEdit.realEdit)
 	else: main.deinteract()
@@ -36,10 +39,17 @@ func receiveKey(event:InputEventKey) -> bool:
 	elif Editor.eventIs(event, &"focusKeyCurse") and Mods.active(&"C5"):
 			if main.focused.type == KeyBulk.TYPE.CURSE: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
 			else: _keyTypeSelected(KeyBulk.TYPE.CURSE)
-	elif Editor.eventIs(event, &"focusKeyInfinite"): _keyInfiniteToggled(!main.focused.infinite)
+	elif Editor.eventIs(event, &"focusKeyInfinite"): _keyInfiniteToggled(0 if main.focused.infinite else 1)
 	elif Editor.eventIs(event, &"quicksetColor"): editor.quickSet.startQuick(&"quicksetColor", main.focused)
 	else: return false
 	return true
+
+func editDeinteracted(edit:PanelContainer) -> void:
+	if main.focused is not KeyBulk: return
+	if edit == %keyPartialInfiniteEdit and !main.focused.infinite: %keyPartialInfinite.visible = false
+
+func changedMods() -> void:
+	%keyPartialInfinite.visible = Mods.active(&"PartialInfKeys") and main.focused is KeyBulk and main.focused.infinite
 
 func _keyColorSelected(color:Game.COLOR) -> void:
 	if main.focused is not KeyBulk: return
@@ -60,8 +70,9 @@ func _keyCountSet(count:PackedInt64Array) -> void:
 
 func _keyInfiniteToggled(value:bool) -> void:
 	if main.focused is not KeyBulk: return
-	Changes.addChange(Changes.PropertyChange.new(main.focused,&"infinite",value))
-	Changes.bufferSave()
+	if value == !main.focused.infinite:
+		Changes.addChange(Changes.PropertyChange.new(main.focused,&"infinite",int(value)))
+		Changes.bufferSave()
 
 func _keyRotorSelected(value:KeyRotorSelector.VALUE):
 	if main.focused is not KeyBulk: return
@@ -81,3 +92,8 @@ func setKeyUnIcon() -> void:
 	match main.focused.type:
 		KeyBulk.TYPE.STAR: %keyUn.icon = STAR_UN_ICONS[int(main.focused.un)]
 		KeyBulk.TYPE.CURSE: %keyUn.icon = CURSE_UN_ICONS[int(main.focused.un)]
+
+func _keyPartialInfiniteSet(value:PackedInt64Array) -> void:
+	if main.focused is not KeyBulk: return
+	Changes.addChange(Changes.PropertyChange.new(main.focused,&"infinite",M.toInt(value)))
+	Changes.bufferSave()

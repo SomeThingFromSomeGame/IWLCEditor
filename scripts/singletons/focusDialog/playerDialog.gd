@@ -46,6 +46,8 @@ func receiveKey(event:InputEvent) -> bool:
 	else: return false
 	return true
 
+func editDeinteracted(_edit) -> void: pass
+
 func changedMods() -> void:
 	%playerCurse.visible = Mods.active(&"C5")
 

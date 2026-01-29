@@ -7,6 +7,7 @@ class_name SelectMods
 
 # the way the select tree is laid out
 static var ModTree:Array = [
+	&"PartialInfKeys",
 	SubTree.new(
 		"Benign",
 		"Mods that don't do much.",

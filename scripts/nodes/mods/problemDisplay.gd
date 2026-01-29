@@ -46,6 +46,8 @@ func getProblemName() -> String:
 
 		[&"DisconnectedLock", &"DisconnectedLock"]: return "Disconnected Lock"
 		[&"OutOfBounds", &"OutOfBounds"]: return "Object Out of Bounds"
+		
+		[&"PartialInfKeys", &"PartialInfKeys"]: return "Partial Infinite Key"
 	return "Somebody forgot to set the ProblemDisplay text for this error :)"
 
 func showInstance(index:int) -> void:

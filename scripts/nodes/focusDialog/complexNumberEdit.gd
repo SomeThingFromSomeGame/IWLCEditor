@@ -9,10 +9,6 @@ signal valueSet(value:PackedInt64Array)
 
 var value:PackedInt64Array
 
-func _ready() -> void:
-	realEdit.purpose = NumberEdit.PURPOSE.REAL
-	imaginaryEdit.purpose = NumberEdit.PURPOSE.IMAGINARY
-
 func setValue(_value:PackedInt64Array,manual:bool=false) -> void:
 	value = _value
 	realEdit.setValue(M.r(value), true)

@@ -15,7 +15,7 @@ var zeroIValid:bool = false # whether or not zeroI is a vaild state
 var isZeroI:bool = false
 
 func _ready() -> void:
-	Explainer.addControl(self,ControlExplanation.new("/ Number Edit("+Explainer.ARROWS_UD+"±1 [%s]×-1 [%s]×i)", [&"numberNegate", &"numberTimesI"]))
+	Explainer.addControl(self,ControlExplanation.new("/ Number Edit("+Explainer.ARROWS_UD+"±1 [%s]×-1 [%s]×i) /", [&"numberNegate", &"numberTimesI"]))
 
 func _gui_input(event:InputEvent) -> void:
 	if Editor.isLeftClick(event): editor.focusDialog.interact(self)

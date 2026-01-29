@@ -17,6 +17,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+purpose = 2
 
 [node name="plus" type="TextureRect" parent="." unique_id=1009444212]
 layout_mode = 2
@@ -28,6 +29,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+purpose = 3
 
 [node name="plus2" type="TextureRect" parent="." unique_id=1985417121]
 layout_mode = 2

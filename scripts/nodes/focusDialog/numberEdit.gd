@@ -1,7 +1,7 @@
 extends PanelContainer
 class_name NumberEdit
 
-enum PURPOSE {SINGLE, REAL, IMAGINARY, AXIAL}
+enum PURPOSE {SINGLE, SINGLE_NONNEGATIVE, REAL, IMAGINARY, AXIAL}
 
 @onready var editor:Editor = get_node("/root/editor")
 
@@ -13,10 +13,10 @@ var newlyInteracted:bool = false
 
 var value:PackedInt64Array = M.ZERO
 var bufferedNegative:bool = false # since -0 cant exist, activate it when the number is set
-var purpose:PURPOSE = PURPOSE.SINGLE
+@export var purpose:PURPOSE = PURPOSE.SINGLE
 
 func _ready() -> void:
-	Explainer.addControl(self,ControlExplanation.new("/ Number Edit("+Explainer.ARROWS_UD+"±1 [%s]×-1 [%s]×i)", [&"numberNegate", &"numberTimesI"]))
+	Explainer.addControl(self,ControlExplanation.new("/ Number Edit("+Explainer.ARROWS_UD+"±1 [%s]×-1 [%s]×i) /", [&"numberNegate", &"numberTimesI"]))
 	await editor.ready
 	context = editor.focusDialog
 
@@ -42,13 +42,13 @@ func receiveKey(key:InputEventKey):
 	var number:int = -1
 	if Editor.eventIs(key, &"numberTimesI"):
 		if get_parent() is ComplexNumberEdit: get_parent().rotate()
-	elif Editor.eventIs(key, &"numberNegate"):
+	elif Editor.eventIs(key, &"numberNegate") and purpose != PURPOSE.SINGLE_NONNEGATIVE:
 		if M.nex(value): bufferedNegative = !bufferedNegative
 		setValue(M.negate(value))
 	else:
 		match key.keycode:
 			KEY_TAB: context.tabbed(self)
-			KEY_EQUAL: if purpose != PURPOSE.SINGLE and Input.is_key_pressed(KEY_SHIFT):
+			KEY_EQUAL: if purpose not in [PURPOSE.SINGLE, PURPOSE.SINGLE_NONNEGATIVE] and Input.is_key_pressed(KEY_SHIFT):
 				context.interact((get_parent().imaginaryEdit if purpose == PURPOSE.REAL else get_parent().realEdit))
 			KEY_0, KEY_KP_0: number = 0
 			KEY_1, KEY_KP_1: number = 1

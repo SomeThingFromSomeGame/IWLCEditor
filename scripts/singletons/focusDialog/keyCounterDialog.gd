@@ -32,6 +32,8 @@ func receiveKey(event:InputEvent) -> bool:
 	else: return false
 	return true
 
+func editDeinteracted(_edit) -> void: pass
+
 func _keyCounterWidthSelected(width:int):
 	if main.focused is not KeyCounter: return
 	Changes.addChange(Changes.PropertyChange.new(main.focused,&"size",Vector2(KeyCounter.WIDTHS[width],main.focused.size.y)))

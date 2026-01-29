@@ -39,7 +39,7 @@ static var ARRAYS:Dictionary[StringName,Variant] = {}
 var color:Game.COLOR = Game.COLOR.WHITE
 var type:TYPE = TYPE.NORMAL
 var count:PackedInt64Array = M.ONE
-var infinite:bool = false
+var infinite:int = 0
 var un:bool = false # whether a star or curse key is an unstar or uncurse key
 
 var drawDropShadow:RID
@@ -92,7 +92,7 @@ func _draw() -> void:
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
 	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(3,3),size),getOutlineTexture(color,type,un),false,Game.DROP_SHADOW_COLOR)
-	drawKey(drawGlitch,drawMain,Vector2.ZERO,color,type,un,glitchMimic)
+	drawKey(drawGlitch,drawMain,Vector2.ZERO,color,type,un,glitchMimic,partialInfiniteAlpha)
 	if animState == ANIM_STATE.FLASH: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,outlineTex(),false,Color(Color.WHITE,animAlpha))
 	match type:
 		KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT:
@@ -101,7 +101,13 @@ func _draw() -> void:
 			if M.eq(count, M.nONE): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,SIGNFLIP_SYMBOL)
 			elif M.eq(count, M.I): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
 			elif M.eq(count, M.nI): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
-	if infinite: RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
+	if infinite:
+		RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
+		if infinite > 1:
+			var string:String = ""
+			if partialInfiniteCount: string = str(infinite-partialInfiniteCount)
+			string += "/%s" % infinite
+			TextDraw.outlined2(FKEYBULK,drawSymbol,string,Color("#ebe3dd"),Color("#363029"),14,Vector2(28,8))
 
 func keycountColor() -> Color: return Color("#363029") if M.negative(M.sign(count)) else Color("#ebe3dd")
 func keycountOutlineColor() -> Color: return Color("#d6cfc9") if M.negative(M.sign(count)) else Color("#363029")
@@ -113,9 +119,11 @@ static func keyTextureType(keyType:TYPE, keyUn:bool) -> KeyTextureLoader.TYPE:
 		TYPE.CURSE: return KeyTextureLoader.TYPE.UNCURSE if keyUn else KeyTextureLoader.TYPE.CURSE
 		_: return KeyTextureLoader.TYPE.NORMAL
 
-static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor:Game.COLOR,keyType:TYPE=TYPE.NORMAL,keyUn:bool=false,keyGlitchMimic:Game.COLOR=Game.COLOR.GLITCH) -> void:
+static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor:Game.COLOR,keyType:TYPE=TYPE.NORMAL,keyUn:bool=false,keyGlitchMimic:Game.COLOR=Game.COLOR.GLITCH,keyPartialInfiniteAlpha:float=1) -> void:
 	var rect:Rect2 = Rect2(keyOffset, Vector2(32,32))
 	var textureType:KeyTextureLoader.TYPE = keyTextureType(keyType, keyUn)
+	RenderingServer.canvas_item_set_modulate(keyDrawMain, Color(Color.WHITE, keyPartialInfiniteAlpha))
+	RenderingServer.canvas_item_set_modulate(keyDrawGlitch, Color(Color.WHITE, keyPartialInfiniteAlpha))
 	if keyColor in TEXTURE_COLORS:
 		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,TEXTURE.current([keyColor,textureType]))
 	elif keyColor == Game.COLOR.GLITCH:
@@ -138,10 +146,12 @@ func propertyChangedInit(property:StringName) -> void:
 
 # ==== PLAY ==== #
 var glitchMimic:Game.COLOR = Game.COLOR.GLITCH
+var partialInfiniteCount:int = 0
 
 enum ANIM_STATE {IDLE, FLASH}
 var animState:ANIM_STATE = ANIM_STATE.IDLE
 var animAlpha:float = 0
+var partialInfiniteAlpha:float = 1
 
 func _process(delta:float) -> void:
 	match animState:
@@ -150,12 +160,23 @@ func _process(delta:float) -> void:
 			animAlpha -= delta*6
 			if animAlpha <= 0: animState = ANIM_STATE.IDLE
 			queue_redraw()
+	if infinite > 1:
+		if !partialInfiniteCount and partialInfiniteAlpha < 1:
+			partialInfiniteAlpha = min(partialInfiniteAlpha+delta*6, 1)
+			queue_redraw()
+		elif partialInfiniteCount and partialInfiniteAlpha > 0.5:
+			partialInfiniteAlpha = max(partialInfiniteAlpha-delta*6, 0.5)
+			queue_redraw()
 
 func stop() -> void:
 	glitchMimic = Game.COLOR.GLITCH
+	partialInfiniteCount = 0
+	partialInfiniteAlpha = 1
 	super()
 
 func collect(player:Player) -> void:
+	if partialInfiniteCount: return
+
 	match type:
 		TYPE.NORMAL: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.add(player.key[effectiveColor()], count)))
 		TYPE.EXACT: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), count))
@@ -163,8 +184,13 @@ func collect(player:Player) -> void:
 		TYPE.STAR: GameChanges.addChange(GameChanges.StarChange.new(effectiveColor(), !un))
 		TYPE.CURSE: GameChanges.addChange(GameChanges.CurseChange.new(effectiveColor(), !un))
 		
-	if infinite: flashAnimation()
+	if infinite:
+		flashAnimation()
+		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"partialInfiniteCount", infinite))
 	else: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"active", false))
+	for object in Game.objects.values():
+		if object is KeyBulk and object.infinite and object.partialInfiniteCount > 0:
+			GameChanges.addChange(GameChanges.PropertyChange.new(object, &"partialInfiniteCount", object.partialInfiniteCount - 1))
 	GameChanges.bufferSave()
 
 	if color == Game.COLOR.MASTER: # not effectiveColor; doesnt trigger on glitch master

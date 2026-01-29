@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://tpxbw5vtj5nx" path="res://scenes/focusDialog/complexNumberEdit.tscn" id="5_qjvko"]
 [ext_resource type="Texture2D" uid="uid://1qmmmrn67jvq" path="res://assets/ui/focusDialog/keyBooleans/infinite.png" id="6_4u2vc"]
 [ext_resource type="Script" uid="uid://bb323bon0ten5" path="res://scripts/nodes/focusDialog/selector/keyRotorSelector.gd" id="7_q8u4b"]
+[ext_resource type="Texture2D" uid="uid://co26yexy71p71" path="res://assets/ui/focusDialog/keyBooleans/partialInfinite.png" id="8_16i1m"]
 [ext_resource type="Texture2D" uid="uid://b1rtmm8li5skq" path="res://assets/ui/focusDialog/keySplitType/star.png" id="8_mscoq"]
 [ext_resource type="Texture2D" uid="uid://dcaheb86npiio" path="res://assets/ui/focusDialog/doorType/simple.png" id="10_oii3e"]
 [ext_resource type="Script" uid="uid://cq06lldmmo4k4" path="res://scripts/singletons/focusDialog/doorDialog.gd" id="11_drywk"]
@@ -157,9 +158,8 @@ theme = ExtResource("1_eqegh")
 theme_type_variation = &"DialogPanelContainer"
 script = ExtResource("2_k8bto")
 
-[node name="keyDialog" type="Control" parent="." unique_id=538684455]
+[node name="keyDialog" type="Control" parent="." unique_id=538684455 groups=["modUI"]]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 0
 script = ExtResource("3_b5h7e")
 
@@ -212,6 +212,21 @@ size_flags_horizontal = 4
 toggle_mode = true
 icon = ExtResource("6_4u2vc")
 metadata/explanation = SubResource("Resource_hdjws")
+
+[node name="keyPartialInfinite" type="HBoxContainer" parent="keyDialog/c/c/c/c" unique_id=1803119117]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="keyPartialInfiniteSlash" type="TextureRect" parent="keyDialog/c/c/c/c/keyPartialInfinite" unique_id=1809684457]
+layout_mode = 2
+texture = ExtResource("8_16i1m")
+expand_mode = 3
+
+[node name="keyPartialInfiniteEdit" parent="keyDialog/c/c/c/c/keyPartialInfinite" unique_id=1703551654 instance=ExtResource("20_gx4cd")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
+purpose = 1
 
 [node name="keyCountEdit" parent="keyDialog/c/c/c" unique_id=2107257614 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
@@ -747,6 +762,7 @@ default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 [connection signal="select" from="keyDialog/c/c/c/keyColorSelector" to="keyDialog" method="_keyColorSelected"]
 [connection signal="select" from="keyDialog/c/c/c/c/keyTypeSelector" to="keyDialog" method="_keyTypeSelected"]
 [connection signal="toggled" from="keyDialog/c/c/c/c/keyInfiniteToggle" to="keyDialog" method="_keyInfiniteToggled"]
+[connection signal="valueSet" from="keyDialog/c/c/c/c/keyPartialInfinite/keyPartialInfiniteEdit" to="keyDialog" method="_keyPartialInfiniteSet"]
 [connection signal="valueSet" from="keyDialog/c/c/c/keyCountEdit" to="keyDialog" method="_keyCountSet"]
 [connection signal="select" from="keyDialog/c/c/c/keyRotorSelector" to="keyDialog" method="_keyRotorSelected"]
 [connection signal="toggled" from="keyDialog/c/c/c/keyUn" to="keyDialog" method="_keyUnToggled"]

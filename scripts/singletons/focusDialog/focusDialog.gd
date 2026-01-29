@@ -83,6 +83,7 @@ func deinteract() -> void:
 	if interacted is NumberEdit: interacted.bufferedNegative = false
 	elif interacted is AxialNumberEdit and !interacted.isZeroI: interacted.bufferedSign = M.ONE
 	interacted.setValue(interacted.value,true)
+	if activeDialog: activeDialog.editDeinteracted(interacted)
 	interacted = null
 
 func interactDoorFirstEdit() -> void:

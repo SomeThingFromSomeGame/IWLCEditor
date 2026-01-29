@@ -4,7 +4,7 @@ var editor:Editor
 static var mods:Dictionary[StringName, Mod] = {
 	&"NstdLockSize": Mod.new(
 		"Nonstandard Lock Sizes",
-		"Allows lock sizes on combo doors other than the ones supported by the basegame",
+		"Adds lock sizes on combo doors other than the ones supported by the basegame",
 		[&"NstdLockSize"]
 	),
 	&"MoreLockConfigs": Mod.new(
@@ -19,12 +19,12 @@ static var mods:Dictionary[StringName, Mod] = {
 	),
 	&"ZeroCostLock": Mod.new(
 		"Zero Cost Locks",
-		"Also known as lockless locks",
+		"Allows locks to have a cost of 0",
 		[&"ZeroCostLock"], true
 	),
 	&"InfCopies": Mod.new(
 		"Infinite Copy Doors",
-		"Allows doors to have infinite copies",
+		"Adds the option for doors to have infinite copies",
 		[&"InfCopies"]
 	),
 	&"NoneColor": Mod.new(
@@ -59,14 +59,19 @@ static var mods:Dictionary[StringName, Mod] = {
 	),
 	&"DisconnectedLock": Mod.new(
 		"Disconnected Locks",
-		"Lock of a door but not visually placed on it",
+		"Allows locks of a door to be visually disconnected from it",
 		[&"DisconnectedLock"], true
 	),
 	&"OutOfBounds": Mod.new(
 		"Out of Bounds",
-		"Objects placed out of level bounds",
+		"Allows objects to be placed out of level bounds",
 		[&"OutOfBounds"], true
 	),
+	&"PartialInfKeys": Mod.new(
+		"Partial Infinite Keys",
+		"Adds the option for infinite keys to only become re-available every N key collects",
+		[&"PartialInfKeys"]
+	)
 }
 
 static var modpacks:Dictionary[StringName, Modpack] = {
