@@ -396,6 +396,7 @@ theme_override_constants/margin_bottom = 0
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3vi5u")
 layout_mode = 2
+mouse_filter = 2
 texture = SubResource("ViewportTexture_e62bx")
 expand_mode = 1
 

@@ -158,7 +158,7 @@ func _physics_process(_delta:float) -> void:
 			cameraAnimVal = 0
 			if Game.playGame: Game.playGame.queue_redraw()
 		Game.camera.position = position
-	var scaleFactor:float = (cameraZoomTarget/Game.camera.zoom.x)**0.1
+	var scaleFactor:float = (cameraZoomTarget*Game.uiScale/Game.camera.zoom.x)**0.1
 	Game.camera.zoom *= scaleFactor
 
 	var xSpeed:float = 6

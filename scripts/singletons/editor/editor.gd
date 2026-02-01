@@ -156,7 +156,7 @@ func _process(delta:float) -> void:
 				for element in focusDialog.focused.elements:
 					if Rect2(element.getDrawPosition(), element.getHoverSize()).has_point(mouseWorldPosition):
 						componentHovered = element
-	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, mouseWorldPosition, %gameViewportDisplay.size)
+	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, %gameViewportDisplay.get_local_mouse_position(), %gameViewportDisplay.size)
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else -3
 
 	if autoRunTimer < 2:

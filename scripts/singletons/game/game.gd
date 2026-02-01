@@ -274,7 +274,7 @@ func playTest(spawn:PlayerSpawn) -> void:
 	Changes.bufferSave()
 	
 	if playState == PLAY_STATE.EDIT:
-		camera.zoom = Vector2.ONE
+		camera.zoom = Vector2.ONE*uiScale
 		starting = true
 		player = preload("res://scenes/player.tscn").instantiate()
 		world.add_child(player)
