@@ -1,4 +1,4 @@
-extends SubViewportContainer
+extends TextureRect
 class_name OutlineViewport
 
 # displays three "outline channels"
@@ -18,3 +18,7 @@ func createChild() -> RID:
 func _process(_delta) -> void:
 	%camera.position = editor.editorCamera.position
 	%camera.zoom = editor.editorCamera.zoom
+
+
+func _resized():
+	%viewport.size = size * Game.uiScale

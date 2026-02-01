@@ -105,12 +105,18 @@ shader_parameter/screenPosition = Vector2(0, 0)
 shader_parameter/mousePosition = Vector2(0, 0)
 shader_parameter/tileSize = Vector2(32, 32)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_e62bx"]
+viewport_path = NodePath("c/gameCont/gameViewportDisplay/gameViewport")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pgu5w"]
 shader = ExtResource("29_65evm")
 shader_parameter/width = 1.0
 shader_parameter/rChannel = Color(1, 1, 1, 1)
 shader_parameter/gChannel = Color(0, 0, 0, 1)
 shader_parameter/bChannel = Color(0, 0, 0, 1)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_65evm"]
+viewport_path = NodePath("viewport")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ndxgo"]
 shader = ExtResource("29_65evm")
@@ -119,8 +125,14 @@ shader_parameter/rChannel = Color(0, 0.63529414, 1, 1)
 shader_parameter/gChannel = Color(1, 1, 1, 1)
 shader_parameter/bChannel = Color(0, 0, 0, 1)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_pgu5w"]
+viewport_path = NodePath("viewport")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_e62bx"]
 shader = ExtResource("28_ndxgo")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nxyul"]
+viewport_path = NodePath("c/gameCont/placePreview/placePreviewViewport")
 
 [sub_resource type="Resource" id="Resource_jke8t"]
 script = ExtResource("17_bn54a")
@@ -380,31 +392,29 @@ theme_override_constants/margin_top = 0
 theme_override_constants/margin_right = 0
 theme_override_constants/margin_bottom = 0
 
-[node name="gameViewportCont" type="SubViewportContainer" parent="c/gameCont" unique_id=2126106507]
+[node name="gameViewportDisplay" type="TextureRect" parent="c/gameCont" unique_id=1661740365]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3vi5u")
 layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-stretch = true
+texture = SubResource("ViewportTexture_e62bx")
+expand_mode = 1
 
-[node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportCont" unique_id=1963693598]
+[node name="gameViewport" type="SubViewport" parent="c/gameCont/gameViewportDisplay" unique_id=1963693598]
 unique_name_in_owner = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
-size = Vector2i(820, 628)
 render_target_update_mode = 4
 
-[node name="world" parent="c/gameCont/gameViewportCont/gameViewport" unique_id=515989943 instance=ExtResource("8_5tdu1")]
+[node name="world" parent="c/gameCont/gameViewportDisplay/gameViewport" unique_id=515989943 instance=ExtResource("8_5tdu1")]
 unique_name_in_owner = true
 
-[node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world" unique_id=550330986]
+[node name="editorCamera" type="Camera2D" parent="c/gameCont/gameViewportDisplay/gameViewport/world" unique_id=550330986]
 unique_name_in_owner = true
 position = Vector2(-10, -10)
 anchor_mode = 0
 limit_enabled = false
 
-[node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportCont/gameViewport/world" unique_id=597463386]
+[node name="playtestCamera" type="Camera2D" parent="c/gameCont/gameViewportDisplay/gameViewport/world" unique_id=597463386]
 unique_name_in_owner = true
 offset = Vector2(0, -0.1)
 enabled = false
@@ -415,20 +425,26 @@ limit_bottom = 608
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="multiselect" parent="c/gameCont/gameViewportCont" unique_id=1464548026 instance=ExtResource("12_q8l03")]
-unique_name_in_owner = true
+[node name="c2" type="Control" parent="c/gameCont" unique_id=133289849]
 layout_mode = 2
+mouse_filter = 2
+
+[node name="multiselect" parent="c/gameCont/c2" unique_id=1464548026 instance=ExtResource("12_q8l03")]
+unique_name_in_owner = true
+layout_mode = 0
 script = ExtResource("13_0u1f5")
 
 [node name="outlineViewport1" parent="c/gameCont" unique_id=1242978594 instance=ExtResource("28_e62bx")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_pgu5w")
 layout_mode = 2
+texture = SubResource("ViewportTexture_65evm")
 
 [node name="outlineViewport2" parent="c/gameCont" unique_id=2071303993 instance=ExtResource("28_e62bx")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_ndxgo")
 layout_mode = 2
+texture = SubResource("ViewportTexture_pgu5w")
 
 [node name="outline" type="Node2D" parent="c/gameCont/outlineViewport2" unique_id=1982434259]
 unique_name_in_owner = true
@@ -436,27 +452,29 @@ z_index = 8
 position = Vector2(0, -44)
 script = ExtResource("23_lo5f0")
 
-[node name="placePreviewViewportCont" type="SubViewportContainer" parent="c/gameCont" unique_id=89594649]
+[node name="placePreview" type="TextureRect" parent="c/gameCont" unique_id=1637035575]
 modulate = Color(1, 1, 1, 0.5019608)
 material = SubResource("ShaderMaterial_e62bx")
 layout_mode = 2
 mouse_filter = 2
-stretch = true
+texture = SubResource("ViewportTexture_nxyul")
+expand_mode = 1
 
-[node name="placePreviewViewport" type="SubViewport" parent="c/gameCont/placePreviewViewportCont" unique_id=299564087]
+[node name="placePreviewViewport" type="SubViewport" parent="c/gameCont/placePreview" unique_id=299564087]
+unique_name_in_owner = true
 transparent_bg = true
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
 size = Vector2i(820, 628)
 render_target_update_mode = 4
 
-[node name="placePreviewWorld" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport" unique_id=1869290844 instance=ExtResource("8_5tdu1")]
+[node name="placePreviewWorld" parent="c/gameCont/placePreview/placePreviewViewport" unique_id=1869290844 instance=ExtResource("8_5tdu1")]
 unique_name_in_owner = true
 
-[node name="previewObjectsParent" type="Node2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld" unique_id=1256377345]
+[node name="previewObjectsParent" type="Node2D" parent="c/gameCont/placePreview/placePreviewViewport/placePreviewWorld" unique_id=1256377345]
 unique_name_in_owner = true
 
-[node name="placePreviewCamera" type="Camera2D" parent="c/gameCont/placePreviewViewportCont/placePreviewViewport/placePreviewWorld" unique_id=534036334]
+[node name="placePreviewCamera" type="Camera2D" parent="c/gameCont/placePreview/placePreviewViewport/placePreviewWorld" unique_id=534036334]
 unique_name_in_owner = true
 anchor_mode = 0
 
@@ -677,5 +695,5 @@ theme = ExtResource("1_j8y2p")
 [connection signal="pressed" from="c/c/c/topBar/c/playControls/play" to="c/c/c/topBar" method="_play"]
 [connection signal="pressed" from="c/c/c/topBar/c/playControls/pause" to="c/c/c/topBar" method="_pause"]
 [connection signal="pressed" from="c/c/c/topBar/c/playControls/stop" to="c/c/c/topBar" method="_stop"]
-[connection signal="resized" from="c/gameCont/gameViewportCont" to="." method="_gameViewportResized"]
+[connection signal="resized" from="c/gameCont/gameViewportDisplay" to="." method="_gameViewportDisplayResized"]
 [connection signal="toggled" from="c/c3/c2/toggleSettingsMenu" to="." method="_toggleSettingsMenu"]

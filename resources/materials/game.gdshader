@@ -23,8 +23,8 @@ float lengthSquared(vec2 vector) {
 
 void fragment() {
 	// pixelate
-	vec2 worldScreenSize = SCREEN_SIZE*RCAMERA_ZOOM;
-	COLOR.rgb = texture(TEXTURE, (floor(UV*worldScreenSize + fract(VIEWPORT_POS)) - fract(VIEWPORT_POS) + vec2(0.5,0.5))/worldScreenSize).rgb;
+	/*vec2 worldScreenSize = SCREEN_SIZE*RCAMERA_ZOOM;
+	COLOR.rgb = texture(TEXTURE, (floor(UV*worldScreenSize + fract(VIEWPORT_POS)) - fract(VIEWPORT_POS) + vec2(0.5,0.5))/worldScreenSize).rgb;*/
 
 	vec2 XY = FRAGCOORD.xy*RCAMERA_ZOOM + screenPosition - LEVEL_POS;
 	if (XY.x < 0.0 || XY.y < 0.0 || XY.x > LEVEL_SIZE.x || XY.y > LEVEL_SIZE.y) {

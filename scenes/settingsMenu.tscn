@@ -401,12 +401,6 @@ layout_mode = 2
 text = " (1.00x)"
 label_settings = SubResource("LabelSettings_3e3b5")
 
-[node name="clarifier" type="TextureRect" parent="c/editorSettings/c2/c/c2" unique_id=598608214]
-layout_mode = 2
-size_flags_vertical = 0
-tooltip_text = "Currently, increasing this lowers the resolution of the game. Sorry about that."
-texture = ExtResource("5_iswfj")
-
 [node name="edgeResizing" type="CheckButton" parent="c/editorSettings/c2/c" unique_id=1487025343]
 unique_name_in_owner = true
 layout_mode = 2

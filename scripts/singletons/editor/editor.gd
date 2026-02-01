@@ -110,13 +110,13 @@ func _ready() -> void:
 
 func _process(delta:float) -> void:
 	queue_redraw()
-	var scaleFactor:float = (targetCameraZoom/editorCamera.zoom.x/Game.uiScale)**0.2
+	var scaleFactor:float = (targetCameraZoom/editorCamera.zoom.x)**0.2
 	if abs(scaleFactor - 1) < 0.0001:
-		editorCamera.zoom = Vector2(targetCameraZoom,targetCameraZoom)/Game.uiScale
+		editorCamera.zoom = Vector2(targetCameraZoom,targetCameraZoom)
 		if targetCameraZoom == 1: editorCamera.position = round(editorCamera.position)
 	else:
 		editorCamera.zoom *= scaleFactor
-		editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameCont.position) / editorCamera.zoom
+		editorCamera.position += (1-1/scaleFactor) * (worldspaceToScreenspace(zoomPoint)-gameCont.position) / editorCamera.zoom * Game.uiScale
 		multiselect.update()
 	
 	if settingsOpen: tileSize = Vector2i(32,32)
@@ -132,14 +132,14 @@ func _process(delta:float) -> void:
 
 	mouseWorldPosition = screenspaceToWorldspace(get_global_mouse_position())
 	mouseTilePosition = Vector2i(floor(mouseWorldPosition / Vector2(tileSize))) * tileSize
-	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportCont.material.set_shader_parameter(&"mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
-	else: %gameViewportCont.material.set_shader_parameter(&"mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
-	%gameViewportCont.material.set_shader_parameter(&"screenPosition",screenspaceToWorldspace(Vector2.ZERO))
+	if Game.playState == Game.PLAY_STATE.PLAY or settingsOpen: %gameViewportDisplay.material.set_shader_parameter(&"mousePosition",Vector2(-1e7,-1e7)) # probably far away enough
+	else: %gameViewportDisplay.material.set_shader_parameter(&"mousePosition",mouseWorldPosition - Vector2(Game.levelBounds.position))
+	%gameViewportDisplay.material.set_shader_parameter(&"screenPosition",screenspaceToWorldspace(Vector2.ZERO))
 	RenderingServer.global_shader_parameter_set(&"VIEWPORT_POS",screenspaceToWorldspace(gameCont.position))
-	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x * Game.uiScale
-	else: cameraZoom = editorCamera.zoom.x * Game.uiScale
+	if Game.playState == Game.PLAY_STATE.PLAY: cameraZoom = playtestCamera.zoom.x
+	else: cameraZoom = editorCamera.zoom.x
 	RenderingServer.global_shader_parameter_set(&"RCAMERA_ZOOM", 1/cameraZoom)
-	%gameViewportCont.material.set_shader_parameter(&"tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
+	%gameViewportDisplay.material.set_shader_parameter(&"tileSize", Vector2i(800, 608) if settingsOpen else tileSize)
 	componentHovered = null
 	if !componentDragged:
 		objectHovered = null
@@ -156,7 +156,7 @@ func _process(delta:float) -> void:
 				for element in focusDialog.focused.elements:
 					if Rect2(element.getDrawPosition(), element.getHoverSize()).has_point(mouseWorldPosition):
 						componentHovered = element
-	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, %gameViewportCont.get_local_mouse_position(), %gameViewportCont.size)
+	%mouseover.describe(objectHovered if Game.playState == Game.PLAY_STATE.PLAY else null, mouseWorldPosition, %gameViewportDisplay.size)
 	Game.tiles.z_index = 3 if mode == MODE.TILE and Game.playState != Game.PLAY_STATE.PLAY else -3
 
 	if autoRunTimer < 2:
@@ -525,12 +525,12 @@ func pipette() -> void:
 	else: modes.setMode(MODE.SELECT)
 
 func worldspaceToScreenspace(vector:Vector2) -> Vector2:
-	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - playtestCamera.get_screen_center_position())*playtestCamera.zoom + gameCont.position + gameCont.size/2
-	else: return (vector - editorCamera.position)*editorCamera.zoom + gameCont.position
+	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - playtestCamera.get_screen_center_position())*playtestCamera.zoom/Game.uiScale + gameCont.position + gameCont.size/2
+	else: return (vector - editorCamera.position)*editorCamera.zoom/Game.uiScale + gameCont.position
 
 func screenspaceToWorldspace(vector:Vector2) -> Vector2:
-	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - gameCont.position - gameCont.size/2)/playtestCamera.zoom + playtestCamera.get_screen_center_position()
-	return (vector - gameCont.position)/editorCamera.zoom + editorCamera.position
+	if Game.playState == Game.PLAY_STATE.PLAY: return (vector - gameCont.position - gameCont.size/2)/playtestCamera.zoom*Game.uiScale + playtestCamera.get_screen_center_position()
+	return (vector - gameCont.position)/editorCamera.zoom*Game.uiScale + editorCamera.position
 
 static func isLeftClick(event:InputEvent) -> bool: return event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT
 static func isRightClick(event:InputEvent) -> bool: return event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_RIGHT
@@ -659,5 +659,8 @@ func levelStartCameraCenter(screenSize:Vector2=Vector2(800,608)) -> Vector2:
 		return Game.levelStart.position.clamp(levelBoundsInner.position, levelBoundsInner.end) - screenSize/2
 	return Vector2(Game.levelBounds.position) + (Vector2(Game.levelBounds.size) - screenSize)/2
 
-func _gameViewportResized():
-	RenderingServer.global_shader_parameter_set(&"SCREEN_SIZE", %gameViewportCont.size * Game.uiScale)
+func _gameViewportDisplayResized():
+	var newSize:Vector2 = %gameViewportDisplay.size * Game.uiScale
+	%gameViewport.size = newSize
+	%placePreviewViewport.size = newSize
+	RenderingServer.global_shader_parameter_set(&"SCREEN_SIZE", newSize)
