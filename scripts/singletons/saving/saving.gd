@@ -249,7 +249,9 @@ func loadFile(path:String, immediate:bool=false) -> OpenWindow:
 	openWindow.levelStart = file.get_64()
 	openWindow.file = file
 	if immediate: openWindow.resolve()
-	else: editor.add_child(openWindow)
+	else:
+		@warning_ignore("integer_division") if !OS.has_feature("web"): openWindow.position = get_window().position+(get_window().size-openWindow.size)/2
+		editor.add_child(openWindow)
 	return openWindow
 
 func loadJs(result) -> void:

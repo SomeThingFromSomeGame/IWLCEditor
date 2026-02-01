@@ -411,7 +411,7 @@ func win(goal:Goal) -> void:
 		editor.cameraZoom = camera.zoom.x
 		editor.editorCamera.zoom = camera.zoom
 		editor.targetCameraZoom = camera.zoom.x
-		editor.editorCamera.position = camera.position - editor.gameCont.size/2
+		editor.editorCamera.position = (camera.get_screen_center_position() - editor.gameCont.size/2)
 	else:
 		playGame.win(goal)
 
