@@ -502,8 +502,8 @@ static func eventIs(event:InputEvent, action:StringName, exactMatch:bool=true) -
 
 func home() -> void:
 	targetCameraZoom = 1
-	zoomPoint = levelStartCameraCenter() + Vector2(400,304)
-	editorCamera.position = zoomPoint - gameCont.size / (cameraZoom*2)
+	zoomPoint = levelStartCameraCenter(Vector2(800,608)) + Vector2(400,304)
+	editorCamera.position = zoomPoint - gameCont.size / (cameraZoom/Game.uiScale*2)
 
 func zoomCamera(factor:float) -> void:
 	targetCameraZoom *= factor
