@@ -7,11 +7,11 @@ class_name SelectMods
 
 # the way the select tree is laid out
 static var ModTree:Array = [
-	&"PartialInfKeys",
+	&"PartialInfKey", &"Glistening",
 	SubTree.new(
 		"Benign",
 		"Mods that don't do much.",
-		[&"NstdLockSize",&"MoreLockConfigs",&"ZeroCostLock",&"ZeroCopies"]
+		[&"NstdLockSize",&"MoreLockConfigs",&"ZeroCostLock",&"ZeroCopies",&"MoreKeyCounterWidths"]
 	),
 	SubTree.new(
 		"I Wanna Lockpick: Continued",
@@ -27,7 +27,7 @@ static var ModTree:Array = [
 		"Possibly Misleading",
 		"Surely this is a good idea",
 		[&"DisconnectedLock",&"OutOfBounds"]
-	)
+	),
 ]
 
 class SubTree extends RefCounted:

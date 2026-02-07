@@ -24,12 +24,14 @@ const PROPERTIES:Array[StringName] = [
 static var ARRAYS:Dictionary[StringName,Variant] = {
 	&"key":TYPE_PACKED_INT64_ARRAY,
 	&"star":TYPE_BOOL,
-	&"curse":TYPE_BOOL
+	&"curse":TYPE_BOOL,
+	&"glisten":TYPE_PACKED_INT64_ARRAY
 }
 
 var key:Array[PackedInt64Array] = []
 var star:Array[bool]
 var curse:Array[bool]
+var glisten:Array[PackedInt64Array] = []
 var undoStack:Array[RefCounted] = []
 var saveBuffered:bool = false
 
@@ -42,6 +44,7 @@ func _init() -> void:
 		key.append(M.ZERO)
 		star.append(false)
 		curse.append(color == Game.COLOR.BROWN)
+		glisten.append(M.ZERO)
 
 func resetColors() -> void:
 	for color in Game.COLORS:
@@ -51,6 +54,7 @@ func resetColor(color:Game.COLOR) -> void:
 	Changes.addChange(Changes.ArrayElementChange.new(self,&"key",color,M.ZERO))
 	Changes.addChange(Changes.ArrayElementChange.new(self,&"star",color,false))
 	Changes.addChange(Changes.ArrayElementChange.new(self,&"curse",color,false))
+	Changes.addChange(Changes.ArrayElementChange.new(self,&"glisten",color,M.ZERO))
 
 var forceDrawStart:bool = false
 

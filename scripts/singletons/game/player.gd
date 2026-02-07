@@ -37,6 +37,7 @@ var canDoubleJump:bool = true
 var key:Array[PackedInt64Array] = []
 var star:Array[bool]
 var curse:Array[bool]
+var glisten:Array[PackedInt64Array] = [] #your glistening count
 
 var cantSave:bool = false # cant save if near a door
 
@@ -94,6 +95,7 @@ func _init() -> void:
 	for color in Game.COLORS:
 		# if color == Game.COLOR.STONE:
 		key.append(M.ZERO)
+		glisten.append(M.ZERO)
 		star.append(false)
 		curse.append(color == Game.COLOR.BROWN)
 
@@ -430,3 +432,11 @@ func toggleCamera() -> void:
 	cameraMode = !cameraMode
 	cameraZoomTarget = 1
 	AudioManager.play(preload("res://resources/sounds/player/camera.wav"))
+
+func changeKeys(color:Game.COLOR, after:PackedInt64Array) -> void:
+	if star[color]: return
+	GameChanges.addChange(GameChanges.KeyChange.new(color, M.keepAbove(after,glisten[color])))
+
+func changeGlisten(color:Game.COLOR, after:PackedInt64Array) -> void:
+	if star[color]: return
+	GameChanges.addChange(GameChanges.GlistenChange.new(color, after))

@@ -123,10 +123,11 @@ func tabbed(numberEdit:PanelContainer) -> void:
 					elif numberEdit == %partialBlastNumeratorEdit.realEdit:
 						if componentFocused.index == 0: interactDoorLastEdit()
 						else: interactLockLastEdit(componentFocused.index-1)
-				elif focused is PlayerPlaceholderObject:
+				elif focused.get_script() in [PlayerPlaceholderObject, PlayerSpawn]:
 					if numberEdit == %playerKeyCountEdit.realEdit:
 						playerDialog.setSelectedColor(Mods.previousColor(playerDialog.color))
-						interact(%playerKeyCountEdit.imaginaryEdit)
+						interact(%playerKeyGlistenEdit.imaginaryEdit if Mods.active(&"Glistening") else %playerKeyCountEdit.imaginaryEdit)
+					if numberEdit == %playerKeyGlistenEdit.realEdit: interact(%playerKeyCountEdit.imaginaryEdit)
 			NumberEdit.PURPOSE.AXIAL:
 				assert(componentFocused)
 				if componentFocused.index == 0: interactDoorLastEdit()
@@ -147,10 +148,11 @@ func tabbed(numberEdit:PanelContainer) -> void:
 					elif numberEdit in [%partialBlastNumeratorEdit.imaginaryEdit, %partialBlastDenominatorEdit.imaginaryEdit]:
 						if componentFocused.index == len(focused.locks) - 1: interactDoorFirstEdit()
 						else: interactLockFirstEdit(componentFocused.index+1)
-				elif focused is PlayerPlaceholderObject:
-					if numberEdit == %playerKeyCountEdit.imaginaryEdit:
+				elif focused.get_script() in [PlayerPlaceholderObject, PlayerSpawn]:
+					if numberEdit == (%playerKeyGlistenEdit.imaginaryEdit if Mods.active(&"Glistening") else %playerKeyCountEdit.imaginaryEdit):
 						playerDialog.setSelectedColor(Mods.nextColor(playerDialog.color))
 						interact(%playerKeyCountEdit.realEdit)
+					if Mods.active(&"Glistening") and numberEdit == %playerKeyCountEdit.imaginaryEdit: interact(%playerKeyGlistenEdit.realEdit)
 			NumberEdit.PURPOSE.AXIAL:
 				assert(componentFocused)
 				if componentFocused.index == len(focused.locks) - 1: interactDoorFirstEdit()

@@ -1,8 +1,13 @@
-class_name GameChangesClass
 extends Node
 
 var undoStack:Array[RefCounted] = []
 var saveBuffered:bool = false
+
+static var CHANGE_TYPES:Array[GDScript] = [
+	UndoSeparator,
+	KeyChange, StarChange, CurseChange, GlistenChange,
+	PropertyChange
+]
 
 # handles the undo system for the Game
 # a lot is copied over from Changes
@@ -69,7 +74,7 @@ class UndoSeparator extends RefCounted:
 	func _to_string() -> String:
 		return "<UndoSeparator:"+str(position)+">"
 
-	func serialise() -> Array: return [SerialisedUndoStack.CHANGE_TYPES.find(UndoSeparator), position]
+	func serialise() -> Array: return [GameChanges.CHANGE_TYPES.find(UndoSeparator), position]
 	static func deserialise(properties:Array) -> UndoSeparator: return UndoSeparator.new(properties[1])
 
 @abstract class ColorChange extends Change:
@@ -86,7 +91,7 @@ class UndoSeparator extends RefCounted:
 		after = GameChanges.copy(_after)
 		if activate:
 			before = GameChanges.copy(Game.player.get(array())[color])
-			if cancelCondition():
+			if before == after or color == Game.COLOR.NONE:
 				cancelled = true
 				return
 			do()
@@ -94,26 +99,21 @@ class UndoSeparator extends RefCounted:
 	func do() -> void: Game.player.get(array())[color] = GameChanges.copy(after); update()
 	func undo() -> void: Game.player.get(array())[color] = GameChanges.copy(before); update()
 
-	func cancelCondition() -> bool:
-		return before == after or color == Game.COLOR.NONE
-
 	func update() -> void:
 		Game.player.bufferCheckKeys()
 
 	func _to_string() -> String:
 		return "<ColorChange:"+str(color)+">"
 	
-	func serialise() -> Array: return [SerialisedUndoStack.CHANGE_TYPES.find(get_script()), color, before, after]
+	func serialise() -> Array: return [GameChanges.CHANGE_TYPES.find(get_script()), color, before, after]
 	static func deserialise(properties:Array) -> ColorChange:
-		var change:ColorChange = SerialisedUndoStack.CHANGE_TYPES[properties[0]].new(properties[1], properties[3], false)
+		var change:ColorChange = GameChanges.CHANGE_TYPES[properties[0]].new(properties[1], properties[3], false)
 		change.before = GameChanges.copy(properties[2])
 		return change
 
 class KeyChange extends ColorChange:
 	# C major -> A minor, for example
 	static func array() -> StringName: return &"key"
-
-	func cancelCondition() -> bool: return super() or Game.player.star[color]
 
 	func do() -> void:
 		super()
@@ -128,6 +128,14 @@ class StarChange extends ColorChange:
 class CurseChange extends ColorChange:
 	# a change to the cursed state
 	static func array() -> StringName: return &"curse"
+	
+class GlistenChange extends ColorChange:
+	# a change to the glistening count
+	static func array() -> StringName: return &"glisten"
+
+	func do() -> void:
+		super()
+		Game.bufferGateCheck()
 
 class PropertyChange extends Change:
 	var id:int
@@ -165,7 +173,7 @@ class PropertyChange extends Change:
 	func _to_string() -> String:
 		return "<PropertyChange:"+str(id)+"."+str(property)+">"
 
-	func serialise() -> Array: return [SerialisedUndoStack.CHANGE_TYPES.find(PropertyChange), type in Game.NON_OBJECT_COMPONENTS, id, property, before, after]
+	func serialise() -> Array: return [GameChanges.CHANGE_TYPES.find(PropertyChange), type in Game.NON_OBJECT_COMPONENTS, id, property, before, after]
 	static func deserialise(properties:Array) -> PropertyChange:
 		var component:GameComponent
 		if properties[1]: component = Game.components.get(properties[2])

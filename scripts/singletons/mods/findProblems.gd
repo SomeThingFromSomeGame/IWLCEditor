@@ -77,8 +77,10 @@ func findProblems(component:GameComponent) -> void:
 			findColorProblems(component, component.color)
 			if &"C5" in modsWindow.modsRemoved:
 				noteProblem(&"C5", &"CurseKeyType", component, component.type == KeyBulk.TYPE.CURSE)
-			if &"PartialInfKeys" in modsWindow.modsRemoved:
-				noteProblem(&"PartialInfKeys", &"PartialInfKeys", component, component.infinite not in [0, 1])
+			if &"PartialInfKey" in modsWindow.modsRemoved:
+				noteProblem(&"PartialInfKey", &"PartialInfKey", component, component.infinite not in [0, 1])
+			if &"Glistening" in modsWindow.modsRemoved:
+				noteProblem(&"Glistening", &"GlisteningKey", component, component.glistening)
 		Lock, RemoteLock:
 			findColorProblems(component, component.color)
 			if component is Lock:
@@ -100,12 +102,17 @@ func findProblems(component:GameComponent) -> void:
 				noteProblem(&"C3", &"PartialBlastLock", component, component.type == Lock.TYPE.ALL and (component.isPartial or M.neq(component.count, M.ONE) or M.neq(component.denominator, M.ONE)))
 			if &"C5" in modsWindow.modsRemoved:
 				noteProblem(&"C5", &"LockArmament", component, component.armament)
+			if &"Glistening" in modsWindow.modsRemoved:
+				noteProblem(&"Glistening", &"GlisteningLock", component, component.type == Lock.TYPE.GLISTENING)
 		Door:
 			findColorProblems(component, component.colorSpend)
 			if &"ZeroCopies" in modsWindow.modsRemoved:
 				noteProblem(&"ZeroCopies", &"ZeroCopies", component, M.nex(component.copies))
 			if &"InfCopies" in modsWindow.modsRemoved:
 				noteProblem(&"InfCopies", &"InfCopies", component, M.ex(component.infCopies))
+		KeyCounter:
+			if &"MoreKeyCounterWidths" in modsWindow.modsRemoved:
+				noteProblem(&"MoreKeyCounterWidths", &"NstdKeyCounterWidth", component, KeyCounter.WIDTH_AMOUNT.find(component.size.x) in [KeyCounter.WIDTH.VLONG, KeyCounter.WIDTH.EXLONG])
 		KeyCounterElement:
 			findColorProblems(component, component.color)
 

@@ -59,7 +59,7 @@ func focusComponent(component:GameComponent, _new:bool) -> void: # Lock or Remot
 	
 	%remoteLockConvert.visible = Mods.active(&"C1") and component is not RemoteLock
 
-	%doorAxialNumberEdit.visible = component.type == Lock.TYPE.NORMAL or component.type == Lock.TYPE.EXACT
+	%doorAxialNumberEdit.visible = component.type == Lock.TYPE.NORMAL or component.type == Lock.TYPE.EXACT or component.type == Lock.TYPE.GLISTENING
 	%doorAxialNumberEdit.zeroIValid = component.type == Lock.TYPE.EXACT
 	%doorAxialNumberEdit.setValue(component.count, true)
 	if component.zeroI: %doorAxialNumberEdit.setZeroI()
@@ -105,11 +105,13 @@ func receiveKey(event:InputEvent) -> bool:
 	elif Editor.eventIs(event, &"numberTimesI"):
 		if blastSettings: _blastLockAxisSet(!%blastLockAxis.button_pressed)
 	elif main.focused is RemoteLock or main.componentFocused is Lock:
+		var lock:GameComponent = main.focused if main.focused is RemoteLock else main.componentFocused
 		if Editor.eventIs(event, &"focusLockNormal"): _lockTypeSelected(Lock.TYPE.NORMAL)
-		elif Editor.eventIs(event, &"focusLockBlank"): _lockTypeSelected(Lock.TYPE.BLANK)
-		elif Editor.eventIs(event, &"focusLockBlast"): _lockTypeSelected(Lock.TYPE.BLAST)
-		elif Editor.eventIs(event, &"focusLockAll"): _lockTypeSelected(Lock.TYPE.ALL)
-		elif Editor.eventIs(event, &"focusLockExact") and Mods.active(&"C3"): _lockTypeSelected(Lock.TYPE.EXACT)
+		elif Editor.eventIs(event, &"focusLockBlank"): _lockTypeSelected(Lock.TYPE.BLANK if lock.type != Lock.TYPE.BLANK else Lock.TYPE.NORMAL)
+		elif Editor.eventIs(event, &"focusLockBlast"): _lockTypeSelected(Lock.TYPE.BLAST if lock.type != Lock.TYPE.BLAST else Lock.TYPE.NORMAL)
+		elif Editor.eventIs(event, &"focusLockAll"): _lockTypeSelected(Lock.TYPE.ALL if lock.type != Lock.TYPE.ALL else Lock.TYPE.NORMAL)
+		elif Editor.eventIs(event, &"focusLockExact") and Mods.active(&"C3"): _lockTypeSelected(Lock.TYPE.EXACT if lock.type != Lock.TYPE.EXACT else Lock.TYPE.NORMAL)
+		elif Editor.eventIs(event, &"focusLockGlistening") and Mods.active(&"Glistening"): _lockTypeSelected(Lock.TYPE.GLISTENING if lock.type != Lock.TYPE.GLISTENING else Lock.TYPE.NORMAL)
 		elif Editor.eventIs(event, &"focusLockNegated") and Mods.active(&"C1"): _lockNegatedSet(!%lockNegated.button_pressed)
 		elif Editor.eventIs(event, &"focusLockArmament") and Mods.active(&"C5"): _lockArmamentSet(!%lockArmament.button_pressed)
 		elif main.focused is RemoteLock:

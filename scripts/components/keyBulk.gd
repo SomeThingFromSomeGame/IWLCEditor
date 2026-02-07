@@ -2,6 +2,8 @@ extends GameObject
 class_name KeyBulk
 const SCENE:PackedScene = preload("res://scenes/objects/keyBulk.tscn")
 
+const MULTITYPEOFFSET = 3 # no magic numbers
+
 const TYPES:int = 5
 enum TYPE {NORMAL, EXACT, STAR, ROTOR, CURSE}
 
@@ -21,6 +23,7 @@ const SIGNFLIP_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/signfli
 const POSROTOR_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/posrotor.png")
 const NEGROTOR_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/negrotor.png")
 const INFINITE_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/infinite.png")
+const GLISTENING_SYMBOL:Texture2D = preload("res://assets/game/key/symbols/glistening.png")
 
 static var TEXTURE:KeyColorsTextureLoader = KeyColorsTextureLoader.new("res://assets/game/key/$c/$t.png", TEXTURE_COLORS, true, false, {capitalised=false})
 static var GLITCH:KeyColorsTextureLoader = KeyColorsTextureLoader.new("res://assets/game/key/$c/glitch$t.png", TEXTURE_COLORS, false, false, {capitalised=true})
@@ -32,7 +35,7 @@ const CREATE_PARAMETERS:Array[StringName] = [
 ]
 const PROPERTIES:Array[StringName] = [
 	&"id", &"position", &"size",
-	&"color", &"type", &"count", &"infinite", &"un"
+	&"color", &"type", &"count", &"infinite", &"glistening", &"un"
 ]
 static var ARRAYS:Dictionary[StringName,Variant] = {}
 
@@ -40,6 +43,7 @@ var color:Game.COLOR = Game.COLOR.WHITE
 var type:TYPE = TYPE.NORMAL
 var count:PackedInt64Array = M.ONE
 var infinite:int = 0
+var glistening:bool = false # whether the key affects glistening count or no
 var un:bool = false # whether a star or curse key is an unstar or uncurse key
 
 var drawDropShadow:RID
@@ -102,12 +106,20 @@ func _draw() -> void:
 			elif M.eq(count, M.I): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,POSROTOR_SYMBOL)
 			elif M.eq(count, M.nI): RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,NEGROTOR_SYMBOL)
 	if infinite:
-		RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
+		if glistening:
+			RenderingServer.canvas_item_add_texture_rect(drawSymbol,Rect2(Vector2(MULTITYPEOFFSET,-MULTITYPEOFFSET), size),INFINITE_SYMBOL)
+		else:
+			RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,INFINITE_SYMBOL)
 		if infinite > 1:
 			var string:String = ""
 			if partialInfiniteCount: string = str(infinite-partialInfiniteCount)
 			string += "/%s" % infinite
 			TextDraw.outlined2(FKEYBULK,drawSymbol,string,Color("#ebe3dd"),Color("#363029"),14,Vector2(28,8))
+	if glistening:
+		if infinite:
+			RenderingServer.canvas_item_add_texture_rect(drawSymbol,Rect2(Vector2(-MULTITYPEOFFSET,MULTITYPEOFFSET), size),GLISTENING_SYMBOL)
+		else:
+			RenderingServer.canvas_item_add_texture_rect(drawSymbol,rect,GLISTENING_SYMBOL)
 
 func keycountColor() -> Color: return Color("#363029") if M.negative(M.sign(count)) else Color("#ebe3dd")
 func keycountOutlineColor() -> Color: return Color("#d6cfc9") if M.negative(M.sign(count)) else Color("#363029")
@@ -177,13 +189,21 @@ func stop() -> void:
 func collect(player:Player) -> void:
 	if partialInfiniteCount: return
 
+	var collectColor:Game.COLOR = effectiveColor()
+
+	if glistening:
+		match type:
+			TYPE.NORMAL: player.changeGlisten(collectColor, M.add(player.glisten[collectColor], count))
+			TYPE.EXACT: player.changeGlisten(collectColor, count)
+			TYPE.ROTOR: player.changeGlisten(collectColor, M.times(player.glisten[collectColor], count))
+
 	match type:
-		TYPE.NORMAL: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.add(player.key[effectiveColor()], count)))
-		TYPE.EXACT: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), count))
-		TYPE.ROTOR: GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.times(player.key[effectiveColor()], count)))
+		TYPE.NORMAL: player.changeKeys(collectColor, M.add(player.key[collectColor], count))
+		TYPE.EXACT: player.changeKeys(collectColor, count)
+		TYPE.ROTOR: player.changeKeys(collectColor, M.times(player.key[collectColor], count))
 		TYPE.STAR: GameChanges.addChange(GameChanges.StarChange.new(effectiveColor(), !un))
 		TYPE.CURSE: GameChanges.addChange(GameChanges.CurseChange.new(effectiveColor(), !un))
-		
+	
 	if infinite:
 		flashAnimation()
 		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"partialInfiniteCount", infinite))

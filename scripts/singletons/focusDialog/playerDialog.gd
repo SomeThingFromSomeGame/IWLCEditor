@@ -9,7 +9,7 @@ var color:Game.COLOR
 func focus(focused:GameObject, new:bool, _dontRedirect:bool) -> void:
 	%playerSpawnSettings.visible = focused is PlayerSpawn
 	%playerStateSettings.visible = focused is PlayerPlaceholderObject or Game.levelStart != focused
-	%playerStateSettings2.visible = %playerStateSettings.visible
+	%playerStateColorSettings.visible = %playerStateSettings.visible
 	%playerSettings.visible = focused is PlayerPlaceholderObject
 	if new: setSelectedColor(Game.COLOR.WHITE)
 	else: _playerColorSelected(color)
@@ -32,10 +32,12 @@ func _playerColorSelected(_color:Game.COLOR) -> void:
 		%playerKeyCountEdit.setValue(Game.player.key[color], true)
 		%playerStar.button_pressed = Game.player.star[color]
 		%playerCurse.button_pressed = Game.player.curse[color]
+		%playerKeyGlistenEdit.setValue(Game.player.glisten[color], true)
 	else:
 		%playerKeyCountEdit.setValue(main.focused.key[color], true)
 		%playerStar.button_pressed = main.focused.star[color]
 		%playerCurse.button_pressed = main.focused.curse[color]
+		%playerKeyGlistenEdit.setValue(main.focused.glisten[color], true)
 
 func receiveKey(event:InputEvent) -> bool:
 	if Editor.eventIs(event, &"focusPlayerStart") and %playerSpawnSettings.visible: _playTest()
@@ -50,6 +52,7 @@ func editDeinteracted(_edit) -> void: pass
 
 func changedMods() -> void:
 	%playerCurse.visible = Mods.active(&"C5")
+	%playerKeyGlistenCont.visible = Mods.active(&"Glistening")
 
 func _playerKeyCountSet(value:PackedInt64Array) -> void:
 	if main.focused is PlayerPlaceholderObject:
@@ -67,6 +70,11 @@ func _playerCurseSet(toggled_on:bool) -> void:
 		Game.player.curse[color] = toggled_on
 		Game.player.checkKeys()
 	else: Changes.addChange(Changes.ArrayElementChange.new(main.focused,&"curse",color,toggled_on))
+
+func _playerKeyGlistenSet(value:PackedInt64Array):
+	if main.focused is PlayerPlaceholderObject:
+		Game.player.glisten[color] = value
+	else: Changes.addChange(Changes.ArrayElementChange.new(main.focused,&"glisten",color,value))
 
 func _playTest():
 	if Game.playState != Game.PLAY_STATE.EDIT:

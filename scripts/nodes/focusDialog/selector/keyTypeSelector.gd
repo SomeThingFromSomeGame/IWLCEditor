@@ -6,7 +6,7 @@ const ICONS:Array[Texture2D] = [
 	preload("res://assets/ui/focusDialog/keyType/exact.png"),
 	preload("res://assets/ui/focusDialog/keyType/star.png"),
 	preload("res://assets/ui/focusDialog/keyType/rotor.png"),
-	preload("res://assets/ui/focusDialog/keyType/curse.png"),
+	preload("res://assets/ui/focusDialog/keyType/curse.png")
 ]
 
 func _ready() -> void:

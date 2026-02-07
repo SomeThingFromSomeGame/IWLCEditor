@@ -5,19 +5,27 @@ const ICONS:Array[Texture2D] = [
 	preload("res://assets/ui/focusDialog/lockConfiguration/AnyS.png"),
 	preload("res://assets/ui/focusDialog/lockConfiguration/AnyM.png"),
 	preload("res://assets/ui/focusDialog/lockConfiguration/AnyL.png"),
+	preload("res://assets/ui/focusDialog/lockConfiguration/AnyXL.png"),
+	preload("res://assets/ui/focusDialog/lockConfiguration/AnyXXL.png"),
 ]
 
 func _ready() -> void:
-	columns = 3
-	options = range(3)
-	defaultValue = 0
+	columns = 5
+	options = range(KeyCounter.WIDTHS)
+	defaultValue = KeyCounter.WIDTH.SHORT
 	buttonType = KeyCounterWidthSelectorButton
 	super()
+
+func changedMods() -> void:
+	var widths:Array[KeyCounter.WIDTH] = Mods.keyCounterWidths()
+	for button in buttons: button.visible = false
+	for width in widths: buttons[width].visible = true
+	columns = len(widths)
 
 class KeyCounterWidthSelectorButton extends SelectorButton:
 	var drawMain:RID
 
-	func _init(_value:KeyBulk.TYPE, _selector:KeyCounterWidthSelector):
+	func _init(_value:KeyCounter.WIDTH, _selector:KeyCounterWidthSelector):
 		custom_minimum_size = Vector2(16,16)
 		z_index = 1
 		super(_value, _selector)

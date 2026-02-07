@@ -1,10 +1,10 @@
 extends Node
-class_name LoadV1
+class_name LoadV1to2
 
 static var COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement, KeyBulk, Door, Goal, KeyCounter, PlayerSpawn, FloatingTile, RemoteLock]
 static var NON_OBJECT_COMPONENTS:Array[GDScript] = [Lock, KeyCounterElement]
 
-static var PROPERTIES:Dictionary[GDScript,Array] = {
+static var BASE_PROPERTIES:Dictionary[GDScript,Array] = {
 	Lock: [
 		&"id", &"position", &"size",
 		&"parentId", &"color", &"type", &"sizeType", &"count", &"configuration", &"zeroI", &"isPartial", &"denominator", &"negated", &"armament",
@@ -43,7 +43,7 @@ static var PROPERTIES:Dictionary[GDScript,Array] = {
 		&"frozen", &"crumbled", &"painted"
 	]
 }
-static var ARRAYS:Dictionary[GDScript,Dictionary] = {
+static var BASE_ARRAYS:Dictionary[GDScript,Dictionary] = {
 	Lock: {},
 	KeyCounterElement: {},
 	KeyBulk: {},
@@ -68,18 +68,13 @@ static var ARRAYS:Dictionary[GDScript,Dictionary] = {
 # - components
 # - objects
 
-static func loadFile(file:FileAccess) -> void:
-	#Game.level = file.get_var(true)
-	#Game.levelBounds.size = file.get_var()
-	#for mod in file.get_var(): Mods.mods[mod].active = true
-	#var modpackId:StringName = file.get_var()
-	#if modpackId:
-	#	Mods.activeModpack = Mods.modpacks[modpackId]
-	#	Mods.activeVersion = Mods.activeModpack.versions[file.get_32()]
-	#else:
-	#	Mods.activeModpack = null
-	#	Mods.activeVersion = null
-	#var levelStart:int = file.get_64()
+static func loadFile(file:FileAccess, formatVersion:int) -> void:
+	var PROPERTIES:Dictionary[GDScript,Array] = BASE_PROPERTIES.duplicate_deep()
+	var ARRAYS:Dictionary[GDScript, Dictionary] = BASE_ARRAYS.duplicate_deep()
+	if formatVersion > 1:
+		PROPERTIES.get(KeyBulk).insert(7, &"glistening")
+		ARRAYS.get(PlayerSpawn)[&"glisten"] = TYPE_PACKED_INT64_ARRAY
+	
 	# LEVEL DATA
 	# tiles
 	Game.tiles.tile_map_data = file.get_var()

@@ -1,9 +1,13 @@
 extends MarginContainer
 class_name HotkeySetting
 
+## The label displayed to the user
 @export var label:String
+## The name of the action (in Project -> Project Settings -> Input Map)
 @export var action:StringName
+## A prerequisite mod, if this is a modded hotkey. Leave blank for no prerequisite
 @export var prerequisite:StringName
+## Whether or not this is a held modifier.
 @export var held:bool = false
 var input:InputEvent
 
@@ -20,7 +24,7 @@ func _ready() -> void:
 		buttons.append(button)
 
 func changedMods() -> void:
-	visible = !prerequisite or Mods.mods[prerequisite].active
+	visible = !prerequisite or Mods.active(prerequisite)
 	for button in buttons: button.check()
 
 func _hover() -> void: %label.add_theme_color_override("font_color", Color("#ffffff")); %hover.visible = true

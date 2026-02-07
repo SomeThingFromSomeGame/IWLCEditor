@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://co26yexy71p71" path="res://assets/ui/focusDialog/keyBooleans/partialInfinite.png" id="8_16i1m"]
 [ext_resource type="Texture2D" uid="uid://b1rtmm8li5skq" path="res://assets/ui/focusDialog/keySplitType/star.png" id="8_mscoq"]
 [ext_resource type="Texture2D" uid="uid://dcaheb86npiio" path="res://assets/ui/focusDialog/doorType/simple.png" id="10_oii3e"]
+[ext_resource type="Texture2D" uid="uid://b6ao3k0ww6tu1" path="res://assets/ui/focusDialog/keyBooleans/glistening.png" id="10_vapyv"]
 [ext_resource type="Script" uid="uid://cq06lldmmo4k4" path="res://scripts/singletons/focusDialog/doorDialog.gd" id="11_drywk"]
 [ext_resource type="Texture2D" uid="uid://ulo77sni12v" path="res://assets/ui/focusDialog/doorType/combo.png" id="11_jwt4y"]
 [ext_resource type="Texture2D" uid="uid://bowkgmjrwugjj" path="res://assets/ui/focusDialog/doorType/gate.png" id="12_qi8n2"]
@@ -40,6 +41,7 @@
 [ext_resource type="Script" uid="uid://dihumic7k5rec" path="res://scripts/singletons/focusDialog/keyCounterDialog.gd" id="30_bfxh1"]
 [ext_resource type="Script" uid="uid://2iqmgcrc5wpq" path="res://scripts/nodes/focusDialog/doorsHandler.gd" id="31_xwnfa"]
 [ext_resource type="Script" uid="uid://b0shfyjnfk7ih" path="res://scripts/singletons/focusDialog/goalDialog.gd" id="33_di8ev"]
+[ext_resource type="Texture2D" uid="uid://cv1qa4bwwetr5" path="res://assets/ui/focusDialog/numberEdit/parenthesis.png" id="38_lm5cw"]
 [ext_resource type="Script" uid="uid://vfxgywtu3kgg" path="res://scripts/singletons/focusDialog/playerDialog.gd" id="40_p7jkh"]
 [ext_resource type="Texture2D" uid="uid://bde4hvh2i41bh" path="res://assets/ui/focusDialog/keySplitType/curse.png" id="41_ft2jg"]
 
@@ -160,6 +162,7 @@ script = ExtResource("2_k8bto")
 
 [node name="keyDialog" type="Control" parent="." unique_id=538684455 groups=["modUI"]]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 0
 script = ExtResource("3_b5h7e")
 
@@ -227,6 +230,14 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(32, 0)
 layout_mode = 2
 purpose = 1
+
+[node name="keyGlisteningToggle" type="Button" parent="keyDialog/c/c/c/c" unique_id=1657225081 groups=["explained"]]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+toggle_mode = true
+icon = ExtResource("10_vapyv")
+metadata/explanation = SubResource("Resource_hdjws")
 
 [node name="keyCountEdit" parent="keyDialog/c/c/c" unique_id=2107257614 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
@@ -539,7 +550,6 @@ metadata/_custom_type_script = "uid://2iqmgcrc5wpq"
 
 [node name="playerDialog" type="Control" parent="." unique_id=1028920322 groups=["modUI"]]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 0
 script = ExtResource("40_p7jkh")
 
@@ -630,26 +640,44 @@ size_flags_horizontal = 4
 script = ExtResource("3_wmate")
 metadata/_custom_type_script = "uid://c70juj2p5s6yd"
 
-[node name="playerStateSettings2" type="PanelContainer" parent="playerDialog/c" unique_id=4846107]
+[node name="playerStateColorSettings" type="PanelContainer" parent="playerDialog/c" unique_id=4846107]
 unique_name_in_owner = true
 layout_mode = 2
 theme_type_variation = &"DialogPanelContainer"
 
-[node name="c" type="MarginContainer" parent="playerDialog/c/playerStateSettings2" unique_id=2136528159]
+[node name="c" type="MarginContainer" parent="playerDialog/c/playerStateColorSettings" unique_id=2136528159]
 layout_mode = 2
 
-[node name="c" type="VBoxContainer" parent="playerDialog/c/playerStateSettings2/c" unique_id=890339268]
+[node name="c" type="VBoxContainer" parent="playerDialog/c/playerStateColorSettings/c" unique_id=890339268]
 layout_mode = 2
 
-[node name="playerKeyCountEdit" parent="playerDialog/c/playerStateSettings2/c/c" unique_id=1084238138 instance=ExtResource("5_qjvko")]
+[node name="playerKeyCountEdit" parent="playerDialog/c/playerStateColorSettings/c/c" unique_id=1084238138 instance=ExtResource("5_qjvko")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/playerStateSettings2/c/c" unique_id=750588887]
+[node name="playerKeyGlistenCont" type="HBoxContainer" parent="playerDialog/c/playerStateColorSettings/c/c" unique_id=865961514]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="p" type="TextureRect" parent="playerDialog/c/playerStateColorSettings/c/c/playerKeyGlistenCont" unique_id=875548380]
+layout_mode = 2
+texture = ExtResource("38_lm5cw")
+
+[node name="playerKeyGlistenEdit" parent="playerDialog/c/playerStateColorSettings/c/c/playerKeyGlistenCont" unique_id=399422665 instance=ExtResource("5_qjvko")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="p2" type="TextureRect" parent="playerDialog/c/playerStateColorSettings/c/c/playerKeyGlistenCont" unique_id=1003227765]
+layout_mode = 2
+texture = ExtResource("38_lm5cw")
+flip_h = true
+
+[node name="colorSettings" type="HBoxContainer" parent="playerDialog/c/playerStateColorSettings/c/c" unique_id=750588887]
 layout_mode = 2
 alignment = 1
 
-[node name="playerStar" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" unique_id=178393802 groups=["explained"]]
+[node name="playerStar" type="Button" parent="playerDialog/c/playerStateColorSettings/c/c/colorSettings" unique_id=178393802 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -657,7 +685,7 @@ toggle_mode = true
 icon = ExtResource("8_mscoq")
 metadata/explanation = SubResource("Resource_vapyv")
 
-[node name="playerCurse" type="Button" parent="playerDialog/c/playerStateSettings2/c/c/colorSettings" unique_id=76095913 groups=["explained"]]
+[node name="playerCurse" type="Button" parent="playerDialog/c/playerStateColorSettings/c/c/colorSettings" unique_id=76095913 groups=["explained"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -691,7 +719,7 @@ layout_mode = 2
 [node name="c" type="VBoxContainer" parent="keyCounterDialog/c/c" unique_id=36732370]
 layout_mode = 2
 
-[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=2056077053]
+[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=2056077053 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
@@ -763,6 +791,7 @@ default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 [connection signal="select" from="keyDialog/c/c/c/c/keyTypeSelector" to="keyDialog" method="_keyTypeSelected"]
 [connection signal="toggled" from="keyDialog/c/c/c/c/keyInfiniteToggle" to="keyDialog" method="_keyInfiniteToggled"]
 [connection signal="valueSet" from="keyDialog/c/c/c/c/keyPartialInfinite/keyPartialInfiniteEdit" to="keyDialog" method="_keyPartialInfiniteSet"]
+[connection signal="toggled" from="keyDialog/c/c/c/c/keyGlisteningToggle" to="keyDialog" method="_keyGlisteningToggled"]
 [connection signal="valueSet" from="keyDialog/c/c/c/keyCountEdit" to="keyDialog" method="_keyCountSet"]
 [connection signal="select" from="keyDialog/c/c/c/keyRotorSelector" to="keyDialog" method="_keyRotorSelected"]
 [connection signal="toggled" from="keyDialog/c/c/c/keyUn" to="keyDialog" method="_keyUnToggled"]
@@ -793,9 +822,10 @@ default_color = Color(0.8352941, 0.8352941, 0.8352941, 1)
 [connection signal="pressed" from="playerDialog/c/c/c/c/playerSpawnSettings/c/savestate" to="playerDialog" method="_setSavestate"]
 [connection signal="pressed" from="playerDialog/c/c/c/c/playerSettings/leaveSavestate" to="playerDialog" method="_leaveSavestate"]
 [connection signal="select" from="playerDialog/c/c/c/c/playerStateSettings/playerColorSelector" to="playerDialog" method="_playerColorSelected"]
-[connection signal="valueSet" from="playerDialog/c/playerStateSettings2/c/c/playerKeyCountEdit" to="playerDialog" method="_playerKeyCountSet"]
-[connection signal="toggled" from="playerDialog/c/playerStateSettings2/c/c/colorSettings/playerStar" to="playerDialog" method="_playerStarSet"]
-[connection signal="toggled" from="playerDialog/c/playerStateSettings2/c/c/colorSettings/playerCurse" to="playerDialog" method="_playerCurseSet"]
+[connection signal="valueSet" from="playerDialog/c/playerStateColorSettings/c/c/playerKeyCountEdit" to="playerDialog" method="_playerKeyCountSet"]
+[connection signal="valueSet" from="playerDialog/c/playerStateColorSettings/c/c/playerKeyGlistenCont/playerKeyGlistenEdit" to="playerDialog" method="_playerKeyGlistenSet"]
+[connection signal="toggled" from="playerDialog/c/playerStateColorSettings/c/c/colorSettings/playerStar" to="playerDialog" method="_playerStarSet"]
+[connection signal="toggled" from="playerDialog/c/playerStateColorSettings/c/c/colorSettings/playerCurse" to="playerDialog" method="_playerCurseSet"]
 [connection signal="select" from="keyCounterDialog/c/c/c/keyCounterWidthSelector" to="keyCounterDialog" method="_keyCounterWidthSelected"]
 [connection signal="select" from="keyCounterDialog/c/c/c/keyCounterColorSelector" to="keyCounterDialog" method="_keyCounterColorSelected"]
 [connection signal="select" from="goalDialog/c/c/c/goalTypeSelector" to="goalDialog" method="_goalTypeSelected"]

@@ -6,16 +6,18 @@ const SEARCH_ICON:Texture2D = preload("res://assets/game/keyCounter/icon.png")
 const SEARCH_NAME:String = "Key Counter"
 const SEARCH_KEYWORDS:Array[String] = ["oKeyHandle", "key box"]
 
-const SHORT:Texture2D = preload("res://assets/game/keyCounter/short.png")
-const MEDIUM:Texture2D = preload("res://assets/game/keyCounter/medium.png")
-const LONG:Texture2D = preload("res://assets/game/keyCounter/long.png")
-const WIDTHS:Array[float] = [107, 139, 203]
+const TEXTURES = [
+	preload("res://assets/game/keyCounter/short.png"),
+	preload("res://assets/game/keyCounter/medium.png"),
+	preload("res://assets/game/keyCounter/long.png"),
+	preload("res://assets/game/keyCounter/vlong.png"),
+	preload("res://assets/game/keyCounter/exlong.png")
+]
+const WIDTHS = 5
+enum WIDTH {SHORT, MEDIUM, LONG, VLONG, EXLONG}
+const WIDTH_AMOUNT:Array[float] = [107, 139, 203, 253, 353]
 func getSprite() -> Texture2D:
-	match size.x:
-		WIDTHS[0]: return SHORT
-		WIDTHS[1]: return MEDIUM
-		WIDTHS[2]: return LONG
-	return LONG
+	return TEXTURES[WIDTH_AMOUNT.find(size.x)]
 
 # the ninepatch (or i guess 3 since we dont care about horizontally) tiling for this is weird
 const TOP_LEFT:Vector2 = Vector2(16,16)
@@ -35,7 +37,7 @@ var drawMain:RID
 var elements:Array[KeyCounterElement] = []
 
 func _init() -> void :
-	size = Vector2(WIDTHS[0],63)
+	size = Vector2(WIDTH_AMOUNT[WIDTH.SHORT],63)
 
 func _ready() -> void:
 	drawMain = RenderingServer.canvas_item_create()

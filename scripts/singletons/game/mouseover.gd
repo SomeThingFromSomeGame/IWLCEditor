@@ -1,7 +1,7 @@
 extends PanelContainer
 class_name Mouseover
 
-const LOCK_TYPES = ["", "Blank ", "Blast ", "All ", "Exact "]
+const LOCK_TYPES = ["", "Blank ", "Blast ", "All ", "Exact ", "Starry "]
 
 func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void:
 	if !object:
@@ -23,6 +23,8 @@ func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void
 			if object.type in [KeyBulk.TYPE.NORMAL, KeyBulk.TYPE.EXACT]:
 				string += "\nAmount: " + M.str(object.count)
 			if object.color == Game.COLOR.GLITCH: string += "\nMimic: " + Game.COLOR_NAMES[object.glitchMimic]
+			if object.glistening:
+				string += "\n- Effects -\nGlistening!"
 		Door:
 			if object.type == Door.TYPE.SIMPLE:
 				string += LOCK_TYPES[object.locks[0].type] + Game.COLOR_NAMES[object.colorSpend] + " Door"
@@ -49,6 +51,7 @@ func describe(object:GameObject, pos:Vector2, screenBottomRight:Vector2) -> void
 		RemoteLock:
 			string += LOCK_TYPES[object.type] + Game.COLOR_NAMES[object.color] + " Remote Lock\n"
 			string += ("S" if object.satisfied else "Uns") + "atisfied, Cost: " + M.str(object.cost)
+			if object.type == Lock.TYPE.GLISTENING: string += " Glistening"
 			if object.type in [Lock.TYPE.BLAST, Lock.TYPE.ALL]: string += " (" + lockCost(object) + ")"
 			if object.armament: string += " (Armament)"
 			if object.color == Game.COLOR.GLITCH: string += "\nMimic: " + Game.COLOR_NAMES[object.glitchMimic]
@@ -83,6 +86,8 @@ func lockCost(lock:GameComponent) -> String:
 		Lock.TYPE.EXACT:
 			string += "Exactly " + M.str(lock.count)
 			if lock.zeroI: string += "i"
+		Lock.TYPE.GLISTENING:
+			string += M.str(lock.count) + " Glistening"
 	return string
 
 func effects(object:GameObject) -> String:

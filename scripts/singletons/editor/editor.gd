@@ -358,7 +358,7 @@ func startSizeDrag(component:GameComponent, handle:Vector2=Vector2(1,1)) -> void
 	var minSize:Vector2
 	if component is Door: minSize = Vector2(32,32)
 	elif component is Lock or component is RemoteLock: minSize = Vector2(18,18)
-	elif component is KeyCounter: minSize = Vector2(107,63)
+	elif component is KeyCounter: minSize = Vector2(KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.SHORT],63)
 	elif component is FloatingTile: minSize = Vector2(16,16)
 	elif component == levelBoundsObject: minSize = Vector2(800, 608)
 	if handle.x and handle.y: dragMode = DRAG_MODE.SIZE_DIAG
@@ -418,10 +418,14 @@ func dragComponent() -> void: # returns whether or not an object is being dragge
 			# keycounter has only a few possible widths
 			if componentDragged is KeyCounter:
 				toPosition -= effectiveDragPivotRect.position
-				if toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[2]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[2]
-				elif toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[1]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTHS[1]
-				elif toPosition.x >= KeyCounter.WIDTHS[2]: toPosition.x = KeyCounter.WIDTHS[2]
-				elif toPosition.x >= KeyCounter.WIDTHS[1]: toPosition.x = KeyCounter.WIDTHS[1]
+				if toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.EXLONG]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.EXLONG]
+				elif toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.VLONG]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.VLONG]
+				elif toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.LONG]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.LONG]
+				elif toPosition.x <= effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.MEDIUM]: toPosition.x = effectiveDragPivotRect.size.x - KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.MEDIUM]
+				elif toPosition.x >= KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.EXLONG]: toPosition.x = KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.EXLONG]
+				elif toPosition.x >= KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.VLONG]: toPosition.x = KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.VLONG]
+				elif toPosition.x >= KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.LONG]: toPosition.x = KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.LONG]
+				elif toPosition.x >= KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.MEDIUM]: toPosition.x = KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.MEDIUM]
 				else: toPosition.x = 0
 				toPosition.y = 0
 				toPosition += effectiveDragPivotRect.position

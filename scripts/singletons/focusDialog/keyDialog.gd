@@ -13,7 +13,8 @@ func focus(focused:KeyBulk, _new:bool, _dontRedirect:bool) -> void:
 	%keyCountEdit.visible = focused.type in [KeyBulk.TYPE.NORMAL,KeyBulk.TYPE.EXACT]
 	%keyCountEdit.setValue(focused.count, true)
 	%keyInfiniteToggle.button_pressed = focused.infinite
-	%keyPartialInfinite.visible = Mods.active(&"PartialInfKeys") and (focused.infinite or main.interacted == %keyPartialInfiniteEdit)
+	%keyGlisteningToggle.button_pressed = focused.glistening
+	%keyPartialInfinite.visible = Mods.active(&"PartialInfKey") and (focused.infinite or main.interacted == %keyPartialInfiniteEdit)
 	%keyPartialInfiniteEdit.setValue(M.N(focused.infinite), true)
 	%keyRotorSelector.visible = focused.type == KeyBulk.TYPE.ROTOR
 	%keyUn.visible = focused.type in [KeyBulk.TYPE.STAR, KeyBulk.TYPE.CURSE]
@@ -40,6 +41,7 @@ func receiveKey(event:InputEventKey) -> bool:
 			if main.focused.type == KeyBulk.TYPE.CURSE: Changes.PropertyChange.new(main.focused,&"un",!main.focused.un)
 			else: _keyTypeSelected(KeyBulk.TYPE.CURSE)
 	elif Editor.eventIs(event, &"focusKeyInfinite"): _keyInfiniteToggled(0 if main.focused.infinite else 1)
+	elif Editor.eventIs(event, &"focusKeyGlistening"): _keyGlisteningToggled(!main.focused.glistening)
 	elif Editor.eventIs(event, &"quicksetColor"): editor.quickSet.startQuick(&"quicksetColor", main.focused)
 	else: return false
 	return true
@@ -49,7 +51,8 @@ func editDeinteracted(edit:PanelContainer) -> void:
 	if edit == %keyPartialInfiniteEdit and !main.focused.infinite: %keyPartialInfinite.visible = false
 
 func changedMods() -> void:
-	%keyPartialInfinite.visible = Mods.active(&"PartialInfKeys") and main.focused is KeyBulk and main.focused.infinite
+	%keyGlisteningToggle.visible = Mods.active(&"Glistening")
+	%keyPartialInfinite.visible = Mods.active(&"PartialInfKey") and main.focused is KeyBulk and main.focused.infinite
 
 func _keyColorSelected(color:Game.COLOR) -> void:
 	if main.focused is not KeyBulk: return
@@ -72,6 +75,12 @@ func _keyInfiniteToggled(value:bool) -> void:
 	if main.focused is not KeyBulk: return
 	if value == !main.focused.infinite:
 		Changes.addChange(Changes.PropertyChange.new(main.focused,&"infinite",int(value)))
+		Changes.bufferSave()
+
+func _keyGlisteningToggled(value:bool) -> void:
+	if main.focused is not KeyBulk: return
+	if value == !main.focused.glistening:
+		Changes.addChange(Changes.PropertyChange.new(main.focused,&"glistening",value))
 		Changes.bufferSave()
 
 func _keyRotorSelected(value:KeyRotorSelector.VALUE):

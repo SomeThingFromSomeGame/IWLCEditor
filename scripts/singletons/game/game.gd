@@ -285,6 +285,7 @@ func playTest(spawn:PlayerSpawn) -> void:
 			player.key.assign(spawn.key.map(func(number): return number.duplicate()))
 			player.star.assign(spawn.star)
 			player.curse.assign(spawn.curse)
+			player.glisten.assign(spawn.glisten.map(func(number): return number.duplicate()))
 		else: GameChanges.start()
 	playState = PLAY_STATE.PLAY
 	latestSpawn = spawn
@@ -331,6 +332,7 @@ func savestate() -> void:
 	Changes.addChange(Changes.PropertyChange.new(state,&"key",player.key.map(func(count): return count.duplicate())))
 	Changes.addChange(Changes.PropertyChange.new(state,&"star",player.star))
 	Changes.addChange(Changes.PropertyChange.new(state,&"curse",player.curse))
+	Changes.addChange(Changes.PropertyChange.new(state,&"glisten",player.glisten.map(func(count): return count.duplicate())))
 	Changes.addChange(Changes.PropertyChange.new(state,&"undoStack",GameChanges.undoStack.duplicate()))
 	Changes.addChange(Changes.PropertyChange.new(state,&"saveBuffered",GameChanges.saveBuffered))
 
