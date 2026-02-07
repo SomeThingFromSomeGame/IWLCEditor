@@ -265,7 +265,7 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 					match lockType:
 						TYPE.NORMAL: lockSymbol = SYMBOL_NORMAL
 						TYPE.GLISTENING: lockSymbol = SYMBOL_GLISTENINGI if M.isNonzeroImag(lockCount) else SYMBOL_GLISTENING
-						TYPE.EXACT: lockSymbol = SYMBOL_EXACTI if M.isNonzeroImag(lockCount) else SYMBOL_EXACT
+						TYPE.EXACT: lockSymbol = SYMBOL_EXACTI if M.isNonzeroImag(lockCount) or lockZeroI else SYMBOL_EXACT
 					if lockNegated: lockRect = Rect2(lockSize-lockRect.position-lockRect.size-offsetFromType(lockSizeType)*2,lockRect.size)
 					RenderingServer.canvas_item_add_texture_rect(lockDrawConfiguration,lockRect,lockSymbol,false,getConfigurationColor(negative))
 				if symbolLast: Game.FTALK.draw_string(lockDrawMain,Vector2(startX,startY)-offsetFromType(lockSizeType),string,HORIZONTAL_ALIGNMENT_LEFT,-1,12,getConfigurationColor(negative))
