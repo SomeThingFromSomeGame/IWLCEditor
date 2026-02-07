@@ -496,14 +496,10 @@ func tryOpen(player:Player) -> void:
 	for lock in remoteLocks:
 		cost = M.add(cost, lock.cost)
 	
-	# more glistening code
-	var KEY:PackedInt64Array = M.sub(player.key[colorAfterAurabreaker()],cost)
-	var GLISTEN:PackedInt64Array = M.sub(player.glisten[colorAfterAurabreaker()],glistenCost)
-	GameChanges.addChange(GameChanges.GlistenChange.new(colorAfterAurabreaker(),GLISTEN))
-	if M.isAStrictlyGreater(KEY,GLISTEN):
-			GameChanges.addChange(GameChanges.KeyChange.new(colorAfterAurabreaker(), KEY))
-	else:
-		GameChanges.addChange(GameChanges.KeyChange.new(colorAfterAurabreaker(), M.returnGreaterParts(KEY,GLISTEN)))
+	var spendColor:Game.COLOR = colorAfterAurabreaker()
+	player.changeKeys(spendColor, M.sub(player.key[spendColor],cost))
+	player.changeGlisten(spendColor, M.sub(player.glisten[spendColor], glistenCost))
+	
 	GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(ipow(), M.sub(M.allAxes(), infCopies)))))
 	
 	if gameFrozen or gameCrumbled or gamePainted: AudioManager.play(preload("res://resources/sounds/door/deaura.wav"))
@@ -526,12 +522,7 @@ func tryMasterOpen(player:Player) -> bool:
 
 	var openedForwards:bool = M.positive(M.sign(M.across(gameCopies, player.masterMode)))
 	GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(player.masterMode, M.sub(M.allAxes(), infCopies)))))
-	var KEY:PackedInt64Array = M.sub(player.key[Game.COLOR.MASTER], player.masterMode)
-	var GLISTEN:PackedInt64Array = player.glisten[Game.COLOR.MASTER]
-	if M.isAStrictlyGreater(KEY,GLISTEN):
-			GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.MASTER, KEY))
-	else:
-		GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.MASTER, M.returnGreaterParts(KEY,GLISTEN)))
+	player.changeKeys(Game.COLOR.MASTER, M.sub(player.key[Game.COLOR.MASTER], player.masterMode))
 	
 	if openedForwards:
 		AudioManager.play(preload("res://resources/sounds/door/master.wav"))
@@ -553,24 +544,15 @@ func tryQuicksilverOpen(player:Player) -> bool:
 	var glistenCost:PackedInt64Array = M.ZERO
 	for lock in locks:
 		if lock.type == lock.TYPE.GLISTENING:
-			glistenCost = M.add(cost, lock.getCost(player))
+			glistenCost = M.add(cost, lock.getCost(player, player.masterMode))
 		else:
-			cost = M.add(cost, lock.getCost(player))
+			cost = M.add(cost, lock.getCost(player, player.masterMode))
 	for lock in remoteLocks:
 		cost = M.add(cost, lock.cost)
-	var KEY:PackedInt64Array = M.sub(player.key[Game.COLOR.QUICKSILVER], player.masterMode)
-	var GLISTEN:PackedInt64Array = player.glisten[Game.COLOR.QUICKSILVER]
-	if M.isAStrictlyGreater(KEY,GLISTEN):
-			GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.QUICKSILVER, KEY))
-	else:
-		GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.QUICKSILVER, M.returnGreaterParts(KEY,GLISTEN)))
-	KEY = M.sub(player.key[colorAfterGlitch()], cost)
-	GLISTEN = M.sub(player.glisten[colorAfterGlitch()],glistenCost)
-	GameChanges.addChange(GameChanges.GlistenChange.new(colorAfterGlitch(),GLISTEN))
-	if M.isAStrictlyGreater(KEY,GLISTEN):
-		GameChanges.addChange(GameChanges.KeyChange.new(colorAfterGlitch(), KEY))
-	else:
-		GameChanges.addChange(GameChanges.KeyChange.new(colorAfterGlitch(), M.returnGreaterParts(KEY,GLISTEN)))
+	player.changeKeys(Game.COLOR.QUICKSILVER, M.sub(player.key[Game.COLOR.QUICKSILVER], player.masterMode))
+	var spendColor:Game.COLOR = colorAfterAurabreaker()
+	player.changeKeys(spendColor, M.sub(player.key[spendColor],cost))
+	player.changeGlisten(spendColor, M.sub(player.glisten[spendColor], glistenCost))
 
 	AudioManager.play(preload("res://resources/sounds/door/master.wav"))
 	relockAnimation()
@@ -591,12 +573,7 @@ func tryDynamiteOpen(player:Player) -> bool:
 
 	if M.simplies(gameCopies, player.key[Game.COLOR.DYNAMITE]) and M.nonNegative(M.sub(M.along(player.key[Game.COLOR.DYNAMITE], gameCopies), M.acrabs(gameCopies))) and M.nex(infCopies):
 		# if the door can open, open it
-		var KEY:PackedInt64Array = M.sub(player.key[Game.COLOR.DYNAMITE], gameCopies)
-		var GLISTEN:PackedInt64Array = player.glisten[Game.COLOR.DYNAMITE]
-		if M.isAStrictlyGreater(KEY,GLISTEN):
-				GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.DYNAMITE, KEY))
-		else:
-			GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.DYNAMITE, M.returnGreaterParts(KEY,GLISTEN)))
+		player.changeKeys(Game.COLOR.DYNAMITE, M.sub(player.key[Game.COLOR.DYNAMITE], gameCopies))
 		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.ZERO))
 		
 		openedForwards = true
@@ -605,12 +582,7 @@ func tryDynamiteOpen(player:Player) -> bool:
 		openedBackwards = M.hasNonPositive(M.along(player.key[Game.COLOR.DYNAMITE], gameCopies))
 
 		GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(player.key[Game.COLOR.DYNAMITE], M.sub(M.allAxes(),infCopies)))))
-		var KEY:PackedInt64Array = M.ZERO
-		var GLISTEN:PackedInt64Array = player.glisten[Game.COLOR.DYNAMITE]
-		if M.isAStrictlyGreater(KEY,GLISTEN):
-				GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.DYNAMITE, KEY))
-		else:
-			GameChanges.addChange(GameChanges.KeyChange.new(Game.COLOR.DYNAMITE, M.returnGreaterParts(KEY,GLISTEN)))
+		player.changeKeys(Game.COLOR.DYNAMITE, M.ZERO)
 
 	if openedForwards:
 		AudioManager.play(preload("res://resources/sounds/door/explode.wav"))

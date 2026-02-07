@@ -161,6 +161,7 @@ script = ExtResource("2_k8bto")
 
 [node name="keyDialog" type="Control" parent="." unique_id=538684455 groups=["modUI"]]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 0
 script = ExtResource("3_b5h7e")
 
@@ -548,7 +549,6 @@ metadata/_custom_type_script = "uid://2iqmgcrc5wpq"
 
 [node name="playerDialog" type="Control" parent="." unique_id=1028920322 groups=["modUI"]]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 0
 script = ExtResource("40_p7jkh")
 

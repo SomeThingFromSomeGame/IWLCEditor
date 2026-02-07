@@ -76,6 +76,14 @@ func negate(n:PackedInt64Array) -> PackedInt64Array:
 func rotate(n:PackedInt64Array) -> PackedInt64Array:
 	return [-n[1], n[0]]
 
+# componentwise max
+func max(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
+	return [max(a[0], b[0]), max(a[1], b[1])]
+
+# componentwise orelse
+func orelse(a:PackedInt64Array, b:PackedInt64Array) -> PackedInt64Array:
+	return [a[0] if a[0] else b[0], a[1] if a[1] else b[1]]
+
 # reducers
 
 func r(n:PackedInt64Array) -> PackedInt64Array:
@@ -132,6 +140,11 @@ func ilt(a:PackedInt64Array, b:PackedInt64Array) -> bool:
 	return a[1] < b[1]
 
 func ilte(a:PackedInt64Array, b:PackedInt64Array) -> bool: return !igt(a, b)
+
+func cgt(a:PackedInt64Array, b:PackedInt64Array) -> bool: return gt(a,b) && igt(a,b)
+func cgte(a:PackedInt64Array, b:PackedInt64Array) -> bool: return gte(a,b) && igte(a,b)
+func clt(a:PackedInt64Array, b:PackedInt64Array) -> bool: return lt(a,b) && ilt(a,b)
+func clte(a:PackedInt64Array, b:PackedInt64Array) -> bool: return lte(a,b) && ilte(a,b)
 
 func divisibleBy(a:PackedInt64Array, b:PackedInt64Array) -> bool: return nex(modulo(a,b))
 
@@ -214,24 +227,7 @@ func strWithInf(n:PackedInt64Array,infAxes:PackedInt64Array) -> String:
 		else: iComponent += str(n[1]) + "i"
 	if !n[0] and !n[1]: return "0"
 	return rComponent + iComponent
-	
-func returnGreaterParts(a:PackedInt64Array,b:PackedInt64Array) -> PackedInt64Array:
-	# compares  and b
-	# for each part (real + imag):
-	# if b > 0, check if a > b, if yes return a else return b
-	# if b < 0, check if a < b, if yes return a else return b
-	# if b = 0, just return a
-	var real:int
-	var imag:int
-	if (gt(b,ZERO) and gte(a,b)) or (lt(b,ZERO) and lte(a,b)) or (eq(r(b),ZERO)):
-		real = a[0]
-	else:
-		real = b[0]
-	if (igt(b,ZERO) and igte(a,b)) or (ilt(b,ZERO) and ilte(a,b)) or (eq(i(b),ZERO)):
-		imag = a[1]
-	else:
-		imag = b[1]
-	return Nc(real,imag)
 
-func isAStrictlyGreater(a:PackedInt64Array,b:PackedInt64Array) -> bool:
-	return eq(a,returnGreaterParts(a,b))
+func keepAbove(a:PackedInt64Array,b:PackedInt64Array) -> PackedInt64Array:
+	# in both axes, keeps the magnitude of a greater than or equal to the magnitude of b, in the direction of b. if b doesnt exist in that axis, it will be unaffected
+	return along(max(along(a,orelse(b,allAxes())), acrabs(b)), orelse(b,allAxes()))

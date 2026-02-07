@@ -189,40 +189,14 @@ func stop() -> void:
 func collect(player:Player) -> void:
 	if partialInfiniteCount: return
 
-	var KEY:PackedInt64Array
-	var GLISTEN:PackedInt64Array = player.glisten[effectiveColor()]
+	var collectColor:Game.COLOR = effectiveColor()
+
 	match type:
-		TYPE.NORMAL: 
-			KEY = M.add(player.key[effectiveColor()], count)
-			if glistening:
-				GLISTEN = M.add(player.glisten[effectiveColor()], count)
-				GameChanges.addChange(GameChanges.GlistenChange.new(effectiveColor(), GLISTEN))
-			if M.isAStrictlyGreater(KEY,GLISTEN):
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), KEY))
-			else:
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.returnGreaterParts(KEY,GLISTEN)))
-				
-		TYPE.EXACT: 
-			KEY = count
-			if glistening: 
-				GLISTEN = count
-				GameChanges.addChange(GameChanges.GlistenChange.new(effectiveColor(), GLISTEN))
-			if M.isAStrictlyGreater(KEY,GLISTEN):
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), KEY))
-			else:
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.returnGreaterParts(KEY,GLISTEN)))
-		TYPE.ROTOR: 
-			KEY = M.times(player.key[effectiveColor()], count)
-			if glistening: 
-				GLISTEN = M.times(player.glisten[effectiveColor()], count)
-				GameChanges.addChange(GameChanges.GlistenChange.new(effectiveColor(), GLISTEN))
-			if M.isAStrictlyGreater(KEY,GLISTEN):
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), KEY))
-			else:
-				GameChanges.addChange(GameChanges.KeyChange.new(effectiveColor(), M.returnGreaterParts(KEY,GLISTEN)))
+		TYPE.NORMAL:  player.changeKeys(collectColor, M.add(player.key[collectColor], count))
+		TYPE.EXACT: player.changeKeys(collectColor, count)
+		TYPE.ROTOR: player.changeKeys(collectColor, M.times(player.key[collectColor], count))
 		TYPE.STAR: GameChanges.addChange(GameChanges.StarChange.new(effectiveColor(), !un))
 		TYPE.CURSE: GameChanges.addChange(GameChanges.CurseChange.new(effectiveColor(), !un))
-		
 	
 	if infinite:
 		flashAnimation()
