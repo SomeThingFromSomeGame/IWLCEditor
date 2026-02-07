@@ -35,9 +35,9 @@ const Y_MAXSPEED:float = 9
 
 var canDoubleJump:bool = true
 var key:Array[PackedInt64Array] = []
-var glisten:Array[PackedInt64Array] = [] #your glistening count
 var star:Array[bool]
 var curse:Array[bool]
+var glisten:Array[PackedInt64Array] = [] #your glistening count
 
 var cantSave:bool = false # cant save if near a door
 

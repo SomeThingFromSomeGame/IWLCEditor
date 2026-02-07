@@ -9,7 +9,7 @@ var confirmAction:ACTION
 
 var jsCallback:JavaScriptObject
 
-const FILE_FORMAT_VERSION:int = 1
+const FILE_FORMAT_VERSION:int = 2
 
 # Okay.
 # Here's how we'll do it
@@ -232,13 +232,16 @@ func loadFile(path:String, immediate:bool=false) -> OpenWindow:
 	if file.get_pascal_string() != "IWLCEditorLevel": errorPopup("Unrecognised file format"); return null
 	var formatVersion:int = file.get_32()
 	var editorVersion:String = file.get_pascal_string()
-	if formatVersion == 1: openWindow.loader = LoadV1
-	else:
+	openWindow.formatVersion = formatVersion
+	if formatVersion == 0:
 		openWindow.queue_free()
 		if formatVersion == 0: errorPopup("File version 0 is unrecognised")
-		else: errorPopup("File version %s is unrecognised. File last opened in IWLCEditor v%s" % [formatVersion, editorVersion])
 		return null
-
+	elif formatVersion <= 2: openWindow.loader = LoadV1to2
+	else:
+		openWindow.queue_free()
+		errorPopup("File version %s is unrecognised. File last opened in IWLCEditor v%s" % [formatVersion, editorVersion])
+		return null
 	openWindow.level = file.get_var(true)
 	openWindow.screenshot = file.get_var(true)
 	openWindow.mods = file.get_var()
