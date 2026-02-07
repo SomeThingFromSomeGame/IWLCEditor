@@ -700,7 +700,7 @@ layout_mode = 2
 [node name="c" type="VBoxContainer" parent="keyCounterDialog/c/c" unique_id=36732370]
 layout_mode = 2
 
-[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=2056077053]
+[node name="keyCounterWidthSelector" type="GridContainer" parent="keyCounterDialog/c/c/c" unique_id=2056077053 groups=["modUI"]]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4

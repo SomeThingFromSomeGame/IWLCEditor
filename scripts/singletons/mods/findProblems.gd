@@ -110,6 +110,9 @@ func findProblems(component:GameComponent) -> void:
 				noteProblem(&"ZeroCopies", &"ZeroCopies", component, M.nex(component.copies))
 			if &"InfCopies" in modsWindow.modsRemoved:
 				noteProblem(&"InfCopies", &"InfCopies", component, M.ex(component.infCopies))
+		KeyCounter:
+			if &"MoreKeyCounterWidths" in modsWindow.modsRemoved:
+				noteProblem(&"MoreKeyCounterWidths", &"NstdKeyCounterWidth", component, KeyCounter.WIDTH_AMOUNT.find(component.size.x) in [KeyCounter.WIDTH.VLONG, KeyCounter.WIDTH.EXLONG])
 		KeyCounterElement:
 			findColorProblems(component, component.color)
 

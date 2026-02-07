@@ -77,6 +77,11 @@ static var mods:Dictionary[StringName, Mod] = {
 		"Adds Glistening keys and locks. Added by Bored",
 		[&"GlisteningKey", &"GlisteningLock"]
 	),
+	&"MoreKeyCounterWidths": Mod.new(
+		"More Key Counter Widths",
+		"Adds larger sizes for key counters. Added by Bored",
+		[&"NstdKeyCounterWidth"]
+	)
 }
 
 static var modpacks:Dictionary[StringName, Modpack] = {
@@ -197,6 +202,15 @@ func lockTypes() -> Array[Lock.TYPE]:
 	]
 	if active(&"C3"): array.append(Lock.TYPE.EXACT)
 	if active(&"Glistening"): array.append(Lock.TYPE.GLISTENING)
+	return array
+
+func keyCounterWidths() -> Array[KeyCounter.WIDTH]:
+	var array:Array[KeyCounter.WIDTH] = [
+		KeyCounter.WIDTH.SHORT,
+		KeyCounter.WIDTH.MEDIUM,
+		KeyCounter.WIDTH.LONG,
+	]
+	if active(&"MoreKeyCounterWidths"): array.append_array([KeyCounter.WIDTH.VLONG, KeyCounter.WIDTH.EXLONG])
 	return array
 
 func objectAvailable(object:GDScript) -> bool:

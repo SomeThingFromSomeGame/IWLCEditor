@@ -11,7 +11,7 @@ static var ModTree:Array = [
 	SubTree.new(
 		"Benign",
 		"Mods that don't do much.",
-		[&"NstdLockSize",&"MoreLockConfigs",&"ZeroCostLock",&"ZeroCopies"]
+		[&"NstdLockSize",&"MoreLockConfigs",&"ZeroCostLock",&"ZeroCopies",&"MoreKeyCounterWidths"]
 	),
 	SubTree.new(
 		"I Wanna Lockpick: Continued",

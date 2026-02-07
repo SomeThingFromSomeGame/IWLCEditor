@@ -174,8 +174,8 @@ static func exportFile(_file:FileAccess) -> void:
 				for element in object.elements:
 					code += "show[%s] = color_%s;&#xA;" % [index, COLOR_NAMES[element.color].to_upper()]
 					index += 1
-				if object.size.x == KeyCounter.WIDTHS[1]: code += "long = 1;&#xA;"
-				elif object.size.x == KeyCounter.WIDTHS[2]: code += "long = 2;&#xA;"
+				if object.size.x == KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.MEDIUM]: code += "long = 1;&#xA;"
+				elif object.size.x == KeyCounter.WIDTH_AMOUNT[KeyCounter.WIDTH.LONG]: code += "long = 2;&#xA;"
 				storeInstance("oKeyHandle", object.position-levelPos+Vector2(17,16), code, object.gameMakerName)
 			PlayerSpawn:
 				storeInstance("objPlayerStart", object.position-levelPos, "", object.gameMakerName)

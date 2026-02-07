@@ -5,7 +5,7 @@ class_name KeyCounterDialog
 @onready var main:FocusDialog = get_parent()
 
 func focus(focused:KeyCounter, new:bool, dontRedirect:bool) -> void:
-	%keyCounterWidthSelector.setSelect(KeyCounter.WIDTHS.find(focused.size.x))
+	%keyCounterWidthSelector.setSelect(KeyCounter.WIDTH_AMOUNT.find(focused.size.x))
 	if !main.componentFocused:
 		%keyCounterColorSelector.visible = false
 		%keyCounterHandler.deselect()
@@ -34,9 +34,9 @@ func receiveKey(event:InputEvent) -> bool:
 
 func editDeinteracted(_edit) -> void: pass
 
-func _keyCounterWidthSelected(width:int):
+func _keyCounterWidthSelected(width:KeyCounter.WIDTH):
 	if main.focused is not KeyCounter: return
-	Changes.addChange(Changes.PropertyChange.new(main.focused,&"size",Vector2(KeyCounter.WIDTHS[width],main.focused.size.y)))
+	Changes.addChange(Changes.PropertyChange.new(main.focused,&"size",Vector2(KeyCounter.WIDTH_AMOUNT[width],main.focused.size.y)))
 	Changes.bufferSave()
 
 func _keyCounterColorSelected(color:Game.COLOR) -> void:
