@@ -210,9 +210,9 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 			RenderingServer.canvas_item_add_rect(lockDrawGlitch,Rect2(rect.position+Vector2.ONE,rect.size-Vector2(2,2)),Game.mainTone[lockBaseColor])
 			if lockGlitchColor != Game.COLOR.GLITCH:
 				if lockSizeType == SIZE_TYPE.ANY:
-					if lockGlitchColor in Game.TEXTURED_COLORS: RenderingServer.canvas_item_add_nine_patch(lockDrawMain,rect,GLITCH_ANY_RECT,GLITCH_FILL_TEXTURE.current([lockGlitchColor,lockType]),GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE)
+					if lockGlitchColor in Game.TEXTURED_COLORS: RenderingServer.canvas_item_add_nine_patch(lockDrawMain,rect,GLITCH_ANY_RECT,GLITCH_FILL_TEXTURE.current([lockGlitchColor,lockSizeType]),GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE)
 					else: RenderingServer.canvas_item_add_nine_patch(lockDrawMain,rect,GLITCH_ANY_RECT,GLITCH_FILL.current([lockSizeType]),GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[lockGlitchColor])
-				elif lockGlitchColor in Game.TEXTURED_COLORS: RenderingServer.canvas_item_add_texture_rect(lockDrawMain,rect,GLITCH_FILL_TEXTURE.current([lockGlitchColor,lockType]))
+				elif lockGlitchColor in Game.TEXTURED_COLORS: RenderingServer.canvas_item_add_texture_rect(lockDrawMain,rect,GLITCH_FILL_TEXTURE.current([lockGlitchColor,lockSizeType]))
 				else: RenderingServer.canvas_item_add_texture_rect(lockDrawMain,rect,GLITCH_FILL.current([lockSizeType]),false,Game.mainTone[lockGlitchColor])
 		elif lockBaseColor in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
 			RenderingServer.canvas_item_set_material(lockDrawScaled,Game.NO_MATERIAL.get_rid())
