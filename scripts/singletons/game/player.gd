@@ -289,7 +289,7 @@ func interacted(area:Area2D) -> void:
 func near(area:Area2D) -> void:
 	var object:GameObject = area.get_parent()
 	if object is Door:
-		cantSave = true
+		if object.type != Door.TYPE.GATE: cantSave = true
 		object.auraCheck(self)
 		if curseMode: object.curseCheck(self)
 	if object is RemoteLock:

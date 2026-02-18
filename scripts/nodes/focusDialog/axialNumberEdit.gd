@@ -31,8 +31,8 @@ func setValue(_value:PackedInt64Array, manual:bool=false) -> void:
 	else: %drawText.text = M.str(value)
 	if !manual: valueSet.emit(value)
 
-func increment() -> void: setValue(M.add(value, M.ONE))
-func decrement() -> void: setValue(M.sub(value, M.ONE))
+func increment() -> void: setValue(M.add(value, M.saxis(value)))
+func decrement() -> void: setValue(M.sub(value, M.saxis(value)))
 
 func deNew():
 	newlyInteracted = false
