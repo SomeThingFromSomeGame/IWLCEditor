@@ -114,6 +114,7 @@ func acrabs(n:PackedInt64Array) -> PackedInt64Array:
 	return [abs(n[0]), abs(n[1])]
 
 func axibs(n:PackedInt64Array) -> PackedInt64Array: return acrabs(axis(n))
+func saxibs(n:PackedInt64Array) -> PackedInt64Array: return acrabs(saxis(n))
 
 # comparators
 
