@@ -1,5 +1,5 @@
 extends GameTextureLoader
-class_name IndexTextureLoader
+class_name GoldIndexTextureLoader
 
 var frames:int
 var textures:Array[Texture2D] = []
