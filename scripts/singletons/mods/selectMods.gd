@@ -19,6 +19,16 @@ static var ModTree:Array = [
 		[&"C1",&"C2",&"C3",&"C4",&"C5"]
 	),
 	SubTree.new(
+		"Other Modpacks",
+		"Mods that are based on community ideas.",
+		[SubTree.new(
+			"Negative Worlds",
+			"(by Something) Wow.. it's like these worlds are negative,,, (so far its just error)",
+			[&"ErrorColor"]
+		),
+		]
+	),
+	SubTree.new(
 		"Lockpick Editor Compatibility",
 		"Mods to mimic unique behaviour from L4Vo5's Lockpick Editor",
 		[&"InfCopies",&"NoneColor"]
