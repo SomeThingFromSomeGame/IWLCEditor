@@ -290,12 +290,12 @@ func near(area:Area2D) -> void:
 	var object:GameObject = area.get_parent()
 	if object is Door:
 		if object.type != Door.TYPE.GATE: cantSave = true
-		object.auraCheck(self)
 		if curseMode: object.curseCheck(self)
+		object.auraCheck(self)
 	if object is RemoteLock:
 		cantSave = true
-		object.auraCheck(self)
 		if curseMode: object.curseCheck(self)
+		object.auraCheck(self)
 
 func overlapping(area:Area2D) -> bool: return %interact.overlaps_area(area)
 
