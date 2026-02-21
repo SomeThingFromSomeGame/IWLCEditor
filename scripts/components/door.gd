@@ -148,7 +148,7 @@ func _draw() -> void:
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	if type != TYPE.GATE: RenderingServer.canvas_item_add_rect(drawDropShadow,Rect2(Vector2(3,3),size),Game.DROP_SHADOW_COLOR)
 	drawDoor(drawScaled,drawAuraBreaker,drawGlitch,drawMain,
-		size,colorAfterCurse(),colorAfterGlitch(),type,
+		size,getColor(COLOR_STEP.DRAW_BASE),getColor(COLOR_STEP.Glitch),type,
 		gateAlpha,
 		len(locks) > 0 and (locks[0].isNegative() if type == TYPE.SIMPLE else M.negative(M.sign(ipow()))),
 		(Game.playState == Game.PLAY_STATE.PLAY and drawComplex) or (Game.playState == Game.PLAY_STATE.EDIT and M.nex(copies)),
@@ -156,7 +156,7 @@ func _draw() -> void:
 	)
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
 	# error effect
-	if colorSpend == Game.COLOR.ERROR:
+	if getColor(COLOR_STEP.BASE) == Game.COLOR.ERROR:
 		for i in range(size.x / 32):
 			for j in range(size.y / 32):
 				var errorrect:Rect2 = Rect2(i*32+randi_range(-5,5),j*32+randi_range(-5,5),32.0,32.0)
@@ -194,13 +194,10 @@ static func drawDoor(doorDrawScaled:RID,doorDrawAuraBreaker:RID,doorDrawGlitch:R
 		RenderingServer.canvas_item_add_rect(doorDrawMain,Rect2(Vector2(doorSize.x,0),Vector2(1,doorSize.y)),Color.BLACK.blend(Color(Color.WHITE,doorGateAlpha)))
 	else:
 		if drawFill:
-			var tempColor = doorBaseColor
-			if doorBaseColor == Game.COLOR.ERROR:
-				tempColor = doorGlitchColor
-			if tempColor in Game.TEXTURED_COLORS:
-				var tileTexture:bool = tempColor in Game.TILED_TEXTURED_COLORS
-				RenderingServer.canvas_item_add_texture_rect(doorDrawScaled,rect,Game.COLOR_TEXTURES.current([tempColor]),tileTexture)
-			elif tempColor == Game.COLOR.GLITCH:
+			if doorBaseColor in Game.TEXTURED_COLORS:
+				var tileTexture:bool = doorBaseColor in Game.TILED_TEXTURED_COLORS
+				RenderingServer.canvas_item_add_texture_rect(doorDrawScaled,rect,Game.COLOR_TEXTURES.current([doorBaseColor]),tileTexture)
+			elif doorBaseColor == Game.COLOR.GLITCH:
 				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[Game.COLOR.GLITCH])
 				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[Game.COLOR.GLITCH])
 				RenderingServer.canvas_item_add_nine_patch(doorDrawGlitch,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[Game.COLOR.GLITCH])
@@ -211,16 +208,16 @@ static func drawDoor(doorDrawScaled:RID,doorDrawAuraBreaker:RID,doorDrawGlitch:R
 						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_HIGH,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.highTone[doorGlitchColor])
 						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_MAIN,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorGlitchColor])
 						RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,GLITCH_DARK,GLITCH_CORNER_SIZE,GLITCH_CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorGlitchColor])
-			elif tempColor in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
+			elif doorBaseColor in [Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI]:
 				RenderingServer.canvas_item_set_material(doorDrawScaled,Game.NO_MATERIAL.get_rid())
-				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[tempColor])
-				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[tempColor])
-				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[tempColor])
-				drawAuras(doorDrawAuraBreaker,doorDrawAuraBreaker,doorDrawAuraBreaker,tempColor==Game.COLOR.ICE,tempColor==Game.COLOR.MUD,tempColor==Game.COLOR.GRAFFITI,rect)
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawScaled,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorBaseColor])
+				drawAuras(doorDrawAuraBreaker,doorDrawAuraBreaker,doorDrawAuraBreaker,doorBaseColor==Game.COLOR.ICE,doorBaseColor==Game.COLOR.MUD,doorBaseColor==Game.COLOR.GRAFFITI,rect)
 			else:
-				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[tempColor])
-				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[tempColor])
-				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[tempColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.highTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_MAIN,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.mainTone[doorBaseColor])
+				RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,SPEND_DARK,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Game.darkTone[doorBaseColor])
 		# frame
 		if doorDrawComplex:
 			RenderingServer.canvas_item_add_nine_patch(doorDrawMain,rect,TEXTURE_RECT,FRAME_HIGH,CORNER_SIZE,CORNER_SIZE,TILE,TILE,true,Color.from_hsv(Game.complexViewHue,0.4901960784,1))
@@ -490,7 +487,7 @@ func tryOpen(player:Player) -> void:
 	if animState != ANIM_STATE.IDLE: return
 	if gameFrozen or gameCrumbled or gamePainted:
 		var gateArmamentImmunities:Array[Game.COLOR] = player.getArmamentImmunities()
-		if hasColor(Game.COLOR.PURE): return
+		if hasEffectiveColor(Game.COLOR.PURE): return
 		if int(gameFrozen) + int(gameCrumbled) + int(gamePainted) > 1: return
 		if gameFrozen and (M.nex(player.key[Game.COLOR.ICE]) or Game.COLOR.ICE in gateArmamentImmunities): return
 		if gameCrumbled and (M.nex(player.key[Game.COLOR.MUD]) or Game.COLOR.MUD in gateArmamentImmunities): return
@@ -505,9 +502,9 @@ func tryOpen(player:Player) -> void:
 		var wontOpen:bool = false
 		for lock in locks:
 			if !lock.canOpen(player):
-				if lock.colorAfterAurabreaker() == Game.COLOR.NONE: willCrash = true
+				if lock.getColor(Lock.COLOR_STEP.EFFECTIVE) == Game.COLOR.NONE: willCrash = true
 				else: return
-			elif lock.colorAfterAurabreaker() == Game.COLOR.NONE: wontOpen = true
+			elif lock.getColor(Lock.COLOR_STEP.EFFECTIVE) == Game.COLOR.NONE: wontOpen = true
 		for lock in remoteLocks:
 			if !lock.satisfied: return
 		if willCrash: Game.crash(); return
@@ -525,7 +522,7 @@ func tryOpen(player:Player) -> void:
 		else:
 			cost = M.add(cost, lock.cost)
 	
-	var spendColor:Game.COLOR = colorAfterAurabreaker()
+	var spendColor:Game.COLOR = getColor(COLOR_STEP.FINAL)
 	player.changeGlisten(spendColor, M.sub(player.glisten[spendColor], glistenCost))
 	player.changeKeys(spendColor, M.sub(player.key[spendColor],cost))
 	
@@ -536,18 +533,18 @@ func tryOpen(player:Player) -> void:
 		match type:
 			TYPE.SIMPLE:
 				if locks[0].type == Lock.TYPE.BLAST: AudioManager.play(preload("res://resources/sounds/door/blast.wav"))
-				elif colorAfterCurse() == Game.COLOR.MASTER and locks[0].colorAfterCurse() == Game.COLOR.MASTER: AudioManager.play(preload("res://resources/sounds/door/master.wav"))
+				elif getColor(COLOR_STEP.FINAL) == Game.COLOR.MASTER and locks[0].getColor(Lock.COLOR_STEP.FINAL) == Game.COLOR.MASTER: AudioManager.play(preload("res://resources/sounds/door/master.wav"))
 				else: AudioManager.play(preload("res://resources/sounds/door/simple.wav"))
 			TYPE.COMBO: AudioManager.play(preload("res://resources/sounds/door/combo.wav"))
-		Game.setGlitch(colorAfterAurabreaker())
+		Game.setGlitch(getColor(COLOR_STEP.EFFECTIVE))
 
 	if M.nex(gameCopies): destroy()
 	else: relockAnimation()
 	GameChanges.bufferSave()
 
 func tryMasterOpen(player:Player) -> bool:
-	if hasColor(Game.COLOR.MASTER): return false
-	if hasColor(Game.COLOR.PURE): return false
+	if hasEffectiveColor(Game.COLOR.MASTER): return false
+	if hasEffectiveColor(Game.COLOR.PURE): return false
 
 	var openedForwards:bool = M.positive(M.sign(M.across(gameCopies, player.masterMode)))
 	GameChanges.addChange(GameChanges.PropertyChange.new(self, &"gameCopies", M.sub(gameCopies, M.across(player.masterMode, M.sub(M.allAxes(), infCopies)))))
@@ -566,8 +563,8 @@ func tryMasterOpen(player:Player) -> bool:
 	return true
 
 func tryQuicksilverOpen(player:Player) -> bool:
-	if hasColor(Game.COLOR.QUICKSILVER): return false
-	if hasColor(Game.COLOR.PURE): return false
+	if hasEffectiveColor(Game.COLOR.QUICKSILVER): return false
+	if hasEffectiveColor(Game.COLOR.PURE): return false
 
 	var cost:PackedInt64Array = M.ZERO
 	var glistenCost:PackedInt64Array = M.ZERO
@@ -582,14 +579,14 @@ func tryQuicksilverOpen(player:Player) -> bool:
 		else:
 			cost = M.add(cost, lock.cost)
 	player.changeKeys(Game.COLOR.QUICKSILVER, M.sub(player.key[Game.COLOR.QUICKSILVER], player.masterMode))
-	var spendColor:Game.COLOR = colorAfterAurabreaker()
+	var spendColor:Game.COLOR = getColor(COLOR_STEP.FINAL)
 	player.changeGlisten(spendColor, M.sub(player.glisten[spendColor], glistenCost))
 	player.changeKeys(spendColor, M.sub(player.key[spendColor],cost))
 
 	AudioManager.play(preload("res://resources/sounds/door/master.wav"))
 	relockAnimation()
 
-	Game.setGlitch(colorAfterGlitch())
+	Game.setGlitch(getColor(COLOR_STEP.EFFECTIVE))
 
 	player.dropMaster()
 	GameChanges.bufferSave()
@@ -597,8 +594,8 @@ func tryQuicksilverOpen(player:Player) -> bool:
 	return true
 
 func tryDynamiteOpen(player:Player) -> bool:
-	if hasColor(Game.COLOR.DYNAMITE): return false
-	if hasColor(Game.COLOR.PURE): return false
+	if hasEffectiveColor(Game.COLOR.DYNAMITE): return false
+	if hasEffectiveColor(Game.COLOR.PURE): return false
 
 	var openedForwards:bool
 	var openedBackwards:bool
@@ -630,20 +627,20 @@ func tryDynamiteOpen(player:Player) -> bool:
 	GameChanges.bufferSave()
 	return true
 
-func hasColor(color:Game.COLOR) -> bool:
-	if colorAfterGlitch() == color: return true
-	for lock in locks: if lock.colorAfterGlitch() == color: return true
+func hasEffectiveColor(color:Game.COLOR) -> bool:
+	if getColor(COLOR_STEP.EFFECTIVE) == color: return true
+	for lock in locks: if lock.getColor(Lock.COLOR_STEP.EFFECTIVE) == color: return true
 	return false
 
-func hasBaseColor(color:Game.COLOR) -> bool:
+func hasInitialColor(color:Game.COLOR) -> bool:
 	if colorSpend == color: return true
 	for lock in locks: if lock.color == color: return true
 	return false
 
 func destroy() -> void:
 	GameChanges.addChange(GameChanges.PropertyChange.new(self, &"active", false))
-	var color:Game.COLOR = colorAfterCurse()
-	if type == TYPE.SIMPLE: color = locks[0].colorAfterCurse()
+	var color:Game.COLOR = getColor(COLOR_STEP.BASE)
+	if type == TYPE.SIMPLE: color = locks[0].getColor(Lock.COLOR_STEP.BASE)
 	makeDebris(Debris, color)
 	justOpened = true
 
@@ -654,8 +651,8 @@ func addCopyAnimation() -> void:
 	animPart = 0
 	Game.fasterAnims()
 	addCopySound = AudioManager.play(preload("res://resources/sounds/door/addCopy.wav"))
-	var color:Game.COLOR = colorAfterCurse()
-	if type == TYPE.SIMPLE: color = locks[0].colorAfterCurse()
+	var color:Game.COLOR = getColor(COLOR_STEP.BASE)
+	if type == TYPE.SIMPLE: color = locks[0].getColor(Lock.COLOR_STEP.BASE)
 	makeDebris(AddCopyDebris, color)
 
 func relockAnimation() -> void:
@@ -665,14 +662,14 @@ func relockAnimation() -> void:
 	animPart = 0
 	Game.fasterAnims()
 	for lock in locks: lock.queue_redraw()
-	var color:Game.COLOR = colorAfterCurse()
-	if type == TYPE.SIMPLE: color = locks[0].colorAfterCurse()
+	var color:Game.COLOR = getColor(COLOR_STEP.BASE)
+	if type == TYPE.SIMPLE: color = locks[0].getColor(Lock.COLOR_STEP.BASE)
 	makeDebris(RelockDebris, color)
 
 func makeDebris(debrisType:GDScript, debrisColor:Game.COLOR) -> void:
 	for y in floor(size.y/16):
 		for x in floor(size.x/16):
-			add_child(debrisType.new(debrisColor,Vector2(x*16,y*16)))
+			%particlesParent.add_child(debrisType.new(debrisColor,Vector2(x*16,y*16)))
 
 func propertyGameChangedDo(property:StringName) -> void:
 	if property == &"active":
@@ -688,9 +685,9 @@ func gateCheck(player:Player, starting:bool=false) -> void:
 	var willCrash:bool = false
 	for lock in locks:
 		if !lock.canOpen(player):
-			if lock.colorAfterGlitch() == Game.COLOR.NONE: willCrash = true
+			if lock.getColor(Lock.COLOR_STEP.EFFECTIVE) == Game.COLOR.NONE: willCrash = true
 			else: shouldOpen = false
-		elif lock.colorAfterGlitch() == Game.COLOR.NONE: shouldOpen = false
+		elif lock.getColor(Lock.COLOR_STEP.EFFECTIVE) == Game.COLOR.NONE: shouldOpen = false
 	for lock in remoteLocks:
 		if !lock.satisfied: shouldOpen = false
 	if shouldOpen and willCrash: Game.crash(); return
@@ -706,28 +703,28 @@ func auraCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
 	if animState != ANIM_STATE.IDLE: return
 	var deAuraed:bool = false
-	if player.auraRed and gameFrozen and !hasColor(Game.COLOR.MAROON):
+	if player.auraRed and gameFrozen and !hasEffectiveColor(Game.COLOR.MAROON):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameFrozen",false))
 		makeDebris(Debris, Game.COLOR.WHITE)
 		deAuraed = true
-	if player.auraGreen and gameCrumbled and !hasColor(Game.COLOR.FOREST):
+	if player.auraGreen and gameCrumbled and !hasEffectiveColor(Game.COLOR.FOREST):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameCrumbled",false))
 		makeDebris(Debris, Game.COLOR.BROWN)
 		deAuraed = true
-	if player.auraBlue and gamePainted and !hasColor(Game.COLOR.NAVY):
+	if player.auraBlue and gamePainted and !hasEffectiveColor(Game.COLOR.NAVY):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gamePainted",false))
 		makeDebris(Debris, Game.COLOR.ORANGE)
 		deAuraed = true
 	var auraed:bool = false
-	if player.auraMaroon and !gameFrozen and !hasColor(Game.COLOR.RED) and !isAllColorAfterCurse(Game.COLOR.ICE):
+	if player.auraMaroon and !gameFrozen and !hasEffectiveColor(Game.COLOR.RED) and !isAllInitialColor(Game.COLOR.ICE):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameFrozen",true))
 		makeDebris(Debris, Game.COLOR.WHITE)
 		auraed = true
-	if player.auraForest and !gameCrumbled and !hasColor(Game.COLOR.GREEN) and !isAllColorAfterCurse(Game.COLOR.MUD):
+	if player.auraForest and !gameCrumbled and !hasEffectiveColor(Game.COLOR.GREEN) and !isAllInitialColor(Game.COLOR.MUD):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gameCrumbled",true))
 		makeDebris(Debris, Game.COLOR.BROWN)
 		auraed = true
-	if player.auraNavy and !gamePainted and !hasColor(Game.COLOR.BLUE) and !isAllColorAfterCurse(Game.COLOR.GRAFFITI):
+	if player.auraNavy and !gamePainted and !hasEffectiveColor(Game.COLOR.BLUE) and !isAllInitialColor(Game.COLOR.GRAFFITI):
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"gamePainted",true))
 		makeDebris(Debris, Game.COLOR.ORANGE)
 		auraed = true
@@ -735,22 +732,22 @@ func auraCheck(player:Player) -> void:
 		AudioManager.play(preload("res://resources/sounds/door/deaura.wav"))
 		GameChanges.bufferSave()
 
-func isAllColor(color:Game.COLOR) -> bool:
-	if colorSpend != color: return false
+func isAllInitialColor(color:Game.COLOR) -> bool:
+	if getColor(COLOR_STEP.INITIAL) != color: return false
 	for lock in locks: if lock.color != color: return false
 	return true
 
-func isAllColorAfterCurse(color:Game.COLOR) -> bool:
-	if colorAfterCurse() != color: return false
-	for lock in locks: if lock.colorAfterCurse() != color: return false
+func isAllBaseColor(color:Game.COLOR) -> bool:
+	if getColor(COLOR_STEP.BASE) != color: return false
+	for lock in locks: if lock.getColor(Lock.COLOR_STEP.BASE) != color: return false
 	return true
 
 func curseCheck(player:Player) -> void:
 	if type == TYPE.GATE: return
 	if animState != ANIM_STATE.IDLE: return
-	if hasColor(Game.COLOR.PURE): return
+	if hasEffectiveColor(Game.COLOR.PURE): return
 	var willCurse:bool = player.curseMode > 0 and (!cursed or (curseColor != player.curseColor and curseColor != Game.COLOR.PURE))
-	var willCurseRedundant:bool = willCurse and isAllColor(player.curseColor)
+	var willCurseRedundant:bool = willCurse and isAllInitialColor(player.curseColor)
 	if willCurse and !willCurseRedundant:
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"cursed",true))
 		GameChanges.addChange(GameChanges.PropertyChange.new(self,&"curseColor",player.curseColor))
@@ -772,23 +769,41 @@ func curseCheck(player:Player) -> void:
 func makeCurseParticles(color:Game.COLOR, mode:int, scaleMin:float=1,scaleMax:float=1) -> void:
 	for y in floor(size.y/16):
 		for x in floor(size.x/16):
-			add_child(CurseParticle.Temporary.new(color, mode, Vector2(x,y)*16+Vector2.ONE*randf_range(4,12), randf_range(scaleMin,scaleMax)))
+			%particlesParent.add_child(CurseParticle.Temporary.new(color, mode, Vector2(x,y)*16+Vector2.ONE*randf_range(4,12), randf_range(scaleMin,scaleMax)))
 
-func colorAfterCurse() -> Game.COLOR:
-	if cursed and curseColor != Game.COLOR.PURE: return curseColor
-	return colorSpend
+enum COLOR_STEP {INITIAL, Curse, BASE, Error, DRAW_BASE, Glitch, EFFECTIVE, AuraBreaker, FINAL}
 
-func colorAfterGlitch() -> Game.COLOR:
-	var base:Game.COLOR = colorAfterCurse()
-	if base == Game.COLOR.GLITCH: return curseGlitchMimic if cursed and curseColor != Game.COLOR.PURE else glitchMimic
-	if base == Game.COLOR.ERROR: return curseErrorMimic if cursed and curseColor != Game.COLOR.PURE else errorMimic
-	return base
+func getColor(step:COLOR_STEP) -> Game.COLOR:
+	var resultColor:Game.COLOR = colorSpend
 
-func colorAfterAurabreaker() -> Game.COLOR:
-	if gameFrozen: return Game.COLOR.ICE
-	if gameCrumbled: return Game.COLOR.MUD
-	if gamePainted: return Game.COLOR.GRAFFITI
-	return colorAfterGlitch()
+	if step < COLOR_STEP.Curse: return resultColor
+	var curseAffected:bool = cursed and curseColor != Game.COLOR.PURE
+	if curseAffected: resultColor = curseColor
+	
+	# BASE
+	# redundancy checks go here, like cant freeze if all ice
+
+	if step < COLOR_STEP.Error: return resultColor
+	var checkColor:Game.COLOR = resultColor # error and glitch act independently
+	if checkColor == Game.COLOR.ERROR: resultColor = curseErrorMimic if curseAffected else errorMimic
+
+	# DRAW_BASE
+	# the step used for drawing
+
+	if step < COLOR_STEP.Glitch: return resultColor
+	if checkColor == Game.COLOR.GLITCH: resultColor = curseGlitchMimic if curseAffected else glitchMimic
+
+	# EFFECTIVE
+	# the step used for normal immunities, and what glitch gets set to when the door is opened
+
+	if step < COLOR_STEP.AuraBreaker: return resultColor
+	if gameFrozen: resultColor = Game.COLOR.ICE
+	if gameCrumbled: resultColor = Game.COLOR.MUD
+	if gamePainted: resultColor = Game.COLOR.GRAFFITI
+
+	# FINAL
+	# the step used for spending
+	return resultColor
 
 func ipow() -> PackedInt64Array: # for complex view
 	if Game.playState == Game.PLAY_STATE.EDIT: return M.ONE
@@ -825,7 +840,7 @@ func setError(setColor:Game.COLOR) -> void:
 func armamentColors() -> Array[Game.COLOR]:
 	var colors:Array[Game.COLOR]
 	for lock in locks:
-		if lock.armament and lock.colorAfterGlitch() not in colors: colors.append(lock.colorAfterGlitch())
+		if lock.armament and lock.getColor(Lock.COLOR_STEP.EFFECTIVE) not in colors: colors.append(lock.getColor(Lock.COLOR_STEP.EFFECTIVE))
 	return colors
 
 class Debris extends Node2D:

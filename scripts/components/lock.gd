@@ -178,7 +178,7 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	if !parent.active and Game.playState == Game.PLAY_STATE.PLAY: return
 	drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
-		size,colorAfterCurse(),colorAfterGlitch(),type,effectiveConfiguration(),sizeType,effectiveCount(),effectiveZeroI(),isPartial,effectiveDenominator(),negated,armament,
+		size,getColor(COLOR_STEP.DRAW_BASE),getColor(COLOR_STEP.Glitch),type,effectiveConfiguration(),sizeType,effectiveCount(),effectiveZeroI(),isPartial,effectiveDenominator(),negated,armament,
 		getFrameHighColor(isNegative(), negated),
 		getFrameMainColor(isNegative(), negated),
 		getFrameDarkColor(isNegative(), negated),
@@ -186,7 +186,7 @@ func _draw() -> void:
 		parent.animState != Door.ANIM_STATE.RELOCK or parent.animPart > 2,
 		Game.playState == Game.PLAY_STATE.PLAY and parent.drawComplex
 	)
-	if colorAfterCurse() == Game.COLOR.ERROR:
+	if getColor(COLOR_STEP.BASE) == Game.COLOR.ERROR:
 		RenderingServer.canvas_item_add_texture_rect(drawError,Rect2(-offsetFromType(sizeType), size),ERROR_FX.current([randi_range(0,2)]))
 
 static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID,
@@ -446,22 +446,39 @@ func stop() -> void:
 	glitchMimic = Game.COLOR.GLITCH
 	errorMimic = Game.COLOR.ERROR
 
-func colorAfterCurse() -> Game.COLOR:
-	if parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament: return parent.curseColor
-	return color
+enum COLOR_STEP {INITIAL, Curse, BASE, Error, DRAW_BASE, Glitch, EFFECTIVE, AuraBreaker, FINAL}
 
-func colorAfterGlitch() -> Game.COLOR:
-	var base:Game.COLOR = colorAfterCurse()
-	if base == Game.COLOR.GLITCH: return parent.curseGlitchMimic if (parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament) else glitchMimic
-	if base == Game.COLOR.ERROR: return parent.curseErrorMimic if (parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament) else errorMimic
-	return base
+func getColor(step:COLOR_STEP) -> Game.COLOR:
+	var resultColor:Game.COLOR = color
 
-func colorAfterAurabreaker() -> Game.COLOR:
-	if int(parent.gameFrozen) + int(parent.gameCrumbled) + int(parent.gamePainted) > 1 or armament: return colorAfterGlitch()
-	if parent.gameFrozen: return Game.COLOR.ICE
-	if parent.gameCrumbled: return Game.COLOR.MUD
-	if parent.gamePainted: return Game.COLOR.GRAFFITI
-	return colorAfterGlitch()
+	if step < COLOR_STEP.Curse: return resultColor
+	var curseAffected:bool = parent.cursed and parent.curseColor != Game.COLOR.PURE and !armament
+	if curseAffected: resultColor = parent.curseColor
+	
+	# BASE
+	# redundancy checks go here, like cant freeze if all ice
+
+	if step < COLOR_STEP.Error: return resultColor
+	var checkColor:Game.COLOR = resultColor # error and glitch act independently
+	if checkColor == Game.COLOR.ERROR: resultColor = parent.curseErrorMimic if curseAffected else errorMimic
+
+	# DRAW_BASE
+	# the step used for drawing
+
+	if step < COLOR_STEP.Glitch: return resultColor
+	if checkColor == Game.COLOR.GLITCH: resultColor = parent.curseGlitchMimic if curseAffected else glitchMimic
+
+	# EFFECTIVE
+	# the step used for normal immunities
+
+	if step < COLOR_STEP.AuraBreaker: return resultColor
+	if parent.gameFrozen: resultColor = Game.COLOR.ICE
+	if parent.gameCrumbled: resultColor = Game.COLOR.MUD
+	if parent.gamePainted: resultColor = Game.COLOR.GRAFFITI
+
+	# FINAL
+	# the step used for check and cost
+	return resultColor
 
 func effectiveConfiguration() -> CONFIGURATION:
 	if Game.simpleLocks: return CONFIGURATION.NONE
@@ -474,8 +491,8 @@ func canOpen(player:Player) -> bool: return getLockCanOpen(self, player)
 
 static func getLockCanOpen(lock:GameComponent,player:Player) -> bool:
 	var can:bool = true
-	var keyCount:PackedInt64Array = player.key[lock.colorAfterAurabreaker()]
-	var glistCount:PackedInt64Array = player.glisten[lock.colorAfterAurabreaker()]
+	var keyCount:PackedInt64Array = player.key[lock.getColor(COLOR_STEP.FINAL)]
+	var glistCount:PackedInt64Array = player.glisten[lock.getColor(COLOR_STEP.FINAL)]
 	var lockCount:PackedInt64Array = lock.effectiveCount()
 	var lockDenominator:PackedInt64Array = lock.effectiveDenominator()
 	match lock.type:
@@ -504,7 +521,7 @@ func getCost(player:Player, ipow:PackedInt64Array=parent.ipow()) -> PackedInt64A
 
 static func getLockCost(lock:GameComponent, player:Player, ipow:PackedInt64Array) -> PackedInt64Array:
 	var cost:PackedInt64Array = M.ZERO
-	var keyCount:PackedInt64Array = player.key[lock.colorAfterAurabreaker()]
+	var keyCount:PackedInt64Array = player.key[lock.getColor(COLOR_STEP.FINAL)]
 	var lockCount:PackedInt64Array = lock.effectiveCount(ipow)
 	var lockDenominator:PackedInt64Array = lock.effectiveDenominator(ipow)
 	match lock.type:
