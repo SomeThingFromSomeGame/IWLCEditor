@@ -159,7 +159,7 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
 	RenderingServer.canvas_item_set_self_modulate(drawError, "#ffffffaa")
 	RenderingServer.canvas_item_set_material(drawError,Game.ADDITIVE_MATERIAL)
-	Game.connect(&"goldIndexChanged",func(): if color in Game.ANIMATED_COLORS or armament or color == Game.COLOR.ERROR: queue_redraw())
+	Game.connect(&"goldIndexChanged",func(): if color in Game.ANIMATED_COLORS or armament: queue_redraw())
 
 func _freed() -> void:
 	RenderingServer.free_rid(drawScaled)

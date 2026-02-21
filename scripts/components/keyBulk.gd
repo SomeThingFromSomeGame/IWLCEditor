@@ -52,7 +52,6 @@ var drawGlitch:RID
 var drawMain:RID
 var drawSymbol:RID
 var drawError:RID
-var addBlend:RID
 func _init() -> void: size = Vector2(32,32)
 
 func _ready() -> void:
@@ -68,11 +67,9 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawSymbol,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawError,get_canvas_item())
-	addBlend = RenderingServer.material_create()
-	RenderingServer.material_set_param(addBlend, "BlendMode", 1)
 	RenderingServer.canvas_item_set_self_modulate(drawError, "#ffffffaa")
-	RenderingServer.canvas_item_set_material(drawError,addBlend)
-	Game.connect(&"goldIndexChanged",func():if color in Game.ANIMATED_COLORS || color == Game.COLOR.ERROR: queue_redraw())
+	RenderingServer.canvas_item_set_material(drawError,Game.ADDITIVE_MATERIAL)
+	Game.connect(&"goldIndexChanged",func():if color in Game.ANIMATED_COLORS: queue_redraw())
 
 
 func _freed() -> void:
@@ -107,7 +104,7 @@ func _draw() -> void:
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	var rect:Rect2 = Rect2(Vector2.ZERO, size)
 	RenderingServer.canvas_item_add_texture_rect(drawDropShadow,Rect2(Vector2(3,3),size),getOutlineTexture(color,type,un),false,Game.DROP_SHADOW_COLOR)
-	drawKey(drawGlitch,drawMain,Vector2.ZERO,color,type,un,glitchMimic,errorMimic,partialInfiniteAlpha)
+	drawKey(drawGlitch,drawMain,Vector2.ZERO,baseColor(),type,un,glitchMimic,partialInfiniteAlpha)
 	if color == Game.COLOR.ERROR:
 		var errorrect:Rect2 = Rect2(Vector2(randi_range(-5,5),randi_range(-5,5)),size)
 		RenderingServer.canvas_item_add_texture_rect(drawError,errorrect,ERROR_FX.current([randi_range(0,2)]))
@@ -145,27 +142,24 @@ static func keyTextureType(keyType:TYPE, keyUn:bool) -> KeyTextureLoader.TYPE:
 		TYPE.CURSE: return KeyTextureLoader.TYPE.UNCURSE if keyUn else KeyTextureLoader.TYPE.CURSE
 		_: return KeyTextureLoader.TYPE.NORMAL
 
-static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor:Game.COLOR,keyType:TYPE=TYPE.NORMAL,keyUn:bool=false,keyGlitchMimic:Game.COLOR=Game.COLOR.GLITCH,keyErrorMimic:Game.COLOR=Game.COLOR.ERROR,keyPartialInfiniteAlpha:float=1) -> void:
+static func drawKey(keyDrawGlitch:RID,keyDrawMain:RID,keyOffset:Vector2,keyColor:Game.COLOR,keyType:TYPE=TYPE.NORMAL,keyUn:bool=false,keyGlitchMimic:Game.COLOR=Game.COLOR.GLITCH,keyPartialInfiniteAlpha:float=1) -> void:
 	var rect:Rect2 = Rect2(keyOffset, Vector2(32,32))
 	var textureType:KeyTextureLoader.TYPE = keyTextureType(keyType, keyUn)
 	RenderingServer.canvas_item_set_modulate(keyDrawMain, Color(Color.WHITE, keyPartialInfiniteAlpha))
 	RenderingServer.canvas_item_set_modulate(keyDrawGlitch, Color(Color.WHITE, keyPartialInfiniteAlpha))
-	var tempcolor = keyColor
-	if keyColor == Game.COLOR.ERROR && keyErrorMimic != Game.COLOR.ERROR:
-		tempcolor = keyErrorMimic
-	if tempcolor in TEXTURE_COLORS:
-		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,TEXTURE.current([tempcolor,textureType]))
-	elif tempcolor == Game.COLOR.GLITCH:
+	if keyColor in TEXTURE_COLORS:
+		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,TEXTURE.current([keyColor,textureType]))
+	elif keyColor == Game.COLOR.GLITCH:
 		RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,FRAME_GLITCH.current([textureType]))
-		RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,FILL.current([textureType]),false,Game.mainTone[tempcolor])
-		if keyType == TYPE.CURSE: RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,CURSE_FILL_DARK,false,Game.darkTone[tempcolor])
+		RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,FILL.current([textureType]),false,Game.mainTone[keyColor])
+		if keyType == TYPE.CURSE: RenderingServer.canvas_item_add_texture_rect(keyDrawGlitch,rect,CURSE_FILL_DARK,false,Game.darkTone[keyColor])
 		if keyGlitchMimic != Game.COLOR.GLITCH:
 			if keyGlitchMimic in TEXTURE_COLORS: RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,GLITCH.current([keyGlitchMimic,textureType]))
 			else: RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FILL_GLITCH.current([textureType]),false,Game.mainTone[keyGlitchMimic])
 	else:
 		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FRAME.current([textureType]))
-		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FILL.current([textureType]),false,Game.mainTone[tempcolor])
-		if keyType == TYPE.CURSE and !keyUn: RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,CURSE_FILL_DARK,false,Game.darkTone[tempcolor])
+		RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,FILL.current([textureType]),false,Game.mainTone[keyColor])
+		if keyType == TYPE.CURSE and !keyUn: RenderingServer.canvas_item_add_texture_rect(keyDrawMain,rect,CURSE_FILL_DARK,false,Game.darkTone[keyColor])
 
 func propertyChangedInit(property:StringName) -> void:
 	if property == &"type":
@@ -261,7 +255,10 @@ func propertyGameChangedDo(property:StringName) -> void:
 	if property == &"active":
 		%interact.process_mode = PROCESS_MODE_INHERIT if active else PROCESS_MODE_DISABLED
 
-func effectiveColor() -> Game.COLOR:
-	if color == Game.COLOR.GLITCH: return glitchMimic
+func baseColor() -> Game.COLOR:
 	if color == Game.COLOR.ERROR: return errorMimic
 	return color
+
+func effectiveColor() -> Game.COLOR:
+	if color == Game.COLOR.GLITCH: return glitchMimic
+	return baseColor()
