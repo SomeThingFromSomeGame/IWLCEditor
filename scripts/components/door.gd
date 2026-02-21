@@ -813,7 +813,7 @@ func setGlitch(setColor:Game.COLOR) -> void:
 		Game.player.bufferCheckKeys() # if armaments
 func setError(setColor:Game.COLOR) -> void:
 	if !cursed or curseColor == Game.COLOR.PURE: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"errorMimic", setColor))
-	elif curseColor == Game.COLOR.GLITCH: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"curseErrorMimic", setColor))
+	elif curseColor == Game.COLOR.ERROR: GameChanges.addChange(GameChanges.PropertyChange.new(self, &"curseErrorMimic", setColor))
 	for lock in locks:
 		if !cursed or curseColor == Game.COLOR.PURE or lock.armament: GameChanges.addChange(GameChanges.PropertyChange.new(lock, &"errorMimic", setColor))
 		lock.queue_redraw()
