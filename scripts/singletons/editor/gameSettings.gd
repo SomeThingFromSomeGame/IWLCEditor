@@ -14,19 +14,16 @@ var keyDrawMain:RID
 var doorDrawScaled:RID
 var doorDrawAuraBreaker:RID
 var doorDrawMain:RID
-var doorDrawError:RID
 
 func _ready() -> void:
 	keyDrawMain = RenderingServer.canvas_item_create()
 	doorDrawScaled = RenderingServer.canvas_item_create()
 	doorDrawAuraBreaker = RenderingServer.canvas_item_create()
 	doorDrawMain = RenderingServer.canvas_item_create()
-	doorDrawError = RenderingServer.canvas_item_create()
 	RenderingServer.canvas_item_set_parent(keyDrawMain, %keyPreview.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(doorDrawScaled, %doorPreview.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(doorDrawAuraBreaker, %doorPreview.get_canvas_item())
 	RenderingServer.canvas_item_set_parent(doorDrawMain, %doorPreview.get_canvas_item())
-	RenderingServer.canvas_item_set_parent(doorDrawError, %doorPreview.get_canvas_item())
 	toneButtonGroup.pressed.connect(_toneSelected)
 	%presets.get_popup().id_pressed.connect(_setPreset)
 	%colorSelector.onlyFlatColors()
@@ -149,9 +146,8 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(doorDrawScaled)
 	RenderingServer.canvas_item_clear(doorDrawAuraBreaker)
 	RenderingServer.canvas_item_clear(doorDrawMain)
-	RenderingServer.canvas_item_clear(doorDrawError)
 	KeyBulk.drawKey(keyDrawMain,keyDrawMain,Vector2.ZERO,%colorSelector.selected)
-	Door.drawDoor(doorDrawScaled,doorDrawAuraBreaker,doorDrawMain,doorDrawError,doorDrawMain,Vector2(32,32),%colorSelector.selected,Game.COLOR.GLITCH,Door.TYPE.COMBO,1)
+	Door.drawDoor(doorDrawScaled,doorDrawAuraBreaker,doorDrawMain,doorDrawMain,Vector2(32,32),%colorSelector.selected,Game.COLOR.GLITCH,Door.TYPE.COMBO,1)
 
 func _hideTimerSet(toggled_on:bool) -> void:
 	Game.hideTimer = toggled_on

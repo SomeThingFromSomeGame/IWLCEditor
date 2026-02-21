@@ -41,15 +41,14 @@ var doors:Array[Door] = []
 var drawDropShadow:RID
 var drawConnections:RID
 var drawGlitch:RID
-var drawError:RID
 var drawScaled:RID
 var drawAuraBreaker:RID
 var drawMain:RID
+var drawError:RID
 var drawConfiguration:RID
 var drawCrumbled:RID
 var drawPainted:RID
 var drawFrozen:RID
-var addBlend:RID
 
 func _init() -> void: size = Vector2(18,18)
 
@@ -59,8 +58,8 @@ func _ready() -> void:
 	drawScaled = RenderingServer.canvas_item_create()
 	drawAuraBreaker = RenderingServer.canvas_item_create()
 	drawGlitch = RenderingServer.canvas_item_create()
-	drawError = RenderingServer.canvas_item_create()
 	drawMain = RenderingServer.canvas_item_create()
+	drawError = RenderingServer.canvas_item_create()
 	drawConfiguration = RenderingServer.canvas_item_create()
 	drawCrumbled = RenderingServer.canvas_item_create()
 	drawPainted = RenderingServer.canvas_item_create()
@@ -77,20 +76,18 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawCrumbled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawPainted,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawFrozen,get_canvas_item())
-	addBlend = RenderingServer.material_create()
-	RenderingServer.material_set_param(addBlend, "BlendMode", 1)
 	RenderingServer.canvas_item_set_self_modulate(drawError, "#ffffffaa")
-	RenderingServer.canvas_item_set_material(drawError,addBlend)
+	RenderingServer.canvas_item_set_material(drawError,Game.ADDITIVE_MATERIAL)
 	Game.connect(&"goldIndexChanged",queue_redraw)
 
 func _freed() -> void:
 	RenderingServer.free_rid(drawDropShadow)
 	RenderingServer.free_rid(drawConnections)
 	RenderingServer.free_rid(drawGlitch)
-	RenderingServer.free_rid(drawError)
 	RenderingServer.free_rid(drawScaled)
 	RenderingServer.free_rid(drawAuraBreaker)
 	RenderingServer.free_rid(drawMain)
+	RenderingServer.free_rid(drawError)
 	RenderingServer.free_rid(drawConfiguration)
 	RenderingServer.free_rid(drawCrumbled)
 	RenderingServer.free_rid(drawPainted)
@@ -102,15 +99,15 @@ func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawAuraBreaker)
 	RenderingServer.canvas_item_clear(drawGlitch)
-	RenderingServer.canvas_item_clear(drawError)
 	RenderingServer.canvas_item_clear(drawMain)
+	RenderingServer.canvas_item_clear(drawError)
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	RenderingServer.canvas_item_clear(drawCrumbled)
 	RenderingServer.canvas_item_clear(drawPainted)
 	RenderingServer.canvas_item_clear(drawFrozen)
 	if !active and Game.playState == Game.PLAY_STATE.PLAY: return
 	RenderingServer.canvas_item_add_rect(drawDropShadow,Rect2(Vector2(3,3)-getOffset(),size),Game.DROP_SHADOW_COLOR)
-	Lock.drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawError,drawMain,drawConfiguration,
+	Lock.drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,configuration,sizeType,count,zeroI,isPartial,denominator,negated,armament,
 		Lock.getFrameHighColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
 		Lock.getFrameMainColor(isNegative(), negated).blend(Color(animColor,animAlpha)),
@@ -137,6 +134,8 @@ func _draw() -> void:
 		crumbled if Game.playState == Game.PLAY_STATE.EDIT else gameCrumbled,
 		painted if Game.playState == Game.PLAY_STATE.EDIT else gamePainted,
 		Rect2(-getOffset(),size))
+	if colorAfterCurse() == Game.COLOR.ERROR:
+		RenderingServer.canvas_item_add_texture_rect(drawError,Rect2(-Lock.offsetFromType(sizeType), size),Lock.ERROR_FX.current([randi_range(0,2)]))
 
 func getDrawPosition() -> Vector2: return position - getOffset()
 

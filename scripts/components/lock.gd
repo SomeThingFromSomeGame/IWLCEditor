@@ -134,10 +134,9 @@ var displayIndex:int # split into armaments and nonarmaments
 var drawScaled:RID
 var drawAuraBreaker:RID
 var drawGlitch:RID
-var drawError:RID
 var drawMain:RID
+var drawError:RID
 var drawConfiguration:RID
-var addBlend:RID
 
 static func getConfigurationColor(_isNegative:bool) -> Color:
 	if _isNegative: return Color("#ebdfd3")
@@ -155,32 +154,30 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(drawScaled,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawAuraBreaker,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawGlitch,get_canvas_item())
-	RenderingServer.canvas_item_set_parent(drawError,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawMain,get_canvas_item())
+	RenderingServer.canvas_item_set_parent(drawError,get_canvas_item())
 	RenderingServer.canvas_item_set_parent(drawConfiguration,get_canvas_item())
-	addBlend = RenderingServer.material_create()
-	RenderingServer.material_set_param(addBlend, "BlendMode", 1)
 	RenderingServer.canvas_item_set_self_modulate(drawError, "#ffffffaa")
-	RenderingServer.canvas_item_set_material(drawError,addBlend)
+	RenderingServer.canvas_item_set_material(drawError,Game.ADDITIVE_MATERIAL)
 	Game.connect(&"goldIndexChanged",func(): if color in Game.ANIMATED_COLORS or armament or color == Game.COLOR.ERROR: queue_redraw())
 
 func _freed() -> void:
 	RenderingServer.free_rid(drawScaled)
 	RenderingServer.free_rid(drawAuraBreaker)
 	RenderingServer.free_rid(drawGlitch)
-	RenderingServer.free_rid(drawError)
 	RenderingServer.free_rid(drawMain)
+	RenderingServer.free_rid(drawError)
 	RenderingServer.free_rid(drawConfiguration)
 
 func _draw() -> void:
 	RenderingServer.canvas_item_clear(drawScaled)
 	RenderingServer.canvas_item_clear(drawAuraBreaker)
 	RenderingServer.canvas_item_clear(drawGlitch)
-	RenderingServer.canvas_item_clear(drawError)
 	RenderingServer.canvas_item_clear(drawMain)
+	RenderingServer.canvas_item_clear(drawError)
 	RenderingServer.canvas_item_clear(drawConfiguration)
 	if !parent.active and Game.playState == Game.PLAY_STATE.PLAY: return
-	drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawError,drawMain,drawConfiguration,
+	drawLock(drawScaled,drawAuraBreaker,drawGlitch,drawMain,drawConfiguration,
 		size,colorAfterCurse(),colorAfterGlitch(),type,effectiveConfiguration(),sizeType,effectiveCount(),effectiveZeroI(),isPartial,effectiveDenominator(),negated,armament,
 		getFrameHighColor(isNegative(), negated),
 		getFrameMainColor(isNegative(), negated),
@@ -189,8 +186,10 @@ func _draw() -> void:
 		parent.animState != Door.ANIM_STATE.RELOCK or parent.animPart > 2,
 		Game.playState == Game.PLAY_STATE.PLAY and parent.drawComplex
 	)
+	if colorAfterCurse() == Game.COLOR.ERROR:
+		RenderingServer.canvas_item_add_texture_rect(drawError,Rect2(-offsetFromType(sizeType), size),ERROR_FX.current([randi_range(0,2)]))
 
-static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawError:RID, lockDrawMain:RID, lockDrawConfiguration:RID,
+static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch:RID, lockDrawMain:RID, lockDrawConfiguration:RID,
 	lockSize:Vector2,
 	lockBaseColor:Game.COLOR, lockGlitchColor:Game.COLOR,
 	lockType:TYPE,
@@ -323,8 +322,6 @@ static func drawLock(lockDrawScaled:RID, lockDrawAuraBreaker:RID, lockDrawGlitch
 				if lockType == TYPE.ALL: symbol = SYMBOL_ALL
 				RenderingServer.canvas_item_add_texture_rect(lockDrawMain,symbolRect,symbol,false,getConfigurationColor(negative))
 	else: RenderingServer.canvas_item_add_texture_rect(lockDrawConfiguration,rect,getPredefinedLockSprite(lockCount,lockType,lockConfiguration),false,getConfigurationColor(negative))
-	if lockBaseColor == Game.COLOR.ERROR:
-		RenderingServer.canvas_item_add_texture_rect(lockDrawError,rect,ERROR_FX.current([randi_range(0,2)]))
 
 func getDrawPosition() -> Vector2: return position + parent.position - getOffset()
 
