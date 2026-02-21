@@ -2,6 +2,11 @@ extends Node
 var editor:Editor
 
 static var mods:Dictionary[StringName, Mod] = {
+	&"ErrorColor": Mod.new(
+		"Error Color",
+		"Adds the Error Color from the Negative Worlds",
+		[&"ErrorColor"],
+	),
 	&"NstdLockSize": Mod.new(
 		"Nonstandard Lock Sizes",
 		"Adds lock sizes on combo doors other than the ones supported by the basegame",
@@ -174,6 +179,7 @@ func colors() -> Array[Game.COLOR]:
 	if active(&"C2"): array.append_array([Game.COLOR.DYNAMITE, Game.COLOR.QUICKSILVER])
 	if active(&"C4"): array.append_array([Game.COLOR.MAROON, Game.COLOR.FOREST, Game.COLOR.NAVY, Game.COLOR.ICE, Game.COLOR.MUD, Game.COLOR.GRAFFITI])
 	if active(&"NoneColor"): array.append(Game.COLOR.NONE)
+	if active(&"ErrorColor"): array.append(Game.COLOR.ERROR)
 	return array
 
 func nextColor(color:Game.COLOR) -> Game.COLOR:

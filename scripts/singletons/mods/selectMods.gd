@@ -14,9 +14,20 @@ static var ModTree:Array = [
 		[&"NstdLockSize",&"MoreLockConfigs",&"ZeroCostLock",&"ZeroCopies",&"MoreKeyCounterWidths"]
 	),
 	SubTree.new(
-		"I Wanna Lockpick: Continued",
-		"Mods that were made for the I Wanna Lockpick: Continued modpack.",
-		[&"C1",&"C2",&"C3",&"C4",&"C5"]
+		"Modpacks",
+		"Mods that are based on community ideas.",
+		[
+			SubTree.new(
+				"I Wanna Lockpick: Continued",
+				"Mods that were made for the I Wanna Lockpick: Continued modpack.",
+				[&"C1",&"C2",&"C3",&"C4",&"C5"]
+			),
+			SubTree.new(
+				"Negative Worlds",
+				"(by Something) Wow.. it's like these worlds are negative,,, (so far its just error)",
+				[&"ErrorColor"]
+			),
+		]
 	),
 	SubTree.new(
 		"Lockpick Editor Compatibility",
